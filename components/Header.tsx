@@ -2,6 +2,10 @@
 import { useRouter } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
+import { HiHome } from "react-icons/hi";
+import { BiSearch } from "react-icons/bi";
+import Button from "./Button";
+
 
 
 interface HeaderProps {
@@ -34,7 +38,30 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
                   <RxCaretRight className="text-white" size={35} />
                 </button>
             </div>
+            <div className="flex md:hidden gap-x-2 items-center">
+                <button className="rounded-full p-2 bg-white flex items-center justify-center text-black hover:opacity-75 transition">
+                    <HiHome className="text-black" size={24} />
+                </button>
+                <button className="rounded-full p-2 bg-white flex items-center justify-center text-black hover:opacity-75 transition">
+                    <BiSearch className="text-black" size={24} />
+                </button>
+            </div>
+            <div className="flex justify-between items-center gap-x-4">
+                <>
+                  <div>
+                    <Button onClick={() => {}} className="bg-transparent text-neutral-300 font-medium">
+                      サインアップ
+                    </Button>
+                  </div>
+                  <div>
+                    <Button onClick={() => {}} className="bg-white px-6 py-2">
+                      ログイン
+                    </Button>
+                  </div>
+                </>
+            </div>
         </div>
+        {children}
     </div>
   )
 }
