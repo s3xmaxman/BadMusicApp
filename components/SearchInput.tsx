@@ -12,16 +12,19 @@ const SearchInput = () => {
     const [ value, setValue ] = useState('');
     const debounceValue = useDebounce(value, 500);
 
-    useEffect(() => {
-        const query = {
-            title: debounceValue
-        }
-
-        const url = qs.stringifyUrl({
-            url: '/search',
-            query: query
-        })
-    }, [debounceValue, router])
+    useEffect(() => { 
+        // デバウンスされた値をクエリパラメータとして設定 
+        const query = { 
+            title: debounceValue 
+        } 
+        // クエリパラメータを含んだURLを作成 
+        const url = qs.stringifyUrl({ 
+            url: '/search', 
+            query: query 
+        }) 
+        // URLに遷移 
+        router.push(url) 
+    }, [debounceValue, router]) 
 
 
 
