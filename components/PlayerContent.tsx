@@ -1,7 +1,7 @@
 "use client";
 
 import useSound from 'use-sound';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
@@ -28,121 +28,100 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     const player = usePlayer();
     const [volume, setVolume] = useState(0.1);
     const [isPlaying, setIsPlaying] = useState(false);
-    const [isLooping, setIsLooping] = useState(false);
+    const [isRepeating, setIsRepeating] = useState(false);
     const [playbackTime, setPlaybackTime] = useState(0);
     const [duration, setDuration] = useState(0);
-    const [ value, setValue ] = useState(0);
+    const isRepeatingRef = useRef(isRepeating);
 
-
+   
 
     // 再生状態に応じてアイコンを切り替えます。
     const Icon = isPlaying ? BsPauseFill : BsPlayFill;
     // 音量状態に応じてボリュームアイコンを切り替えます。
     const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
 
-      // 次の曲を再生する関数です。
     const onPlayNext = () => {
-        // 曲がなければ何もしません。
-        if (player.ids.length === 0) {
+      if (player.ids.length === 0) {
         return;
-        }
-
-        // 現在の曲のインデックスを取得し、次の曲のIDを見つけます。
-        const currentIndex = player.ids.findIndex((id) => id === player.activeId);
-        const nextSong = player.ids[currentIndex + 1];
-
-        // 次の曲がなければ最初の曲を再生します。
-        if (!nextSong) {
-        return player.setId(player.ids[0]);
-        }
-
-        // 次の曲を再生します。
-        player.setId(nextSong);
-    }
-
-    // 前の曲を再生する関数です。
-    const onPlayPrevious = () => {
-    // 曲がなければ何もしません。
-    if (player.ids.length === 0) {
-      return;
-    }
-
-    // 現在の曲のインデックスを取得し、前の曲のIDを見つけます。
-    const currentIndex = player.ids.findIndex((id) => id === player.activeId);
-    const previousSong = player.ids[currentIndex - 1];
-
-    // 前の曲がなければ最後の曲を再生します。
-    if (!previousSong) {
-      return player.setId(player.ids[player.ids.length - 1]);
-    }
-
-    // 前の曲を再生します。
-    player.setId(previousSong);
-  }
+      }
   
-
+      const currentIndex = player.ids.findIndex((id) => id === player.activeId);
+      const nextSong = player.ids[currentIndex + 1];
+  
+      if (!nextSong) {
+        return player.setId(player.ids[0]);
+      }
+  
+      player.setId(nextSong);
+    }
+  
+    const onPlayPrevious = () => {
+      if (player.ids.length === 0) {
+        return;
+      }
+  
+      const currentIndex = player.ids.findIndex((id) => id === player.activeId);
+      const previousSong = player.ids[currentIndex - 1];
+  
+      if (!previousSong) {
+        return player.setId(player.ids[player.ids.length - 1]);
+      }
+  
+      player.setId(previousSong);
+    }
+    
+    
     const [play, {
       pause,
       sound,
       duration: soundDuration,
       stop
-    }] = useSound(
+     }] = useSound(
       songUrl,
       { 
         volume: volume,
+        loop: isRepeating,
         onplay: () => setIsPlaying(true),
         onend: () => {
+
           setIsPlaying(false);
-          onPlayNext();
+          if (!isRepeatingRef.current) {
+            onPlayNext();
+          } else {
+            play();
+          }  
         },
         onpause: () => setIsPlaying(false),
         format: ['mp3'],
         onload: () => setDuration(soundDuration), // ロード時に総時間をセット
       }
-    );
-    
+     );
 
-      // // 再生位置の更新を行う useEffect
-      // useEffect(() => {
-      //   if (isPlaying && sound) {
-      //     const interval = setInterval(() => {
-      //       setPlaybackTime(sound.seek());
-      //     }, 1000);
-
-      //     return () => clearInterval(interval);
-      //   }
-      // }, [isPlaying, sound]);
-
-      useEffect(() => {
-        if (isPlaying && sound) {
-        const interval = setInterval(() => {
-         const seek = sound.seek();
-         const duration = soundDuration;
-         if (typeof seek === 'number' && typeof duration === 'number') {
-           const percentage = ((seek / duration) * 100);
-           setPlaybackTime(percentage);
-           setValue(percentage); // Add this line
-         }
-        }, 1000);
-       
-        return () => clearInterval(interval);
-        }
-       }, [isPlaying, sound, soundDuration]);
-       
-       
-       
-       
-
- 
+     useEffect(() => {
+      isRepeatingRef.current = isRepeating;
+    }, [isRepeating]);
+     
+    const formatTime = (seconds: number): string => {
+      const pad = (num: number, size: number): string => num.toString().padStart(size, '0');
+      const minutes = pad(Math.floor(seconds / 60), 2);
+      const secondsLeft = pad(Math.abs(Math.floor(seconds % 60)), 2); 
+      return `${minutes}:${secondsLeft}`;
+      };
+      
+      const currentTime = formatTime(playbackTime);
+      const remainingTime = formatTime(duration - playbackTime);
+      
+     
    
     // コンポーネントがアンマウントされるときにサウンドをアンロードします。
-    useEffect(() => {
-        sound?.play(); // サウンドがあれば再生します。
-        
-        return () => {
-        sound?.unload(); // コンポーネントのクリーンアップ時にサウンドをアンロードします。
-        }
-    }, [sound]);
+      useEffect(() => {
+          sound?.play(); // サウンドがあれば再生します。
+          
+          return () => {
+          sound?.unload(); // コンポーネントのクリーンアップ時にサウンドをアンロードします。
+          }
+      }, [isPlaying, sound]);
+
 
    
     // 再生ボタンのハンドラです。再生中ではない場合は再生を開始し、そうでなければ一時停止します。
@@ -157,11 +136,16 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     // ミュート切り替え関数です。現在ミュートされていれば音量を戻し、そうでなければミュートします。
     const toggleMute = () => {
         if (volume === 0) {
-        setVolume(1);
+        setVolume(0.1);
         } else {
         setVolume(0);
         }
     }
+
+    const toggleRepeat = () => {
+      setIsRepeating(!isRepeating);
+      console.log('Repeat status changed to:', !isRepeating);
+    };
 
     return ( 
       <div className="grid grid-cols-2 md:grid-cols-3 h-full">
@@ -170,9 +154,8 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
               <MediaItem data={song} />
               <LikeButton songId={song.id} />
             </div>
-          </div>   
-    
-          {/* モバイル表示で再生ボタンを右寄せにする */}
+          </div>
+  
           <div 
             className="
               flex 
@@ -200,15 +183,12 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
               <Icon size={30} className="text-black" />
             </div>
           </div>
-    
-          {/* デスクトップ表示でコントロールを中央にする */}
+  
           <div 
             className="
               hidden
               h-full
-              md:flex
-              md:col-span-2 
-              lg:col-span-1 
+              md:flex 
               justify-center 
               items-center 
               w-full 
@@ -216,7 +196,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
               gap-x-6
             "
           >
-            {/* 前の曲へ移動 */}
+            <span>{currentTime}</span>
             <AiFillStepBackward
               onClick={onPlayPrevious}
               size={30} 
@@ -227,7 +207,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
                 transition
               "
             />
-            {/* 再生・一時停止 */}
             <div 
               onClick={handlePlay} 
               className="
@@ -240,12 +219,10 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
                 bg-white 
                 p-1 
                 cursor-pointer
-                flex-col
               "
             >
               <Icon size={30} className="text-black" />
             </div>
-            {/* 次の曲へ移動 */}
             <AiFillStepForward
               onClick={onPlayNext}
               size={30} 
@@ -256,23 +233,14 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
                 transition
               " 
             />
-            {/* 繰り返し再生 */}
-            <BsRepeat1 
-              onClick={() => setIsLooping(!isLooping)} 
-              size={30} 
-              className={`text-neutral-400 cursor-pointer hover:text-white transition ${isLooping ? 'text-green-500' : ''}`} 
-            />
-            {/* ここにSeekbarコンポーネントを挿入 */}
-            <Seekbar 
-              max={duration} // 仮の進行度の最大値
-              value={playbackTime} // 仮の現在の進行度
-              onChange={(value) => {
-                sound.seek(value); 
-                setPlaybackTime(value); 
-              }}
-            />
+          <BsRepeat1
+            onClick={toggleRepeat}
+            size={30}
+            className={`text-neutral-400 cursor-pointer hover:text-white transition ${isRepeating ? 'text-green-500' : ''}`}
+          />
+
           </div>
-          {/* ボリュームコントロール */}
+      
           <div className="hidden md:flex w-full justify-end pr-2">
             <div className="flex items-center gap-x-2 w-[120px]">
               <VolumeIcon 
