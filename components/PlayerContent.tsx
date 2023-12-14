@@ -1,10 +1,11 @@
 "use client";
 
-import useSound from "use-sound";
+import useSound from 'use-sound';
 import { useEffect, useState } from "react";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
+import { BsRepeat1 } from "react-icons/bs";
 
 import { Song } from "@/types";
 import usePlayer from "@/hooks/usePlayer";
@@ -12,6 +13,7 @@ import usePlayer from "@/hooks/usePlayer";
 import LikeButton from "./LikeButton";
 import MediaItem from "./MediaItem";
 import Slider from "./Slider";
+import Seekbar from './Seekbar';
 
 
 interface PlayerContentProps {
@@ -24,8 +26,14 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
   songUrl
 }) => {
     const player = usePlayer();
-    const [volume, setVolume] = useState(1);
+    const [volume, setVolume] = useState(0.1);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [isLooping, setIsLooping] = useState(false);
+    const [playbackTime, setPlaybackTime] = useState(0);
+    const [duration, setDuration] = useState(0);
+    const [ value, setValue ] = useState(0);
+
+
 
     // 再生状態に応じてアイコンを切り替えます。
     const Icon = isPlaying ? BsPauseFill : BsPlayFill;
@@ -52,8 +60,8 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
         player.setId(nextSong);
     }
 
-  // 前の曲を再生する関数です。
-   const onPlayPrevious = () => {
+    // 前の曲を再生する関数です。
+    const onPlayPrevious = () => {
     // 曲がなければ何もしません。
     if (player.ids.length === 0) {
       return;
@@ -73,22 +81,60 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
   }
   
 
- // useSoundフックで、曲の再生と一時停止、サウンドオブジェクトを管理します。
-    const [play, { pause, sound }] = useSound(
-        songUrl,
-        { 
-        volume: volume, // 音量を設定します。
-        onplay: () => setIsPlaying(true), // 再生時に再生状態をtrueにします。
+    const [play, {
+      pause,
+      sound,
+      duration: soundDuration,
+      stop
+    }] = useSound(
+      songUrl,
+      { 
+        volume: volume,
+        onplay: () => setIsPlaying(true),
         onend: () => {
-            // 曲が終了した時、再生状態をfalseにし、次の曲を再生します。
-            setIsPlaying(false);
-            onPlayNext();
+          setIsPlaying(false);
+          onPlayNext();
         },
-        onpause: () => setIsPlaying(false), // 一時停止時に再生状態をfalseにします。
-        format: ['mp3'] // mp3フォーマットを指定します。
-        }
+        onpause: () => setIsPlaying(false),
+        format: ['mp3'],
+        onload: () => setDuration(soundDuration), // ロード時に総時間をセット
+      }
     );
-  
+    
+
+      // // 再生位置の更新を行う useEffect
+      // useEffect(() => {
+      //   if (isPlaying && sound) {
+      //     const interval = setInterval(() => {
+      //       setPlaybackTime(sound.seek());
+      //     }, 1000);
+
+      //     return () => clearInterval(interval);
+      //   }
+      // }, [isPlaying, sound]);
+
+      useEffect(() => {
+        if (isPlaying && sound) {
+        const interval = setInterval(() => {
+         const seek = sound.seek();
+         const duration = soundDuration;
+         if (typeof seek === 'number' && typeof duration === 'number') {
+           const percentage = ((seek / duration) * 100);
+           setPlaybackTime(percentage);
+           setValue(percentage); // Add this line
+         }
+        }, 1000);
+       
+        return () => clearInterval(interval);
+        }
+       }, [isPlaying, sound, soundDuration]);
+       
+       
+       
+       
+
+ 
+   
     // コンポーネントがアンマウントされるときにサウンドをアンロードします。
     useEffect(() => {
         sound?.play(); // サウンドがあれば再生します。
@@ -97,14 +143,15 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
         sound?.unload(); // コンポーネントのクリーンアップ時にサウンドをアンロードします。
         }
     }, [sound]);
-  
+
+   
     // 再生ボタンのハンドラです。再生中ではない場合は再生を開始し、そうでなければ一時停止します。
     const handlePlay = () => {
-        if (!isPlaying) {
+      if (!isPlaying) {
         play();
         } else {
         pause();
-    }
+      }
     }
   
     // ミュート切り替え関数です。現在ミュートされていれば音量を戻し、そうでなければミュートします。
@@ -116,109 +163,132 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
         }
     }
 
-  return ( 
-    <div className="grid grid-cols-2 md:grid-cols-3 h-full">
-        <div className="flex w-full justify-start">
-          <div className="flex items-center gap-x-4">
-            <MediaItem data={song} />
-            <LikeButton songId={song.id} />
-          </div>
-        </div>
-
-        <div 
-          className="
-            flex 
-            md:hidden 
-            col-auto 
-            w-full 
-            justify-end 
-            items-center
-          "
-        >
+    return ( 
+      <div className="grid grid-cols-2 md:grid-cols-3 h-full">
+          <div className="flex w-full justify-start">
+            <div className="flex items-center gap-x-4">
+              <MediaItem data={song} />
+              <LikeButton songId={song.id} />
+            </div>
+          </div>   
+    
+          {/* モバイル表示で再生ボタンを右寄せにする */}
           <div 
-            onClick={handlePlay} 
             className="
-              h-10
-              w-10
               flex 
-              items-center 
+              md:hidden 
+              col-auto 
+              w-full 
+              justify-end 
+              items-center
+            "
+          >
+            <div 
+              onClick={handlePlay} 
+              className="
+                h-10
+                w-10
+                flex 
+                items-center 
+                justify-center 
+                rounded-full 
+                bg-white 
+                p-1 
+                cursor-pointer
+              "
+            >
+              <Icon size={30} className="text-black" />
+            </div>
+          </div>
+    
+          {/* デスクトップ表示でコントロールを中央にする */}
+          <div 
+            className="
+              hidden
+              h-full
+              md:flex
+              md:col-span-2 
+              lg:col-span-1 
               justify-center 
-              rounded-full 
-              bg-white 
-              p-1 
-              cursor-pointer
-            "
-          >
-            <Icon size={30} className="text-black" />
-          </div>
-        </div>
-
-        <div 
-          className="
-            hidden
-            h-full
-            md:flex 
-            justify-center 
-            items-center 
-            w-full 
-            max-w-[722px] 
-            gap-x-6
-          "
-        >
-          <AiFillStepBackward
-            onClick={onPlayPrevious}
-            size={30} 
-            className="
-              text-neutral-400 
-              cursor-pointer 
-              hover:text-white 
-              transition
-            "
-          />
-          <div 
-            onClick={handlePlay} 
-            className="
-              flex 
               items-center 
-              justify-center
-              h-10
-              w-10 
-              rounded-full 
-              bg-white 
-              p-1 
-              cursor-pointer
+              w-full 
+              max-w-[722px] 
+              gap-x-6
             "
           >
-            <Icon size={30} className="text-black" />
-          </div>
-          <AiFillStepForward
-            onClick={onPlayNext}
-            size={30} 
-            className="
-              text-neutral-400 
-              cursor-pointer 
-              hover:text-white 
-              transition
-            " 
-          />
-        </div>
-
-        <div className="hidden md:flex w-full justify-end pr-2">
-          <div className="flex items-center gap-x-2 w-[120px]">
-            <VolumeIcon 
-              onClick={toggleMute} 
-              className="cursor-pointer" 
-              size={34} 
+            {/* 前の曲へ移動 */}
+            <AiFillStepBackward
+              onClick={onPlayPrevious}
+              size={30} 
+              className="
+                text-neutral-400 
+                cursor-pointer 
+                hover:text-white 
+                transition
+              "
             />
-            <Slider 
-              value={volume} 
-              onChange={(value) => setVolume(value)}
+            {/* 再生・一時停止 */}
+            <div 
+              onClick={handlePlay} 
+              className="
+                flex 
+                items-center 
+                justify-center
+                h-10
+                w-10 
+                rounded-full 
+                bg-white 
+                p-1 
+                cursor-pointer
+                flex-col
+              "
+            >
+              <Icon size={30} className="text-black" />
+            </div>
+            {/* 次の曲へ移動 */}
+            <AiFillStepForward
+              onClick={onPlayNext}
+              size={30} 
+              className="
+                text-neutral-400 
+                cursor-pointer 
+                hover:text-white 
+                transition
+              " 
+            />
+            {/* 繰り返し再生 */}
+            <BsRepeat1 
+              onClick={() => setIsLooping(!isLooping)} 
+              size={30} 
+              className={`text-neutral-400 cursor-pointer hover:text-white transition ${isLooping ? 'text-green-500' : ''}`} 
+            />
+            {/* ここにSeekbarコンポーネントを挿入 */}
+            <Seekbar 
+              max={duration} // 仮の進行度の最大値
+              value={playbackTime} // 仮の現在の進行度
+              onChange={(value) => {
+                sound.seek(value); 
+                setPlaybackTime(value); 
+              }}
             />
           </div>
+          {/* ボリュームコントロール */}
+          <div className="hidden md:flex w-full justify-end pr-2">
+            <div className="flex items-center gap-x-2 w-[120px]">
+              <VolumeIcon 
+                onClick={toggleMute} 
+                className="cursor-pointer" 
+                size={34} 
+              />
+              <Slider 
+                value={volume} 
+                onChange={(value) => setVolume(value)}
+              />
+            </div>
+          </div>
         </div>
-
-      </div>
-   );
+     );
+  
 }
  
 export default PlayerContent;
