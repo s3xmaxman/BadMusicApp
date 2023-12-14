@@ -69,7 +69,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
   
       player.setId(previousSong);
     }
-    
+
     
     const [play, {
       pause,
@@ -83,7 +83,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
         loop: isRepeating,
         onplay: () => setIsPlaying(true),
         onend: () => {
-
           setIsPlaying(false);
           if (!isRepeatingRef.current) {
             onPlayNext();
@@ -100,6 +99,9 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
      useEffect(() => {
       isRepeatingRef.current = isRepeating;
     }, [isRepeating]);
+    
+
+  
      
     const formatTime = (seconds: number): string => {
       const pad = (num: number, size: number): string => num.toString().padStart(size, '0');
@@ -110,9 +112,20 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
       
       const currentTime = formatTime(playbackTime);
       const remainingTime = formatTime(duration - playbackTime);
+
+      useEffect(() => {
+        const interval = setInterval(() => {
+          if (sound?.playing()) {
+            setPlaybackTime(Math.round(sound.seek()));
+          }
+        }, 1000); // 1秒ごとに更新
       
-     
-   
+        return () => {
+          clearInterval(interval);
+        };
+      }, [isPlaying, sound]);
+      
+       
     // コンポーネントがアンマウントされるときにサウンドをアンロードします。
       useEffect(() => {
           sound?.play(); // サウンドがあれば再生します。
@@ -123,16 +136,16 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
       }, [isPlaying, sound]);
 
 
-   
-    // 再生ボタンのハンドラです。再生中ではない場合は再生を開始し、そうでなければ一時停止します。
-    const handlePlay = () => {
+     // 再生ボタンのハンドラです。再生中ではない場合は再生を開始し、そうでなければ一時停止します。
+     const handlePlay = () => {
       if (!isPlaying) {
         play();
         } else {
         pause();
       }
-    }
-  
+    }  
+       
+
     // ミュート切り替え関数です。現在ミュートされていれば音量を戻し、そうでなければミュートします。
     const toggleMute = () => {
         if (volume === 0) {
@@ -235,10 +248,10 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
             />
           <BsRepeat1
             onClick={toggleRepeat}
-            size={30}
-            className={`text-neutral-400 cursor-pointer hover:text-white transition ${isRepeating ? 'text-green-500' : ''}`}
+            size={25}
+            className= "text-neutral-400 cursor-pointer hover:text-white transition" 
+            style={{color: isRepeating ? 'green' : 'white'}}
           />
-
           </div>
       
           <div className="hidden md:flex w-full justify-end pr-2">
