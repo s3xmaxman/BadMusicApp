@@ -10,10 +10,7 @@ const Player = () => {
   const { song } = useGetSongById(player.activeId);
 
 
-  const songUrl = song ? useLoadSongUrl(song) : undefined;
-
-
-  
+  const songUrl = useLoadSongUrl(song!);
 
   if(!song || !songUrl || !player.activeId) {
     return null;
@@ -32,7 +29,7 @@ const Player = () => {
         px-4
       "
     >
-      <PlayerContent key={songUrl} song={song} songUrl={songUrl}  />
+      <PlayerContent  song={song} songUrl={songUrl}  />
     </div>
   );
 }
