@@ -36,13 +36,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
 
     console.log(songUrl)
 
-    // song-Nocturnal-lq2lzdez
-    
-
-    
-
-   
-
     // 再生状態に応じてアイコンを切り替えます。
     const Icon = isPlaying ? BsPauseFill : BsPlayFill;
     // 音量状態に応じてボリュームアイコンを切り替えます。
@@ -103,7 +96,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
           if (!isRepeatingRef.current) {
             onPlayNext();
           } else {
-            play();
+            play()
           }  
         },
         onpause: () => setIsPlaying(false),

@@ -10,11 +10,8 @@ const Player = () => {
   const { song } = useGetSongById(player.activeId);
 
 
-  let songUrl;
-  if (song) {
-    // This hook will now only be called if song is not undefined 
-    songUrl = useLoadSongUrl(song);
-  }
+  const songUrl = song ? useLoadSongUrl(song) : undefined;
+
 
   
 
@@ -35,7 +32,7 @@ const Player = () => {
         px-4
       "
     >
-      <PlayerContent song={song} songUrl={songUrl}  />
+      <PlayerContent key={songUrl} song={song} songUrl={songUrl}  />
     </div>
   );
 }
