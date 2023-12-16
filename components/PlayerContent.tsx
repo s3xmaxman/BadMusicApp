@@ -46,7 +46,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
         return;
       }
     
-      if (isShuffling) {
+      if (!isRepeatingRef.current && isShuffling) {
         const randomIndex = Math.floor(Math.random() * player.ids.length);
         return player.setId(player.ids[randomIndex]);
       }
@@ -66,7 +66,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
         return;
       }
       
-      if (isShuffling) {
+      if (!isRepeatingRef.current && isShuffling) {
         const randomIndex = Math.floor(Math.random() * player.ids.length);
         return player.setId(player.ids[randomIndex]);
       }
@@ -247,7 +247,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
           <BsRepeat1
             onClick={toggleRepeat}
             size={25}
-            className= "text-neutral-400 cursor-pointer hover:text-white transition" 
+            className="text-neutral-400 cursor-pointer hover:text-white transition"
             style={{color: isRepeating ? 'green' : 'white'}}
           />
           </div>
@@ -273,21 +273,3 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
 export default PlayerContent;
 
 
-
-
-// 上記のコードはspotifyのような音楽再生をメインとしたWEBアプリの再生プレイヤーコンポーネントです
-// しかし、
-// useEffect(() => {
-//   sound?.play(); // サウンドがあれば再生します。
-
-//   return () => {
-//       sound?.unload(); // コンポーネントのクリーンアップ時にサウンドをアンロードします。
-//   }
-// }, isRepeating ? [isPlaying, sound] : [sound]); 
-
-
-// isRepeatingがTrueの場合画面を更新した一番最初に再生ボタンをおした曲が再生されません
-// しかし、別の曲の再生ボタンを押せば再生されます
-// 私が修正したいのはisRepeatingがTrueでも画面更新時に最初にクリックした曲を再生できるようにしたいです
-// ちなみにisRepeatingがfalseなら問題なく動作します
-// 修正をお願いします
