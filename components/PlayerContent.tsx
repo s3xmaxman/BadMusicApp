@@ -81,7 +81,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
       player.setId(previousSong);
     }
 
-    
     const [play, {
       pause,
       sound,
@@ -104,29 +103,36 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
       }
      );
 
+
     useEffect(() => {
       isRepeatingRef.current = isRepeating;
     }, [isRepeating]);
     
-   
     useEffect(() => {
-      sound?.play(); // サウンドがあれば再生します。
+      sound?.play();
 
       return () => {
-          sound?.unload(); // コンポーネントのクリーンアップ時にサウンドをアンロードします。
+        sound?.unload();
       }
-    }, isRepeating ? [isPlaying, sound] : [sound]); 
+    }, [sound]);
 
-          
-     // 再生ボタンのハンドラです。再生中ではない場合は再生を開始し、そうでなければ一時停止します。
+    useEffect(() => {
+      if (isRepeating && !isPlaying) {
+        sound?.play() 
+      } 
+    }, [isRepeating, isPlaying, sound]);
+
+    
+
+    //  再生ボタンのハンドラです。再生中ではない場合は再生を開始し、そうでなければ一時停止します。
      const handlePlay = () => {
       if (!isPlaying) {
         play();
         } else {
         pause();
       }
-    }  
-       
+    } 
+      
     // ミュート切り替え関数です。現在ミュートされていれば音量を戻し、そうでなければミュートします。
     const toggleMute = () => {
         if (volume === 0) {
@@ -266,3 +272,22 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
  
 export default PlayerContent;
 
+
+
+
+// 上記のコードはspotifyのような音楽再生をメインとしたWEBアプリの再生プレイヤーコンポーネントです
+// しかし、
+// useEffect(() => {
+//   sound?.play(); // サウンドがあれば再生します。
+
+//   return () => {
+//       sound?.unload(); // コンポーネントのクリーンアップ時にサウンドをアンロードします。
+//   }
+// }, isRepeating ? [isPlaying, sound] : [sound]); 
+
+
+// isRepeatingがTrueの場合画面を更新した一番最初に再生ボタンをおした曲が再生されません
+// しかし、別の曲の再生ボタンを押せば再生されます
+// 私が修正したいのはisRepeatingがTrueでも画面更新時に最初にクリックした曲を再生できるようにしたいです
+// ちなみにisRepeatingがfalseなら問題なく動作します
+// 修正をお願いします
