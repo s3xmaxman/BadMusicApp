@@ -14,6 +14,7 @@ import usePlayer from "@/hooks/usePlayer";
 import LikeButton from "./LikeButton";
 import MediaItem from "./MediaItem";
 import Slider from "./Slider";
+import SeekBar from './Seekbar';
 
 
 
@@ -83,8 +84,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
       player.setId(previousSong);
     }
 
-    
-
     const [play, { pause, sound}] = useSound( songUrl, { 
       volume: volume, 
       loop: isRepeating, 
@@ -107,6 +106,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
       format: ['mp3'], 
     });
 
+ 
     useEffect(() => { 
       if (isRepeating && !isPlaying && isPlayingSound) { 
         sound?.play(); 
@@ -141,12 +141,29 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
         setDuration(sound.duration());
         const interval = setInterval(() => {
           setCurrentTime(sound.seek());
-          setDuration(sound.duration() - sound.seek());
         }, 1000);
         return () => clearInterval(interval);
       }
     }, [sound]);
+
+    useEffect(() => {
+      setCurrentTime(0);
+      setDuration(0);
+    }, [songUrl]);
+
+    useEffect(() => {
+      if (sound) {
+        setCurrentTime(sound.seek());
+      }
+    }, [sound]);
     
+    useEffect(() => {
+      if (sound?._duration) {
+        setDuration(sound._duration);
+      }
+    }, [sound?._duration]);
+   
+
 
     //  再生ボタンのハンドラです。再生中ではない場合は再生を開始し、そうでなければ一時停止します。
      const handlePlay = () => {
@@ -181,8 +198,13 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
       const seconds = Math.floor(time % 60);
       return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     };
-    
 
+    const handleSeek = (time: number) => {
+      if (sound) {
+        sound.seek(time);
+        setCurrentTime(time);
+      }
+    };
 
     return ( 
       <div className="grid grid-cols-2 md:grid-cols-3 h-full">
@@ -190,9 +212,10 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
             <div className="flex items-center gap-x-4">
               <MediaItem data={song} />
               <LikeButton songId={song.id} />
+              
             </div>
           </div>
-  
+          
           <div 
             className="
               flex 
@@ -240,6 +263,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
              className= "text-neutral-400 cursor-pointer hover:text-white transition" 
              style={{color: isShuffling ? 'green' : 'white'}}
             />
+            
             <AiFillStepBackward
               onClick={onPlayPrevious}
               size={30} 
@@ -276,15 +300,16 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
                 transition
               " 
             />
+            
           <BsRepeat1
             onClick={toggleRepeat}
             size={25}
             className="text-neutral-400 cursor-pointer hover:text-white transition"
             style={{color: isRepeating ? 'green' : 'white'}}
           />
-          -{formatTime(duration)}
+          -{formatTime(duration - currentTime)}
+          <SeekBar currentTime={currentTime} duration={duration} onSeek={handleSeek} />
           </div>
-      
           <div className="hidden md:flex w-full justify-end pr-2">
             <div className="flex items-center gap-x-2 w-[120px]">
               <VolumeIcon 
