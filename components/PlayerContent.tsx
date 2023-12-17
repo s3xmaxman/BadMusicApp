@@ -32,9 +32,8 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     const [isPlaying, setIsPlaying] = useState(false);
     const [isRepeating, setIsRepeating] = useState(false);
     const [isShuffling, setIsShuffling] = useState(false);
+    const [isPlayingSound, setIsPlayingSound] = useState(false);
     const isRepeatingRef = useRef(isRepeating);
-
-    console.log(songUrl)
 
     // 再生状態に応じてアイコンを切り替えます。
     const Icon = isPlaying ? BsPauseFill : BsPlayFill;
@@ -81,27 +80,36 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
       player.setId(previousSong);
     }
 
-    const [play, {
-      pause,
-      sound,
-     }] = useSound(
-      songUrl,
-      { 
-        volume: volume,
-        loop: isRepeating,
-        onplay: () => setIsPlaying(true),
-        onend: () => {
-          setIsPlaying(false);
-          if (!isRepeatingRef.current) {
-            onPlayNext();
-          } else {
-            play()
-          }  
-        },
-        onpause: () => setIsPlaying(false),
-        format: ['mp3'],
-      }
-     );
+    
+
+    const [play, { pause, sound, }] = useSound( songUrl, { 
+      volume: volume, 
+      loop: isRepeating, 
+      onplay: () => {
+        setIsPlaying(true);
+        setIsPlayingSound(true);
+      }, 
+      onend: () => { 
+        setIsPlaying(false);
+        if (!isRepeatingRef.current) { 
+          onPlayNext(); 
+        } else { 
+          play() 
+        } 
+      }, 
+      onpause: () => { 
+        setIsPlaying(false);
+        setIsPlayingSound(false);
+      }, 
+      format: ['mp3'], 
+    });
+    
+
+    useEffect(() => { 
+      if (isRepeating && !isPlaying && isPlayingSound) { 
+        sound?.play(); 
+      } 
+    }, [isRepeating, isPlaying, sound, isPlayingSound]);
 
 
     useEffect(() => {
@@ -116,13 +124,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
       }
     }, [sound]);
 
-    useEffect(() => {
-      if (isRepeating && !isPlaying) {
-        sound?.play() 
-      } 
-    }, [isRepeating, isPlaying, sound]);
-
-    
 
     //  再生ボタンのハンドラです。再生中ではない場合は再生を開始し、そうでなければ一時停止します。
      const handlePlay = () => {
@@ -150,8 +151,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     const toggleShuffle = () => {
       setIsShuffling(!isShuffling);
       console.log('Shuffle status changed to:', !isShuffling);
-     
-    }
+    };
 
     return ( 
       <div className="grid grid-cols-2 md:grid-cols-3 h-full">
