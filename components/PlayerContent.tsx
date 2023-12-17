@@ -14,7 +14,7 @@ import usePlayer from "@/hooks/usePlayer";
 import LikeButton from "./LikeButton";
 import MediaItem from "./MediaItem";
 import Slider from "./Slider";
-import Seekbar from './Seekbar';
+
 
 
 interface PlayerContentProps {
@@ -34,6 +34,9 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     const [isShuffling, setIsShuffling] = useState(false);
     const [isPlayingSound, setIsPlayingSound] = useState(false);
     const isRepeatingRef = useRef(isRepeating);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [duration, setDuration] = useState(0);
+
 
     // 再生状態に応じてアイコンを切り替えます。
     const Icon = isPlaying ? BsPauseFill : BsPlayFill;
@@ -82,7 +85,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
 
     
 
-    const [play, { pause, sound, }] = useSound( songUrl, { 
+    const [play, { pause, sound}] = useSound( songUrl, { 
       volume: volume, 
       loop: isRepeating, 
       onplay: () => {
@@ -103,7 +106,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
       }, 
       format: ['mp3'], 
     });
-    
 
     useEffect(() => { 
       if (isRepeating && !isPlaying && isPlayingSound) { 
@@ -124,6 +126,27 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
       }
     }, [sound]);
 
+    useEffect(() => {
+      if (sound) {
+        setDuration(sound.duration());
+        const interval = setInterval(() => {
+          setCurrentTime(sound.seek());
+        }, 1000);
+        return () => clearInterval(interval);
+      }
+    }, [sound]);
+
+    useEffect(() => {
+      if (sound) {
+        setDuration(sound.duration());
+        const interval = setInterval(() => {
+          setCurrentTime(sound.seek());
+          setDuration(sound.duration() - sound.seek());
+        }, 1000);
+        return () => clearInterval(interval);
+      }
+    }, [sound]);
+    
 
     //  再生ボタンのハンドラです。再生中ではない場合は再生を開始し、そうでなければ一時停止します。
      const handlePlay = () => {
@@ -142,16 +165,24 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
         setVolume(0);
         }
     }
-
+    
+    // リピート状態を切り替え関数です。現在リピートされていればリピートを解除し、そうでなければリピートします。
     const toggleRepeat = () => {
       setIsRepeating(!isRepeating);
-      console.log('Repeat status changed to:', !isRepeating);
     };
-
+    
+    // シャッフル再生の関数です。現在シャッフルされていれば再生を解除し、そうでなければシャッフルします。
     const toggleShuffle = () => {
       setIsShuffling(!isShuffling);
-      console.log('Shuffle status changed to:', !isShuffling);
     };
+    
+    const formatTime = (time: number) => {
+      const minutes = Math.floor(time / 60);
+      const seconds = Math.floor(time % 60);
+      return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    };
+    
+
 
     return ( 
       <div className="grid grid-cols-2 md:grid-cols-3 h-full">
@@ -202,6 +233,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
               gap-x-6
             "
           >
+            {formatTime(currentTime)}
             <FaRandom
              onClick={toggleShuffle}
              size={20}
@@ -250,6 +282,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
             className="text-neutral-400 cursor-pointer hover:text-white transition"
             style={{color: isRepeating ? 'green' : 'white'}}
           />
+          -{formatTime(duration)}
           </div>
       
           <div className="hidden md:flex w-full justify-end pr-2">

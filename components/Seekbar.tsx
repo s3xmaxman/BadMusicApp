@@ -37,7 +37,6 @@ const Seekbar: React.FC<SeekbarProps> = ({
           </div>
         </div>
       );
- 
   };
   
 export default Seekbar;
