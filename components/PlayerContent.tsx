@@ -136,15 +136,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
       }
     }, [sound]);
 
-    useEffect(() => {
-      if (sound) {
-        setDuration(sound.duration());
-        const interval = setInterval(() => {
-          setCurrentTime(sound.seek());
-        }, 1000);
-        return () => clearInterval(interval);
-      }
-    }, [sound]);
 
     useEffect(() => {
       setCurrentTime(0);
@@ -215,7 +206,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
               
             </div>
           </div>
-          
+
           <div 
             className="
               flex 
