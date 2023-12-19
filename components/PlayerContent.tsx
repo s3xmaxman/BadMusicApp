@@ -24,6 +24,8 @@ interface PlayerContentProps {
   
 }
 
+
+
 const PlayerContent: React.FC<PlayerContentProps> = ({ 
   song, 
   songUrl,
@@ -316,7 +318,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
           </div>
         </div>
      );
-  
 }
  
 export default PlayerContent;
