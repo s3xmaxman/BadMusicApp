@@ -24,8 +24,6 @@ interface PlayerContentProps {
   
 }
 
-
-
 const PlayerContent: React.FC<PlayerContentProps> = ({ 
   song, 
   songUrl,
