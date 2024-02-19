@@ -15,6 +15,7 @@ interface LibraryProps {
     songs: Song[]   
 }
 const Library: React.FC<LibraryProps> = ({songs}) => {
+    
     const subscribeModal = useSubscribeModal();
     const authModal = useAuthModal();
     const { user, subscription } = useUser();
@@ -25,12 +26,13 @@ const Library: React.FC<LibraryProps> = ({songs}) => {
             return authModal.onOpen();
         }
 
-        if(!subscription) {
-            return subscribeModal.onOpen();
-        }
+        // if(!subscription) {
+        //     return subscribeModal.onOpen();
+        // }
         
         return uploadModal.onOpen();
    }
+   
 
   return (
     <div className='flex flex-col'>
