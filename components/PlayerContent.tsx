@@ -301,7 +301,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
           />
             {formatTime(currentTime)}
             <SeekBar currentTime={currentTime} duration={duration} onSeek={handleSeek} />
-            -{formatTime(duration - currentTime)}
+            {formatTime(duration)}
           </div>
           <div className="hidden md:flex w-full justify-end pr-2">
             <div className="flex items-center gap-x-2 w-[120px]">
