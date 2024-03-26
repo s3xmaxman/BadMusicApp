@@ -1,7 +1,7 @@
 "use client";
 
 import useSound from 'use-sound';
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
@@ -37,6 +37,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     const isRepeatingRef = useRef(isRepeating);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
+
 
 
     // 再生状態に応じてアイコンを切り替えます。
@@ -247,7 +248,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
               gap-x-6
             "
           >
-            {formatTime(currentTime)}
+            
             <FaRandom
              onClick={toggleShuffle}
              size={20}
@@ -298,8 +299,9 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
             className="text-neutral-400 cursor-pointer hover:text-white transition"
             style={{color: isRepeating ? 'green' : 'white'}}
           />
-          -{formatTime(duration - currentTime)}
-          <SeekBar currentTime={currentTime} duration={duration} onSeek={handleSeek} />
+            {formatTime(currentTime)}
+            <SeekBar currentTime={currentTime} duration={duration} onSeek={handleSeek} />
+            -{formatTime(duration - currentTime)}
           </div>
           <div className="hidden md:flex w-full justify-end pr-2">
             <div className="flex items-center gap-x-2 w-[120px]">
@@ -308,10 +310,12 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
                 className="cursor-pointer" 
                 size={34} 
               />
+              
               <Slider 
                 value={volume} 
                 onChange={(value) => setVolume(value)}
               />
+              
             </div>
           </div>
         </div>
