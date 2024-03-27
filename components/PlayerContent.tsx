@@ -24,9 +24,7 @@ interface PlayerContentProps {
   
 }
 
-const PlayerContent: React.FC<PlayerContentProps> = ({ 
-  song, 
-  songUrl,
+const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl,
 }) => {
     const player = usePlayer();
     const [volume, setVolume] = useState(0.1);
@@ -37,6 +35,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     const isRepeatingRef = useRef(isRepeating);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
+ 
 
 
 
@@ -185,11 +184,16 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
       setIsShuffling(!isShuffling);
     };
     
-    const formatTime = (time: number) => {
-      const minutes = Math.floor(time / 60);
-      const seconds = Math.floor(time % 60);
-      return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-    };
+    const formatTime = useMemo(() => {
+      return (time: number) => {
+        const minutes = Math.floor(time / 60);
+        const seconds = Math.floor(time % 60);
+        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+      };
+    }, []);
+    
+    const formattedCurrentTime = useMemo(() => formatTime(currentTime), [currentTime, sound]);
+    const formattedDuration = useMemo(() => formatTime(duration), [duration, sound?._duration]);
 
     const handleSeek = (time: number) => {
       if (sound) {
@@ -245,9 +249,9 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
             className="text-neutral-400 cursor-pointer hover:text-white transition"
             style={{color: isRepeating ? 'green' : 'white'}}
           />
-            {formatTime(currentTime)}
+            <span className="w-[50px] text-center inline-block">{formatTime(currentTime)}</span>
             <SeekBar currentTime={currentTime} duration={duration} onSeek={handleSeek} />
-            {formatTime(duration)}
+            <span className="w-[50px] text-center inline-block">{formatTime(duration)}</span>
           </div>
           <div className="hidden md:flex w-full justify-end pr-2">
             <div className="flex items-center gap-x-2 w-[120px]">
