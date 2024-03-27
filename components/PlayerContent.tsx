@@ -186,7 +186,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl}) => {
   }, []);
   
   const formattedCurrentTime = useMemo(() => formatTime(currentTime), [currentTime, sound]);
-  const formattedDuration = useMemo(() => formatTime(duration), [duration, sound.duration]);
+  const formattedDuration = useMemo(() => formatTime(duration), [duration, sound]);
 
   const handleSeek = (time: number) => {
     if (sound) {

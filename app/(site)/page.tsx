@@ -3,11 +3,18 @@ import Header from '@/components/Header'
 import ListItem from '@/components/ListItem'
 import React from 'react'
 import PageContent from './components/PageContent';
+import RightSidebar from '@/components/RightSidebar';
+
 
 export const revalidate = 0
 
 export default async function Home(){
   const songs = await getSongs();
+  const currentSong = {
+    image: '/images/test.png',
+    name: 'Song Name',
+    artist: 'Artist Name',
+ };
 
   
   return (
@@ -30,10 +37,10 @@ export default async function Home(){
         </div>
         <div>
            <PageContent songs={songs}/>
+           <RightSidebar song={currentSong} />
         </div>
       </div>
     </div>
   )
 }
-
 
