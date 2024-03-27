@@ -36,9 +36,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl,
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
  
-
-
-
     // 再生状態に応じてアイコンを切り替えます。
     const Icon = isPlaying ? BsPauseFill : BsPlayFill;
     // 音量状態に応じてボリュームアイコンを切り替えます。
@@ -234,7 +231,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl,
             />
             <div 
               onClick={handlePlay} 
-              className="flex items-center justify-center h-10 w-10 rounded-full bg-white p-1 cursor-pointer"
+              className="flex items-center justify-center h-7 w-7 rounded-full bg-white p-1 cursor-pointer"
             >
               <Icon size={30} className="text-black" />
             </div>
@@ -245,7 +242,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl,
             />
           <BsRepeat1
             onClick={toggleRepeat}
-            size={25}
+            size={20}
             className="text-neutral-400 cursor-pointer hover:text-white transition"
             style={{color: isRepeating ? 'green' : 'white'}}
           />
