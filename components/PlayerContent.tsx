@@ -24,178 +24,177 @@ interface PlayerContentProps {
   
 }
 
-const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl,
-}) => {
-    const player = usePlayer();
-    const [volume, setVolume] = useState(0.1);
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [isRepeating, setIsRepeating] = useState(false);
-    const [isShuffling, setIsShuffling] = useState(false);
-    const [isPlayingSound, setIsPlayingSound] = useState(false);
-    const isRepeatingRef = useRef(isRepeating);
-    const [currentTime, setCurrentTime] = useState(0);
-    const [duration, setDuration] = useState(0);
+const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl}) => {
+  const player = usePlayer();
+  const [volume, setVolume] = useState(0.1);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isRepeating, setIsRepeating] = useState(false);
+  const [isShuffling, setIsShuffling] = useState(false);
+  const [isPlayingSound, setIsPlayingSound] = useState(false);
+  const isRepeatingRef = useRef(isRepeating);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
  
 
-    const Icon = isPlaying ? BsPauseFill : BsPlayFill;
-    const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
+  const Icon = isPlaying ? BsPauseFill : BsPlayFill;
+  const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
 
-    const onPlayNext = () => {
-      if (player.ids.length === 0) {
-        return;
-      }
-    
-      if (!isRepeatingRef.current && isShuffling) {
-        const randomIndex = Math.floor(Math.random() * player.ids.length);
-        return player.setId(player.ids[randomIndex]);
-      }
-      
-      const currentIndex = player.ids.findIndex((id) => id === player.activeId);
-      const nextSong = player.ids[currentIndex + 1];
-    
-      if (!nextSong) {
-        return player.setId(player.ids[0]);
-      }
-    
-      player.setId(nextSong);
+  const onPlayNext = () => {
+    if (player.ids.length === 0) {
+      return;
+    }
+  
+    if (!isRepeatingRef.current && isShuffling) {
+      const randomIndex = Math.floor(Math.random() * player.ids.length);
+      return player.setId(player.ids[randomIndex]);
     }
     
-    const onPlayPrevious = () => {
-      if (player.ids.length === 0) {
-        return;
-      }
-      
-      if (!isRepeatingRef.current && isShuffling) {
-        const randomIndex = Math.floor(Math.random() * player.ids.length);
-        return player.setId(player.ids[randomIndex]);
-      }
-
-      const currentIndex = player.ids.findIndex((id) => id === player.activeId);
-      const previousSong = player.ids[currentIndex - 1];
-
-      if (isRepeatingRef.current) {
-        if (sound) {
-          sound.seek(0); 
-          setCurrentTime(0); 
-        }
-        return;
-     }
-
-      player.setId(previousSong);
+    const currentIndex = player.ids.findIndex((id) => id === player.activeId);
+    const nextSong = player.ids[currentIndex + 1];
+  
+    if (!nextSong) {
+      return player.setId(player.ids[0]);
+    }
+  
+    player.setId(nextSong);
+  }
+  
+  const onPlayPrevious = () => {
+    if (player.ids.length === 0) {
+      return;
+    }
+    
+    if (!isRepeatingRef.current && isShuffling) {
+      const randomIndex = Math.floor(Math.random() * player.ids.length);
+      return player.setId(player.ids[randomIndex]);
     }
 
-    const [play, { pause, sound}] = useSound( songUrl, { 
-      volume: volume, 
-      loop: isRepeating, 
-      onplay: () => {
-        setIsPlaying(true);
-        setIsPlayingSound(true);
-      }, 
-      onend: () => { 
-        setIsPlaying(false);
-        if (!isRepeatingRef.current) { 
-          onPlayNext(); 
-        } else { 
-          play() 
-        } 
-      }, 
-      onpause: () => { 
-        setIsPlaying(false);
-        setIsPlayingSound(false);
-      }, 
-      format: ['mp3'], 
-    });
+    const currentIndex = player.ids.findIndex((id) => id === player.activeId);
+    const previousSong = player.ids[currentIndex - 1];
 
- 
-    useEffect(() => { 
-      if (isRepeating && !isPlaying && isPlayingSound) { 
-        sound?.play(); 
+    if (isRepeatingRef.current) {
+      if (sound) {
+        sound.seek(0); 
+        setCurrentTime(0); 
+      }
+      return;
+    }
+
+    player.setId(previousSong);
+  }
+
+  const [play, { pause, sound}] = useSound( songUrl, { 
+    volume: volume, 
+    loop: isRepeating, 
+    onplay: () => {
+      setIsPlaying(true);
+      setIsPlayingSound(true);
+    }, 
+    onend: () => { 
+      setIsPlaying(false);
+      if (!isRepeatingRef.current) { 
+        onPlayNext(); 
+      } else { 
+        play() 
       } 
-    }, [isRepeating, isPlaying, sound, isPlayingSound]);
+    }, 
+    onpause: () => { 
+      setIsPlaying(false);
+      setIsPlayingSound(false);
+    }, 
+    format: ['mp3'], 
+  });
 
 
-    useEffect(() => {
-      isRepeatingRef.current = isRepeating;
-    }, [isRepeating]);
-    
-    useEffect(() => {
-      sound?.play();
-
-      return () => {
-        sound?.unload();
-      }
-    }, [sound]);
-
-    useEffect(() => {
-      if (sound) {
-        setDuration(sound.duration());
-        const interval = setInterval(() => {
-          setCurrentTime(sound.seek());
-        }, 1000);
-        return () => clearInterval(interval);
-      }
-    }, [sound]);
-
-
-    useEffect(() => {
-      setCurrentTime(0);
-      setDuration(0);
-    }, [songUrl]);
-
-    useEffect(() => {
-      if (sound) {
-        setCurrentTime(sound.seek());
-      }
-    }, [sound]);
-    
-    useEffect(() => {
-      if (sound?._duration) {
-        setDuration(sound._duration);
-      }
-    }, [sound?._duration]);
-   
-
-     const handlePlay = () => {
-      if (!isPlaying) {
-        play();
-        } else {
-        pause();
-      }
+  useEffect(() => { 
+    if (isRepeating && !isPlaying && isPlayingSound) { 
+      sound?.play(); 
     } 
-      
-    const toggleMute = () => {
-        if (volume === 0) {
-        setVolume(0.1);
-        } else {
-        setVolume(0);
-        }
-    }
-    
-    const toggleRepeat = () => {
-      setIsRepeating(!isRepeating);
-    };
-    
-    const toggleShuffle = () => {
-      setIsShuffling(!isShuffling);
-    };
-    
-    const formatTime = useMemo(() => {
-      return (time: number) => {
-        const minutes = Math.floor(time / 60);
-        const seconds = Math.floor(time % 60);
-        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-      };
-    }, []);
-    
-    const formattedCurrentTime = useMemo(() => formatTime(currentTime), [currentTime, sound]);
-    const formattedDuration = useMemo(() => formatTime(duration), [duration, sound?._duration]);
+  }, [isRepeating, isPlaying, sound, isPlayingSound]);
 
-    const handleSeek = (time: number) => {
-      if (sound) {
-        sound.seek(time);
-        setCurrentTime(time);
+
+  useEffect(() => {
+    isRepeatingRef.current = isRepeating;
+  }, [isRepeating]);
+  
+  useEffect(() => {
+    sound?.play();
+
+    return () => {
+      sound?.unload();
+    }
+  }, [sound]);
+
+  useEffect(() => {
+    if (sound) {
+      setDuration(sound.duration());
+      const interval = setInterval(() => {
+        setCurrentTime(sound.seek());
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [sound]);
+
+
+  useEffect(() => {
+    setCurrentTime(0);
+    setDuration(0);
+  }, [songUrl]);
+
+  useEffect(() => {
+    if (sound) {
+      setCurrentTime(sound.seek());
+    }
+  }, [sound]);
+  
+  useEffect(() => {
+    if (sound?._duration) {
+      setDuration(sound._duration);
+    }
+  }, [sound?._duration]);
+  
+
+    const handlePlay = () => {
+    if (!isPlaying) {
+      play();
+      } else {
+      pause();
+    }
+  } 
+    
+  const toggleMute = () => {
+      if (volume === 0) {
+      setVolume(0.1);
+      } else {
+      setVolume(0);
       }
+  }
+  
+  const toggleRepeat = () => {
+    setIsRepeating(!isRepeating);
+  };
+  
+  const toggleShuffle = () => {
+    setIsShuffling(!isShuffling);
+  };
+  
+  const formatTime = useMemo(() => {
+    return (time: number) => {
+      const minutes = Math.floor(time / 60);
+      const seconds = Math.floor(time % 60);
+      return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     };
+  }, []);
+  
+  const formattedCurrentTime = useMemo(() => formatTime(currentTime), [currentTime, sound]);
+  const formattedDuration = useMemo(() => formatTime(duration), [duration, sound?._duration]);
+
+  const handleSeek = (time: number) => {
+    if (sound) {
+      sound.seek(time);
+      setCurrentTime(time);
+    }
+  };
 
     return ( 
       <div className="grid grid-cols-2 md:grid-cols-3 h-full">
