@@ -36,9 +36,8 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl,
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
  
-    // 再生状態に応じてアイコンを切り替えます。
+
     const Icon = isPlaying ? BsPauseFill : BsPlayFill;
-    // 音量状態に応じてボリュームアイコンを切り替えます。
     const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
 
     const onPlayNext = () => {
@@ -70,14 +69,18 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl,
         const randomIndex = Math.floor(Math.random() * player.ids.length);
         return player.setId(player.ids[randomIndex]);
       }
-    
+
       const currentIndex = player.ids.findIndex((id) => id === player.activeId);
       const previousSong = player.ids[currentIndex - 1];
-    
-      if (!previousSong) {
-        return player.setId(player.ids[player.ids.length - 1]);
-      }
-    
+
+      if (isRepeatingRef.current) {
+        if (sound) {
+          sound.seek(0); 
+          setCurrentTime(0); 
+        }
+        return;
+     }
+
       player.setId(previousSong);
     }
 
@@ -152,8 +155,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl,
     }, [sound?._duration]);
    
 
-
-    //  再生ボタンのハンドラです。再生中ではない場合は再生を開始し、そうでなければ一時停止します。
      const handlePlay = () => {
       if (!isPlaying) {
         play();
@@ -162,7 +163,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl,
       }
     } 
       
-    // ミュート切り替え関数です。現在ミュートされていれば音量を戻し、そうでなければミュートします。
     const toggleMute = () => {
         if (volume === 0) {
         setVolume(0.1);
@@ -171,12 +171,10 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl,
         }
     }
     
-    // リピート状態を切り替え関数です。現在リピートされていればリピートを解除し、そうでなければリピートします。
     const toggleRepeat = () => {
       setIsRepeating(!isRepeating);
     };
     
-    // シャッフル再生の関数です。現在シャッフルされていれば再生を解除し、そうでなければシャッフルします。
     const toggleShuffle = () => {
       setIsShuffling(!isShuffling);
     };
@@ -246,9 +244,9 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl,
             className="text-neutral-400 cursor-pointer hover:text-white transition"
             style={{color: isRepeating ? 'green' : 'white'}}
           />
-            <span className="w-[50px] text-center inline-block">{formatTime(currentTime)}</span>
+            <span className="w-[50px] text-center inline-block">{formattedCurrentTime}</span>
             <SeekBar currentTime={currentTime} duration={duration} onSeek={handleSeek} />
-            <span className="w-[50px] text-center inline-block">{formatTime(duration)}</span>
+            <span className="w-[50px] text-center inline-block">{formattedDuration}</span>
           </div>
           <div className="hidden md:flex w-full justify-end pr-2">
             <div className="flex items-center gap-x-2 w-[120px]">
