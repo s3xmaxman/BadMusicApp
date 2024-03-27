@@ -23,7 +23,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId }) => {
     const [isLiked, setIsLiked] = useState(false);
 
     useEffect(() => {
-        // ユーザーIDが存在しない場合は処理を終了する
+
         if (!user?.id) {
             return;
         }
@@ -47,7 +47,6 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId }) => {
         fetchData();
     }, [songId, user?.id, supabaseClient]);
 
-    // isLikedの値によって表示するアイコンを決定する
     const Icon = isLiked ? AiFillHeart : AiOutlineHeart;
 
     const handleLike = async () => {
@@ -90,7 +89,6 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId }) => {
             }
         }
 
-        // ルーターをリフレッシュする
         router.refresh();
     }
 

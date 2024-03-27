@@ -35,7 +35,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl}) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
  
-
   const Icon = isPlaying ? BsPauseFill : BsPlayFill;
   const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
 
@@ -187,7 +186,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl}) => {
   }, []);
   
   const formattedCurrentTime = useMemo(() => formatTime(currentTime), [currentTime, sound]);
-  const formattedDuration = useMemo(() => formatTime(duration), [duration, sound?._duration]);
+  const formattedDuration = useMemo(() => formatTime(duration), [duration, sound.duration]);
 
   const handleSeek = (time: number) => {
     if (sound) {
@@ -244,7 +243,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl}) => {
             style={{color: isRepeating ? 'green' : 'white'}}
           />
             <span className="w-[50px] text-center inline-block">{formattedCurrentTime}</span>
-            <SeekBar currentTime={currentTime} duration={duration} onSeek={handleSeek} />
+             <SeekBar currentTime={currentTime} duration={duration} onSeek={handleSeek} />
             <span className="w-[50px] text-center inline-block">{formattedDuration}</span>
           </div>
           <div className="hidden md:flex w-full justify-end pr-2">
