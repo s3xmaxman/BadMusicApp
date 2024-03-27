@@ -11,7 +11,7 @@ interface SongItemProps {
 }
 
 const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
-  const iamgePath = useLoadImage(data)  
+  const imagePath = useLoadImage(data)  
   return (
     <div
       onClick={() => onClick(data.id)}
@@ -32,19 +32,10 @@ const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
       p-3
       "
     >
-      <div
-        className="
-          relative 
-          aspect-square 
-          w-full 
-          h-full 
-          rounded-md 
-          overflow-hidden
-        "
-      >
+      <div className="relative aspect-square w-full h-full rounded-md overflow-hidden">
         <Image
             className="object-cover" 
-            src={iamgePath || '/images/liked.png'}
+            src={imagePath || '/images/liked.png'}
             fill
             alt="Image"
         />
@@ -53,25 +44,11 @@ const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
         <p className="font-semibold truncate w-full">
             {data.title}
         </p>
-        <p
-            className="
-              text-neutral-400 
-              text-sm 
-              pb-4 
-              w-full 
-              truncate
-            "
-        >
+        <p className=" text-neutral-400 text-sm pb-4 w-full truncate">
           {data.author}
         </p>
       </div>
-      <div 
-        className="
-          absolute 
-          bottom-24 
-          right-5
-        "
-      >
+      <div className=" absolute bottom-24 right-5">
         <PlayButton />
       </div>  
     </div>
