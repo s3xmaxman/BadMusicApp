@@ -20,8 +20,7 @@ import SeekBar from './Seekbar';
 
 interface PlayerContentProps {
   song: Song;
-  songUrl: string;
-  
+  songUrl: string; 
 }
 
 const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl}) => {

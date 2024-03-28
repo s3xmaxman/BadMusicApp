@@ -14,7 +14,7 @@ import useSubscribeModal from '@/hooks/useSubscribeModal';
 interface LibraryProps {
     songs: Song[]   
 }
-const Library: React.FC<LibraryProps> = ({songs}) => {
+const Library: React.FC<LibraryProps> = ({ songs }) => {
     
     const subscribeModal = useSubscribeModal();
     const authModal = useAuthModal();

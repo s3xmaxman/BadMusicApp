@@ -4,18 +4,14 @@ import ListItem from '@/components/ListItem'
 import React from 'react'
 import PageContent from './components/PageContent';
 import RightSidebar from '@/components/RightSidebar';
-import { Song } from "@/types";
-
+import usePlayer from '@/hooks/usePlayer';
+import useGetSongById from '@/hooks/useGetSongById';
 
 export const revalidate = 0
 
-interface HomeProps {
-  song: Song
-}
-
-export default async function Home({ song }: HomeProps) {
+export default async function Home() {
   const songs = await getSongs();
- 
+
   return (
     <div className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
       <Header>
@@ -39,7 +35,7 @@ export default async function Home({ song }: HomeProps) {
            <PageContent songs={songs}/>
           </div>
           <div className='w-96 flex-shrink-0'>
-            <RightSidebar song={song}/>
+            <RightSidebar />
           </div>
         </div>
       </div>
