@@ -4,8 +4,6 @@ import ListItem from '@/components/ListItem'
 import React from 'react'
 import PageContent from './components/PageContent';
 import RightSidebar from '@/components/RightSidebar';
-import usePlayer from '@/hooks/usePlayer';
-import useGetSongById from '@/hooks/useGetSongById';
 
 export const revalidate = 0
 
