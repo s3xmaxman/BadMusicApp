@@ -4,19 +4,18 @@ import ListItem from '@/components/ListItem'
 import React from 'react'
 import PageContent from './components/PageContent';
 import RightSidebar from '@/components/RightSidebar';
+import { Song } from "@/types";
 
 
 export const revalidate = 0
 
-export default async function Home(){
-  const songs = await getSongs();
-  const currentSong = {
-    image: '/images/test.png',
-    name: 'Song Name',
-    artist: 'Artist Name',
- };
+interface HomeProps {
+  song: Song
+}
 
-  
+export default async function Home({ song }: HomeProps) {
+  const songs = await getSongs();
+ 
   return (
     <div className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
       <Header>
@@ -35,12 +34,17 @@ export default async function Home(){
               最新曲
             </h1>
         </div>
-        <div>
+        <div className='mt-2 mb-7 px-6 flex'>
+          <div className='w-full mr-4'>
            <PageContent songs={songs}/>
-           <RightSidebar song={currentSong} />
+          </div>
+          <div className='w-96 flex-shrink-0'>
+            <RightSidebar song={song}/>
+          </div>
         </div>
       </div>
     </div>
   )
 }
+
 
