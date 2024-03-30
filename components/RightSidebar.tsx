@@ -13,7 +13,7 @@ const RightSidebar = () => {
   const imagePath = useLoadImage(song!);
  
   if (!song) {
-    return null;
+    return null
   }
   
   return (
@@ -25,7 +25,6 @@ const RightSidebar = () => {
           width={600}
           height={600}
           className="w-full object-cover rounded-lg shadow-lg transition-all duration-500 ease-in-out"
-          style={{ filter: 'brightness(0.8)' }}
         />
         <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
           <FaMusic className="text-white text-6xl" />
