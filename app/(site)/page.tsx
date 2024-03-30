@@ -10,8 +10,8 @@ export const revalidate = 0
 export default async function Home() {
   const songs = await getSongs();
   return (
-    <div className="flex bg-neutral-900 rounded-lg h-full overflow-hidden overflow-y-auto">
-      <div className="w-[1250px]">
+    <div className="flex bg-neutral-900 rounded-lg h-full overflow-hidden">
+      <div className="w-[1250px] h-full overflow-y-auto">
         <Header>
           <div className='mb-2'>
             <h1 className='text-white text-3xl font-semibold'> こんにちは </h1>
@@ -31,7 +31,7 @@ export default async function Home() {
           </div>
         </div>
       </div>
-      <div className="hidden md:block w-96 flex-shrink-0 ml-4">
+      <div className="h-full overflow-y-auto w-96">
         <RightSidebar />
       </div>
     </div>
