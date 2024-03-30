@@ -31,7 +31,7 @@ export default async function Home() {
           </div>
         </div>
       </div>
-      <div className="h-full overflow-y-auto w-96">
+      <div className="hidden md:block h-full overflow-y-auto w-96">
         <RightSidebar />
       </div>
     </div>
