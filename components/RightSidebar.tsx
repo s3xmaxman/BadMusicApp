@@ -34,7 +34,7 @@ const RightSidebar = () => {
       </div>
       <div className="mt-8">
         <h1 className="text-3xl font-bold tracking-wide">{song.title}</h1>
-        <p className="text-lg text-gray-300">{song.author}</p>
+        <p className="mt-2 text-lg text-gray-300">{song.author}</p>
       </div>
       <div className='mt-2'>
         <LikeButton  songId={song.id} />
