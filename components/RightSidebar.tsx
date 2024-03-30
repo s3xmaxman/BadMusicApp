@@ -5,6 +5,7 @@ import useLoadImage from '@/hooks/useLoadImage';
 import usePlayer from '@/hooks/usePlayer';
 import useGetSongById from '@/hooks/useGetSongById';
 import { FaMusic } from 'react-icons/fa';
+import LikeButton from './LikeButton';
 
 
 const RightSidebar = () => {
@@ -34,6 +35,9 @@ const RightSidebar = () => {
       <div className="mt-8">
         <h1 className="text-3xl font-bold tracking-wide">{song.title}</h1>
         <p className="text-lg text-gray-300">{song.author}</p>
+      </div>
+      <div className='mt-2'>
+        <LikeButton  songId={song.id} />
       </div>
     </div>
    );
