@@ -17,25 +17,26 @@ const RightSidebar = () => {
   }
   
   return (
-    <div className="bg-gradient-to-b bg-natural-900 text-white p-4 h-full flex flex-col items-center rounded-lg overflow-auto">
-      <div className="mt-8 relative w-full max-w-xs mx-auto">
+    <div className="bg-gradient-to-b bg-natural-900 text-white p-4 h-full flex flex-col items-start rounded-lg overflow-auto">
+      <div className="relative w-full mt-4">
         <Image
           src={imagePath || '/images/RightSide.png'}
           alt="Song Image"
-          width='800'
-          height='800'
-          className="w-full object-cover rounded-lg shadow-lg transition-all duration-500 ease-in-out"
+          layout="responsive"
+          width={800}
+          height={800}
+          className="object-cover rounded-lg shadow-lg transition-all duration-500 ease-in-out"
         />
         <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
           <FaMusic className="text-white text-6xl" />
         </div>
       </div>
-      <div className="mt-16 text-center">
+      <div className="mt-8">
         <h1 className="text-3xl font-bold tracking-wide">{song.title}</h1>
         <p className="text-lg text-gray-300">{song.author}</p>
       </div>
     </div>
-  );
+   );
 };
 
 export default RightSidebar;
