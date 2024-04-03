@@ -48,7 +48,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({
     )
 })
 
-// Inputコンポーネントの表示名を設定
+
 Input.displayName = "Input";
 
 export default Input
