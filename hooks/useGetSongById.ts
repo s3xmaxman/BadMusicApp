@@ -4,24 +4,18 @@ import { useEffect, useMemo, useState } from "react"
 import toast from "react-hot-toast"
 
 const useGetSongById = (id?: string) => {
-    // ローディング状態のstate
     const [isLoading, setIsLoading] = useState(true)
-    // 曲データのstate
     const [song , setSong] = useState<Song | undefined>(undefined)
-    // supabaseクライアントのコンテキストを取得
     const { supabaseClient } = useSessionContext()
 
     // idが変わるたびに実行されるuseEffectフック
     useEffect(() => {
-        // idがない場合は何もしない
         if(!id) {
             return
         }
 
-        // ローディング状態をtrueに設定
         setIsLoading(true)
 
-        // 非同期関数で曲を取得
         const fetchSong = async () => {
             // supabaseから指定されたidの曲を取得
             const { data, error } = await supabaseClient
@@ -52,6 +46,5 @@ const useGetSongById = (id?: string) => {
     }), [isLoading, song])  
 }
 
-// useGetSongByIdフックをデフォルトエクスポート
 export default useGetSongById
 
