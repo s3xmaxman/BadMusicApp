@@ -108,15 +108,16 @@ const UploadModal = () => {
       
       router.refresh();
       setIsLoading(false);
-      toast.success('Song created!');
+      toast.success('曲をアップロードしました');
       reset();
       uploadModal.onClose();
     } catch (error) {
-      toast.error('Something went wrong');
+      toast.error('不具合が発生しました');
     } finally {
       setIsLoading(false);
     }
   }
+
 
 
   return (
