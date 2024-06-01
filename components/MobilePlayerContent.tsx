@@ -7,6 +7,7 @@ import { BsRepeat1 } from "react-icons/bs";
 import SeekBar from "./Seekbar";
 import { Song } from "@/types";
 import { RiCloseLine } from "react-icons/ri";
+import LikeButton from "./LikeButton";
 
 interface MobilePlayerContentProps {
   song: Song;
@@ -60,14 +61,18 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
         <Image
           src={imageUrl || "/images/music-placeholder.png"}
           alt={song.title}
-          width={480}
-          height={480}
+          width={460}
+          height={460}
           className="rounded-md mb-8"
         />
-        <div className="text-center mb-8">
-          <h3 className="text-2xl font-semibold mb-2">{song.title}</h3>
-          <p className="text-gray-400 text-lg">{song.author}</p>
+        <div className="flex justify-around items-center w-full mb-8">
+          <div>
+            <h3 className="text-2xl font-semibold mb-2">{song.title}</h3>
+            <p className="text-gray-400 text-lg">{song.author}</p>
+          </div>
+          <LikeButton songId={song.id} />
         </div>
+
         <div className="flex items-center gap-x-4">
           <span className="w-[50px] text-center inline-block">
             {formattedCurrentTime}
@@ -76,6 +81,7 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
             currentTime={currentTime}
             duration={duration}
             onSeek={handleSeek}
+            className="w-[250px] h-3"
           />
           <span className="w-[50px] text-center inline-block">
             {formattedDuration}

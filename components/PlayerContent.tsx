@@ -271,6 +271,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
           <Slider value={volume} onChange={(value) => setVolume(value)} />
         </div>
       </div>
+
       {isMobilePlayer && (
         <MobilePlayerContent
           song={song}
