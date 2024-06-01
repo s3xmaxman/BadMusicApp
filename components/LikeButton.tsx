@@ -19,7 +19,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId }) => {
     const { supabaseClient } = useSessionContext();
     const { user } = useUser();
     const authModal = useAuthModal();
-
+    
     const [isLiked, setIsLiked] = useState(false);
 
     useEffect(() => {
@@ -70,6 +70,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId }) => {
                 // 削除が成功した場合、isLikedをfalseに設定する
                 setIsLiked(false);
             }
+            
         } else {
             // いいねされていない場合、'liked_songs'テーブルに新しいエントリーを挿入する
             const { error } = await supabaseClient
