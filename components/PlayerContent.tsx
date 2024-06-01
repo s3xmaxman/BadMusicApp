@@ -16,7 +16,6 @@ import MediaItem from "./MediaItem";
 import Slider from "./Slider";
 import SeekBar from "./Seekbar";
 import useLoadImage from "@/hooks/useLoadImage";
-import Image from "next/image";
 import MobilePlayerContent from "./MobilePlayerContent";
 
 interface PlayerContentProps {
@@ -279,6 +278,8 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
           imageUrl={imageUrl || "/images/music-placeholder.png"}
           currentTime={currentTime}
           duration={duration}
+          formattedCurrentTime={formattedCurrentTime}
+          formattedDuration={formattedDuration}
           isPlaying={isPlaying}
           isShuffling={isShuffling}
           isRepeating={isRepeating}
