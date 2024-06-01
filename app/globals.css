@@ -10,14 +10,20 @@ body,
   color-scheme: dark;
 }
 
+.range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #4c1d95; /* from-violet-950 */
+  cursor: pointer;
+}
 
-
-
-
-
-
-
-
-
-
-
+.range-slider::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #4c1d95; /* from-violet-950 */
+  cursor: pointer;
+}
