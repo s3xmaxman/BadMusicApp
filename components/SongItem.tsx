@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import useLoadImage from "@/hooks/useLoadImage";
 import { Song } from "@/types";
@@ -6,12 +6,12 @@ import Image from "next/image";
 import PlayButton from "./PlayButton";
 
 interface SongItemProps {
-    onClick: (id: string) => void;
-    data: Song;
+  onClick: (id: string) => void;
+  data: Song;
 }
 
 const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
-  const imagePath = useLoadImage(data)  
+  const imagePath = useLoadImage(data);
   return (
     <div
       onClick={() => onClick(data.id)}
@@ -34,25 +34,23 @@ const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
     >
       <div className="relative aspect-square w-full h-full rounded-md overflow-hidden">
         <Image
-            className="object-cover w-full h-full" 
-            src={imagePath || '/images/liked.png'}
-            fill
-            alt="Image"
+          className="object-cover w-full h-full"
+          src={imagePath || "/images/liked.png"}
+          fill
+          alt="Image"
         />
       </div>
       <div className="flex flex-col items-start w-full pt-4 gap-y-1">
-        <p className="font-semibold truncate w-full">
-            {data.title}
-        </p>
+        <p className="font-semibold truncate w-full">{data.title}</p>
         <p className=" text-neutral-400 text-sm pb-4 w-full truncate">
           {data.author}
         </p>
       </div>
       <div className=" absolute bottom-24 right-5">
         <PlayButton />
-      </div>  
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default SongItem
+export default SongItem;

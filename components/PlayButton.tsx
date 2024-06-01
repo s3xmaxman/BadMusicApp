@@ -1,10 +1,10 @@
-import React from 'react'
-import { FaPlay } from 'react-icons/fa'
+import React from "react";
+import { FaPlay } from "react-icons/fa";
 
 const PlayButton = () => {
   return (
     <button
-        className="
+      className="
             transition
             opacity-0
             rounded-full
@@ -20,9 +20,9 @@ const PlayButton = () => {
             hover:scale-110
         "
     >
-        <FaPlay  className="text-black"/>
+      <FaPlay className="text-black" />
     </button>
-  )
-}
+  );
+};
 
-export default PlayButton
+export default PlayButton;

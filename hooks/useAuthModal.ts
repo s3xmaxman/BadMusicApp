@@ -5,7 +5,7 @@ interface AuthModalStore {
   isOpen: boolean; // モーダルが開いているかどうかを示すフラグ
   onOpen: () => void; // モーダルを開くための関数
   onClose: () => void; // モーダルを閉じるための関数
-};
+}
 
 // Zustandフックを使用してAuthModalの状態を管理するカスタムフック
 export const useAuthModal = create<AuthModalStore>((set) => ({

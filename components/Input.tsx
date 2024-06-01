@@ -1,25 +1,19 @@
 import { forwardRef } from "react";
-import { twMerge } from "tailwind-merge"
+import { twMerge } from "tailwind-merge";
 
 // InputPropsというインターフェースを定義
 // React.InputHTMLAttributes<HTMLInputElement>を継承している
-interface InputProps 
-    extends React.InputHTMLAttributes<HTMLInputElement> {
-}
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 
 // Inputコンポーネントの定義
 // forwardRefを使用して、refを受け取る
-const Input = forwardRef<HTMLInputElement, InputProps>(({
-    className,
-    type,
-    disabled,
-    ...props
-}, ref) => {
+const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ className, type, disabled, ...props }, ref) => {
     return (
-        <input
-            type={type}
-            className={twMerge(
-                `
+      <input
+        type={type}
+        className={twMerge(
+          `
                 flex 
                 w-full 
                 rounded-md 
@@ -38,19 +32,17 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({
                 disabled:opacity-50
                 focus:outline-none
               `,
-                disabled && 'opacity-75',
-                className
-            )}
-            disabled={disabled}
-            ref={ref}
-            {...props}
-        />
-    )
-})
-
+          disabled && "opacity-75",
+          className
+        )}
+        disabled={disabled}
+        ref={ref}
+        {...props}
+      />
+    );
+  }
+);
 
 Input.displayName = "Input";
 
-export default Input
-
-
+export default Input;
