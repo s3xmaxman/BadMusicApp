@@ -17,6 +17,7 @@ import Slider from "./Slider";
 import SeekBar from "./Seekbar";
 import useLoadImage from "@/hooks/useLoadImage";
 import Image from "next/image";
+import MobilePlayerContent from "./MobilePlayerContent";
 
 interface PlayerContentProps {
   song: Song;
@@ -31,6 +32,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
   const [isRepeating, setIsRepeating] = useState(false);
   const [isShuffling, setIsShuffling] = useState(false);
   const [isPlayingSound, setIsPlayingSound] = useState(true);
+  const [isMobilePlayer, setIsMobilePlayer] = useState(false);
   const isRepeatingRef = useRef(isRepeating);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -173,6 +175,10 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
     setIsShuffling(!isShuffling);
   };
 
+  const toggleMobilePlayer = () => {
+    setIsMobilePlayer(!isMobilePlayer);
+  };
+
   const formatTime = useMemo(() => {
     return (time: number) => {
       const minutes = Math.floor(time / 60);
@@ -198,128 +204,93 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
   };
 
   return (
-    <div>
-      <div className="hidden md:grid grid-cols-2 md:grid-cols-3 h-full">
-        <div className="flex w-full justify-start">
-          <div className="flex items-center gap-x-4">
-            <MediaItem data={song} />
-            <LikeButton songId={song.id} />
-          </div>
-        </div>
-
-        <div className="flex md:hidden col-auto w-full justify-end items-center">
-          <div
-            onClick={handlePlay}
-            className="h-10 w-10 flex items-center justify-center rounded-full bg-white p-1 cursor-pointer"
-          >
-            <Icon size={30} className="text-black" />
-          </div>
-        </div>
-
-        <div className="hidden w-full md:flex md:justify-center items-center max-w-[722px] gap-x-6">
-          <FaRandom
-            onClick={toggleShuffle}
-            size={20}
-            className="text-neutral-400 cursor-pointer hover:text-white transition"
-            style={{ color: isShuffling ? "green" : "white" }}
-          />
-          <AiFillStepBackward
-            onClick={onPlayPrevious}
-            size={30}
-            className=" text-neutral-400 cursor-pointer hover:text-white transition"
-          />
-          <div
-            onClick={handlePlay}
-            className="flex items-center justify-center h-7 w-7 rounded-full bg-white p-1 cursor-pointer"
-          >
-            <Icon size={30} className="text-black" />
-          </div>
-          <AiFillStepForward
-            onClick={onPlayNext}
-            size={30}
-            className=" text-neutral-400 cursor-pointer hover:text-white transition"
-          />
-          <BsRepeat1
-            onClick={toggleRepeat}
-            size={20}
-            className="text-neutral-400 cursor-pointer hover:text-white transition"
-            style={{ color: isRepeating ? "green" : "white" }}
-          />
-          <span className="w-[50px] text-center inline-block">
-            {formattedCurrentTime}
-          </span>
-          <SeekBar
-            currentTime={currentTime}
-            duration={duration}
-            onSeek={handleSeek}
-          />
-          <span className="w-[50px] text-center inline-block">
-            {formattedDuration}
-          </span>
-        </div>
-        <div className="hidden md:flex w-full justify-end pr-2">
-          <div className="flex items-center gap-x-2 w-[120px]">
-            <VolumeIcon
-              onClick={toggleMute}
-              className="cursor-pointer"
-              size={34}
-            />
-            <Slider value={volume} onChange={(value) => setVolume(value)} />
-          </div>
+    <div className="grid grid-cols-2 md:grid-cols-3 h-full">
+      <div className="flex w-full justify-start">
+        <div className="flex items-center gap-x-4">
+          <MediaItem data={song} onClick={toggleMobilePlayer} />
+          <LikeButton songId={song.id} />
         </div>
       </div>
 
-      {/* {/* Mobile version */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-neutral-900 text-white p-4">
-        <div className="flex flex-col items-center">
-          <Image
-            src={imageUrl || "/images/music-placeholder.png"}
-            alt={song.title}
-            width={384} // 固定幅
-            height={384} // 固定高さ
-            // className="player-image"
-          />
-          <div className="text-center mb-2">
-            <h3 className="text-lg font-semibold">{song.title}</h3>
-            <p className="text-sm text-gray-400">{song.author}</p>
-          </div>
-          <SeekBar
-            currentTime={currentTime}
-            duration={duration}
-            onSeek={handleSeek}
-          />
-          <div className="flex items-center justify-center gap-x-6 mt-4">
-            <FaRandom
-              onClick={toggleShuffle}
-              size={20}
-              className="text-neutral-400 cursor-pointer hover:text-white transition"
-              style={{ color: isShuffling ? "green" : "white" }}
-            />
-            <AiFillStepBackward
-              onClick={onPlayPrevious}
-              size={30}
-              className="text-neutral-400 cursor-pointer hover:text-white transition"
-            />
-            <div
-              onClick={handlePlay}
-              className="flex items-center justify-center h-10 w-10 rounded-full bg-white p-1 cursor-pointer"
-            >
-              <Icon size={30} className="text-black" />
-            </div>
-            <AiFillStepForward
-              onClick={onPlayNext}
-              size={30}
-              className="text-neutral-400 cursor-pointer hover:text-white transition"
-            />
-            <BsRepeat1
-              onClick={toggleRepeat}
-              size={20}
-              className="text-neutral-400 cursor-pointer hover:text-white transition"
-              style={{ color: isRepeating ? "green" : "white" }}
-            />
-          </div>
+      <div className="flex md:hidden col-auto w-full justify-end items-center">
+        <div
+          onClick={handlePlay}
+          className="h-10 w-10 flex items-center justify-center rounded-full bg-white p-1 cursor-pointer"
+        >
+          <Icon size={30} className="text-black" />
         </div>
       </div>
+
+      <div className="hidden w-full md:flex md:justify-center items-center max-w-[722px] gap-x-6">
+        <FaRandom
+          onClick={toggleShuffle}
+          size={20}
+          className="text-neutral-400 cursor-pointer hover:text-white transition"
+          style={{ color: isShuffling ? "green" : "white" }}
+        />
+        <AiFillStepBackward
+          onClick={onPlayPrevious}
+          size={30}
+          className=" text-neutral-400 cursor-pointer hover:text-white transition"
+        />
+        <div
+          onClick={handlePlay}
+          className="flex items-center justify-center h-7 w-7 rounded-full bg-white p-1 cursor-pointer"
+        >
+          <Icon size={30} className="text-black" />
+        </div>
+        <AiFillStepForward
+          onClick={onPlayNext}
+          size={30}
+          className=" text-neutral-400 cursor-pointer hover:text-white transition"
+        />
+        <BsRepeat1
+          onClick={toggleRepeat}
+          size={20}
+          className="text-neutral-400 cursor-pointer hover:text-white transition"
+          style={{ color: isRepeating ? "green" : "white" }}
+        />
+        <span className="w-[50px] text-center inline-block">
+          {formattedCurrentTime}
+        </span>
+        <SeekBar
+          currentTime={currentTime}
+          duration={duration}
+          onSeek={handleSeek}
+        />
+        <span className="w-[50px] text-center inline-block">
+          {formattedDuration}
+        </span>
+      </div>
+      <div className="hidden md:flex w-full justify-end pr-2">
+        <div className="flex items-center gap-x-2 w-[120px]">
+          <VolumeIcon
+            onClick={toggleMute}
+            className="cursor-pointer"
+            size={34}
+          />
+          <Slider value={volume} onChange={(value) => setVolume(value)} />
+        </div>
+      </div>
+      {isMobilePlayer && (
+        <MobilePlayerContent
+          song={song}
+          songUrl={songUrl}
+          imageUrl={imageUrl || "/images/music-placeholder.png"}
+          currentTime={currentTime}
+          duration={duration}
+          isPlaying={isPlaying}
+          isShuffling={isShuffling}
+          isRepeating={isRepeating}
+          handlePlay={handlePlay}
+          handleSeek={handleSeek}
+          toggleMobilePlayer={toggleMobilePlayer}
+          toggleShuffle={toggleShuffle}
+          toggleRepeat={toggleRepeat}
+          onPlayNext={onPlayNext}
+          onPlayPrevious={onPlayPrevious}
+        />
+      )}
     </div>
   );
 };
