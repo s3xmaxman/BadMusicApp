@@ -254,7 +254,8 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
             style={{ color: isRepeating ? "green" : "white" }}
           />
         </div>
-        <div className="flex items-center gap-x-2 mt-4 w-full lg:max-w-[500px] md:max-w-[300px]">
+
+        <div className="flex items-center gap-x-2 mt-4 w-full lg:max-w-[800px] md:max-w-[300px]">
           <span className="w-[50px] text-center inline-block">
             {formattedCurrentTime}
           </span>
