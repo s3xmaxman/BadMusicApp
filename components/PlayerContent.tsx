@@ -44,7 +44,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
     if (player.ids.length === 0) {
       return;
     }
-
     let nextIndex;
     if (isShufflingRef.current) {
       const currentIndex = player.ids.findIndex((id) => id === player.activeId);
@@ -63,7 +62,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
     if (player.ids.length === 0) {
       return;
     }
-
     let prevIndex;
     if (isShufflingRef.current) {
       const currentIndex = player.ids.findIndex((id) => id === player.activeId);
@@ -109,6 +107,9 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
 
   useEffect(() => {
     isRepeatingRef.current = isRepeating;
+    if (sound) {
+      sound.loop(isRepeating); // Loop設定を変更する
+    }
   }, [isRepeating]);
 
   useEffect(() => {
@@ -117,7 +118,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
 
   useEffect(() => {
     sound?.play();
-
     return () => {
       sound?.unload();
     };
@@ -190,6 +190,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
     () => formatTime(currentTime),
     [currentTime, sound]
   );
+
   const formattedDuration = useMemo(
     () => formatTime(duration),
     [duration, sound]
@@ -201,13 +202,12 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
       setCurrentTime(time);
     }
   };
-
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 h-full">
       <div className="flex w-full justify-start">
         <div className="flex items-center gap-x-4">
           <MediaItem data={song} onClick={toggleMobilePlayer} />
-          <div className="hidden md:block">
+          <div className="hidden md:bl">
             <LikeButton songId={song.id} />
           </div>
         </div>
