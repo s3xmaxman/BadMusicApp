@@ -13,6 +13,7 @@ import { useUser } from "@/hooks/useUser";
 import Modal from "./Modal";
 import Input from "./Input";
 import Button from "./Button";
+import { sanitizeTitle } from "@/libs/helpers";
 
 const UploadModal = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -55,7 +56,7 @@ const UploadModal = () => {
       // Upload song
       const { data: songData, error: songError } = await supabaseClient.storage
         .from("songs")
-        .upload(`song-${values.title}-${uniqueID}`, songFile, {
+        .upload(`song-${sanitizeTitle(values.title)}-${uniqueID}`, songFile, {
           cacheControl: "3600",
           upsert: false,
         });
@@ -69,10 +70,14 @@ const UploadModal = () => {
       const { data: imageData, error: imageError } =
         await supabaseClient.storage
           .from("images")
-          .upload(`image-${values.title}-${uniqueID}`, imageFile, {
-            cacheControl: "3600",
-            upsert: false,
-          });
+          .upload(
+            `image-${sanitizeTitle(values.title)}-${uniqueID}`,
+            imageFile,
+            {
+              cacheControl: "3600",
+              upsert: false,
+            }
+          );
 
       if (imageError) {
         setIsLoading(false);
