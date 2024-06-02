@@ -14,7 +14,7 @@ const Slider: React.FC<SliderProps> = ({ value = 1, onChange }) => {
 
   return (
     <RadixSlider.Root
-      className=" relative flex items-center select-none touch-none w-full h-10"
+      className="relative flex items-center select-none touch-none w-full h-10"
       defaultValue={[1]}
       value={[value]}
       onValueChange={handleChange}

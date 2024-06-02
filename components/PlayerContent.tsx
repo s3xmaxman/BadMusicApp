@@ -249,12 +249,12 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
           />
           <BsRepeat1
             onClick={toggleRepeat}
-            size={20}
+            size={25}
             className="text-neutral-400 cursor-pointer hover:text-white transition"
             style={{ color: isRepeating ? "green" : "white" }}
           />
         </div>
-        <div className="flex items-center gap-x-2 mt-4">
+        <div className="flex items-center gap-x-2 mt-4 w-full lg:max-w-[500px] md:max-w-[300px]">
           <span className="w-[50px] text-center inline-block">
             {formattedCurrentTime}
           </span>
@@ -262,7 +262,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
             currentTime={currentTime}
             duration={duration}
             onSeek={handleSeek}
-            className="w-[500px] h-2"
+            className="flex-1 h-2"
           />
           <span className="w-[50px] text-center inline-block">
             {formattedDuration}
@@ -271,7 +271,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
       </div>
 
       <div className="hidden md:flex w-full justify-end pr-2">
-        <div className="flex items-center gap-x-2 w-[120px]">
+        <div className="flex items-center gap-x-2 w-full md:w-[120px] lg:w-[200px]">
           <VolumeIcon
             onClick={toggleMute}
             className="cursor-pointer"
