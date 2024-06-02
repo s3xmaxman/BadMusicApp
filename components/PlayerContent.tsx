@@ -207,9 +207,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
       <div className="flex w-full justify-start">
         <div className="flex items-center gap-x-4">
           <MediaItem data={song} onClick={toggleMobilePlayer} />
-          <div className="hidden md:block">
-            <LikeButton songId={song.id} />
-          </div>
         </div>
       </div>
 
@@ -273,6 +270,8 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
 
       <div className="hidden md:flex w-full justify-end pr-2">
         <div className="flex items-center gap-x-2 w-full md:w-[120px] lg:w-[200px]">
+          <LikeButton songId={song.id} />
+          <div className="mx-1" />
           <VolumeIcon
             onClick={toggleMute}
             className="cursor-pointer"
