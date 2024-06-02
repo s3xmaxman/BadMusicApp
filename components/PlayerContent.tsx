@@ -30,7 +30,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isRepeating, setIsRepeating] = useState(false);
   const [isShuffling, setIsShuffling] = useState(false);
-  const [isPlayingSound, setIsPlayingSound] = useState(true);
+  const [isPlayingSound, setIsPlayingSound] = useState(false);
   const [isMobilePlayer, setIsMobilePlayer] = useState(false);
   const isRepeatingRef = useRef(isRepeating);
   const [currentTime, setCurrentTime] = useState(0);
