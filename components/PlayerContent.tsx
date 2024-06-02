@@ -222,47 +222,54 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
         </div>
       </div>
 
-      <div className="hidden w-full md:flex md:justify-center items-center max-w-[722px] gap-x-6">
-        <FaRandom
-          onClick={toggleShuffle}
-          size={20}
-          className="text-neutral-400 cursor-pointer hover:text-white transition"
-          style={{ color: isShuffling ? "green" : "white" }}
-        />
-        <AiFillStepBackward
-          onClick={onPlayPrevious}
-          size={30}
-          className=" text-neutral-400 cursor-pointer hover:text-white transition"
-        />
-        <div
-          onClick={handlePlay}
-          className="flex items-center justify-center h-7 w-7 rounded-full bg-white p-1 cursor-pointer"
-        >
-          <Icon size={30} className="text-black" />
+      {/* PC版のレイアウト */}
+      <div className="hidden md:flex flex-col w-full md:justify-center items-center max-w-[722px] gap-x-6">
+        <div className="flex items-center gap-x-8">
+          <FaRandom
+            onClick={toggleShuffle}
+            size={20}
+            className="text-neutral-400 cursor-pointer hover:text-white transition"
+            style={{ color: isShuffling ? "green" : "white" }}
+          />
+          <AiFillStepBackward
+            onClick={onPlayPrevious}
+            size={30}
+            className=" text-neutral-400 cursor-pointer hover:text-white transition"
+          />
+          <div
+            onClick={handlePlay}
+            className="flex items-center justify-center h-7 w-7 rounded-full bg-white p-1 cursor-pointer"
+          >
+            <Icon size={30} className="text-black" />
+          </div>
+          <AiFillStepForward
+            onClick={onPlayNext}
+            size={30}
+            className=" text-neutral-400 cursor-pointer hover:text-white transition"
+          />
+          <BsRepeat1
+            onClick={toggleRepeat}
+            size={20}
+            className="text-neutral-400 cursor-pointer hover:text-white transition"
+            style={{ color: isRepeating ? "green" : "white" }}
+          />
         </div>
-        <AiFillStepForward
-          onClick={onPlayNext}
-          size={30}
-          className=" text-neutral-400 cursor-pointer hover:text-white transition"
-        />
-        <BsRepeat1
-          onClick={toggleRepeat}
-          size={20}
-          className="text-neutral-400 cursor-pointer hover:text-white transition"
-          style={{ color: isRepeating ? "green" : "white" }}
-        />
-        <span className="w-[50px] text-center inline-block">
-          {formattedCurrentTime}
-        </span>
-        <SeekBar
-          currentTime={currentTime}
-          duration={duration}
-          onSeek={handleSeek}
-        />
-        <span className="w-[50px] text-center inline-block">
-          {formattedDuration}
-        </span>
+        <div className="flex items-center gap-x-2 mt-4">
+          <span className="w-[50px] text-center inline-block">
+            {formattedCurrentTime}
+          </span>
+          <SeekBar
+            currentTime={currentTime}
+            duration={duration}
+            onSeek={handleSeek}
+            className="w-[500px] h-2"
+          />
+          <span className="w-[50px] text-center inline-block">
+            {formattedDuration}
+          </span>
+        </div>
       </div>
+
       <div className="hidden md:flex w-full justify-end pr-2">
         <div className="flex items-center gap-x-2 w-[120px]">
           <VolumeIcon
