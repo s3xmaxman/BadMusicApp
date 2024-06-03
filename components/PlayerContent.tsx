@@ -44,6 +44,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
     if (player.ids.length === 0) {
       return;
     }
+
     let nextIndex;
     if (isShufflingRef.current) {
       const currentIndex = player.ids.findIndex((id) => id === player.activeId);
@@ -62,6 +63,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
     if (player.ids.length === 0) {
       return;
     }
+
     let prevIndex;
     if (isShufflingRef.current) {
       const currentIndex = player.ids.findIndex((id) => id === player.activeId);

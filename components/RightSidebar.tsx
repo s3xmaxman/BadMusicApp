@@ -31,12 +31,14 @@ const RightSidebar = () => {
           <FaMusic className="text-white text-6xl" />
         </div>
       </div>
-      <div className="mt-8">
-        <h1 className="text-3xl font-bold tracking-wide">{song.title}</h1>
-        <p className="mt-2 text-lg text-gray-300">{song.author}</p>
-      </div>
-      <div className="mt-2">
-        <LikeButton songId={song.id} />
+      <div className="mt-8 w-full flex items-center justify-start">
+        <div>
+          <h1 className="text-3xl font-bold tracking-wide">{song.title}</h1>
+          <p className="mt-2 text-lg text-gray-300">{song.author}</p>
+        </div>
+        <div className="mt-20 ml-auto">
+          <LikeButton songId={song.id} />
+        </div>
       </div>
     </div>
   );
