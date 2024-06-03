@@ -23,12 +23,11 @@ export const postData = async ({
   url: string;
   data?: { price: Price };
 }) => {
-  // POSTリクエストの情報をコンソールに出力します。
   console.log("POST REQUEST", url, data);
 
   // fetchを使用して、指定されたURLに対してPOSTリクエストを送信します。
   const res: Response = await fetch(url, {
-    method: "POST", // リクエストメソッドをPOSTに設定
+    method: "POST",
     headers: new Headers({ "Content-Type": "application/json" }), // ヘッダーにコンテンツタイプをJSONとして設定
     credentials: "same-origin", // クレデンシャルポリシーを同一オリジンに設定
     body: JSON.stringify(data), // リクエストボディにデータをJSON形式で設定
@@ -36,8 +35,8 @@ export const postData = async ({
 
   // レスポンスが正常でない場合は、エラーをコンソールに出力し、例外をスローします。
   if (!res.ok) {
-    console.log("Error in postData", { url, data, res }); // エラー情報をコンソールに出力
-    throw new Error(res.statusText); // レスポンスのステータステキストを含むErrorをスロー
+    console.log("Error in postData", { url, data, res });
+    throw new Error(res.statusText);
   }
 
   // レスポンスボディをJSONとして返します。
@@ -49,10 +48,10 @@ export const toDateTime = (secs: number) => {
   // 1970年1月1日 00:30:00を基準にして、引数で渡された秒数を加算する
   var t = new Date("1970-01-01T00:30:00Z");
   t.setSeconds(secs);
-  // 変換後の日時を返す
   return t;
 };
 
+// 引数で渡された文字列をランダムな文字列に変換する関数
 function generateRandomString(length: number) {
   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   let result = "";
@@ -63,6 +62,7 @@ function generateRandomString(length: number) {
   return result;
 }
 
+// 引数で渡された文字列を正規化する関数
 export const sanitizeTitle = (title: string) => {
   const regex = /^[a-zA-Z0-9-_]+$/;
   if (!regex.test(title)) {

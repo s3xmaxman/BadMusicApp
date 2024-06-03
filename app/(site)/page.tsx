@@ -34,7 +34,7 @@ export default async function Home() {
           </div>
         </div>
       </div>
-      <div className="hidden lg:block h-full w-96 overflow-y-auto ">
+      <div className="hidden lg:block h-full w-96 overflow-y-auto">
         <RightSidebar />
       </div>
     </div>
