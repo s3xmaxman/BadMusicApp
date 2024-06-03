@@ -53,9 +53,9 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
   return (
     <div className="md:hidden fixed top-0 left-0 right-0 bottom-0 bg-neutral-900 text-white px-2 py-4 flex flex-col items-center justify-center">
       <RiCloseLine
-        size={32}
+        size={25}
         onClick={toggleMobilePlayer}
-        className="absolute top-4 left-2 cursor-pointer"
+        className="absolute top-2 left-2 cursor-pointer"
       />
       <div className="flex flex-col items-center h-full w-full justify-evenly">
         <Image
