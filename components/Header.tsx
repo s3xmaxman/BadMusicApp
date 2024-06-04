@@ -43,7 +43,7 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
         className
       )}
     >
-      <div className="w-full mb-4 flex items-center justify-end">
+      <div className="w-full mb-4 flex items-center md:justify-between justify-end">
         <div className="hidden md:flex gap-x-2 items-center">
           <button
             onClick={() => router.back()}
