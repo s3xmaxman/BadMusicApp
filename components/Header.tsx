@@ -43,7 +43,7 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
         className
       )}
     >
-      <div className="w-full mb-4 flex items-center justify-between">
+      <div className="w-full mb-4 flex items-center justify-end">
         <div className="hidden md:flex gap-x-2 items-center">
           <button
             onClick={() => router.back()}
@@ -58,20 +58,7 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
             <RxCaretRight className="text-white" size={35} />
           </button>
         </div>
-        <div className="flex md:hidden gap-x-2 items-center">
-          <button
-            onClick={() => router.push("/")}
-            className="rounded-full p-2 bg-white flex items-center justify-center text-black hover:opacity-75 transition"
-          >
-            <HiHome className="text-black" size={24} />
-          </button>
-          <button
-            onClick={() => router.push("/search")}
-            className="rounded-full p-2 bg-white flex items-center justify-center text-black hover:opacity-75 transition"
-          >
-            <BiSearch className="text-black" size={24} />
-          </button>
-        </div>
+
         <div className="flex justify-between items-center gap-x-4">
           {user ? (
             <div className="flex gap-x-4 items-center">
@@ -92,7 +79,7 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
                   onClick={authModal.onOpen}
                   className="bg-transparent text-neutral-300 font-medium"
                 >
-                  サインアップ
+                  SignUp
                 </Button>
               </div>
               <div>
@@ -100,7 +87,7 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
                   onClick={authModal.onOpen}
                   className="bg-white px-6 py-2"
                 >
-                  ログイン
+                  Login
                 </Button>
               </div>
             </>
