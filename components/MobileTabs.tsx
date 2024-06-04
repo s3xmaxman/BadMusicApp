@@ -1,12 +1,7 @@
 "use client";
 import Link from "next/link";
 import React, { useState } from "react";
-import {
-  AiFillHome,
-  AiOutlinePlusCircle,
-  AiOutlineBars,
-  AiOutlineSearch,
-} from "react-icons/ai";
+import { AiFillHome, AiOutlineBars, AiOutlineSearch } from "react-icons/ai";
 
 const MobileTabs = () => {
   const [activeTab, setActiveTab] = useState("home");
