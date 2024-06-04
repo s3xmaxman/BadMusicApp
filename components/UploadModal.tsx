@@ -13,10 +13,12 @@ import { useUser } from "@/hooks/useUser";
 import Modal from "./Modal";
 import Input from "./Input";
 import Button from "./Button";
+import GenreSelect from "./GenreSelect";
 import { sanitizeTitle } from "@/libs/helpers";
 
 const UploadModal = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedGenre, setSelectedGenre] = useState<string>("All");
 
   const uploadModal = useUploadModal();
   const supabaseClient = useSupabaseClient();
@@ -37,6 +39,10 @@ const UploadModal = () => {
       reset();
       uploadModal.onClose();
     }
+  };
+
+  const handleGenreChange = (genre: string) => {
+    setSelectedGenre(genre);
   };
 
   const onSubmit: SubmitHandler<FieldValues> = async (values) => {
@@ -93,6 +99,7 @@ const UploadModal = () => {
           author: values.author,
           image_path: imageData.path,
           song_path: songData.path,
+          genre: selectedGenre === "All" ? null : selectedGenre,
         });
 
       if (supabaseError) {
@@ -131,6 +138,9 @@ const UploadModal = () => {
           {...register("author", { required: true })}
           placeholder="Song author"
         />
+
+        <GenreSelect className="w-full" onGenreChange={handleGenreChange} />
+
         <div>
           <div className="pb-1">曲を選択</div>
           <Input

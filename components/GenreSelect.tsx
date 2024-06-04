@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 
 import {
   Select,
@@ -11,19 +11,27 @@ import {
 
 interface GenreSelectProps {
   onGenreChange: (genre: string) => void;
+  className?: string;
 }
 
 const genres = [
   "All",
   "Nu Disco",
   "Vapor Wave",
+  "Electro",
   "Electro House",
+  "Tropical House",
+  "Deep House",
   "Dance Pop",
   "DubStep",
+  "Trap",
 ];
 
-const GenreSelect: React.FC<GenreSelectProps> = ({ onGenreChange }) => {
-  const [selectedGenre, setSelectedGenre] = React.useState("All");
+const GenreSelect: React.FC<GenreSelectProps> = ({
+  onGenreChange,
+  className,
+}) => {
+  const [selectedGenre, setSelectedGenre] = useState("All");
 
   const handleGenreChange = (genre: string) => {
     setSelectedGenre(genre);
@@ -31,7 +39,7 @@ const GenreSelect: React.FC<GenreSelectProps> = ({ onGenreChange }) => {
   };
   return (
     <Select onValueChange={handleGenreChange} value={selectedGenre}>
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className={`w-[180px] ${className}`}>
         <SelectValue placeholder="ジャンルを選択" />
       </SelectTrigger>
       <SelectContent>
