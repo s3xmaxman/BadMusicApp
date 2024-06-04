@@ -4,6 +4,7 @@ import useLoadSongUrl from "@/hooks/useLoadSongUrl";
 import usePlayer from "@/hooks/usePlayer";
 import React from "react";
 import PlayerContent from "./PlayerContent";
+import MobileTabs from "./MobileTabs";
 
 const Player = () => {
   const player = usePlayer();
@@ -15,9 +16,16 @@ const Player = () => {
   }
 
   return (
-    <div className="fixed bottom-0 bg-black w-full py-2 h-[100px] px-4">
-      <PlayerContent song={song} songUrl={songUrl} />
-    </div>
+    <>
+      <div className="fixed bottom-0 left-0 w-full ">
+        <div className="bg-black w-full py-2 px-4 h-[100px] pb-[130px] md:pb-0">
+          <PlayerContent song={song} songUrl={songUrl} />
+        </div>
+      </div>
+      <div className="md:hidden">
+        <MobileTabs />
+      </div>
+    </>
   );
 };
 
