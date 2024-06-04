@@ -67,8 +67,9 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
         />
         <div className="flex justify-around items-center w-full mb-4">
           <div>
-            <h3 className="text-xl font-semibold mb-1">{song.title}</h3>
-            <p className="text-gray-400 text-base">{song.author}</p>
+            <h1 className="text-xl font-semibold mb-1">{song.title}</h1>
+            <p className="text-base">#{song.genre}</p>
+            <p className="text-gray-400 text-base mt-2">{song.author}</p>
           </div>
           <LikeButton songId={song.id} />
         </div>
