@@ -9,6 +9,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+interface GenreSelectProps {
+  onGenreChange: (genre: string) => void;
+}
+
 const genres = [
   "All",
   "Nu Disco",
@@ -18,9 +22,15 @@ const genres = [
   "DubStep",
 ];
 
-const GenreSelect = () => {
+const GenreSelect: React.FC<GenreSelectProps> = ({ onGenreChange }) => {
+  const [selectedGenre, setSelectedGenre] = React.useState("All");
+
+  const handleGenreChange = (genre: string) => {
+    setSelectedGenre(genre);
+    onGenreChange(genre);
+  };
   return (
-    <Select>
+    <Select onValueChange={handleGenreChange} value={selectedGenre}>
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="ジャンルを選択" />
       </SelectTrigger>
