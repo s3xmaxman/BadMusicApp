@@ -33,8 +33,6 @@ const PageContent: React.FC<PageContentProps> = ({ songs }) => {
   return (
     <div className="flex flex-col h-full">
       <div className="flex justify-end mb-4">
-        {" "}
-        {/* justify-end で右寄せ */}
         <GenreSelect onGenreChange={handleGenreChange} />
       </div>
       <div className="flex-grow">
