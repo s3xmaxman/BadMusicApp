@@ -5,7 +5,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -16,7 +15,7 @@ const genres = [
   "Vapor Wave",
   "Electro House",
   "Dance Pop",
-  "Dubstep",
+  "DubStep",
 ];
 
 const GenreSelect = () => {
