@@ -27,3 +27,7 @@ body,
   background: #4c1d95; /* from-violet-950 */
   cursor: pointer;
 }
+
+.active-tab {
+  color: #4c1d95;
+}

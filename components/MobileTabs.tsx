@@ -16,7 +16,7 @@ const MobileTabs = () => {
         <button
           onClick={() => handleTabClick("home")}
           className={`flex flex-col items-center text-white ${
-            activeTab === "home" ? "text-[#4c1d95]" : ""
+            activeTab === "home" ? "active-tab" : ""
           }`}
         >
           <Link href="/">
@@ -27,7 +27,7 @@ const MobileTabs = () => {
         <button
           onClick={() => handleTabClick("add")}
           className={`flex flex-col items-center text-white ${
-            activeTab === "add" ? "text-[#4c1d95]" : ""
+            activeTab === "add" ? "active-tab" : ""
           }`}
         >
           <Link href="/search">
@@ -38,7 +38,7 @@ const MobileTabs = () => {
         <button
           onClick={() => handleTabClick("menu")}
           className={`flex flex-col items-center text-white ${
-            activeTab === "menu" ? "text-[#4c1d95]" : ""
+            activeTab === "menu" ? "active-tab" : ""
           }`}
         >
           <AiOutlineBars size={24} />
