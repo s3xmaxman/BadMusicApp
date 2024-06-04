@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const music = [
+const genres = [
   "Nu Disco",
   "Vapor Wave",
   "Electro House",
@@ -27,7 +27,7 @@ const GenreSelect = () => {
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Genre</SelectLabel>
-          {music.map((genre: string) => (
+          {genres.map((genre: string) => (
             <SelectItem key={genre} value={genre}>
               {genre}
             </SelectItem>
