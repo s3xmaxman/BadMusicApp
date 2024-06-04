@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select";
 
 const genres = [
+  "All",
   "Nu Disco",
   "Vapor Wave",
   "Electro House",
@@ -22,13 +23,16 @@ const GenreSelect = () => {
   return (
     <Select>
       <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Select a genre" />
+        <SelectValue placeholder="ジャンルを選択" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Genre</SelectLabel>
           {genres.map((genre: string) => (
-            <SelectItem key={genre} value={genre}>
+            <SelectItem
+              className="bg-neutral-900 group-hover:bg-neutral-900"
+              key={genre}
+              value={genre}
+            >
               {genre}
             </SelectItem>
           ))}
