@@ -4,7 +4,6 @@ import useLoadSongUrl from "@/hooks/useLoadSongUrl";
 import usePlayer from "@/hooks/usePlayer";
 import React from "react";
 import PlayerContent from "./PlayerContent";
-import MobileTabs from "./MobileTabs";
 
 const Player = () => {
   const player = usePlayer();
