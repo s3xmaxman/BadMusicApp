@@ -10,7 +10,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const music = ["Nu Disco", "Vapor Wave", "Electro House", "Dance Pop"];
+const music = [
+  "Nu Disco",
+  "Vapor Wave",
+  "Electro House",
+  "Dance Pop",
+  "Dubstep",
+];
 
 const GenreSelect = () => {
   return (
