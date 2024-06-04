@@ -38,9 +38,6 @@ export default async function Home() {
       <div className="hidden lg:block h-full w-96 overflow-y-auto">
         <RightSidebar />
       </div>
-      <div className="md:hidden mt-auto">
-        <MobileTabs />
-      </div>
     </div>
   );
 }

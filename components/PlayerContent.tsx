@@ -21,9 +21,16 @@ import MobilePlayerContent from "./MobilePlayerContent";
 interface PlayerContentProps {
   song: Song;
   songUrl: string;
+  isMobilePlayer: boolean;
+  toggleMobilePlayer: () => void;
 }
 
-const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
+const PlayerContent: React.FC<PlayerContentProps> = ({
+  song,
+  songUrl,
+  isMobilePlayer,
+  toggleMobilePlayer,
+}) => {
   const imageUrl = useLoadImage(song);
   const player = usePlayer();
   const [volume, setVolume] = useState(0.1);
@@ -31,7 +38,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
   const [isRepeating, setIsRepeating] = useState(false);
   const [isShuffling, setIsShuffling] = useState(false);
   const [isPlayingSound, setIsPlayingSound] = useState(false);
-  const [isMobilePlayer, setIsMobilePlayer] = useState(false);
   const isRepeatingRef = useRef(isRepeating);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -174,10 +180,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
 
   const toggleShuffle = () => {
     setIsShuffling(!isShuffling);
-  };
-
-  const toggleMobilePlayer = () => {
-    setIsMobilePlayer(!isMobilePlayer);
   };
 
   const formatTime = useMemo(() => {
