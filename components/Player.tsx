@@ -22,9 +22,6 @@ const Player = () => {
           <PlayerContent song={song} songUrl={songUrl} />
         </div>
       </div>
-      <div className="md:hidden">
-        <MobileTabs />
-      </div>
     </>
   );
 };
