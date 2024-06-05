@@ -3,11 +3,11 @@
 import Image from "next/image";
 
 import useLoadImage from "@/hooks/useLoadImage";
-import { Song } from "@/types";
+import { Playlist, Song } from "@/types";
 import usePlayer from "@/hooks/usePlayer";
 
 interface MediaItemProps {
-  data: Song;
+  data: Song | Playlist;
   onClick?: (id: string) => void;
 }
 
@@ -31,14 +31,16 @@ const MediaItem: React.FC<MediaItemProps> = ({ data, onClick }) => {
       <div className="relative rounded-md overflow-hidden min-h-[48px] min-w-[48px]">
         <Image
           fill
-          src={imageUrl || "/images/music-placeholder.png"}
+          src={imageUrl || "/images/playlist.png"}
           alt="MediaItem"
           className="object-cover"
         />
       </div>
       <div className="flex flex-col gap-y-1 overflow-hidden w-[70%]">
         <p className="text-white truncate w-full">{data.title}</p>
-        <p className="text-neutral-400 text-sm truncate">{data.author}</p>
+        {"author" in data && (
+          <p className="text-neutral-400 text-sm truncate">{data.author}</p>
+        )}
       </div>
     </div>
   );

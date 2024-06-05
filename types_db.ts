@@ -70,18 +70,21 @@ export interface Database {
           id: number;
           user_id: string;
           title: string;
+          image_path: string;
           created_at: string;
         };
         Insert: {
           id?: number;
           user_id: string;
           title: string;
+          image_path?: string;
           created_at?: string;
         };
         Update: {
           id?: number;
           user_id?: string;
           title?: string;
+          image_path?: string;
           created_at?: string;
         };
         Relationships: [

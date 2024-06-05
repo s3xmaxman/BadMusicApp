@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 import { HiHome } from "react-icons/hi";
 import { BiSearch } from "react-icons/bi";
-import { BiSolidMoviePlay } from "react-icons/bi";
+import { AiOutlineBars } from "react-icons/ai";
 import Box from "./Box";
 import SidebarItem from "./SidebarItem";
 import Library from "./Library";
@@ -25,14 +25,20 @@ const Sidebar: React.FC<SidebarProps> = ({ children, songs }) => {
       {
         icon: HiHome,
         label: "ホーム",
-        active: pathname !== "/search",
+        active: pathname === "/",
         href: "/",
       },
       {
         icon: BiSearch,
         label: "検索",
-        active: pathname !== "/",
+        active: pathname === "/search",
         href: "/search",
+      },
+      {
+        icon: AiOutlineBars,
+        label: "プレイリスト",
+        active: pathname === "/playlist",
+        href: "/playlist",
       },
     ],
     [pathname]
