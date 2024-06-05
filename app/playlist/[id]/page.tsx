@@ -1,12 +1,15 @@
 "use client";
-import { useParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Header from "@/components/Header";
+import LikedContent from "@/app/liked/components/LikedContent";
 
-interface PlaylistContentProps {}
+const PlaylistPage = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const playlistTitle = searchParams.get("title");
+  const songs = JSON.parse(searchParams.get("songs") || "[]");
 
-const PlaylistPage = async () => {
-  const params = useParams() as { id: string };
   return (
     <div className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
       <Header>
@@ -22,11 +25,20 @@ const PlaylistPage = async () => {
             </div>
             <div className="flex flex-col gap-y-2 mt-4 md:mt-0">
               <p className="hidden md:block font-semibold text-sm"></p>
-              <h1 className="text-white text-4xl sm:text-5xl lg:text-7xl font-bold"></h1>
+              <h1 className="text-white text-4xl sm:text-5xl lg:text-7xl font-bold">
+                {playlistTitle}
+              </h1>
             </div>
           </div>
         </div>
       </Header>
+      <div>
+        {songs.length ? (
+          <LikedContent songs={songs} />
+        ) : (
+          <p className="text-white">No songs</p>
+        )}
+      </div>
     </div>
   );
 };
