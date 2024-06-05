@@ -35,7 +35,7 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({ playlists, songId }) => {
         .from("playlist_songs")
         .select("*")
         .eq("song_id", songId)
-        .eq("user_id", user.id); // ユーザーIDで絞り込み
+        .eq("user_id", user.id);
 
       if (error) {
         console.error("Error fetching added songs:", error);

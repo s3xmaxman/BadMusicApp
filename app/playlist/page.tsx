@@ -6,6 +6,8 @@ export const revalidate = 0;
 
 const Playlist = async () => {
   const playlists = await getPlaylists();
+
+  console.log(playlists);
   return (
     <div className=" bg-neutral-900 rounded-lg w-full h-full overflow-hidden overflow-y-auto">
       <Header className="from-bg-neutral-900">
