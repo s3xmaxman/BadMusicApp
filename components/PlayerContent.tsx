@@ -17,7 +17,8 @@ import Slider from "./Slider";
 import SeekBar from "./Seekbar";
 import useLoadImage from "@/hooks/useLoadImage";
 import MobilePlayerContent from "./MobilePlayerContent";
-import PlaylistMenu from "./PlaylistMenu";
+import PlaylistMenu from "./AddPlaylist";
+import AddPlaylist from "./AddPlaylist";
 
 interface PlayerContentProps {
   song: Song;
@@ -277,7 +278,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
 
       <div className="hidden md:flex w-full justify-end pr-2">
         <div className="flex items-center gap-x-2 w-full md:w-[120px] lg:w-[200px]">
-          <PlaylistMenu playlists={playlists} />
+          <AddPlaylist playlists={playlists} />
           <LikeButton songId={song.id} />
           <div className="mx-1" />
           <VolumeIcon

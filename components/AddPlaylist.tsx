@@ -13,7 +13,7 @@ interface PlaylistMenuProps {
   playlists: Playlist[];
 }
 
-const PlaylistMenu = ({ playlists }: PlaylistMenuProps) => {
+const AddPlaylist = ({ playlists }: PlaylistMenuProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -32,4 +32,4 @@ const PlaylistMenu = ({ playlists }: PlaylistMenuProps) => {
   );
 };
 
-export default PlaylistMenu;
+export default AddPlaylist;

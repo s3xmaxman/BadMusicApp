@@ -87,8 +87,7 @@ export const MyUserContextProvider = (props: Props) => {
 export const useUser = () => {
   const context = useContext(UserContext); // ユーザーコンテキストを取得
   if (context === undefined) {
-    // ユーザーコンテキストが未定義の場合
-    throw new Error("useUser must be used within a MyUserContextProvider"); // エラーをスロー
+    throw new Error("useUser must be used within a MyUserContextProvider");
   }
-  return context; // ユーザーコンテキストを返す
+  return context;
 };
