@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 import { Playlist } from "@/types";
 import useLoadImage from "@/hooks/useLoadImage";
+import { MdOutlinePlaylistRemove } from "react-icons/md";
 
 interface PlaylistContentProps {
   playlists: Playlist[];
@@ -26,6 +27,7 @@ const PlaylistContent = ({ playlists }: PlaylistContentProps) => {
       {playlists.map((playlist) => (
         <div
           key={playlist.id}
+          className="flex items-center gap-x-3 cursor-pointer hover:bg-neutral-800/50 p-2 rounded-md"
           onClick={() =>
             router.push(
               `/playlist/${playlist.id}?title=${encodeURIComponent(
@@ -33,7 +35,6 @@ const PlaylistContent = ({ playlists }: PlaylistContentProps) => {
               )}`
             )
           }
-          className="flex items-center gap-x-3 cursor-pointer hover:bg-neutral-800/50 p-2 rounded-md"
         >
           <div className="relative rounded-md overflow-hidden min-h-[48px] min-w-[48px]">
             <Image

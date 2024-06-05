@@ -4,11 +4,12 @@ import Image from "next/image";
 import Header from "@/components/Header";
 import LikedContent from "@/app/liked/components/LikedContent";
 import { Song } from "@/types";
+import PlaylistDeleteButton from "@/components/PlaylistDeleteButton";
 
 interface PlaylistPageContentProps {
   playlistId: string;
   playlistTitle: string;
-  songs: Song[]; // Song型は適宜定義してください
+  songs: Song[];
 }
 
 const PlaylistPageContent: React.FC<PlaylistPageContentProps> = ({
@@ -34,6 +35,9 @@ const PlaylistPageContent: React.FC<PlaylistPageContentProps> = ({
               <h1 className="text-white text-4xl sm:text-5xl lg:text-7xl font-bold">
                 {playlistTitle}
               </h1>
+            </div>
+            <div className="absolute right-4">
+              <PlaylistDeleteButton playlistId={playlistId} />
             </div>
           </div>
         </div>
