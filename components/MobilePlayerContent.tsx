@@ -5,12 +5,14 @@ import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { BsRepeat1 } from "react-icons/bs";
 import SeekBar from "./Seekbar";
-import { Song } from "@/types";
+import { Playlist, Song } from "@/types";
 import { RiCloseLine } from "react-icons/ri";
 import LikeButton from "./LikeButton";
+import AddPlaylist from "./AddPlaylist";
 
 interface MobilePlayerContentProps {
   song: Song;
+  playlists: Playlist[];
   songUrl: string;
   imageUrl: string;
   currentTime: number;
@@ -31,6 +33,7 @@ interface MobilePlayerContentProps {
 
 const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
   song,
+  playlists,
   songUrl,
   imageUrl,
   currentTime,
@@ -71,7 +74,10 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
             <p className="text-base">#{song.genre}</p>
             <p className="text-gray-400 text-base mt-2">{song.author}</p>
           </div>
-          <LikeButton songId={song.id} />
+          <div className="flex items-center space-x-4">
+            <AddPlaylist playlists={playlists} songId={song.id} />
+            <LikeButton songId={song.id} />
+          </div>
         </div>
 
         <div className="flex items-center gap-x-2">

@@ -293,6 +293,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
       {isMobilePlayer && (
         <MobilePlayerContent
           song={song}
+          playlists={playlists}
           songUrl={songUrl}
           imageUrl={imageUrl || "/images/music-placeholder.png"}
           currentTime={currentTime}
