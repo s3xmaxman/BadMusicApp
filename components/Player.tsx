@@ -2,11 +2,16 @@
 import useGetSongById from "@/hooks/useGetSongById";
 import useLoadSongUrl from "@/hooks/useLoadSongUrl";
 import usePlayer from "@/hooks/usePlayer";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PlayerContent from "./PlayerContent";
 import MobileTabs from "./MobileTabs";
+import { Playlist } from "@/types";
 
-const Player = () => {
+interface PlayerProps {
+  playlists: Playlist[];
+}
+
+const Player = ({ playlists }: PlayerProps) => {
   const player = usePlayer();
   const { song } = useGetSongById(player.activeId);
   const songUrl = useLoadSongUrl(song!);
@@ -37,6 +42,7 @@ const Player = () => {
             songUrl={songUrl}
             isMobilePlayer={isMobilePlayer}
             toggleMobilePlayer={toggleMobilePlayer}
+            playlists={playlists}
           />
         </div>
       </div>

@@ -9,6 +9,7 @@ import ToasterProvider from "@/providers/ToasterProvider";
 import getSongsByUserId from "@/actions/getSongsByUserId";
 import Player from "@/components/Player";
 import getActiveProductsWithPrices from "@/actions/getActiveProductsWithPrices";
+import getPlaylists from "@/actions/getPlaylists";
 
 const font = Figtree({ subsets: ["latin"] });
 
@@ -26,6 +27,7 @@ export default async function RootLayout({
 }) {
   const userSongs = await getSongsByUserId();
   const products = await getActiveProductsWithPrices();
+  const playlists = await getPlaylists();
 
   return (
     <html lang="en">
@@ -35,7 +37,7 @@ export default async function RootLayout({
           <UserProvider>
             <ModalProvider products={products} />
             <Sidebar songs={userSongs}>{children}</Sidebar>
-            <Player />
+            <Player playlists={playlists} />
           </UserProvider>
         </SupabaseProvider>
       </body>

@@ -5,6 +5,7 @@ import Image from "next/image";
 import useLoadImage from "@/hooks/useLoadImage";
 import { Playlist, Song } from "@/types";
 import usePlayer from "@/hooks/usePlayer";
+import { useRouter } from "next/navigation";
 
 interface MediaItemProps {
   data: Song | Playlist;
@@ -14,13 +15,16 @@ interface MediaItemProps {
 const MediaItem: React.FC<MediaItemProps> = ({ data, onClick }) => {
   const player = usePlayer();
   const imageUrl = useLoadImage(data);
+  const router = useRouter();
 
   const handleClick = () => {
     if (onClick) {
       return onClick(data.id);
+    } else if ("author" in data && data.id) {
+      player.setId(data.id);
+    } else if (data.id) {
+      router.push(`/playlist/${data.id}`);
     }
-
-    return player.setId(data.id);
   };
 
   return (
