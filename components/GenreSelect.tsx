@@ -18,6 +18,7 @@ const genres = [
   "All",
   "Nu Disco",
   "Vapor Wave",
+  "Synth Wave",
   "Electro",
   "Electro House",
   "Tropical House",

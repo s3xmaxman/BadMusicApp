@@ -1,10 +1,11 @@
 "use client";
 
 import { TbPlaylist } from "react-icons/tb";
-import { AiOutlinePlus } from "react-icons/ai";
+import { AiOutlineBars, AiOutlinePlus } from "react-icons/ai";
 import useAuthModal from "@/hooks/useAuthModal";
 import { useUser } from "@/hooks/useUser";
 import useUploadModal from "@/hooks/useUploadModal";
+import usePlaylistModal from "@/hooks/usePlaylistModal";
 import { Song } from "@/types";
 import MediaItem from "./MediaItem";
 import useOnPlay from "@/hooks/useOnPlay";
@@ -18,13 +19,23 @@ const Library: React.FC<LibraryProps> = ({ songs }) => {
   const authModal = useAuthModal();
   const { user, subscription } = useUser();
   const uploadModal = useUploadModal();
+  const playlistModal = usePlaylistModal();
   const onPlay = useOnPlay(songs);
-  const onClick = () => {
+
+  const openCreate = () => {
     if (!user) {
       return authModal.onOpen();
     }
 
     return uploadModal.onOpen();
+  };
+
+  const openPlaylist = () => {
+    if (!user) {
+      return authModal.onOpen();
+    }
+
+    return playlistModal.onOpen();
   };
 
   return (
@@ -34,8 +45,13 @@ const Library: React.FC<LibraryProps> = ({ songs }) => {
           <TbPlaylist className="text-neutral-400" size={26} />
           <p className="text-neutral-400 font-medium text-md">マイライブラリ</p>
         </div>
+        <AiOutlineBars
+          className="text-neutral-400 cursor-pointer hover:text-white transition"
+          size={20}
+          onClick={openPlaylist}
+        />
         <AiOutlinePlus
-          onClick={onClick}
+          onClick={openCreate}
           size={20}
           className="text-neutral-400 cursor-pointer hover:text-white transition"
         />
