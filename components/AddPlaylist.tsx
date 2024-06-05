@@ -12,6 +12,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useUser } from "@/hooks/useUser";
+import useAuthModal from "@/hooks/useAuthModal";
 
 interface PlaylistMenuProps {
   playlists: Playlist[];
@@ -22,6 +23,7 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({ playlists, songId }) => {
   const supabase = createClientComponentClient();
   const { user } = useUser();
   const [isAdded, setIsAdded] = useState<Record<string, boolean>>({});
+  const authModal = useAuthModal();
 
   useEffect(() => {
     const fetchAddedSongs = async () => {
@@ -56,7 +58,7 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({ playlists, songId }) => {
 
   const handleAddToPlaylist = async (playlistId: string) => {
     if (!user) {
-      return toast.error("ログインしてください。");
+      return authModal.onOpen();
     }
 
     if (isAdded[playlistId]) {
