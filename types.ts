@@ -81,6 +81,7 @@ export interface Playlist {
 
 export interface PlaylistSong {
   id: string;
+  user_id: string;
   playlist_id: string;
   song_id: string;
 }

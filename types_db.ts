@@ -101,18 +101,21 @@ export interface Database {
       playlist_songs: {
         Row: {
           id: number;
+          user_id: string;
           playlist_id: number;
           song_id: number;
           created_at: string;
         };
         Insert: {
           id?: number;
+          user_id: string;
           playlist_id: number;
           song_id: number;
           created_at?: string;
         };
         Update: {
           id?: number;
+          user_id?: string;
           playlist_id?: number;
           song_id?: number;
           created_at?: string;
@@ -130,6 +133,13 @@ export interface Database {
             columns: ["song_id"];
             isOneToOne: false;
             referencedRelation: "songs";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "playlist_songs_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
             referencedColumns: ["id"];
           }
         ];
