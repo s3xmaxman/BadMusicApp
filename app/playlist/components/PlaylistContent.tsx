@@ -30,7 +30,7 @@ const PlaylistContent = ({ playlists }: PlaylistContentProps) => {
             router.push(
               `/playlist/${playlist.id}?title=${encodeURIComponent(
                 playlist.title
-              )}&songs=${encodeURIComponent(JSON.stringify(playlist.songs))}`
+              )}`
             )
           }
           className="flex items-center gap-x-3 cursor-pointer hover:bg-neutral-800/50 p-2 rounded-md"

@@ -1,45 +1,23 @@
-"use client";
-import { useRouter, useSearchParams } from "next/navigation";
-import Image from "next/image";
-import Header from "@/components/Header";
-import LikedContent from "@/app/liked/components/LikedContent";
+import getPlaylistSongs from "@/actions/getPlaylistSongs";
+import PlaylistPageContent from "./components/PlaylistPageContent";
 
-const PlaylistPage = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const playlistTitle = searchParams.get("title");
-  const songs = JSON.parse(searchParams.get("songs") || "[]");
+const PlaylistPage = async ({
+  params: { id: playlistId },
+  searchParams,
+}: {
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}) => {
+  const playlistTitle = searchParams.title as string;
+
+  const songs = await getPlaylistSongs(playlistId);
 
   return (
-    <div className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
-      <Header>
-        <div className="mt-20">
-          <div className="flex flex-col md:flex-row items-center gap-x-5">
-            <div className="relative h-32 w-32 lg:h-44 lg:w-44">
-              <Image
-                fill
-                src="/images/playlist.png"
-                alt="Playlist"
-                className="object-cover"
-              />
-            </div>
-            <div className="flex flex-col gap-y-2 mt-4 md:mt-0">
-              <p className="hidden md:block font-semibold text-sm"></p>
-              <h1 className="text-white text-4xl sm:text-5xl lg:text-7xl font-bold">
-                {playlistTitle}
-              </h1>
-            </div>
-          </div>
-        </div>
-      </Header>
-      <div>
-        {songs.length ? (
-          <LikedContent songs={songs} />
-        ) : (
-          <p className="text-white">No songs</p>
-        )}
-      </div>
-    </div>
+    <PlaylistPageContent
+      playlistId={playlistId}
+      playlistTitle={playlistTitle}
+      songs={songs}
+    />
   );
 };
 
