@@ -12,6 +12,12 @@ import useOnPlay from "@/hooks/useOnPlay";
 import { useState } from "react";
 import { MdMusicNote } from "react-icons/md";
 import { MdOutlineQueueMusic } from "react-icons/md";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import Hover from "./Hover";
 
 interface LibraryProps {
   songs: Song[];
@@ -57,16 +63,22 @@ const Library: React.FC<LibraryProps> = ({ songs, playlists }) => {
             </TabsList>
           </Tabs>
         </div>
-        <AiOutlineBars
-          className="text-neutral-400 cursor-pointer hover:text-white transition"
-          size={20}
-          onClick={openPlaylist}
-        />
-        <AiOutlinePlus
-          onClick={openCreate}
-          size={20}
-          className="text-neutral-400 cursor-pointer hover:text-white transition"
-        />
+
+        <Hover contentSize="w-40" description="プレイリストを作成">
+          <AiOutlineBars
+            className="text-neutral-400 cursor-pointer hover:text-white transition"
+            size={20}
+            onClick={openPlaylist}
+          />
+        </Hover>
+
+        <Hover contentSize="w-24" description="曲を追加">
+          <AiOutlinePlus
+            onClick={openCreate}
+            size={20}
+            className="text-neutral-400 cursor-pointer hover:text-white transition"
+          />
+        </Hover>
       </div>
       <div className="flex flex-col gap-y-2 mt-4 px-3">
         {selectedTab === "music" &&
