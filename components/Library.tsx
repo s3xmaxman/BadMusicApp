@@ -10,7 +10,8 @@ import { Playlist, Song } from "@/types";
 import MediaItem from "./MediaItem";
 import useOnPlay from "@/hooks/useOnPlay";
 import { useState } from "react";
-
+import { MdMusicNote } from "react-icons/md";
+import { MdOutlineQueueMusic } from "react-icons/md";
 interface LibraryProps {
   songs: Song[];
   playlists: Playlist[];
@@ -42,14 +43,14 @@ const Library: React.FC<LibraryProps> = ({ songs, playlists }) => {
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-between px-5 pt-4">
-        <div className="inline-flex items-center gap-x-2">
+        <div className=" inline-flex items-center gap-x-4">
           <Tabs value={selectedTab} onValueChange={setSelectedTab}>
-            <TabsList className="flex rounded-full ml-0">
+            <TabsList className="rounded-full">
               <TabsTrigger value="music" className="rounded-full">
-                music
+                <MdMusicNote size={25} />
               </TabsTrigger>
               <TabsTrigger value="playlist" className="rounded-full">
-                playlist
+                <MdOutlineQueueMusic size={25} />
               </TabsTrigger>
             </TabsList>
           </Tabs>
