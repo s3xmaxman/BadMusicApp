@@ -12,7 +12,7 @@ import DeletePlaylistSongsBtn from "@/components/DeletePlaylistSongsBtn";
 
 interface LikedContentProps {
   songs: Song[];
-  playlistId: string;
+  playlistId?: string;
 }
 
 const LikedContent: React.FC<LikedContentProps> = ({ songs, playlistId }) => {
