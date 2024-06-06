@@ -12,10 +12,12 @@ import useOnPlay from "@/hooks/useOnPlay";
 import { useState } from "react";
 import { MdMusicNote } from "react-icons/md";
 import { MdOutlineQueueMusic } from "react-icons/md";
+
 interface LibraryProps {
   songs: Song[];
   playlists: Playlist[];
 }
+
 const Library: React.FC<LibraryProps> = ({ songs, playlists }) => {
   const authModal = useAuthModal();
   const { user } = useUser();

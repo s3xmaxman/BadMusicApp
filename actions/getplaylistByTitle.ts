@@ -4,7 +4,6 @@ import { cookies, headers } from "next/headers";
 import { Playlist } from "@/types";
 
 import getPlaylists from "./getPlaylists";
-import { title } from "process";
 
 export const getPlaylistByTitle = async (
   title: string
