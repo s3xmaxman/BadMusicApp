@@ -12,7 +12,6 @@ interface PlaylistContentProps {
 
 const PlaylistContent = ({ playlists }: PlaylistContentProps) => {
   const router = useRouter();
-
   if (playlists.length === 0) {
     return (
       <div className="flex flex-col gap-y-2 w-full px-6 text-neutral-400">
@@ -24,8 +23,6 @@ const PlaylistContent = ({ playlists }: PlaylistContentProps) => {
   return (
     <div className="flex flex-col gap-y-2 w-full px-6">
       {playlists.map((playlist) => {
-        const imagePath = useLoadImage(playlist);
-
         return (
           <div
             key={playlist.id}
@@ -41,7 +38,7 @@ const PlaylistContent = ({ playlists }: PlaylistContentProps) => {
             <div className="relative rounded-md overflow-hidden min-h-[48px] min-w-[48px]">
               <Image
                 fill
-                src={imagePath || "/images/playlist.png"}
+                src={"/images/playlist.png"}
                 alt="PlaylistItem"
                 className="object-cover"
               />
