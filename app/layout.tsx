@@ -10,6 +10,7 @@ import getSongsByUserId from "@/actions/getSongsByUserId";
 import Player from "@/components/Player";
 import getActiveProductsWithPrices from "@/actions/getActiveProductsWithPrices";
 import getPlaylists from "@/actions/getPlaylists";
+import getSongs from "@/actions/getSongs";
 
 const font = Figtree({ subsets: ["latin"] });
 
@@ -25,9 +26,9 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const userSongs = await getSongsByUserId();
   const products = await getActiveProductsWithPrices();
   const playlists = await getPlaylists();
+  const songs = await getSongs();
 
   return (
     <html lang="en">
@@ -36,7 +37,7 @@ export default async function RootLayout({
         <SupabaseProvider>
           <UserProvider>
             <ModalProvider products={products} />
-            <Sidebar songs={userSongs} playlists={playlists}>
+            <Sidebar songs={songs} playlists={playlists}>
               {children}
             </Sidebar>
             <Player playlists={playlists} />

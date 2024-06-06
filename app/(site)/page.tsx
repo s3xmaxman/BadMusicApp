@@ -3,7 +3,6 @@ import Header from "@/components/Header";
 import ListItem from "@/components/ListItem";
 import PageContent from "./components/PageContent";
 import RightSidebar from "@/components/RightSidebar";
-import getPlaylists from "@/actions/getPlaylists";
 
 export const revalidate = 0;
 

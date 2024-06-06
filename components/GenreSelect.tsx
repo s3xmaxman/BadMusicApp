@@ -38,6 +38,7 @@ const GenreSelect: React.FC<GenreSelectProps> = ({
     setSelectedGenre(genre);
     onGenreChange(genre);
   };
+
   return (
     <Select onValueChange={handleGenreChange} value={selectedGenre}>
       <SelectTrigger className={`w-[180px] ${className}`}>
