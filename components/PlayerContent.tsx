@@ -17,7 +17,6 @@ import Slider from "./Slider";
 import SeekBar from "./Seekbar";
 import useLoadImage from "@/hooks/useLoadImage";
 import MobilePlayerContent from "./MobilePlayerContent";
-import PlaylistMenu from "./AddPlaylist";
 import AddPlaylist from "./AddPlaylist";
 
 interface PlayerContentProps {

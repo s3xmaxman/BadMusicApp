@@ -1,26 +1,27 @@
 "use client";
 
-import { TbPlaylist } from "react-icons/tb";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AiOutlineBars, AiOutlinePlus } from "react-icons/ai";
 import useAuthModal from "@/hooks/useAuthModal";
 import { useUser } from "@/hooks/useUser";
 import useUploadModal from "@/hooks/useUploadModal";
 import usePlaylistModal from "@/hooks/usePlaylistModal";
-import { Song } from "@/types";
+import { Playlist, Song } from "@/types";
 import MediaItem from "./MediaItem";
 import useOnPlay from "@/hooks/useOnPlay";
-import useSubscribeModal from "@/hooks/useSubscribeModal";
+import { useState } from "react";
 
 interface LibraryProps {
   songs: Song[];
+  playlists: Playlist[];
 }
-const Library: React.FC<LibraryProps> = ({ songs }) => {
-  const subscribeModal = useSubscribeModal();
+const Library: React.FC<LibraryProps> = ({ songs, playlists }) => {
   const authModal = useAuthModal();
-  const { user, subscription } = useUser();
+  const { user } = useUser();
   const uploadModal = useUploadModal();
   const playlistModal = usePlaylistModal();
   const onPlay = useOnPlay(songs);
+  const [selectedTab, setSelectedTab] = useState("music");
 
   const openCreate = () => {
     if (!user) {
@@ -42,8 +43,16 @@ const Library: React.FC<LibraryProps> = ({ songs }) => {
     <div className="flex flex-col">
       <div className="flex items-center justify-between px-5 pt-4">
         <div className="inline-flex items-center gap-x-2">
-          <TbPlaylist className="text-neutral-400" size={26} />
-          <p className="text-neutral-400 font-medium text-md">マイライブラリ</p>
+          <Tabs value={selectedTab} onValueChange={setSelectedTab}>
+            <TabsList className="flex rounded-full ml-0">
+              <TabsTrigger value="music" className="rounded-full">
+                music
+              </TabsTrigger>
+              <TabsTrigger value="playlist" className="rounded-full">
+                playlist
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
         </div>
         <AiOutlineBars
           className="text-neutral-400 cursor-pointer hover:text-white transition"
@@ -57,13 +66,16 @@ const Library: React.FC<LibraryProps> = ({ songs }) => {
         />
       </div>
       <div className="flex flex-col gap-y-2 mt-4 px-3">
-        {songs.map((item) => (
-          <MediaItem
-            onClick={(id: string) => onPlay(id)}
-            key={item.id}
-            data={item}
-          />
-        ))}
+        {selectedTab === "music" &&
+          songs.map((item) => (
+            <MediaItem
+              onClick={(id: string) => onPlay(id)}
+              key={item.id}
+              data={item}
+            />
+          ))}
+        {selectedTab === "playlist" &&
+          playlists.map((item) => <MediaItem key={item.id} data={item} />)}
       </div>
     </div>
   );
