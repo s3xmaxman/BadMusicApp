@@ -62,7 +62,6 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({ playlists, songId }) => {
     }
 
     if (isAdded[playlistId]) {
-      // 既に追加済みの場合
       toast.error("既にプレイリストに追加されています。");
       return;
     }
@@ -88,16 +87,13 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({ playlists, songId }) => {
         <RiPlayListAddFill size={20} />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>プレイリスト</DropdownMenuLabel>
-        <DropdownMenuSeparator />
         {playlists.map((playlist) => (
           <DropdownMenuItem
             key={playlist.id}
             onClick={() => handleAddToPlaylist(playlist.id)}
           >
-            {playlist.title} {/* プレイリスト名を表示 */}
+            {playlist.title}
             {isAdded[playlist.id] && " ✓"}
-            {/* 追加済みの場合はチェックマークを表示 */}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
