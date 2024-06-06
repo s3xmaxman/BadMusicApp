@@ -39,7 +39,7 @@ const PlaylistContent = ({ playlists }: PlaylistContentProps) => {
           <div className="relative rounded-md overflow-hidden min-h-[48px] min-w-[48px]">
             <Image
               fill
-              src={useLoadImage(playlist) || "/images/playlist.png"}
+              src={"/images/playlist.png"}
               alt="PlaylistItem"
               className="object-cover"
             />
