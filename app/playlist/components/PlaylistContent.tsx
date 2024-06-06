@@ -25,6 +25,7 @@ const PlaylistContent = ({ playlists }: PlaylistContentProps) => {
     <div className="flex flex-col gap-y-2 w-full px-6">
       {playlists.map((playlist) => {
         const imagePath = useLoadImage(playlist);
+
         return (
           <div
             key={playlist.id}
