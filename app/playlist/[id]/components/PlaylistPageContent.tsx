@@ -4,7 +4,7 @@ import Image from "next/image";
 import Header from "@/components/Header";
 import LikedContent from "@/app/liked/components/LikedContent";
 import { Song } from "@/types";
-import PlaylistDeleteButton from "@/components/PlaylistDeleteButton";
+import DeletePlaylistButton from "@/components/DeletePlaylistButton";
 
 interface PlaylistPageContentProps {
   playlistId: string;
@@ -37,14 +37,14 @@ const PlaylistPageContent: React.FC<PlaylistPageContentProps> = ({
               </h1>
             </div>
             <div className="absolute right-4">
-              <PlaylistDeleteButton playlistId={playlistId} />
+              <DeletePlaylistButton playlistId={playlistId} />
             </div>
           </div>
         </div>
       </Header>
       <div>
         {songs.length ? (
-          <LikedContent songs={songs} />
+          <LikedContent songs={songs} playlistId={playlistId} />
         ) : (
           <p className="text-white">No songs</p>
         )}

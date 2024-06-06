@@ -6,11 +6,11 @@ import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import toast from "react-hot-toast";
 
-interface PlaylistDeleteButtonProps {
+interface DeletePlaylistButtonProps {
   playlistId: string;
 }
 
-const PlaylistDeleteButton: React.FC<PlaylistDeleteButtonProps> = ({
+const DeletePlaylistButton: React.FC<DeletePlaylistButtonProps> = ({
   playlistId,
 }) => {
   const router = useRouter();
@@ -69,4 +69,4 @@ const PlaylistDeleteButton: React.FC<PlaylistDeleteButtonProps> = ({
   );
 };
 
-export default PlaylistDeleteButton;
+export default DeletePlaylistButton;

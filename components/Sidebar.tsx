@@ -5,12 +5,12 @@ import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 import { HiHome } from "react-icons/hi";
 import { BiSearch } from "react-icons/bi";
-import { AiOutlineBars } from "react-icons/ai";
 import Box from "./Box";
 import SidebarItem from "./SidebarItem";
 import Library from "./Library";
 import { Playlist, Song } from "@/types";
 import usePlayer from "@/hooks/usePlayer";
+import { RiPlayListFill } from "react-icons/ri";
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -36,7 +36,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children, songs, playlists }) => {
         href: "/search",
       },
       {
-        icon: AiOutlineBars,
+        icon: RiPlayListFill,
         label: "プレイリスト",
         active: pathname === "/playlist",
         href: "/playlist",

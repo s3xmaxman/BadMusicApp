@@ -8,12 +8,14 @@ import { useUser } from "@/hooks/useUser";
 import MediaItem from "@/components/MediaItem";
 import LikeButton from "@/components/LikeButton";
 import useOnPlay from "@/hooks/useOnPlay";
+import DeletePlaylistSongsBtn from "@/components/DeletePlaylistSongsBtn";
 
 interface LikedContentProps {
   songs: Song[];
+  playlistId: string;
 }
 
-const LikedContent: React.FC<LikedContentProps> = ({ songs }) => {
+const LikedContent: React.FC<LikedContentProps> = ({ songs, playlistId }) => {
   const router = useRouter();
   const { isLoading, user } = useUser();
 
@@ -48,6 +50,9 @@ const LikedContent: React.FC<LikedContentProps> = ({ songs }) => {
             <MediaItem onClick={(id: string) => onPlay(id)} data={song} />
           </div>
           <LikeButton songId={song.id} />
+          {playlistId && (
+            <DeletePlaylistSongsBtn songId={song.id} playlistId={playlistId} />
+          )}
         </div>
       ))}
     </div>
