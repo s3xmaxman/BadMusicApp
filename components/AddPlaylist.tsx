@@ -13,6 +13,7 @@ import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useUser } from "@/hooks/useUser";
 import useAuthModal from "@/hooks/useAuthModal";
+import { RiPlayListFill } from "react-icons/ri";
 
 interface PlaylistMenuProps {
   playlists: Playlist[];
@@ -92,6 +93,9 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({ playlists, songId }) => {
             key={playlist.id}
             onClick={() => handleAddToPlaylist(playlist.id)}
           >
+            <div className="mr-1">
+              <RiPlayListFill size={15} />
+            </div>
             {playlist.title}
             {isAdded[playlist.id] && " ✓"}
           </DropdownMenuItem>
