@@ -36,10 +36,10 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
 }) => {
   const imageUrl = useLoadImage(song);
   const player = usePlayer();
-  const [volume, setVolume] = useState(0.1);
-  const [isPlaying, setIsPlaying] = useState(false);
   const isRepeating = usePlayer((state) => state.isRepeating);
   const isShuffling = usePlayer((state) => state.isShuffling);
+  const [volume, setVolume] = useState(0.1);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [isPlayingSound, setIsPlayingSound] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);

@@ -6,7 +6,6 @@ import usePlayer from "@/hooks/usePlayer";
 import useGetSongById from "@/hooks/useGetSongById";
 import { FaMusic } from "react-icons/fa";
 import LikeButton from "./LikeButton";
-import NextSong from "./NextSong";
 import { motion } from "framer-motion";
 
 const ON_ANIMATION = 20;
@@ -32,7 +31,7 @@ const RightSidebar = () => {
           layout="responsive"
           width={800}
           height={800}
-          className="object-cover rounded-lg shadow-lg transition-all duration-500 ease-in-out"
+          className="object-cover rounded-xl shadow-lg transition-all duration-500 ease-in-out"
         />
         <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
           <FaMusic className="text-white text-6xl" />
@@ -62,19 +61,30 @@ const RightSidebar = () => {
             </h1>
           )}
           <p className="ml-2 text-gray-400 text-lg underline">#{song.genre}</p>
-          <p className="mt-2 text-lg text-gray-300 ">{song.author}</p>
         </div>
-        <div className=" w-full flex justify-end">
+        <div className="flex items-center mt-2">
+          <p className="text-lg text-gray-300 mr-[200px]">{song.author}</p>
           <LikeButton songId={song.id} />
         </div>
       </div>
       <div className="sticky mt-[130px] w-full mb-10">
+        <span className="ml-2text-white text-xl font-semibold">次の曲</span>
         {nextSong && (
-          <NextSong
-            title={nextSong?.title}
-            image_path={nextImagePath}
-            author={nextSong?.author}
-          />
+          <div className="w-full flex items-center gap-x-16 cursor-pointer hover:bg-neutral-800 rounded-md p-3">
+            <Image
+              src={nextImagePath || "/images/playlist.png"}
+              alt="Next Song"
+              width={100}
+              height={100}
+              className="rounded-xl"
+            />
+            <div>
+              <h2 className="text-lg font-semibold text-white">
+                {nextSong.title}
+              </h2>
+              <p className="text-sm text-neutral-400">{nextSong.author}</p>
+            </div>
+          </div>
         )}
       </div>
     </div>
