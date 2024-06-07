@@ -12,11 +12,6 @@ import useOnPlay from "@/hooks/useOnPlay";
 import { useState } from "react";
 import { MdMusicNote } from "react-icons/md";
 import { MdOutlineQueueMusic } from "react-icons/md";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
 import Hover from "./Hover";
 
 interface LibraryProps {

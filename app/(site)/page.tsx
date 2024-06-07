@@ -10,7 +10,7 @@ export default async function Home() {
   const songs = await getSongs();
 
   return (
-    <div className="flex bg-neutral-900 rounded-lg h-full overflow-hidden">
+    <div className="flex bg-gradient-to-b from-gray-900 to-black rounded-xl h-full overflow-hidden">
       <div className="w-[1250px] h-full overflow-y-auto">
         <Header>
           <div className="mb-2">
