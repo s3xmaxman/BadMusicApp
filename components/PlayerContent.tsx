@@ -50,47 +50,16 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
   const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
 
   const onPlayNext = () => {
-    if (player.ids.length === 0) {
-      return;
+    const nextSongId = player.getNextSongId();
+    if (nextSongId) {
+      player.setId(nextSongId);
     }
-
-    let nextIndex;
-    if (isShufflingRef.current) {
-      const currentIndex = player.ids.findIndex((id) => id === player.activeId);
-      do {
-        nextIndex = Math.floor(Math.random() * player.ids.length);
-      } while (nextIndex === currentIndex);
-    } else {
-      const currentIndex = player.ids.findIndex((id) => id === player.activeId);
-      nextIndex = (currentIndex + 1) % player.ids.length;
-    }
-
-    player.setId(player.ids[nextIndex]);
   };
 
   const onPlayPrevious = () => {
-    if (player.ids.length === 0) {
-      return;
-    }
-
-    let prevIndex;
-    if (isShufflingRef.current) {
-      const currentIndex = player.ids.findIndex((id) => id === player.activeId);
-      do {
-        prevIndex = Math.floor(Math.random() * player.ids.length);
-      } while (prevIndex === currentIndex);
-    } else {
-      const currentIndex = player.ids.findIndex((id) => id === player.activeId);
-      prevIndex = (currentIndex - 1 + player.ids.length) % player.ids.length;
-    }
-
-    if (isRepeatingRef.current) {
-      if (sound) {
-        sound.seek(0);
-        setCurrentTime(0);
-      }
-    } else {
-      player.setId(player.ids[prevIndex]);
+    const prevSongId = player.getPreviousSongId();
+    if (prevSongId) {
+      player.setId(prevSongId);
     }
   };
 
@@ -119,7 +88,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
   useEffect(() => {
     isRepeatingRef.current = isRepeating;
     if (sound) {
-      sound.loop(isRepeating); // Loop設定を変更する
+      sound.loop(isRepeating);
     }
   }, [isRepeating]);
 
@@ -178,10 +147,12 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
   };
 
   const toggleRepeat = () => {
+    player.toggleRepeat();
     setIsRepeating(!isRepeating);
   };
 
   const toggleShuffle = () => {
+    player.toggleShuffle();
     setIsShuffling(!isShuffling);
   };
 

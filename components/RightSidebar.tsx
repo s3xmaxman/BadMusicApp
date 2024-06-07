@@ -6,18 +6,22 @@ import usePlayer from "@/hooks/usePlayer";
 import useGetSongById from "@/hooks/useGetSongById";
 import { FaMusic } from "react-icons/fa";
 import LikeButton from "./LikeButton";
+import NextSong from "./NextSong";
+import { motion } from "framer-motion";
 
 const RightSidebar = () => {
   const player = usePlayer();
   const { song } = useGetSongById(player.activeId);
   const imagePath = useLoadImage(song!);
+  const nextSongId = player.getNextSongId();
+  const nextSong = useGetSongById(nextSongId);
 
   if (!song) {
     return null;
   }
 
   return (
-    <div className="bg-gradient-to-b bg-natural-900 text-white p-4 h-full flex flex-col items-start rounded-lg overflow-auto">
+    <div className="bg-gradient-to-b bg-natural-900 text-white p-4 h-full flex flex-col rounded-lg overflow-y-auto">
       <div className="relative w-full mt-4">
         <Image
           src={imagePath || "/images/RightSide.png"}
@@ -33,13 +37,30 @@ const RightSidebar = () => {
       </div>
       <div className="mt-8 w-full flex items-center justify-start">
         <div>
-          <h1 className="text-3xl font-bold tracking-wide">{song.title}</h1>
-          <p className="mt-2 text-lg text-gray-300">#{song.genre}</p>
+          <motion.div
+            className="flex items-center"
+            initial={{ x: "100%" }}
+            animate={{ x: "-100%" }}
+            transition={{
+              duration: 22,
+              repeat: Infinity,
+              loop: true,
+              ease: "linear",
+            }}
+          >
+            <h1 className="text-3xl font-bold tracking-wide song-title">
+              {song.title}
+            </h1>
+          </motion.div>
+          <p className="ml-2 text-gray-400 text-lg underline">#{song.genre}</p>
           <p className="mt-2 text-lg text-gray-300 ">{song.author}</p>
         </div>
         <div className="mt-20 ml-auto">
           <LikeButton songId={song.id} />
         </div>
+      </div>
+      <div className="sticky mt-[150px] w-full mb-10">
+        <NextSong />
       </div>
     </div>
   );

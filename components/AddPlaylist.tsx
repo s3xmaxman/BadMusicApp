@@ -8,12 +8,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Playlist } from "@/types";
 import { RiPlayListAddFill } from "react-icons/ri";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useUser } from "@/hooks/useUser";
 import useAuthModal from "@/hooks/useAuthModal";
 import { RiPlayListFill } from "react-icons/ri";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 
 interface PlaylistMenuProps {
   playlists: Playlist[];
@@ -21,7 +21,7 @@ interface PlaylistMenuProps {
 }
 
 const AddPlaylist: React.FC<PlaylistMenuProps> = ({ playlists, songId }) => {
-  const supabase = createClientComponentClient();
+  const { supabaseClient } = useSessionContext();
   const { user } = useUser();
   const [isAdded, setIsAdded] = useState<Record<string, boolean>>({});
   const authModal = useAuthModal();
@@ -32,7 +32,7 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({ playlists, songId }) => {
         return;
       }
 
-      const { data, error } = await supabase
+      const { data, error } = await supabaseClient
         .from("playlist_songs")
         .select("*")
         .eq("song_id", songId)
@@ -55,10 +55,11 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({ playlists, songId }) => {
     };
 
     fetchAddedSongs();
-  }, [songId, playlists, supabase, user?.id]);
+  }, [songId, playlists, supabaseClient, user?.id]);
 
   const handleAddToPlaylist = async (playlistId: string) => {
     if (!user) {
+      console.log("User not found, opening auth modal");
       return authModal.onOpen();
     }
 
@@ -67,7 +68,7 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({ playlists, songId }) => {
       return;
     }
 
-    const { error } = await supabase.from("playlist_songs").insert({
+    const { error } = await supabaseClient.from("playlist_songs").insert({
       playlist_id: playlistId,
       song_id: songId,
       user_id: user.id,

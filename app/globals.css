@@ -31,3 +31,9 @@ body,
 .active-tab {
   color: #4c1d95;
 }
+
+.song-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
