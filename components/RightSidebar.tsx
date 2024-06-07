@@ -4,18 +4,18 @@ import Image from "next/image";
 import useLoadImage from "@/hooks/useLoadImage";
 import usePlayer from "@/hooks/usePlayer";
 import useGetSongById from "@/hooks/useGetSongById";
-import { FaMusic } from "react-icons/fa";
-import LikeButton from "./LikeButton";
+import { FaMusic, FaHeart } from "react-icons/fa";
 import { motion } from "framer-motion";
+import LikeButton from "./LikeButton";
 
 const ON_ANIMATION = 20;
 
 const RightSidebar = () => {
   const player = usePlayer();
-  const { song } = useGetSongById(player.activeId);
+  const { song: song } = useGetSongById(player.activeId);
+  const { song: nextSong } = useGetSongById(player.getNextSongId());
+
   const imagePath = useLoadImage(song!);
-  const nextSongId = player.getNextSongId();
-  const { song: nextSong } = useGetSongById(nextSongId);
   const nextImagePath = useLoadImage(nextSong!);
 
   if (!song || !nextSong) {
@@ -23,66 +23,69 @@ const RightSidebar = () => {
   }
 
   return (
-    <div className="scroll-container bg-gradient-to-b bg-natural-900 text-white p-4 h-full flex flex-col rounded-lg overflow-y-auto">
-      <div className="relative w-full mt-4">
+    <div className="scroll-container bg-gradient-to-b from-gray-900 to-black text-white p-4 h-full flex flex-col rounded-lg overflow-y-auto">
+      <div className="relative w-full mt-4 aspect-square overflow-hidden rounded-xl">
         <Image
           src={imagePath || "/images/RightSide.png"}
           alt="Song Image"
-          layout="responsive"
-          width={800}
-          height={800}
-          className="object-cover rounded-xl shadow-lg transition-all duration-500 ease-in-out"
+          fill
+          className="object-cover shadow-lg transition-all duration-500 ease-in-out"
         />
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 bg-black/50">
           <FaMusic className="text-white text-6xl" />
         </div>
       </div>
-      <div className="mt-8 w-full flex flex-col items-start">
-        <div>
-          {song.title.length > ON_ANIMATION ? (
-            <motion.div
-              className="flex items-center"
-              initial={{ x: "100%" }}
-              animate={{ x: "-100%" }}
-              transition={{
-                duration: 22,
-                repeat: Infinity,
-                loop: true,
-                ease: "linear",
-              }}
-            >
-              <h1 className="text-3xl font-bold tracking-wide song-title">
-                {song.title}
-              </h1>
-            </motion.div>
-          ) : (
-            <h1 className="text-3xl font-bold tracking-wide song-title">
-              {song.title}
-            </h1>
-          )}
-          <p className="ml-2 text-gray-400 text-lg underline">#{song.genre}</p>
-        </div>
-        <div className="flex items-center mt-2">
-          <p className="text-lg text-gray-300 mr-[200px]">{song.author}</p>
-          <LikeButton songId={song.id} />
+
+      <div className="mt-8 space-y-4">
+        <motion.div
+          className="flex flex-col"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <motion.h1
+            className="text-3xl font-bold tracking-wide line-clamp-2"
+            initial={{ x: song.title.length > ON_ANIMATION ? "100%" : 0 }}
+            animate={{ x: 0 }}
+            transition={{
+              duration: song.title.length > ON_ANIMATION ? 22 : 0,
+              repeat: song.title.length > ON_ANIMATION ? Infinity : 0,
+              loop: true,
+              ease: "linear",
+            }}
+          >
+            {song.title}
+          </motion.h1>
+          <p className="text-gray-400 text-lg">#{song.genre}</p>
+        </motion.div>
+
+        <div className="flex items-center justify-between">
+          <p className="text-gray-300">{song.author}</p>
+          <button className="text-gray-400 hover:text-white">
+            <LikeButton songId={song.id} size={18} />
+          </button>
         </div>
       </div>
-      <div className="sticky mt-[130px] w-full mb-10">
-        <span className="ml-2text-white text-xl font-semibold">次の曲</span>
+
+      <div className="mt-10 border-t border-gray-800 pt-6 flex-grow">
+        <h2 className="text-white text-xl font-semibold mb-4">次の曲</h2>
         {nextSong && (
-          <div className="w-full flex items-center gap-x-16 cursor-pointer hover:bg-neutral-800 rounded-md p-3">
-            <Image
-              src={nextImagePath || "/images/playlist.png"}
-              alt="Next Song"
-              width={100}
-              height={100}
-              className="rounded-xl"
-            />
-            <div>
-              <h2 className="text-lg font-semibold text-white">
+          <div className="flex items-center gap-x-4 py-4 rounded-md">
+            <div className="relative w-24 h-24 rounded-md overflow-hidden shrink-0">
+              <Image
+                src={nextImagePath || "/images/playlist.png"}
+                alt="Next Song"
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div className="flex-grow">
+              <h3 className="text-lg font-semibold text-white line-clamp-1">
                 {nextSong.title}
-              </h2>
-              <p className="text-sm text-neutral-400">{nextSong.author}</p>
+              </h3>
+              <p className="text-sm text-gray-400 line-clamp-1">
+                {nextSong.author}
+              </p>
             </div>
           </div>
         )}

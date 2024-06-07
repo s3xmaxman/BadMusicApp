@@ -8,9 +8,10 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
 interface LikeButtonProps {
   songId: string;
+  size?: number;
 }
 
-const LikeButton: React.FC<LikeButtonProps> = ({ songId }) => {
+const LikeButton: React.FC<LikeButtonProps> = ({ songId, size }) => {
   const router = useRouter();
   const { supabaseClient } = useSessionContext();
   const { user } = useUser();
@@ -84,7 +85,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId }) => {
 
   return (
     <button onClick={handleLike} className="hover:opacity-75 transition">
-      <Icon color={isLiked ? "#4c1d95" : "white"} size={25} />
+      <Icon color={isLiked ? "#4c1d95" : "white"} size={size || 25} />
     </button>
   );
 };
