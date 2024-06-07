@@ -16,9 +16,10 @@ const RightSidebar = () => {
   const { song } = useGetSongById(player.activeId);
   const imagePath = useLoadImage(song!);
   const nextSongId = player.getNextSongId();
-  const nextSong = useGetSongById(nextSongId);
+  const { song: nextSong } = useGetSongById(nextSongId);
+  const nextImagePath = useLoadImage(nextSong!);
 
-  if (!song) {
+  if (!song || !nextSong) {
     return null;
   }
 
@@ -68,7 +69,13 @@ const RightSidebar = () => {
         </div>
       </div>
       <div className="sticky mt-[130px] w-full mb-10">
-        <NextSong />
+        {nextSong && (
+          <NextSong
+            title={nextSong?.title}
+            image_path={nextImagePath}
+            author={nextSong?.author}
+          />
+        )}
       </div>
     </div>
   );

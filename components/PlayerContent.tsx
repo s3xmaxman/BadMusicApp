@@ -38,13 +38,11 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
   const player = usePlayer();
   const [volume, setVolume] = useState(0.1);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isRepeating, setIsRepeating] = useState(false);
-  const [isShuffling, setIsShuffling] = useState(false);
+  const isRepeating = usePlayer((state) => state.isRepeating);
+  const isShuffling = usePlayer((state) => state.isShuffling);
   const [isPlayingSound, setIsPlayingSound] = useState(false);
-  const isRepeatingRef = useRef(isRepeating);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const isShufflingRef = useRef(isShuffling);
 
   const Icon = isPlaying ? BsPauseFill : BsPlayFill;
   const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
@@ -72,7 +70,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     },
     onend: () => {
       setIsPlaying(false);
-      if (!isRepeatingRef.current) {
+      if (!isRepeating) {
         onPlayNext();
       } else {
         play();
@@ -86,15 +84,10 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
   });
 
   useEffect(() => {
-    isRepeatingRef.current = isRepeating;
     if (sound) {
       sound.loop(isRepeating);
     }
   }, [isRepeating]);
-
-  useEffect(() => {
-    isShufflingRef.current = isShuffling;
-  }, [isShuffling]);
 
   useEffect(() => {
     sound?.play();
@@ -148,12 +141,10 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
 
   const toggleRepeat = () => {
     player.toggleRepeat();
-    setIsRepeating(!isRepeating);
   };
 
   const toggleShuffle = () => {
     player.toggleShuffle();
-    setIsShuffling(!isShuffling);
   };
 
   const formatTime = useMemo(() => {

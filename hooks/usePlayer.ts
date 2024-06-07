@@ -5,6 +5,7 @@ interface PlayerStore {
   activeId?: string;
   isRepeating: boolean;
   isShuffling: boolean;
+  shuffledIds: string[];
   setId: (id: string) => void;
   setIds: (ids: string[]) => void;
   toggleRepeat: () => void;
@@ -19,10 +20,28 @@ const usePlayer = create<PlayerStore>((set, get) => ({
   activeId: undefined,
   isRepeating: false,
   isShuffling: false,
+  shuffledIds: [] as string[],
   setId: (id: string) => set({ activeId: id }),
   setIds: (ids: string[]) => set({ ids }),
   toggleRepeat: () => set((state) => ({ isRepeating: !state.isRepeating })),
-  toggleShuffle: () => set((state) => ({ isShuffling: !state.isShuffling })),
+  toggleShuffle: () =>
+    set((state) => {
+      let newShuffledIds = [...state.ids];
+      if (!state.isShuffling) {
+        // シャッフルが有効になった時にのみシャッフルする
+        for (let i = newShuffledIds.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [newShuffledIds[i], newShuffledIds[j]] = [
+            newShuffledIds[j],
+            newShuffledIds[i],
+          ];
+        }
+      }
+      return {
+        isShuffling: !state.isShuffling,
+        shuffledIds: newShuffledIds,
+      };
+    }),
   reset: () =>
     set({
       ids: [],
@@ -31,7 +50,7 @@ const usePlayer = create<PlayerStore>((set, get) => ({
       isShuffling: false,
     }),
   getNextSongId: () => {
-    const { ids, activeId, isShuffling } = get();
+    const { ids, activeId, isShuffling, isRepeating, shuffledIds } = get();
     if (ids.length === 0) {
       return undefined;
     }
@@ -39,21 +58,24 @@ const usePlayer = create<PlayerStore>((set, get) => ({
     const currentIndex = ids.findIndex((id) => id === activeId);
     if (currentIndex === -1) {
       return undefined;
+    }
+
+    if (isRepeating) {
+      return activeId;
     }
 
     let nextIndex: number;
+
     if (isShuffling) {
-      do {
-        nextIndex = Math.floor(Math.random() * ids.length);
-      } while (nextIndex === currentIndex);
+      nextIndex = (currentIndex + 1) % shuffledIds.length;
+      return shuffledIds[nextIndex];
     } else {
       nextIndex = (currentIndex + 1) % ids.length;
+      return ids[nextIndex];
     }
-
-    return ids[nextIndex];
   },
   getPreviousSongId: () => {
-    const { ids, activeId, isShuffling } = get();
+    const { ids, activeId, isShuffling, isRepeating, shuffledIds } = get();
     if (ids.length === 0) {
       return undefined;
     }
@@ -61,13 +83,16 @@ const usePlayer = create<PlayerStore>((set, get) => ({
     const currentIndex = ids.findIndex((id) => id === activeId);
     if (currentIndex === -1) {
       return undefined;
+    }
+
+    if (isRepeating) {
+      return activeId;
     }
 
     let prevIndex: number;
     if (isShuffling) {
-      do {
-        prevIndex = Math.floor(Math.random() * ids.length);
-      } while (prevIndex === currentIndex);
+      prevIndex = (currentIndex + 1) % shuffledIds.length;
+      return shuffledIds[prevIndex];
     } else {
       prevIndex = (currentIndex - 1 + ids.length) % ids.length;
     }
