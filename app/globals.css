@@ -37,3 +37,11 @@ body,
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.scroll-container {
+  overflow: hidden;
+}
+
+.scroll-container::-webkit-scrollbar {
+  display: none;
+}
