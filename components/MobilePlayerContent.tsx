@@ -54,7 +54,7 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
   const Icon = isPlaying ? BsPauseFill : BsPlayFill;
 
   return (
-    <div className="md:hidden fixed top-0 left-0 right-0 bottom-0 bg-neutral-900 text-white px-2 py-4 flex flex-col items-center justify-center">
+    <div className="md:hidden fixed top-0 left-0 right-0 bottom-0 bg-gradient-to-b from-gray-900 to-black text-white px-2 py-4 flex flex-col items-center justify-center">
       <RiCloseLine
         size={25}
         onClick={toggleMobilePlayer}
