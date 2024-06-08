@@ -9,6 +9,7 @@ import { Playlist, Song } from "@/types";
 import { RiCloseLine } from "react-icons/ri";
 import LikeButton from "./LikeButton";
 import AddPlaylist from "./AddPlaylist";
+import { BackgroundGradient } from "./ui/background-gradient";
 
 interface MobilePlayerContentProps {
   song: Song;
@@ -61,13 +62,15 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
         className="absolute top-2 left-2 cursor-pointer"
       />
       <div className="flex flex-col items-center h-full w-full justify-evenly">
-        <Image
-          src={imageUrl || "/images/music-placeholder.png"}
-          alt={song.title}
-          width={360}
-          height={360}
-          className="rounded-md mb-4"
-        />
+        <BackgroundGradient className="relative aspect-square overflow-hidden rounded-xl ">
+          <Image
+            src={imageUrl || "/images/music-placeholder.png"}
+            alt={song.title}
+            width={300}
+            height={300}
+            className="rounded-xl mb-4"
+          />
+        </BackgroundGradient>
         <div className="flex justify-around items-center w-full mb-4">
           <div>
             <h1 className="text-xl font-semibold mb-1">{song.title}</h1>
