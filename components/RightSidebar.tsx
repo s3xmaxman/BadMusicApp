@@ -4,7 +4,7 @@ import Image from "next/image";
 import useLoadImage from "@/hooks/useLoadImage";
 import usePlayer from "@/hooks/usePlayer";
 import useGetSongById from "@/hooks/useGetSongById";
-import { FaMusic, FaHeart } from "react-icons/fa";
+import { FaMusic, FaPlay } from "react-icons/fa";
 import { motion } from "framer-motion";
 import LikeButton from "./LikeButton";
 import { BackgroundGradient } from "./ui/background-gradient";
@@ -64,9 +64,11 @@ const RightSidebar = () => {
 
         <div className="flex items-center justify-between">
           <p className="text-gray-300">{song.author}</p>
-          <button className="text-gray-400 hover:text-white">
+          <div className="flex items-center gap-2">
+            <FaPlay size={13} />
+            <span>{song.count}</span>
             <LikeButton songId={song.id} size={18} />
-          </button>
+          </div>
         </div>
       </div>
 
