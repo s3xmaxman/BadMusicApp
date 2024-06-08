@@ -7,6 +7,7 @@ import useGetSongById from "@/hooks/useGetSongById";
 import { FaMusic, FaHeart } from "react-icons/fa";
 import { motion } from "framer-motion";
 import LikeButton from "./LikeButton";
+import { BackgroundGradient } from "./ui/background-gradient";
 
 const ON_ANIMATION = 20;
 
@@ -25,15 +26,17 @@ const RightSidebar = () => {
   return (
     <div className="scroll-container bg-gradient-to-b from-gray-900 to-black text-white p-4 h-full flex flex-col rounded-lg overflow-y-auto">
       <div className="relative w-full mt-4 aspect-square overflow-hidden rounded-xl">
-        <Image
-          src={imagePath || "/images/RightSide.png"}
-          alt="Song Image"
-          fill
-          className="object-cover shadow-lg transition-all duration-500 ease-in-out"
-        />
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 bg-black/50">
-          <FaMusic className="text-white text-6xl" />
-        </div>
+        <BackgroundGradient className="relative aspect-square overflow-hidden rounded-xl ">
+          <Image
+            src={imagePath || "/images/RightSide.png"}
+            alt="Song Image"
+            fill
+            className="object-cover shadow-lg transition-all duration-500 ease-in-out"
+          />
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 bg-black/50">
+            <FaMusic className="text-white text-6xl" />
+          </div>
+        </BackgroundGradient>
       </div>
 
       <div className="mt-8 space-y-4">
