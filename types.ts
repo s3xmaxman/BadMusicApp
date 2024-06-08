@@ -8,7 +8,7 @@ export interface Song {
   song_path: string;
   image_path: string;
   genre?: string;
-  count?: number;
+  count?: string;
 }
 
 export interface Product {
