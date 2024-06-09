@@ -15,6 +15,7 @@ import Input from "./Input";
 import Button from "./Button";
 import GenreSelect from "./GenreSelect";
 import { sanitizeTitle } from "@/libs/helpers";
+import { Textarea } from "./ui/textarea";
 
 const UploadModal = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -29,6 +30,7 @@ const UploadModal = () => {
     defaultValues: {
       author: "",
       title: "",
+      lyrics: "",
       song: null,
       image: null,
     },
@@ -97,6 +99,7 @@ const UploadModal = () => {
           user_id: user.id,
           title: values.title,
           author: values.author,
+          lyrics: values.lyrics,
           image_path: imageData.path,
           song_path: songData.path,
           genre: selectedGenre === "All" ? null : selectedGenre,
@@ -139,9 +142,17 @@ const UploadModal = () => {
           {...register("author", { required: true })}
           placeholder="Song author"
         />
-
-        <GenreSelect className="w-full" onGenreChange={handleGenreChange} />
-
+        <Textarea
+          id="lyrics"
+          disabled={isLoading}
+          {...register("lyrics")}
+          placeholder="Lyrics"
+          className="text-neutral-400  bg-neutral-700"
+        />
+        <GenreSelect
+          className="w-full bg-neutral-700"
+          onGenreChange={handleGenreChange}
+        />
         <div>
           <div className="pb-1">曲を選択</div>
           <Input

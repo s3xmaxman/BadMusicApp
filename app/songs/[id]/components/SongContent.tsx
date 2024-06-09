@@ -36,9 +36,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
               alt="Song Image"
               fill
               className="rounded-xl object-cover"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw, 100vw" // Responsive Image Sizes
             />
-
             <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
               <CiPlay1 className="text-white text-6xl" />
             </div>
@@ -89,7 +87,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
           </div>
           <div className="mt-8">
             <h2 className="text-2xl font-bold">Lyrics</h2>
-            <div className="mt-2 max-h-96 overflow-y-auto text-gray-400 whitespace-pre-line">
+            <div className="mt-2 lg:max-h-96 lg:overflow-y-auto text-gray-400 whitespace-pre-line">
               {song?.lyrics}
             </div>
           </div>

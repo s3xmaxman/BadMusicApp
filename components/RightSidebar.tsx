@@ -29,7 +29,7 @@ const RightSidebar = () => {
       <div className="relative w-full mt-4 aspect-square overflow-hidden rounded-xl">
         <BackgroundGradient className="relative aspect-square overflow-hidden rounded-xl ">
           <Image
-            src={imagePath || "/images/RightSide.png"}
+            src={imagePath || "/images/loading.jpg"}
             alt="Song Image"
             fill
             className="object-cover shadow-lg transition-all duration-500 ease-in-out"
