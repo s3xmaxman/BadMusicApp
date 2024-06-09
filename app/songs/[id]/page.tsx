@@ -1,5 +1,6 @@
 import React from "react";
 import SongContent from "./components/SongContent";
+import { Song } from "@/types";
 
 interface Props {
   params: {
@@ -7,7 +8,7 @@ interface Props {
   };
 }
 
-const SongPage = ({ params: { id: songId } }: Props) => {
+const SongPage = async ({ params: { id: songId } }: Props) => {
   return <SongContent songId={songId} />;
 };
 
