@@ -89,9 +89,9 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
           </div>
           <div className="mt-8">
             <h2 className="text-2xl font-bold">Lyrics</h2>
-            <p className="mt-2 whitespace-pre-line text-gray-400">
+            <div className="mt-2 max-h-96 overflow-y-auto text-gray-400 whitespace-pre-line">
               {song?.lyrics}
-            </p>
+            </div>
           </div>
         </div>
       </div>
