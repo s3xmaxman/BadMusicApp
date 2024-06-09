@@ -3,6 +3,7 @@
 import useLoadImage from "@/hooks/useLoadImage";
 import { Song } from "@/types";
 import Image from "next/image";
+import Link from "next/link";
 import PlayButton from "./PlayButton";
 
 interface SongItemProps {
@@ -14,7 +15,6 @@ const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
   const imagePath = useLoadImage(data);
   return (
     <div
-      onClick={() => onClick(data.id)}
       className="
       relative 
       group 
@@ -38,10 +38,15 @@ const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
           src={imagePath || "/images/liked.png"}
           fill
           alt="Image"
+          onClick={() => onClick(data.id)}
         />
       </div>
       <div className="flex flex-col items-start w-full pt-4 gap-y-1">
-        <p className="font-semibold truncate w-full">{data.title}</p>
+        <Link href={`/songs/${data.id}`}>
+          <p className="font-semibold truncate w-full hover:underline">
+            {data.title}
+          </p>
+        </Link>
         <p className=" text-neutral-400 text-sm pb-4 w-full truncate">
           {data.author}
         </p>
