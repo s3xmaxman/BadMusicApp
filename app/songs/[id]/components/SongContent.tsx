@@ -1,34 +1,42 @@
 "use client";
 import React from "react";
-
+import { CiPlay1 } from "react-icons/ci";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { BackgroundGradient } from "@/components/ui/background-gradient";
+import { Song } from "@/types";
+
 import useGetSongById from "@/hooks/useGetSongById";
 import useLoadImage from "@/hooks/useLoadImage";
-import { BackgroundGradient } from "@/components/ui/background-gradient";
+
 import useGetSongsByGenre from "@/hooks/useGetSongGenre";
 import Link from "next/link";
+import useOnPlay from "@/hooks/useOnPlay";
 
 interface SongContentProps {
   songId: string;
 }
 
-const SongContent = ({ songId }: SongContentProps) => {
+const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   const { song } = useGetSongById(songId);
   const imagePath = useLoadImage(song!);
-  const { songs } = useGetSongsByGenre(song?.genre || "", songId);
+  const { songGenres } = useGetSongsByGenre(song?.genre || "", songId);
 
   return (
     <div className="bg-gradient-to-b from-gray-900 to-black text-white p-4 md:p-8">
       <div className="flex flex-col md:flex-row items-start space-y-4 md:space-y-0 md:space-x-8">
         <div className="w-full md:w-1/3">
           <BackgroundGradient className="relative aspect-square overflow-hidden rounded-xl ">
+            {/* TODO: Add onPlay */}
             <Image
               src={imagePath || "/images/liked.png"}
               alt="Song Image"
               fill
               className="rounded-xl w-full"
             />
+            <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 bg-black/50">
+              <CiPlay1 className="text-white text-6xl" />
+            </div>
           </BackgroundGradient>
         </div>
         <div className="flex-1">
@@ -60,7 +68,7 @@ const SongContent = ({ songId }: SongContentProps) => {
       <div className="mt-8">
         <h2 className="text-xl font-bold">Similar Songs</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-          {songs.map((otherSong) => {
+          {songGenres.map((otherSong) => {
             const otherSongImagePath = useLoadImage(otherSong);
             return (
               <Link href={`/songs/${otherSong.id}`}>

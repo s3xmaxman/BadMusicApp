@@ -1,6 +1,6 @@
 import React from "react";
 import SongContent from "./components/SongContent";
-import { Song } from "@/types";
+import getSongs from "@/actions/getSongs";
 
 interface Props {
   params: {

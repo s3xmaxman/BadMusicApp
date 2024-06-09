@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 
 const useGetSongsByGenre = (genre: string, excludeId?: string) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [songs, setSongs] = useState<Song[]>([]);
+  const [songGenres, setSongGenres] = useState<Song[]>([]);
   const { supabaseClient } = useSessionContext();
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const useGetSongsByGenre = (genre: string, excludeId?: string) => {
       if (error) {
         console.error(error);
       } else {
-        setSongs(data || []);
+        setSongGenres(data || []);
       }
 
       setIsLoading(false);
@@ -38,9 +38,9 @@ const useGetSongsByGenre = (genre: string, excludeId?: string) => {
   return useMemo(
     () => ({
       isLoading,
-      songs,
+      songGenres,
     }),
-    [isLoading, songs]
+    [isLoading, songGenres]
   );
 };
 
