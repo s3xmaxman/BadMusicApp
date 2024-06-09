@@ -8,7 +8,7 @@ interface Props {
 }
 
 const SongPage = ({ params: { id: songId } }: Props) => {
-  return <SongContent />;
+  return <SongContent songId={songId} />;
 };
 
 export default SongPage;
