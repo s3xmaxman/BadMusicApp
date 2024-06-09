@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import LikeButton from "./LikeButton";
 import { BackgroundGradient } from "./ui/background-gradient";
 
-const ON_ANIMATION = 20;
+const ON_ANIMATION = 500;
 
 const RightSidebar = () => {
   const player = usePlayer();

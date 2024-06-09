@@ -42,16 +42,16 @@ const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
         />
       </div>
       <div className="flex flex-col items-start w-full pt-4 gap-y-1">
-        <Link href={`/songs/${data.id}`}>
+        <Link href={`/songs/${data.id}`} className="w-full">
           <p className="font-semibold truncate w-full hover:underline">
             {data.title}
           </p>
         </Link>
-        <p className=" text-neutral-400 text-sm pb-4 w-full truncate">
+        <p className="text-neutral-400 text-sm pb-4 w-full truncate">
           {data.author}
         </p>
       </div>
-      <div className=" absolute bottom-24 right-5">
+      <div className="absolute bottom-24 right-5">
         <PlayButton />
       </div>
     </div>
