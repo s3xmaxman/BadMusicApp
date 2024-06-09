@@ -1,4 +1,5 @@
 import React from "react";
+import SongContent from "./components/SongContent";
 
 interface Props {
   params: {
@@ -7,7 +8,7 @@ interface Props {
 }
 
 const SongPage = ({ params: { id: songId } }: Props) => {
-  return <div>SongPage</div>;
+  return <SongContent />;
 };
 
 export default SongPage;
