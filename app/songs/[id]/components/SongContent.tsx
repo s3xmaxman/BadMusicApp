@@ -12,6 +12,7 @@ import useGetSongsByGenre from "@/hooks/useGetSongGenre";
 import Link from "next/link";
 import useOnPlay from "@/hooks/useOnPlay";
 import useLoadImages from "@/hooks/useLoadImages";
+import useDownload from "@/hooks/useDownload";
 
 interface SongContentProps {
   songId: string;
@@ -22,6 +23,18 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   const imageUrl = useLoadImage(song!);
   const { songGenres } = useGetSongsByGenre(song?.genre || "", songId);
   const imageUrls = useLoadImages(songGenres);
+  const { fileUrl, loading, error } = useDownload(song?.song_path!);
+
+  const handleDownloadClick = () => {
+    if (fileUrl) {
+      const link = document.createElement("a");
+      link.href = fileUrl;
+      link.setAttribute("download", song?.title || "download");
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
+  };
 
   return (
     <div className="bg-gradient-to-b from-gray-900 to-black text-white px-4 md:px-10 lg:px-20 py-8">
@@ -76,11 +89,16 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
               <CiShare1 />
               Share
             </button>
-            <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded flex items-center gap-2">
+            <button
+              onClick={handleDownloadClick}
+              className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded flex items-center gap-2"
+              disabled={loading}
+            >
               <FaDownload />
               Download
             </button>
             <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded flex items-center gap-2">
+              {/* TODO: Add Edit hook */}
               <FaEdit />
               Edit
             </button>
