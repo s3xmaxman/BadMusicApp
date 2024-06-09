@@ -9,11 +9,11 @@ import { BackgroundGradient } from "@/components/ui/background-gradient";
 import useGetSongsByGenre from "@/hooks/useGetSongGenre";
 import Link from "next/link";
 
-interface Props {
+interface SongContentProps {
   songId: string;
 }
 
-const SongContent = ({ songId }: Props) => {
+const SongContent = ({ songId }: SongContentProps) => {
   const { song } = useGetSongById(songId);
   const imagePath = useLoadImage(song!);
   const { songs } = useGetSongsByGenre(song?.genre || "", songId);
@@ -26,8 +26,7 @@ const SongContent = ({ songId }: Props) => {
             <Image
               src={imagePath || "/images/liked.png"}
               alt="Song Image"
-              width={350}
-              height={350}
+              fill
               className="rounded-xl w-full"
             />
           </BackgroundGradient>
@@ -44,6 +43,7 @@ const SongContent = ({ songId }: Props) => {
         </div>
         <div className="w-full md:w-1/3 mt-8 md:mt-0">
           <h2 className="text-3xl font-bold">Lyrics</h2>
+          {/* TODO: Add real lyrics */}
           <p className="mt-2 whitespace-pre-line">
             Stirring waves on the ocean breeze, yeah <br />
             Come dance now, come dance, dance <br />

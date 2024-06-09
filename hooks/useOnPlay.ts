@@ -2,11 +2,10 @@ import { Song } from "@/types";
 import usePlayer from "./usePlayer";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-const supabase = createClientComponentClient();
-
+// TODO: 連打に対応する
 const useOnPlay = (songs: Song[]) => {
   const player = usePlayer();
-
+  const supabase = createClientComponentClient();
   const onPlay = async (id: string) => {
     try {
       player.setId(id);
