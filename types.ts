@@ -9,6 +9,7 @@ export interface Song {
   image_path: string;
   genre?: string;
   count?: string;
+  lyrics?: string;
 }
 
 export interface Product {

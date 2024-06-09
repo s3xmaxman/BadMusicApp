@@ -4,7 +4,6 @@ import { CiPlay1, CiHeart, CiShare1 } from "react-icons/ci";
 import { FaDownload, FaEdit } from "react-icons/fa";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { BackgroundGradient } from "@/components/ui/background-gradient";
 
 import useGetSongById from "@/hooks/useGetSongById";
 import useLoadImage from "@/hooks/useLoadImage";
@@ -90,9 +89,8 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
           </div>
           <div className="mt-8">
             <h2 className="text-2xl font-bold">Lyrics</h2>
-            {/* TODO: Add real lyrics */}
             <p className="mt-2 whitespace-pre-line text-gray-400">
-              {/* {song?.lyrics} */}
+              {song?.lyrics}
             </p>
           </div>
         </div>

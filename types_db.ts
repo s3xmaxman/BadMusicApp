@@ -236,6 +236,7 @@ export interface Database {
           user_id: string | null;
           genre?: string | null;
           count?: number | null;
+          lyrics?: string | null;
         };
         Insert: {
           author?: string | null;
@@ -247,6 +248,7 @@ export interface Database {
           user_id?: string | null;
           genre?: string | null;
           count?: number | null;
+          lyrics?: string | null;
         };
         Update: {
           author?: string | null;
@@ -258,6 +260,7 @@ export interface Database {
           user_id?: string | null;
           genre?: string | null;
           count?: number | null;
+          lyrics?: string | null;
         };
         Relationships: [
           {
