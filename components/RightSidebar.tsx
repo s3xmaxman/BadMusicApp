@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import useLoadImage from "@/hooks/useLoadImage";
 import usePlayer from "@/hooks/usePlayer";
 import useGetSongById from "@/hooks/useGetSongById";
@@ -57,7 +58,12 @@ const RightSidebar = () => {
               ease: "linear",
             }}
           >
-            {song.title}
+            <Link
+              className="cursor-pointer hover:underline"
+              href={`/songs/${song.id}`}
+            >
+              {song.title}
+            </Link>
           </motion.h1>
           <p className="text-gray-400 text-lg">#{song.genre}</p>
         </motion.div>

@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import useGetSongById from "@/hooks/useGetSongById";
 import useLoadImage from "@/hooks/useLoadImage";
+import { BackgroundGradient } from "@/components/ui/background-gradient";
 
 interface Props {
   songId: string;
@@ -13,34 +14,24 @@ const SongContent = ({ songId }: Props) => {
   const { song } = useGetSongById(songId);
   const imagePath = useLoadImage(song!);
   return (
-    <div className="bg-black text-white p-4 md:p-8">
+    <div className="bg-gradient-to-b from-gray-900 to-black text-white p-4 md:p-8">
       <div className="flex flex-col md:flex-row items-start space-y-4 md:space-y-0 md:space-x-8">
         <div className="w-full md:w-1/3">
-          <Image
-            src={imagePath || "/images/liked.png"}
-            alt="Song Image"
-            width={400}
-            height={400}
-            className="rounded-xl w-full"
-          />
+          <BackgroundGradient className="relative aspect-square overflow-hidden rounded-xl ">
+            <Image
+              src={imagePath || "/images/liked.png"}
+              alt="Song Image"
+              width={400}
+              height={400}
+              className="rounded-xl w-full"
+            />
+          </BackgroundGradient>
         </div>
         <div className="flex-1">
-          <h1 className="text-5xl md:text-3xl font-bold">{song?.title}</h1>
+          <h1 className="text-3xl md:text-3xl font-bold">{song?.title}</h1>
           <p className="text-gray-400">{song?.author}</p>
           <p className="mt-4">#{song?.genre}</p>
           <div className="mt-4 flex space-x-4">
-            <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded">
-              Unpublish
-            </button>
-            <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded">
-              Remix
-            </button>
-            <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded">
-              Extend
-            </button>
-            <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded">
-              Inpaint
-            </button>
             <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded">
               Edit
             </button>
@@ -64,7 +55,7 @@ const SongContent = ({ songId }: Props) => {
       <div className="mt-8">
         <h2 className="text-xl font-bold">More from this creator</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-          <div className="bg-gray-800 p-4 rounded">
+          <div className="bg-gradient-to-b from-gray-900 to-black p-4 rounded">
             <Image
               src="/path-to-laras-echo-image.jpg"
               alt="Lara's Echo"
@@ -75,7 +66,7 @@ const SongContent = ({ songId }: Props) => {
             <p className="mt-2">Lara's Echo</p>
             <p className="text-gray-400">Electronic, Pop, Rhythmic</p>
           </div>
-          <div className="bg-gray-800 p-4 rounded">
+          <div className="bg-gradient-to-b from-gray-900 to-black p-4 rounded">
             <Image
               src="/path-to-lost-in-bangkok-image.jpg" // Adjust the path if needed
               alt="Lost in Bangkok"
@@ -86,7 +77,7 @@ const SongContent = ({ songId }: Props) => {
             <p className="mt-2">Lost in Bangkok</p>
             <p className="text-gray-400">Electronic, Pop, Rhythmic</p>
           </div>
-          <div className="bg-gray-800 p-4 rounded">
+          <div className="bg-gradient-to-b from-gray-900 to-black p-4 rounded">
             <Image
               src="/path-to-kobe-psynthwave-image.jpg" // Adjust the path if needed
               alt="神戸Psynthwave夜景"
