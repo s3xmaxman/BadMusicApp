@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
-import { CiPlay1 } from "react-icons/ci";
+import { CiPlay1, CiHeart, CiShare1 } from "react-icons/ci";
+import { FaDownload, FaEdit } from "react-icons/fa";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { BackgroundGradient } from "@/components/ui/background-gradient";
-import { Song } from "@/types";
 
 import useGetSongById from "@/hooks/useGetSongById";
 import useLoadImage from "@/hooks/useLoadImage";
@@ -20,55 +20,87 @@ interface SongContentProps {
 
 const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   const { song } = useGetSongById(songId);
-  const imagePath = useLoadImage(song!);
+  const imageUrl = useLoadImage(song!);
   const { songGenres } = useGetSongsByGenre(song?.genre || "", songId);
   const imageUrls = useLoadImages(songGenres);
 
   return (
-    <div className="bg-gradient-to-b from-gray-900 to-black text-white p-4 md:p-8">
-      <div className="flex flex-col md:flex-row items-start space-y-4 md:space-y-0 md:space-x-8">
-        <div className="w-full md:w-1/3">
-          <BackgroundGradient className="relative aspect-square overflow-hidden rounded-xl">
-            {/* TODO: Add onPlay */}
+    <div className="bg-gradient-to-b from-gray-900 to-black text-white px-4 md:px-10 lg:px-20 py-8">
+      <div className="flex flex-col lg:flex-row items-start gap-8">
+        <div className="w-full lg:w-1/3 flex-shrink-0">
+          <motion.div
+            className="relative w-full aspect-square overflow-hidden rounded-xl shadow-lg cursor-pointer"
+            whileHover={{ scale: 1.05 }}
+          >
             <Image
-              src={imagePath || "/images/liked.png"}
+              src={imageUrl || "/images/Loading.jpg"}
               alt="Song Image"
               fill
-              className="rounded-xl w-full"
+              className="rounded-xl object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw, 100vw" // Responsive Image Sizes
             />
-            <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 bg-black/50">
+
+            <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
               <CiPlay1 className="text-white text-6xl" />
             </div>
-          </BackgroundGradient>
+          </motion.div>
+          <div className="flex items-center gap-2 mt-4">
+            <button className="text-white opacity-70 hover:opacity-100 transition duration-300">
+              <CiPlay1 />
+            </button>
+            <span className="text-white opacity-70 hover:opacity-100 transition duration-300">
+              {song?.count}
+            </span>
+            <button className="text-white opacity-70 hover:opacity-100 transition duration-300">
+              <CiHeart />
+            </button>
+            <span className="text-white opacity-70 hover:opacity-100 transition duration-300">
+              {song?.count}
+            </span>
+          </div>
         </div>
-        <div className="flex-1">
-          <h1 className="text-3xl md:text-3xl font-bold">{song?.title}</h1>
-          <p className="text-gray-400">{song?.author}</p>
-          <p className="mt-4">#{song?.genre}</p>
-          <div className="mt-4 flex space-x-4">
-            <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded">
+        <div className="flex flex-col lg:w-2/3 gap-4">
+          <div>
+            <h1 className="text-3xl lg:text-5xl font-bold">{song?.title}</h1>
+            <p className="text-gray-400 text-lg lg:text-xl">{song?.author}</p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {song?.genre?.split(", ").map((g) => (
+              <span
+                key={g}
+                className="text-sm bg-gray-800 text-white rounded-full px-3 py-1"
+              >
+                #{g}
+              </span>
+            ))}
+          </div>
+          <div className="flex gap-4">
+            <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded flex items-center gap-2">
+              <CiShare1 />
+              Share
+            </button>
+            <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded flex items-center gap-2">
+              <FaDownload />
+              Download
+            </button>
+            <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded flex items-center gap-2">
+              <FaEdit />
               Edit
             </button>
           </div>
-        </div>
-        <div className="w-full md:w-1/3 mt-8 md:mt-0">
-          <h2 className="text-3xl font-bold">Lyrics</h2>
-          {/* TODO: Add real lyrics */}
-          <p className="mt-2 whitespace-pre-line">
-            Stirring waves on the ocean breeze, yeah <br />
-            Come dance now, come dance, dance <br />
-            Dance with me, yeah <br />
-            Splashing tides on the endless sea, yeah <br />
-            Brightest stars in the night you will see <br />
-            Stirring waves on the ocean breeze, yeah <br />
-            Feel that rhythm, feel the heat, yeah <br />
-            Lost in motion, in the beat, beat <br />
-            Move your body, set it free, yeah <br />
-          </p>
+          <div className="mt-8">
+            <h2 className="text-2xl font-bold">Lyrics</h2>
+            {/* TODO: Add real lyrics */}
+            <p className="mt-2 whitespace-pre-line text-gray-400">
+              {/* {song?.lyrics} */}
+            </p>
+          </div>
         </div>
       </div>
-      <div className="mt-8">
-        <h2 className="text-xl font-bold">Similar Songs</h2>
+      <div className="mt-16">
+        <h2 className="text-2xl lg:text-3xl font-bold">
+          More from this creator
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
           {songGenres.map((otherSong, index) => {
             return (
