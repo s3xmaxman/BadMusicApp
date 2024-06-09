@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { FaRandom } from "react-icons/fa";
+import { FaPlay, FaRandom } from "react-icons/fa";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { BsRepeat1 } from "react-icons/bs";
@@ -78,6 +78,8 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
             <p className="text-gray-400 text-base mt-2">{song.author}</p>
           </div>
           <div className="flex items-center space-x-4">
+            <FaPlay size={13} />
+            <span>{song.count}</span>
             <AddPlaylist playlists={playlists} songId={song.id} />
             <LikeButton songId={song.id} />
           </div>

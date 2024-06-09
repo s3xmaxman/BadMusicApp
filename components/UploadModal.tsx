@@ -100,6 +100,7 @@ const UploadModal = () => {
           image_path: imageData.path,
           song_path: songData.path,
           genre: selectedGenre === "All" ? null : selectedGenre,
+          count: 0,
         });
 
       if (supabaseError) {
