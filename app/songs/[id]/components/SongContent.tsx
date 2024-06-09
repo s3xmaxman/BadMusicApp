@@ -12,6 +12,7 @@ import useLoadImage from "@/hooks/useLoadImage";
 import useGetSongsByGenre from "@/hooks/useGetSongGenre";
 import Link from "next/link";
 import useOnPlay from "@/hooks/useOnPlay";
+import useLoadImages from "@/hooks/useLoadImages";
 
 interface SongContentProps {
   songId: string;
@@ -21,12 +22,13 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   const { song } = useGetSongById(songId);
   const imagePath = useLoadImage(song!);
   const { songGenres } = useGetSongsByGenre(song?.genre || "", songId);
+  const imageUrls = useLoadImages(songGenres);
 
   return (
     <div className="bg-gradient-to-b from-gray-900 to-black text-white p-4 md:p-8">
       <div className="flex flex-col md:flex-row items-start space-y-4 md:space-y-0 md:space-x-8">
         <div className="w-full md:w-1/3">
-          <BackgroundGradient className="relative aspect-square overflow-hidden rounded-xl ">
+          <BackgroundGradient className="relative aspect-square overflow-hidden rounded-xl">
             {/* TODO: Add onPlay */}
             <Image
               src={imagePath || "/images/liked.png"}
@@ -57,7 +59,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
             Come dance now, come dance, dance <br />
             Dance with me, yeah <br />
             Splashing tides on the endless sea, yeah <br />
-            Brightest stars in the night you'll see <br />
+            Brightest stars in the night you will see <br />
             Stirring waves on the ocean breeze, yeah <br />
             Feel that rhythm, feel the heat, yeah <br />
             Lost in motion, in the beat, beat <br />
@@ -68,17 +70,15 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
       <div className="mt-8">
         <h2 className="text-xl font-bold">Similar Songs</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-          {songGenres.map((otherSong) => {
-            const otherSongImagePath = useLoadImage(otherSong);
+          {songGenres.map((otherSong, index) => {
             return (
-              <Link href={`/songs/${otherSong.id}`}>
+              <Link href={`/songs/${otherSong.id}`} key={otherSong.id}>
                 <motion.div
-                  key={otherSong.id}
                   className="bg-gradient-to-b from-gray-900 to-black p-4 rounded overflow-hidden transform transition duration-300 hover:scale-105"
                   whileHover={{ scale: 1.05 }}
                 >
                   <Image
-                    src={otherSongImagePath || "/images/liked.png"}
+                    src={imageUrls[index] || "/images/liked.png"}
                     alt={otherSong.title}
                     width={200}
                     height={200}
