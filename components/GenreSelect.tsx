@@ -56,7 +56,7 @@ const GenreSelect: React.FC<GenreSelectProps> = ({
           className={cn(
             "px-4 py-2 rounded-full text-sm font-medium",
             selectedGenres.includes(genre)
-              ? "bg-indigo-500 text-white"
+              ? "bg-[#4c1d95] text-white"
               : "bg-gray-200 text-gray-700 hover:bg-gray-300"
           )}
         >
