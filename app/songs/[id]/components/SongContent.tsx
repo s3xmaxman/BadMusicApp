@@ -15,6 +15,7 @@ import useLoadImages from "@/hooks/useLoadImages";
 import useDownload from "@/hooks/useDownload";
 import EditModal from "@/components/EditModal";
 import { useUser } from "@/hooks/useUser";
+import toast from "react-hot-toast";
 
 interface SongContentProps {
   songId: string;
@@ -26,7 +27,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   const imageUrl = useLoadImage(song!);
   const { songGenres } = useGetSongsByGenre(song?.genre || "", songId);
   const imageUrls = useLoadImages(songGenres);
-  const { fileUrl, loading, error } = useDownload(song?.song_path!);
+  const { fileUrl, loading } = useDownload(song?.song_path!);
   const onPlay = useOnPlay([song!]);
   const { user } = useUser();
 
