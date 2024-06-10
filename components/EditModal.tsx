@@ -112,7 +112,7 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
           disabled={isLoading}
           {...register("lyrics")}
           placeholder="Lyrics"
-          className="text-neutral-400  bg-neutral-700"
+          className="bg-neutral-700"
         />
         <GenreSelect
           className="w-full bg-neutral-700"
@@ -120,7 +120,7 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
           defaultValue={selectedGenre}
         />
         <Button disabled={isLoading} type="submit">
-          Update
+          {isLoading ? "編集中" : "編集"}
         </Button>
       </form>
     </Modal>
