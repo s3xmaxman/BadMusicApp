@@ -20,8 +20,8 @@ interface EditModalProps {
 
 const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedGenre, setSelectedGenre] = useState<string>(
-    song.genre || "All"
+  const [selectedGenres, setSelectedGenres] = useState<string[]>(
+    song.genre ? song.genre.split(", ") : []
   );
   const supabaseClient = useSupabaseClient();
 
@@ -48,12 +48,12 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
       setValue("image_path", song.image_path);
       setValue("song_path", song.song_path);
       setValue("genre", song.genre || "All");
-      setSelectedGenre(song.genre || "All");
+      setSelectedGenres(song.genre ? song.genre.split(", ") : []);
     }
   }, [isOpen, song, setValue]);
 
-  const handleGenreChange = (genre: string) => {
-    setSelectedGenre(genre);
+  const handleGenreChange = (genre: string[]) => {
+    setSelectedGenres(genre);
   };
 
   const onSubmit: SubmitHandler<Song> = async (values) => {
@@ -67,7 +67,7 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
           title: values.title,
           author: values.author,
           lyrics: values.lyrics,
-          genre: selectedGenre === "All" ? null : selectedGenre,
+          genre: selectedGenres.join(", "),
         })
         .eq("id", song.id);
 
@@ -115,7 +115,7 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
         <GenreSelect
           className="w-full bg-neutral-700"
           onGenreChange={handleGenreChange}
-          defaultValue={selectedGenre}
+          defaultValue={selectedGenres}
         />
         <Button disabled={isLoading} type="submit">
           {isLoading ? "編集中" : "編集"}

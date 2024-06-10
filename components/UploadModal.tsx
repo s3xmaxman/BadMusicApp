@@ -19,7 +19,7 @@ import { Textarea } from "./ui/textarea";
 
 const UploadModal = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedGenre, setSelectedGenre] = useState<string>("All");
+  const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
 
   const uploadModal = useUploadModal();
   const supabaseClient = useSupabaseClient();
@@ -43,8 +43,9 @@ const UploadModal = () => {
     }
   };
 
-  const handleGenreChange = (genre: string) => {
-    setSelectedGenre(genre);
+  const handleGenreChange = (genres: string[]) => {
+    setSelectedGenres(genres);
+    console.log("選択されたジャンル:", genres);
   };
 
   const onSubmit: SubmitHandler<FieldValues> = async (values) => {
@@ -102,7 +103,7 @@ const UploadModal = () => {
           lyrics: values.lyrics,
           image_path: imageData.path,
           song_path: songData.path,
-          genre: selectedGenre === "All" ? null : selectedGenre,
+          genre: selectedGenres.join(", "),
           count: 0,
         });
 

@@ -1,23 +1,17 @@
-import { useState } from "react";
+"use client";
 
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { cn } from "@/libs/utils";
+import React, { useState } from "react";
 
 interface GenreSelectProps {
-  onGenreChange: (genre: string) => void;
+  onGenreChange: (genres: string[]) => void;
   className?: string;
-  defaultValue?: string;
+  defaultValue?: string[];
 }
 
 const genres = [
-  "All",
   "Nu Disco",
+  "Future Funk",
   "Vapor Wave",
   "Synth Wave",
   "Electro",
@@ -34,36 +28,42 @@ const GenreSelect: React.FC<GenreSelectProps> = ({
   className,
   defaultValue,
 }) => {
-  const [selectedGenre, setSelectedGenre] = useState("All");
+  const [selectedGenres, setSelectedGenres] = useState<string[]>(
+    defaultValue || []
+  );
 
-  const handleGenreChange = (genre: string) => {
-    setSelectedGenre(genre);
-    onGenreChange(genre);
+  const handleGenreToggle = (genre: string) => {
+    setSelectedGenres((prevGenres) => {
+      if (prevGenres.includes(genre)) {
+        return prevGenres.filter((g) => g !== genre);
+      } else {
+        return [...prevGenres, genre];
+      }
+    });
   };
 
-  //TODO: 複数のジャンルを登録出来るようにする
+  React.useEffect(() => {
+    onGenreChange(selectedGenres);
+  }, [selectedGenres]);
+
   return (
-    <Select
-      onValueChange={handleGenreChange}
-      value={defaultValue || selectedGenre}
-    >
-      <SelectTrigger className={`w-[180px] ${className}`}>
-        <SelectValue placeholder="ジャンルを選択" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          {genres.map((genre: string) => (
-            <SelectItem
-              className="bg-neutral-900 group-hover:bg-neutral-900"
-              key={genre}
-              value={genre}
-            >
-              {genre}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
+    <div className={cn("flex flex-wrap gap-2", className)}>
+      {genres.map((genre) => (
+        <button
+          key={genre}
+          type="button"
+          onClick={() => handleGenreToggle(genre)}
+          className={cn(
+            "px-4 py-2 rounded-full text-sm font-medium",
+            selectedGenres.includes(genre)
+              ? "bg-indigo-500 text-white"
+              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+          )}
+        >
+          {genre}
+        </button>
+      ))}
+    </div>
   );
 };
 
