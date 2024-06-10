@@ -12,6 +12,7 @@ import {
 interface GenreSelectProps {
   onGenreChange: (genre: string) => void;
   className?: string;
+  defaultValue?: string;
 }
 
 const genres = [
@@ -31,6 +32,7 @@ const genres = [
 const GenreSelect: React.FC<GenreSelectProps> = ({
   onGenreChange,
   className,
+  defaultValue,
 }) => {
   const [selectedGenre, setSelectedGenre] = useState("All");
 

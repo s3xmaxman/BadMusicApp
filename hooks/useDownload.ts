@@ -14,10 +14,12 @@ const useDownload = (path: string) => {
         const { data, error } = await supabase.storage
           .from("songs")
           .download(path);
+
         if (error) {
           setError(error.message);
           return;
         }
+
         if (data) {
           const url = URL.createObjectURL(data);
           setFileUrl(url);

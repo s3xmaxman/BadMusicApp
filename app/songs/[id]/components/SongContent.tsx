@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { CiPlay1, CiHeart, CiShare1 } from "react-icons/ci";
 import { FaDownload, FaEdit } from "react-icons/fa";
 import Image from "next/image";
@@ -13,17 +13,23 @@ import Link from "next/link";
 import useOnPlay from "@/hooks/useOnPlay";
 import useLoadImages from "@/hooks/useLoadImages";
 import useDownload from "@/hooks/useDownload";
+import EditModal from "@/components/EditModal";
 
 interface SongContentProps {
   songId: string;
 }
 
 const SongContent: React.FC<SongContentProps> = ({ songId }) => {
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const { song } = useGetSongById(songId);
   const imageUrl = useLoadImage(song!);
   const { songGenres } = useGetSongsByGenre(song?.genre || "", songId);
   const imageUrls = useLoadImages(songGenres);
   const { fileUrl, loading, error } = useDownload(song?.song_path!);
+
+  const handleEditClick = () => {
+    setIsEditModalOpen(true);
+  };
 
   const handleDownloadClick = () => {
     if (fileUrl) {
@@ -97,11 +103,21 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
               <FaDownload />
               Download
             </button>
-            <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded flex items-center gap-2">
+            <button
+              onClick={handleEditClick}
+              className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded flex items-center gap-2"
+            >
               {/* TODO: Add Edit hook */}
               <FaEdit />
               Edit
             </button>
+            {song && (
+              <EditModal
+                song={song}
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+              />
+            )}
           </div>
           <div className="mt-8">
             <h2 className="text-2xl font-bold">Lyrics</h2>
