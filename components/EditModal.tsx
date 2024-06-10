@@ -93,7 +93,7 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
   return (
     <Modal
       title="曲を編集"
-      description="Edit song information"
+      description="曲の情報を編集します。"
       isOpen={isOpen}
       onChange={() => onClose()}
     >

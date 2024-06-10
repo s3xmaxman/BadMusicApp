@@ -26,6 +26,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   const { songGenres } = useGetSongsByGenre(song?.genre || "", songId);
   const imageUrls = useLoadImages(songGenres);
   const { fileUrl, loading, error } = useDownload(song?.song_path!);
+  const onPlay = useOnPlay([song!]);
 
   const handleEditClick = () => {
     setIsEditModalOpen(true);
@@ -49,6 +50,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
           <motion.div
             className="relative w-full aspect-square overflow-hidden rounded-xl shadow-lg cursor-pointer"
             whileHover={{ scale: 1.05 }}
+            onClick={() => onPlay(songId)}
           >
             <Image
               src={imageUrl || "/images/Loading.jpg"}
@@ -92,6 +94,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
           </div>
           <div className="flex gap-4">
             <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded flex items-center gap-2">
+              {/* TODO */}
               <CiShare1 />
               Share
             </button>
@@ -107,7 +110,6 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
               onClick={handleEditClick}
               className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded flex items-center gap-2"
             >
-              {/* TODO: Add Edit hook */}
               <FaEdit />
               Edit
             </button>
