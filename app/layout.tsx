@@ -6,7 +6,6 @@ import SupabaseProvider from "@/providers/SupabaseProvider";
 import UserProvider from "@/providers/UserProvider";
 import ModalProvider from "@/providers/ModelProvider";
 import ToasterProvider from "@/providers/ToasterProvider";
-import getSongsByUserId from "@/actions/getSongsByUserId";
 import Player from "@/components/Player";
 import getActiveProductsWithPrices from "@/actions/getActiveProductsWithPrices";
 import getPlaylists from "@/actions/getPlaylists";
@@ -15,7 +14,7 @@ import getSongs from "@/actions/getSongs";
 const font = Figtree({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "BadSpotify",
+  title: "BadMusicApp",
   description: "Listen to music!",
 };
 

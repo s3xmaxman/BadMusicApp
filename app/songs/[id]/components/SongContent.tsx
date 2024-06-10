@@ -14,6 +14,7 @@ import useOnPlay from "@/hooks/useOnPlay";
 import useLoadImages from "@/hooks/useLoadImages";
 import useDownload from "@/hooks/useDownload";
 import EditModal from "@/components/EditModal";
+import { useUser } from "@/hooks/useUser";
 
 interface SongContentProps {
   songId: string;
@@ -27,6 +28,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   const imageUrls = useLoadImages(songGenres);
   const { fileUrl, loading, error } = useDownload(song?.song_path!);
   const onPlay = useOnPlay([song!]);
+  const { user } = useUser();
 
   const handleEditClick = () => {
     setIsEditModalOpen(true);
@@ -106,13 +108,15 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
               <FaDownload />
               Download
             </button>
-            <button
-              onClick={handleEditClick}
-              className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded flex items-center gap-2"
-            >
-              <FaEdit />
-              Edit
-            </button>
+            {user?.id === song?.user_id && (
+              <button
+                onClick={handleEditClick}
+                className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded flex items-center gap-2"
+              >
+                <FaEdit />
+                Edit
+              </button>
+            )}
             {song && (
               <EditModal
                 song={song}
@@ -130,9 +134,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
         </div>
       </div>
       <div className="mt-16">
-        <h2 className="text-2xl lg:text-3xl font-bold">
-          More from this creator
-        </h2>
+        <h2 className="text-2xl lg:text-3xl font-bold">同じジャンルの曲</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
           {songGenres.map((otherSong, index) => {
             return (
