@@ -15,21 +15,21 @@ import useLoadImages from "@/hooks/useLoadImages";
 import useDownload from "@/hooks/useDownload";
 import EditModal from "@/components/EditModal";
 import { useUser } from "@/hooks/useUser";
-import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface SongContentProps {
   songId: string;
 }
 
 const SongContent: React.FC<SongContentProps> = ({ songId }) => {
-  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const { song } = useGetSongById(songId);
+  const { user } = useUser();
   const imageUrl = useLoadImage(song!);
   const { songGenres } = useGetSongsByGenre(song?.genre || "", songId);
   const imageUrls = useLoadImages(songGenres);
   const { fileUrl, loading } = useDownload(song?.song_path!);
   const onPlay = useOnPlay([song!]);
-  const { user } = useUser();
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
 
   const handleEditClick = () => {
     setIsEditModalOpen(true);
@@ -56,7 +56,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
             onClick={() => onPlay(songId)}
           >
             <Image
-              src={imageUrl || "/images/Loading.jpg"}
+              src={imageUrl || ""}
               alt="Song Image"
               fill
               className="rounded-xl object-cover"

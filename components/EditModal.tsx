@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
 
 import Modal from "./Modal";
 import Input from "./Input";
@@ -25,7 +24,6 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
     song.genre || "All"
   );
   const supabaseClient = useSupabaseClient();
-  const router = useRouter();
 
   const { register, handleSubmit, reset, setValue } = useForm<Song>({
     defaultValues: {
@@ -80,8 +78,8 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
       }
 
       toast.success("曲を編集しました");
-      router.refresh();
       onClose();
+      window.location.reload();
     } catch (error) {
       toast.error("曲の編集に失敗しました");
       console.error(error);

@@ -43,7 +43,10 @@ const GenreSelect: React.FC<GenreSelectProps> = ({
 
   //TODO: 複数のジャンルを登録出来るようにする
   return (
-    <Select onValueChange={handleGenreChange} value={selectedGenre}>
+    <Select
+      onValueChange={handleGenreChange}
+      value={defaultValue || selectedGenre}
+    >
       <SelectTrigger className={`w-[180px] ${className}`}>
         <SelectValue placeholder="ジャンルを選択" />
       </SelectTrigger>
@@ -55,7 +58,7 @@ const GenreSelect: React.FC<GenreSelectProps> = ({
               key={genre}
               value={genre}
             >
-              {defaultValue || genre}
+              {genre}
             </SelectItem>
           ))}
         </SelectGroup>
