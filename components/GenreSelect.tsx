@@ -54,7 +54,7 @@ const GenreSelect: React.FC<GenreSelectProps> = ({
               key={genre}
               value={genre}
             >
-              {genre}
+              {defaultValue || genre}
             </SelectItem>
           ))}
         </SelectGroup>
