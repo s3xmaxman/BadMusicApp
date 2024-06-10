@@ -84,6 +84,23 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
   });
 
   useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setVolume(0.5);
+      } else {
+        setVolume(0.1);
+      }
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
     if (sound) {
       sound.loop(isRepeating);
     }
