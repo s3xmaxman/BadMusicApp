@@ -69,7 +69,7 @@ const RightSidebar = () => {
             {song?.genre?.split(", ").map((g) => (
               <Link
                 key={g}
-                className="cursor-pointer hover:underline"
+                className="ml-1 cursor-pointer hover:underline"
                 href={`/genre/${g}`}
               >
                 #{g}

@@ -16,6 +16,7 @@ import useDownload from "@/hooks/useDownload";
 import EditModal from "@/components/EditModal";
 import { useUser } from "@/hooks/useUser";
 import { useRouter } from "next/navigation";
+import useGetSongsByGenres from "@/hooks/useGetSongGenre";
 
 interface SongContentProps {
   songId: string;
@@ -25,7 +26,10 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   const { song } = useGetSongById(songId);
   const { user } = useUser();
   const imageUrl = useLoadImage(song!);
-  const { songGenres } = useGetSongsByGenre(song?.genre || "", songId);
+  const { songGenres } = useGetSongsByGenres(
+    song?.genre ? song.genre.split(",") : [],
+    songId
+  );
   const imageUrls = useLoadImages(songGenres);
   const { fileUrl, loading } = useDownload(song?.song_path!);
   const onPlay = useOnPlay([song!]);

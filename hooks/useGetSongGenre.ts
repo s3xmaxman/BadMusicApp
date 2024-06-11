@@ -2,7 +2,7 @@ import { Song } from "@/types";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useEffect, useMemo, useState } from "react";
 
-const useGetSongsByGenre = (genre: string, excludeId?: string) => {
+const useGetSongsByGenres = (genres: string[], excludeId?: string) => {
   const [isLoading, setIsLoading] = useState(true);
   const [songGenres, setSongGenres] = useState<Song[]>([]);
   const { supabaseClient } = useSessionContext();
@@ -11,15 +11,21 @@ const useGetSongsByGenre = (genre: string, excludeId?: string) => {
     const fetchSongs = async () => {
       setIsLoading(true);
 
-      let query = supabaseClient
-        .from("songs")
-        .select("*")
-        .ilike("genre", `%${genre}%`)
-        .limit(3);
+      let query = supabaseClient.from("songs").select("*");
 
+      // Apply genre filters
+      if (genres.length > 0) {
+        query = query.or(
+          genres.map((genre) => `genre.ilike.%${genre}%`).join(",")
+        );
+      }
+
+      // Exclude a specific song if excludeId is provided
       if (excludeId) {
         query = query.neq("id", excludeId);
       }
+
+      query = query.limit(3);
 
       const { data, error } = await query;
 
@@ -33,7 +39,7 @@ const useGetSongsByGenre = (genre: string, excludeId?: string) => {
     };
 
     fetchSongs();
-  }, [genre, excludeId, supabaseClient]);
+  }, [genres, excludeId, supabaseClient]);
 
   return useMemo(
     () => ({
@@ -44,4 +50,4 @@ const useGetSongsByGenre = (genre: string, excludeId?: string) => {
   );
 };
 
-export default useGetSongsByGenre;
+export default useGetSongsByGenres;
