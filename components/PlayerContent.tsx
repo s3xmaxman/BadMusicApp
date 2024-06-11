@@ -86,7 +86,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
-        setVolume(0.5);
+        setVolume(1.0);
       } else {
         setVolume(0.1);
       }
