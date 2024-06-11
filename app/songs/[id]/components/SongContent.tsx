@@ -92,7 +92,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
             {song?.genre?.split(", ").map((g) => (
               <span
                 key={g}
-                className="text-sm bg-gray-800 text-white rounded-full px-3 py-1"
+                className="text-sm bg-gray-800 text-white rounded-full px-3 py-1 hover:bg-gray-700 transition duration-300"
               >
                 <Link href={`/genre/${decodeURIComponent(g)}`}>#{g}</Link>
               </span>
