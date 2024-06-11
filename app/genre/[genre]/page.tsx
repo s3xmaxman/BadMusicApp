@@ -1,7 +1,7 @@
 import React from "react";
 import getSongsByGenre from "@/actions/getSongsByGenre";
-import Header from "@/components/Header";
 import GenreContent from "./components/GenreContent";
+import Header from "@/components/Header";
 
 interface Props {
   params: {
@@ -12,7 +12,16 @@ interface Props {
 const page = async ({ params: { genre } }: Props) => {
   const decodedGenre = decodeURIComponent(genre);
   const songs = await getSongsByGenre(decodedGenre);
-  return <GenreContent songs={songs} />;
+  return (
+    <div className="bg-gradient-to-b from-gray-900 to-black rounded-lg w-full h-full overflow-hidden overflow-y-auto">
+      <Header>
+        <div className="mb-2 flex flex-col gap-y-6">
+          <h1 className="text-white text-3xl font-semibold">{decodedGenre}</h1>
+        </div>
+      </Header>
+      <GenreContent songs={songs} />
+    </div>
+  );
 };
 
 export default page;

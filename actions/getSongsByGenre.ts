@@ -3,7 +3,7 @@ import { cookies, headers } from "next/headers";
 
 import { Song } from "@/types";
 
-const getSongsByGenre = async (genre: string): Promise<string> => {
+const getSongsByGenre = async (genre: string): Promise<Song[]> => {
   // supabaseクライアントを初期化
   const supabase = createServerComponentClient({
     cookies: cookies,
