@@ -94,7 +94,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
                 key={g}
                 className="text-sm bg-gray-800 text-white rounded-full px-3 py-1"
               >
-                #{g}
+                <Link href={`/genre/${decodeURIComponent(g)}`}>#{g}</Link>
               </span>
             ))}
           </div>
