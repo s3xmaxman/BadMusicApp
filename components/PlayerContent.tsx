@@ -48,6 +48,10 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
   const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
 
   const onPlayNext = () => {
+    if (isRepeating) {
+      player.toggleRepeat();
+    }
+
     const nextSongId = player.getNextSongId();
     if (nextSongId) {
       player.setId(nextSongId);
@@ -55,9 +59,15 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
   };
 
   const onPlayPrevious = () => {
-    const prevSongId = player.getPreviousSongId();
-    if (prevSongId) {
-      player.setId(prevSongId);
+    if (isRepeating) {
+      if (sound) {
+        sound.seek(0);
+      }
+    } else {
+      const prevSongId = player.getPreviousSongId();
+      if (prevSongId) {
+        player.setId(prevSongId);
+      }
     }
   };
 
@@ -70,10 +80,10 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     },
     onend: () => {
       setIsPlaying(false);
-      if (!isRepeating) {
-        onPlayNext();
-      } else {
+      if (isRepeating) {
         play();
+      } else {
+        onPlayNext();
       }
     },
     onpause: () => {
@@ -188,6 +198,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
       setCurrentTime(time);
     }
   };
+
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 h-full">
       <div className="flex w-full justify-start">
