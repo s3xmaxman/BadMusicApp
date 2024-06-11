@@ -65,7 +65,17 @@ const RightSidebar = () => {
               {song.title}
             </Link>
           </motion.h1>
-          <p className="text-gray-400 text-lg">#{song.genre}</p>
+          <p className=" text-gray-400 text-lg">
+            {song?.genre?.split(", ").map((g) => (
+              <Link
+                key={g}
+                className="cursor-pointer hover:underline"
+                href={`/genre/${g}`}
+              >
+                #{g}
+              </Link>
+            ))}
+          </p>
         </motion.div>
 
         <div className="flex items-center justify-between">
