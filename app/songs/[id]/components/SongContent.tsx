@@ -8,7 +8,6 @@ import { motion } from "framer-motion";
 import useGetSongById from "@/hooks/useGetSongById";
 import useLoadImage from "@/hooks/useLoadImage";
 
-import useGetSongsByGenre from "@/hooks/useGetSongGenre";
 import Link from "next/link";
 import useOnPlay from "@/hooks/useOnPlay";
 import useLoadImages from "@/hooks/useLoadImages";
@@ -16,7 +15,7 @@ import useDownload from "@/hooks/useDownload";
 import EditModal from "@/components/EditModal";
 import { useUser } from "@/hooks/useUser";
 import { useRouter } from "next/navigation";
-import useGetSongsByGenres from "@/hooks/useGetSongGenre";
+import useGetSongsByGenres from "@/hooks/useGetSongGenres";
 
 interface SongContentProps {
   songId: string;

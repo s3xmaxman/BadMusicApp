@@ -13,14 +13,12 @@ const useGetSongsByGenres = (genres: string[], excludeId?: string) => {
 
       let query = supabaseClient.from("songs").select("*");
 
-      // Apply genre filters
       if (genres.length > 0) {
         query = query.or(
           genres.map((genre) => `genre.ilike.%${genre}%`).join(",")
         );
       }
 
-      // Exclude a specific song if excludeId is provided
       if (excludeId) {
         query = query.neq("id", excludeId);
       }
