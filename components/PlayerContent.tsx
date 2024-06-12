@@ -75,7 +75,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
 
   const [play, { pause, sound }] = useSound(songUrl, {
     volume: volume,
-    html5: true, // これを有効にしたまま
+    html5: true,
     onplay: () => {
       setIsPlaying(true);
       setIsPlayingSound(true);
@@ -99,13 +99,15 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     if (sound) {
       sound.loop(isRepeating);
     }
-  }, [isRepeating]);
+  }, [isRepeating, sound]);
 
   useEffect(() => {
-    sound?.play();
-    return () => {
-      sound?.unload();
-    };
+    if (sound) {
+      sound.play();
+      return () => {
+        sound.unload();
+      };
+    }
   }, [sound]);
 
   useEffect(() => {
