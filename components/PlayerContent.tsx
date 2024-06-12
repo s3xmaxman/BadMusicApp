@@ -91,6 +91,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
       setIsPlaying(false);
       setIsPlayingSound(false);
     },
+    html5: true,
     format: ["mp3"],
   });
 
