@@ -7,6 +7,7 @@ import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import { BsRepeat1 } from "react-icons/bs";
 import { FaRandom } from "react-icons/fa";
+import { isMobile } from "react-device-detect";
 
 import { Playlist, Song } from "@/types";
 import usePlayer from "@/hooks/usePlayer";
@@ -38,7 +39,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
   const player = usePlayer();
   const isRepeating = usePlayer((state) => state.isRepeating);
   const isShuffling = usePlayer((state) => state.isShuffling);
-  const [volume, setVolume] = useState(0.1);
+  const [volume, setVolume] = useState(isMobile ? 1 : 0.1);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPlayingSound, setIsPlayingSound] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -93,23 +94,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     html5: true,
     format: ["mp3"],
   });
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768) {
-        setVolume(1.0);
-      } else {
-        setVolume(0.1);
-      }
-    };
-
-    handleResize();
-
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   useEffect(() => {
     if (sound) {
