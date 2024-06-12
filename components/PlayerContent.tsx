@@ -75,7 +75,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
 
   const [play, { pause, sound }] = useSound(songUrl, {
     volume: volume,
-    html5: true,
+    html5: true, // これを有効にしたまま
     onplay: () => {
       setIsPlaying(true);
       setIsPlayingSound(true);
@@ -99,15 +99,27 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     if (sound) {
       sound.loop(isRepeating);
     }
+  }, [isRepeating]);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden && sound) {
+        sound.loop(isRepeating); // ページがアクティブになった時にループ設定を再確認する
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
   }, [isRepeating, sound]);
 
   useEffect(() => {
-    if (sound) {
-      sound.play();
-      return () => {
-        sound.unload();
-      };
-    }
+    sound?.play();
+    return () => {
+      sound?.unload();
+    };
   }, [sound]);
 
   useEffect(() => {
