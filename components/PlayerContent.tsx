@@ -48,6 +48,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
   const Icon = isPlaying ? BsPauseFill : BsPlayFill;
   const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
 
+  //TODO: リピート機能をモバイルデバイスでも動くようにする
   const onPlayNext = () => {
     if (isRepeating) {
       player.toggleRepeat();
@@ -74,7 +75,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
 
   const [play, { pause, sound }] = useSound(songUrl, {
     volume: volume,
-    loop: isRepeating,
+    html5: true, // これを有効にしたまま
     onplay: () => {
       setIsPlaying(true);
       setIsPlayingSound(true);
@@ -91,7 +92,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
       setIsPlaying(false);
       setIsPlayingSound(false);
     },
-    html5: true,
     format: ["mp3"],
   });
 
