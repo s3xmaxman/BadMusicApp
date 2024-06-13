@@ -1,6 +1,5 @@
 "use client";
 
-import useSound from "use-sound";
 import { useEffect, useState, useRef, useMemo } from "react";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
@@ -28,6 +27,14 @@ interface PlayerContentProps {
   playlists: Playlist[];
 }
 
+interface PlayerContentProps {
+  song: Song;
+  songUrl: string;
+  isMobilePlayer: boolean;
+  toggleMobilePlayer: () => void;
+  playlists: Playlist[];
+}
+
 const PlayerContent: React.FC<PlayerContentProps> = ({
   song,
   songUrl,
@@ -41,19 +48,15 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
   const isShuffling = usePlayer((state) => state.isShuffling);
   const [volume, setVolume] = useState(isMobile ? 1 : 0.1);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isPlayingSound, setIsPlayingSound] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   const Icon = isPlaying ? BsPauseFill : BsPlayFill;
   const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
 
-  //TODO: リピート機能をモバイルデバイスでも動くようにする
   const onPlayNext = () => {
-    if (isRepeating) {
-      player.toggleRepeat();
-    }
-
     const nextSongId = player.getNextSongId();
     if (nextSongId) {
       player.setId(nextSongId);
@@ -61,100 +64,78 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
   };
 
   const onPlayPrevious = () => {
-    if (isRepeating) {
-      if (sound) {
-        sound.seek(0);
-      }
-    } else {
-      const prevSongId = player.getPreviousSongId();
-      if (prevSongId) {
-        player.setId(prevSongId);
-      }
+    const prevSongId = player.getPreviousSongId();
+    if (prevSongId) {
+      player.setId(prevSongId);
     }
   };
 
-  const [play, { pause, sound }] = useSound(songUrl, {
-    volume: volume,
-    html5: true, // これを有効にしたまま
-    onplay: () => {
-      setIsPlaying(true);
-      setIsPlayingSound(true);
-    },
-    onend: () => {
-      setIsPlaying(false);
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    // イベントリスナーの追加
+    const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
+    const handleLoadedMetadata = () => setDuration(audio.duration);
+    const handleEnded = () => {
       if (isRepeating) {
-        play();
+        audio.currentTime = 0;
+        audio.play();
       } else {
         onPlayNext();
       }
-    },
-    onpause: () => {
-      setIsPlaying(false);
-      setIsPlayingSound(false);
-    },
-    format: ["mp3"],
-  });
-
-  useEffect(() => {
-    if (sound) {
-      sound.loop(isRepeating);
-    }
-  }, [isRepeating]);
-
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (!document.hidden && sound) {
-        sound.loop(isRepeating); // ページがアクティブになった時にループ設定を再確認する
-      }
     };
+    const handleCanPlayThrough = () => audio.play(); // 読み込み完了時に再生
 
-    document.addEventListener("visibilitychange", handleVisibilityChange);
+    audio.addEventListener("timeupdate", handleTimeUpdate);
+    audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+    audio.addEventListener("ended", handleEnded);
+    audio.addEventListener("canplaythrough", handleCanPlayThrough); // 読み込み完了イベント
 
+    // イベントリスナーの削除
     return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      audio.removeEventListener("timeupdate", handleTimeUpdate);
+      audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+      audio.removeEventListener("ended", handleEnded);
+      audio.removeEventListener("canplaythrough", handleCanPlayThrough);
     };
-  }, [isRepeating, sound]);
+  }, [isRepeating, songUrl]);
 
   useEffect(() => {
-    sound?.play();
-    return () => {
-      sound?.unload();
-    };
-  }, [sound]);
+    const audio = audioRef.current;
+    if (!audio) return;
 
-  useEffect(() => {
-    if (sound) {
-      setDuration(sound.duration());
-      const interval = setInterval(() => {
-        setCurrentTime(sound.seek());
-      }, 1000);
-      return () => clearInterval(interval);
+    if (isPlaying) {
+      audio.play();
+    } else {
+      audio.pause();
     }
-  }, [sound]);
+  }, [isPlaying]);
 
   useEffect(() => {
-    setCurrentTime(0);
-    setDuration(0);
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.volume = volume;
+  }, [volume]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || !songUrl) return;
+
+    // 新しいオーディオソースを設定する前に停止
+    audio.pause();
+    audio.currentTime = 0;
+    audio.src = songUrl; // 新しいオーディオソースを設定
+
+    // 読み込みが完了していれば再生
+    if (audio.readyState >= 4) {
+      // HTMLMediaElement.readyStateが4以上であれば読み込み完了
+      audio.play();
+    }
   }, [songUrl]);
 
-  useEffect(() => {
-    if (sound) {
-      setCurrentTime(sound.seek());
-    }
-  }, [sound]);
-
-  useEffect(() => {
-    if (sound?._duration) {
-      setDuration(sound._duration);
-    }
-  }, [sound?._duration]);
-
   const handlePlay = () => {
-    if (!isPlaying) {
-      play();
-    } else {
-      pause();
-    }
+    setIsPlaying(!isPlaying);
   };
 
   const toggleMute = () => {
@@ -183,124 +164,124 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
 
   const formattedCurrentTime = useMemo(
     () => formatTime(currentTime),
-    [currentTime, sound]
+    [currentTime]
   );
 
-  const formattedDuration = useMemo(
-    () => formatTime(duration),
-    [duration, sound]
-  );
+  const formattedDuration = useMemo(() => formatTime(duration), [duration]);
 
   const handleSeek = (time: number) => {
-    if (sound) {
-      sound.seek(time);
+    if (audioRef.current) {
+      audioRef.current.currentTime = time;
       setCurrentTime(time);
     }
   };
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 h-full">
-      <div className="flex w-full justify-start">
-        <div className="flex items-center gap-x-4">
-          <MediaItem data={song} onClick={toggleMobilePlayer} />
+    <>
+      <audio ref={audioRef} src={songUrl} loop={isRepeating} />
+      <div className="grid grid-cols-2 md:grid-cols-3 h-full">
+        <div className="flex w-full justify-start">
+          <div className="flex items-center gap-x-4">
+            <MediaItem data={song} onClick={toggleMobilePlayer} />
+          </div>
         </div>
-      </div>
 
-      <div className="flex md:hidden col-auto w-full justify-end items-center">
-        <div
-          onClick={handlePlay}
-          className="h-10 w-10 flex items-center justify-center rounded-full bg-white p-1 cursor-pointer"
-        >
-          <Icon size={30} className="text-black" />
-        </div>
-      </div>
-
-      {/* PC版のレイアウト */}
-      <div className="hidden md:flex flex-col w-full md:justify-center items-center max-w-[722px] gap-x-6">
-        <div className="flex items-center gap-x-8">
-          <FaRandom
-            onClick={toggleShuffle}
-            size={20}
-            className="text-neutral-400 cursor-pointer hover:text-white transition"
-            style={{ color: isShuffling ? "green" : "white" }}
-          />
-          <AiFillStepBackward
-            onClick={onPlayPrevious}
-            size={30}
-            className=" text-neutral-400 cursor-pointer hover:text-white transition"
-          />
+        <div className="flex md:hidden col-auto w-full justify-end items-center">
           <div
             onClick={handlePlay}
-            className="flex items-center justify-center h-7 w-7 rounded-full bg-white p-1 cursor-pointer"
+            className="h-10 w-10 flex items-center justify-center rounded-full bg-white p-1 cursor-pointer"
           >
             <Icon size={30} className="text-black" />
           </div>
-          <AiFillStepForward
-            onClick={onPlayNext}
-            size={30}
-            className=" text-neutral-400 cursor-pointer hover:text-white transition"
-          />
-          <BsRepeat1
-            onClick={toggleRepeat}
-            size={25}
-            className="text-neutral-400 cursor-pointer hover:text-white transition"
-            style={{ color: isRepeating ? "green" : "white" }}
-          />
         </div>
 
-        <div className="flex items-center gap-x-2 mt-4 w-full lg:max-w-[800px] md:max-w-[300px]">
-          <span className="w-[50px] text-center inline-block">
-            {formattedCurrentTime}
-          </span>
-          <SeekBar
+        {/* PC版のレイアウト */}
+        <div className="hidden md:flex flex-col w-full md:justify-center items-center max-w-[722px] gap-x-6">
+          <div className="flex items-center gap-x-8">
+            <FaRandom
+              onClick={toggleShuffle}
+              size={20}
+              className="text-neutral-400 cursor-pointer hover:text-white transition"
+              style={{ color: isShuffling ? "green" : "white" }}
+            />
+            <AiFillStepBackward
+              onClick={onPlayPrevious}
+              size={30}
+              className=" text-neutral-400 cursor-pointer hover:text-white transition"
+            />
+            <div
+              onClick={handlePlay}
+              className="flex items-center justify-center h-7 w-7 rounded-full bg-white p-1 cursor-pointer"
+            >
+              <Icon size={30} className="text-black" />
+            </div>
+            <AiFillStepForward
+              onClick={onPlayNext}
+              size={30}
+              className=" text-neutral-400 cursor-pointer hover:text-white transition"
+            />
+            <BsRepeat1
+              onClick={toggleRepeat}
+              size={25}
+              className="text-neutral-400 cursor-pointer hover:text-white transition"
+              style={{ color: isRepeating ? "green" : "white" }}
+            />
+          </div>
+
+          <div className="flex items-center gap-x-2 mt-4 w-full lg:max-w-[800px] md:max-w-[300px]">
+            <span className="w-[50px] text-center inline-block">
+              {formattedCurrentTime}
+            </span>
+            <SeekBar
+              currentTime={currentTime}
+              duration={duration}
+              onSeek={handleSeek}
+              className="flex-1 h-2"
+            />
+            <span className="w-[50px] text-center inline-block">
+              {formattedDuration}
+            </span>
+          </div>
+        </div>
+
+        <div className="hidden md:flex w-full justify-end pr-2">
+          <div className="flex items-center gap-x-2 w-full md:w-[120px] lg:w-[200px]">
+            <AddPlaylist playlists={playlists} songId={song.id} />
+            <LikeButton songId={song.id} />
+            <div className="mx-1" />
+            <VolumeIcon
+              onClick={toggleMute}
+              className="cursor-pointer"
+              size={34}
+            />
+            <Slider value={volume} onChange={(value) => setVolume(value)} />
+          </div>
+        </div>
+
+        {isMobilePlayer && (
+          <MobilePlayerContent
+            song={song}
+            playlists={playlists}
+            songUrl={songUrl}
+            imageUrl={imageUrl || "/images/music-placeholder.png"}
             currentTime={currentTime}
             duration={duration}
-            onSeek={handleSeek}
-            className="flex-1 h-2"
+            formattedCurrentTime={formattedCurrentTime}
+            formattedDuration={formattedDuration}
+            isPlaying={isPlaying}
+            isShuffling={isShuffling}
+            isRepeating={isRepeating}
+            handlePlay={handlePlay}
+            handleSeek={handleSeek}
+            toggleMobilePlayer={toggleMobilePlayer}
+            toggleShuffle={toggleShuffle}
+            toggleRepeat={toggleRepeat}
+            onPlayNext={onPlayNext}
+            onPlayPrevious={onPlayPrevious}
           />
-          <span className="w-[50px] text-center inline-block">
-            {formattedDuration}
-          </span>
-        </div>
+        )}
       </div>
-
-      <div className="hidden md:flex w-full justify-end pr-2">
-        <div className="flex items-center gap-x-2 w-full md:w-[120px] lg:w-[200px]">
-          <AddPlaylist playlists={playlists} songId={song.id} />
-          <LikeButton songId={song.id} />
-          <div className="mx-1" />
-          <VolumeIcon
-            onClick={toggleMute}
-            className="cursor-pointer"
-            size={34}
-          />
-          <Slider value={volume} onChange={(value) => setVolume(value)} />
-        </div>
-      </div>
-
-      {isMobilePlayer && (
-        <MobilePlayerContent
-          song={song}
-          playlists={playlists}
-          songUrl={songUrl}
-          imageUrl={imageUrl || "/images/music-placeholder.png"}
-          currentTime={currentTime}
-          duration={duration}
-          formattedCurrentTime={formattedCurrentTime}
-          formattedDuration={formattedDuration}
-          isPlaying={isPlaying}
-          isShuffling={isShuffling}
-          isRepeating={isRepeating}
-          handlePlay={handlePlay}
-          handleSeek={handleSeek}
-          toggleMobilePlayer={toggleMobilePlayer}
-          toggleShuffle={toggleShuffle}
-          toggleRepeat={toggleRepeat}
-          onPlayNext={onPlayNext}
-          onPlayPrevious={onPlayPrevious}
-        />
-      )}
-    </div>
+    </>
   );
 };
 
