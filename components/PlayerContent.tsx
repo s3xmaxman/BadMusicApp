@@ -57,6 +57,10 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
   const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
 
   const onPlayNext = () => {
+    if (isRepeating) {
+      player.toggleRepeat();
+    }
+
     const nextSongId = player.getNextSongId();
     if (nextSongId) {
       player.setId(nextSongId);
@@ -64,9 +68,15 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
   };
 
   const onPlayPrevious = () => {
-    const prevSongId = player.getPreviousSongId();
-    if (prevSongId) {
-      player.setId(prevSongId);
+    if (isRepeating) {
+      if (audioRef.current) {
+        audioRef.current.currentTime = 0;
+      }
+    } else {
+      const prevSongId = player.getPreviousSongId();
+      if (prevSongId) {
+        player.setId(prevSongId);
+      }
     }
   };
 
