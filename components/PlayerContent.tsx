@@ -1,16 +1,12 @@
 "use client";
 
-import { useEffect, useState, useRef, useMemo } from "react";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import { BsRepeat1 } from "react-icons/bs";
 import { FaRandom } from "react-icons/fa";
-import { isMobile } from "react-device-detect";
 
 import { Playlist, Song } from "@/types";
-import usePlayer from "@/hooks/usePlayer";
-
 import LikeButton from "./LikeButton";
 import MediaItem from "./MediaItem";
 import Slider from "./Slider";
@@ -18,14 +14,7 @@ import SeekBar from "./Seekbar";
 import useLoadImage from "@/hooks/useLoadImage";
 import MobilePlayerContent from "./MobilePlayerContent";
 import AddPlaylist from "./AddPlaylist";
-
-interface PlayerContentProps {
-  song: Song;
-  songUrl: string;
-  isMobilePlayer: boolean;
-  toggleMobilePlayer: () => void;
-  playlists: Playlist[];
-}
+import useAudioPlayer from "@/hooks/useAudioPlayer";
 
 interface PlayerContentProps {
   song: Song;
@@ -43,148 +32,28 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
   playlists,
 }) => {
   const imageUrl = useLoadImage(song);
-  const player = usePlayer();
-  const isRepeating = usePlayer((state) => state.isRepeating);
-  const isShuffling = usePlayer((state) => state.isShuffling);
-  const [volume, setVolume] = useState(isMobile ? 1 : 0.1);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-
-  const audioRef = useRef<HTMLAudioElement>(null);
+  const {
+    formattedCurrentTime,
+    formattedDuration,
+    volume,
+    toggleMute,
+    setVolume,
+    audioRef,
+    currentTime,
+    duration,
+    isPlaying,
+    isRepeating,
+    isShuffling,
+    handlePlay,
+    handleSeek,
+    onPlayNext,
+    onPlayPrevious,
+    toggleRepeat,
+    toggleShuffle,
+  } = useAudioPlayer(songUrl);
 
   const Icon = isPlaying ? BsPauseFill : BsPlayFill;
   const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
-
-  const onPlayNext = () => {
-    if (isRepeating) {
-      player.toggleRepeat();
-    }
-
-    const nextSongId = player.getNextSongId();
-    if (nextSongId) {
-      player.setId(nextSongId);
-    }
-  };
-
-  const onPlayPrevious = () => {
-    if (isRepeating) {
-      if (audioRef.current) {
-        audioRef.current.currentTime = 0;
-      }
-    } else {
-      const prevSongId = player.getPreviousSongId();
-      if (prevSongId) {
-        player.setId(prevSongId);
-      }
-    }
-  };
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    // イベントリスナーの追加
-    const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
-    const handleLoadedMetadata = () => setDuration(audio.duration);
-    const handleEnded = () => {
-      if (isRepeating) {
-        audio.currentTime = 0;
-        audio.play();
-      } else {
-        onPlayNext();
-      }
-    };
-    const handleCanPlayThrough = () => audio.play(); // 読み込み完了時に再生
-
-    audio.addEventListener("timeupdate", handleTimeUpdate);
-    audio.addEventListener("loadedmetadata", handleLoadedMetadata);
-    audio.addEventListener("ended", handleEnded);
-    audio.addEventListener("canplaythrough", handleCanPlayThrough); // 読み込み完了イベント
-
-    // イベントリスナーの削除
-    return () => {
-      audio.removeEventListener("timeupdate", handleTimeUpdate);
-      audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
-      audio.removeEventListener("ended", handleEnded);
-      audio.removeEventListener("canplaythrough", handleCanPlayThrough);
-    };
-  }, [isRepeating, songUrl]);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    if (isPlaying) {
-      audio.play();
-    } else {
-      audio.pause();
-    }
-  }, [isPlaying]);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    audio.volume = volume;
-  }, [volume]);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio || !songUrl) return;
-
-    // 新しいオーディオソースを設定する前に停止
-    audio.pause();
-    audio.currentTime = 0;
-    audio.src = songUrl; // 新しいオーディオソースを設定
-
-    // 読み込みが完了していれば再生
-    if (audio.readyState >= 4) {
-      // HTMLMediaElement.readyStateが4以上であれば読み込み完了
-      audio.play();
-    }
-  }, [songUrl]);
-
-  const handlePlay = () => {
-    setIsPlaying(!isPlaying);
-  };
-
-  const toggleMute = () => {
-    if (volume === 0) {
-      setVolume(0.1);
-    } else {
-      setVolume(0);
-    }
-  };
-
-  const toggleRepeat = () => {
-    player.toggleRepeat();
-  };
-
-  const toggleShuffle = () => {
-    player.toggleShuffle();
-  };
-
-  const formatTime = useMemo(() => {
-    return (time: number) => {
-      const minutes = Math.floor(time / 60);
-      const seconds = Math.floor(time % 60);
-      return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-    };
-  }, []);
-
-  const formattedCurrentTime = useMemo(
-    () => formatTime(currentTime),
-    [currentTime]
-  );
-
-  const formattedDuration = useMemo(() => formatTime(duration), [duration]);
-
-  const handleSeek = (time: number) => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = time;
-      setCurrentTime(time);
-    }
-  };
 
   return (
     <>
@@ -267,7 +136,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
             <Slider value={volume} onChange={(value) => setVolume(value)} />
           </div>
         </div>
-
+        {/* モバイル版レイアウト */}
         {isMobilePlayer && (
           <MobilePlayerContent
             song={song}
