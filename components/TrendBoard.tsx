@@ -22,7 +22,7 @@ const TrendBoard: React.FC<TrendBoardProps> = ({ trendSongs }) => {
         >
           <div onClick={() => onPlay(song.id)} className="relative w-full h-60">
             <Image
-              src={imageUrls[index] || "/images/liked.png"}
+              src={imageUrls[index] || ""}
               alt={song.title}
               layout="fill"
               objectFit="cover"
