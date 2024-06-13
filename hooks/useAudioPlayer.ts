@@ -76,19 +76,25 @@ const useAudioPlayer = (songUrl: string) => {
       }
     };
     const handleCanPlayThrough = () => audio.play();
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
 
     audio.addEventListener("timeupdate", handleTimeUpdate);
     audio.addEventListener("loadedmetadata", handleLoadedMetadata);
     audio.addEventListener("ended", handleEnded);
     audio.addEventListener("canplaythrough", handleCanPlayThrough);
+    audio.addEventListener("play", handlePlay);
+    audio.addEventListener("pause", handlePause);
 
     return () => {
       audio.removeEventListener("timeupdate", handleTimeUpdate);
       audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
       audio.removeEventListener("ended", handleEnded);
       audio.removeEventListener("canplaythrough", handleCanPlayThrough);
+      audio.removeEventListener("play", handlePlay);
+      audio.removeEventListener("pause", handlePause);
     };
-  }, [isRepeating, songUrl]);
+  }, [songUrl]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -111,13 +117,8 @@ const useAudioPlayer = (songUrl: string) => {
     const audio = audioRef.current;
     if (!audio || !songUrl) return;
 
-    audio.pause();
     audio.currentTime = 0;
     audio.src = songUrl;
-
-    if (audio.readyState >= 4) {
-      audio.play();
-    }
   }, [songUrl]);
 
   const formatTime = useMemo(() => {
