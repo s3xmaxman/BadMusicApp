@@ -16,6 +16,7 @@ import EditModal from "@/components/EditModal";
 import { useUser } from "@/hooks/useUser";
 import { useRouter } from "next/navigation";
 import useGetSongsByGenres from "@/hooks/useGetSongGenres";
+import { set } from "react-hook-form";
 
 interface SongContentProps {
   songId: string;
@@ -32,13 +33,15 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   const imageUrls = useLoadImages(songGenres);
   const { fileUrl, loading } = useDownload(song?.song_path!);
   const onPlay = useOnPlay([song!]);
-  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleEditClick = () => {
     setIsEditModalOpen(true);
   };
 
   const handleDownloadClick = () => {
+    setIsLoading(true);
     if (fileUrl) {
       const link = document.createElement("a");
       link.href = fileUrl;
@@ -47,6 +50,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
       link.click();
       link.remove();
     }
+    setIsLoading(false);
   };
 
   return (
@@ -110,7 +114,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
               disabled={loading}
             >
               <FaDownload />
-              Download
+              {loading ? "Downloading.." : "Download"}
             </button>
             {user?.id === song?.user_id && (
               <button

@@ -18,7 +18,7 @@ const TrendBoard: React.FC<TrendBoardProps> = ({ trendSongs }) => {
       {trendSongs.map((song, index) => (
         <div
           key={song.id}
-          className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl"
+          className="bg-black rounded-xl overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl"
         >
           <div onClick={() => onPlay(song.id)} className="relative w-full h-60">
             <Image

@@ -41,6 +41,12 @@ const Sidebar: React.FC<SidebarProps> = ({ children, songs, playlists }) => {
         active: pathname === "/playlist",
         href: "/playlist",
       },
+      // {
+      //   icon: BiSearch,
+      //   label: "お気に入り",
+      //   active: pathname === "/liked",
+      //   href: "/liked",
+      // },
     ],
     [pathname]
   );
