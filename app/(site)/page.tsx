@@ -3,12 +3,14 @@ import Header from "@/components/Header";
 import ListItem from "@/components/ListItem";
 import PageContent from "./components/PageContent";
 import RightSidebar from "@/components/RightSidebar";
-import Trending from "@/components/Trending";
+import getTrendSongs from "@/actions/getTrendSongs";
+import TrendBoard from "@/components/TrendBoard";
 
 export const revalidate = 0;
 
 export default async function Home() {
   const songs = await getSongs();
+  const trendSongs = await getTrendSongs();
 
   return (
     <div className="flex bg-gradient-to-b from-gray-900 to-black rounded-xl h-full overflow-hidden">
@@ -25,7 +27,7 @@ export default async function Home() {
             </div>
           </div>
         </Header>
-        <Trending />
+        <TrendBoard trendSongs={trendSongs} />
         <div className="mt-2 mb-7 px-6">
           <div className="flex justify-between items-center">
             <h1 className="text-white text-2xl font-semibold"> 最新曲 </h1>
