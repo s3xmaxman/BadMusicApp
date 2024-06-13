@@ -2,6 +2,8 @@
 import { useEffect, useState, useRef, useMemo } from "react";
 import usePlayer from "@/hooks/usePlayer";
 import { isMobile } from "react-device-detect";
+import { BsPauseFill, BsPlayFill } from "react-icons/bs";
+import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 
 const useAudioPlayer = (songUrl: string) => {
   const player = usePlayer();
@@ -12,6 +14,9 @@ const useAudioPlayer = (songUrl: string) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const isRepeating = usePlayer((state) => state.isRepeating);
   const isShuffling = usePlayer((state) => state.isShuffling);
+
+  const Icon = isPlaying ? BsPauseFill : BsPlayFill;
+  const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
 
   const handlePlay = () => {
     setIsPlaying(!isPlaying);
@@ -139,6 +144,8 @@ const useAudioPlayer = (songUrl: string) => {
   };
 
   return {
+    Icon,
+    VolumeIcon,
     formattedCurrentTime,
     formattedDuration,
     toggleMute,

@@ -33,6 +33,8 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
 }) => {
   const imageUrl = useLoadImage(song);
   const {
+    Icon,
+    VolumeIcon,
     formattedCurrentTime,
     formattedDuration,
     volume,
@@ -51,9 +53,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     toggleRepeat,
     toggleShuffle,
   } = useAudioPlayer(songUrl);
-
-  const Icon = isPlaying ? BsPauseFill : BsPlayFill;
-  const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
 
   return (
     <>

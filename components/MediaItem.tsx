@@ -6,7 +6,6 @@ import useLoadImage from "@/hooks/useLoadImage";
 import { Playlist, Song } from "@/types";
 import usePlayer from "@/hooks/usePlayer";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 
 interface MediaItemProps {
   data: Song | Playlist;
@@ -42,11 +41,7 @@ const MediaItem: React.FC<MediaItemProps> = ({ data, onClick }) => {
         />
       </div>
       <div className="flex flex-col gap-y-1 overflow-hidden w-[70%]">
-        <Link href={`/songs/${data.id}`}>
-          <p className="text-white truncate w-full hover:underline">
-            {data.title}
-          </p>
-        </Link>
+        <p className="text-white truncate w-full">{data.title}</p>
         {"author" in data && (
           <p className="text-neutral-400 text-sm truncate">{data.author}</p>
         )}

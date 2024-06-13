@@ -10,6 +10,7 @@ import { RiCloseLine } from "react-icons/ri";
 import LikeButton from "./LikeButton";
 import AddPlaylist from "./AddPlaylist";
 import { BackgroundGradient } from "./ui/background-gradient";
+import Link from "next/link";
 
 interface MobilePlayerContentProps {
   song: Song;
@@ -74,7 +75,15 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
         <div className="flex justify-around items-center w-full mb-4">
           <div>
             <h1 className="text-xl font-semibold mb-1">{song.title}</h1>
-            <p className="text-base">#{song.genre}</p>
+            {song?.genre?.split(", ").map((g) => (
+              <Link
+                key={g}
+                className="ml-1 cursor-pointer hover:underline"
+                href={`/genre/${g}`}
+              >
+                <span>#{g}</span>
+              </Link>
+            ))}
             <p className="text-gray-400 text-base mt-2">{song.author}</p>
           </div>
           <div className="flex items-center space-x-4">
