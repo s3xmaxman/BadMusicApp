@@ -14,6 +14,8 @@ const genres = [
   "Future Funk",
   "Vapor Wave",
   "Synth Wave",
+  "Synth Pop",
+  "City Pop",
   "Electro",
   "Electro House",
   "Tropical House",
