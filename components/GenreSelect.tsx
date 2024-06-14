@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/libs/utils";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface GenreSelectProps {
   onGenreChange: (genres: string[]) => void;
@@ -44,7 +44,7 @@ const GenreSelect: React.FC<GenreSelectProps> = ({
     });
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     onGenreChange(selectedGenres);
   }, [selectedGenres]);
 

@@ -13,28 +13,7 @@ const TrendBoard: React.FC = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<
     "all" | "month" | "week" | "day"
   >("all");
-  const [trends, setTrends] = useState<Song[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchTrends = async (period: "all" | "month" | "week" | "day") => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const songs = await useGetTrendSongs(period);
-      setTrends(songs);
-    } catch (err) {
-      setError("トレンドデータの取得に失敗しました。");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchTrends(selectedPeriod);
-  }, [selectedPeriod]);
-
+  const { trends, isLoading, error } = useGetTrendSongs(selectedPeriod);
   const imageUrls = useLoadImages(trends);
   const onPlay = useOnPlay(trends);
 
