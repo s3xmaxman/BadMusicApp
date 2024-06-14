@@ -14,9 +14,8 @@ import useLoadImages from "@/hooks/useLoadImages";
 import useDownload from "@/hooks/useDownload";
 import EditModal from "@/components/EditModal";
 import { useUser } from "@/hooks/useUser";
-import { useRouter } from "next/navigation";
 import useGetSongsByGenres from "@/hooks/useGetSongGenres";
-import { set } from "react-hook-form";
+import { useRouter } from "next/navigation";
 
 interface SongContentProps {
   songId: string;

@@ -79,7 +79,6 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
 
       toast.success("曲を編集しました");
       onClose();
-      window.location.reload();
     } catch (error) {
       toast.error("曲の編集に失敗しました");
       console.error(error);
