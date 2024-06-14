@@ -87,42 +87,45 @@ const TrendBoard: React.FC = () => {
               variants={itemVariants}
               className="group relative transform transition duration-300 ease-in-out hover:scale-105"
             >
-              <Link href={`/songs/${song.id}`}>
-                <div className="relative w-full h-60 overflow-hidden rounded-xl bg-black shadow-lg">
-                  <Image
-                    src={imageUrls[index] || ""}
-                    alt={song.title}
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-t-xl group-hover:scale-110 transition duration-300 ease-in-out"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-70 transition duration-300 ease-in-out" />
-                  <div
-                    onClick={(e) => {
-                      e.preventDefault();
-                      onPlay(song.id);
-                    }}
-                    className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out cursor-pointer"
+              <div className="relative w-full h-60 overflow-hidden rounded-xl bg-black shadow-lg">
+                <Image
+                  src={imageUrls[index] || ""}
+                  alt={song.title}
+                  fill
+                  objectFit="cover"
+                  className="rounded-t-xl group-hover:scale-110 transition duration-300 ease-in-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-70 transition duration-300 ease-in-out" />
+                <div
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onPlay(song.id);
+                  }}
+                  className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 ease-in-out cursor-pointer"
+                >
+                  <svg
+                    className="w-12 h-12 text-[#4c1d95] fill-current"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    <svg
-                      className="w-12 h-12 text-[#4c1d95] fill-current"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
                 </div>
-              </Link>
+              </div>
+
               <div className="p-4">
                 <h3 className="text-white text-xl font-bold mb-1 flex items-center space-x-2">
                   <span className="text-[#4c1d95]">#{index + 1}</span>
-                  <span className="truncate hover:underline">{song.title}</span>
+                  <Link href={`/songs/${song.id}`}>
+                    <span className="truncate hover:underline">
+                      {song.title}
+                    </span>
+                  </Link>
                 </h3>
                 <p className="text-gray-400 text-sm">{song.author}</p>
                 <p className="text-gray-500 text-xs mt-2">{song.count} plays</p>
