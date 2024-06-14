@@ -25,7 +25,9 @@ export default async function Home() {
           </div>
         </Header>
         <div className="mt-2 mb-7 px-6">
-          <TrendBoard />
+          <div className="mb-8">
+            <TrendBoard />
+          </div>
           <div className="flex justify-between items-center">
             <h1 className="text-white text-2xl font-semibold"> 最新曲 </h1>
           </div>
