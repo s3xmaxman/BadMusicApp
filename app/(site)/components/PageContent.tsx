@@ -1,9 +1,8 @@
 "use client";
-import GenreSelect from "@/components/GenreSelect";
+
 import SongItem from "@/components/SongItem";
 import useOnPlay from "@/hooks/useOnPlay";
 import { Song } from "@/types";
-import { useState } from "react";
 
 interface PageContentProps {
   songs: Song[];
