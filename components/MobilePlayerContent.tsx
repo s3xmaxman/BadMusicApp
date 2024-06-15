@@ -112,8 +112,9 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
           <FaRandom
             onClick={toggleShuffle}
             size={20}
-            className="text-neutral-400 cursor-pointer hover:text-white transition"
-            style={{ color: isShuffling ? "green" : "white" }}
+            className={`cursor-pointer transition ${
+              isShuffling ? "text-[#4c1d95]" : "text-neutral-400"
+            }`}
           />
           <AiFillStepBackward
             onClick={onPlayPrevious}
@@ -134,8 +135,9 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
           <BsRepeat1
             onClick={toggleRepeat}
             size={20}
-            className="text-neutral-400 cursor-pointer hover:text-white transition"
-            style={{ color: isRepeating ? "green" : "white" }}
+            className={`cursor-pointer transition ${
+              isRepeating ? "text-[#4c1d95]" : "text-neutral-400"
+            }`}
           />
         </div>
       </div>
