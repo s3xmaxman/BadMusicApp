@@ -1,7 +1,6 @@
 import getPlaylistSongs from "@/actions/getPlaylistSongs";
 import PlaylistPageContent from "./components/PlaylistPageContent";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+import getPlaylistsImage from "@/actions/getPlaylistsImage";
 
 const PlaylistPage = async ({
   params: { id: playlistId },
@@ -11,7 +10,7 @@ const PlaylistPage = async ({
   searchParams: { [key: string]: string | string[] | undefined };
 }) => {
   const playlistTitle = searchParams.title as string;
-
+  const imageUrl = await getPlaylistsImage(playlistId);
   const songs = await getPlaylistSongs(playlistId);
 
   return (
@@ -19,7 +18,7 @@ const PlaylistPage = async ({
       playlistId={playlistId}
       playlistTitle={playlistTitle}
       songs={songs}
-      // imagePath={playlistData.image_path}
+      imageUrl={imageUrl}
     />
   );
 };

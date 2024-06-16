@@ -9,7 +9,7 @@ import useLoadImage from "@/hooks/useLoadImage";
 interface PlaylistPageContentProps {
   playlistId: string;
   playlistTitle: string;
-  // imagePath?: string;
+  imageUrl?: string;
   songs: Song[];
 }
 
@@ -17,9 +17,12 @@ const PlaylistPageContent: React.FC<PlaylistPageContentProps> = async ({
   playlistId,
   playlistTitle,
   songs,
-  // imagePath,
+  imageUrl,
 }) => {
-  // const imageUrl = imagePath ? useLoadImage(imagePath) : "/default-image-path";
+  const image = imageUrl
+    ? useLoadImage({ image_path: imageUrl } as Playlist)
+    : "/images/playlist.png";
+
   return (
     <div className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
       <Header>
@@ -28,7 +31,7 @@ const PlaylistPageContent: React.FC<PlaylistPageContentProps> = async ({
             <div className="relative h-32 w-32 lg:h-44 lg:w-44">
               <Image
                 fill
-                src={"/images/playlist.png"}
+                src={image!}
                 alt="Playlist"
                 className="object-cover"
               />
