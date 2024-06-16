@@ -2,8 +2,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Playlist } from "@/types";
@@ -14,6 +12,7 @@ import { useUser } from "@/hooks/useUser";
 import useAuthModal from "@/hooks/useAuthModal";
 import { RiPlayListFill } from "react-icons/ri";
 import { useSessionContext } from "@supabase/auth-helpers-react";
+import useGetSongById from "@/hooks/useGetSongById";
 
 interface PlaylistMenuProps {
   playlists: Playlist[];
@@ -25,6 +24,7 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({ playlists, songId }) => {
   const { user } = useUser();
   const [isAdded, setIsAdded] = useState<Record<string, boolean>>({});
   const authModal = useAuthModal();
+  const { song } = useGetSongById(songId);
 
   useEffect(() => {
     const fetchAddedSongs = async () => {
@@ -68,6 +68,16 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({ playlists, songId }) => {
       return;
     }
 
+    const { data: playlistData, error: playlistError } = await supabaseClient
+      .from("playlist_songs")
+      .select("*")
+      .eq("playlist_id", playlistId);
+
+    if (playlistError) {
+      console.error("Error fetching playlist songs:", playlistError);
+      return;
+    }
+
     const { error } = await supabaseClient.from("playlist_songs").insert({
       playlist_id: playlistId,
       song_id: songId,
@@ -80,6 +90,17 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({ playlists, songId }) => {
     } else {
       setIsAdded((prev) => ({ ...prev, [playlistId]: true }));
       toast.success("プレイリストに曲を追加しました");
+
+      if (playlistData.length === 0 && song?.image_path) {
+        const { error: updateError } = await supabaseClient
+          .from("playlists")
+          .update({ image_path: song.image_path })
+          .eq("id", playlistId);
+
+        if (updateError) {
+          console.error("Error updating playlist image:", updateError);
+        }
+      }
     }
   };
 

@@ -1,30 +1,29 @@
-// hooks/useLoadImages.ts
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Song } from "@/types";
+import { Playlist, Song } from "@/types";
 import { useEffect, useState } from "react";
 
-const useLoadImages = (songs: Song[]) => {
+const useLoadImages = (data: Song[] | Playlist[]) => {
   const supabaseClient = useSupabaseClient();
   const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchImageUrls = async () => {
       const urls = await Promise.all(
-        songs.map(async (song) => {
-          if (!song.image_path) return null;
+        data.map(async (data) => {
+          if (!data.image_path) return ""; // nullの代わりに空文字列を返す
 
           const { data: imageData } = await supabaseClient.storage
             .from("images")
-            .getPublicUrl(song.image_path);
+            .getPublicUrl(data.image_path);
 
           return imageData.publicUrl;
         })
       );
-      setImageUrls(urls.filter((url) => url !== null) as string[]);
+      setImageUrls(urls); // filterを除去
     };
 
     fetchImageUrls();
-  }, [songs, supabaseClient]);
+  }, [data, supabaseClient]);
 
   return imageUrls;
 };

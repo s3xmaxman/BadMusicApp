@@ -1,5 +1,5 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies, headers } from "next/headers";
+import { cookies } from "next/headers";
 
 import { Playlist } from "@/types";
 
@@ -8,9 +8,15 @@ const getPlaylists = async (): Promise<Playlist[]> => {
     cookies: cookies,
   });
 
+  // 現在のユーザーセッションを取得
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
   const { data, error } = await supabase
     .from("playlists")
     .select("*")
+    .eq("user_id", session?.user.id)
     .order("created_at", { ascending: false });
 
   if (error) {

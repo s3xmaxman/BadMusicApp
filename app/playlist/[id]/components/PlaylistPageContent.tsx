@@ -3,20 +3,23 @@
 import Image from "next/image";
 import Header from "@/components/Header";
 import LikedContent from "@/app/liked/components/LikedContent";
-import { Song } from "@/types";
+import { Playlist, Song } from "@/types";
 import DeletePlaylistButton from "@/components/DeletePlaylistButton";
-
+import useLoadImage from "@/hooks/useLoadImage";
 interface PlaylistPageContentProps {
   playlistId: string;
   playlistTitle: string;
+  // imagePath?: string;
   songs: Song[];
 }
 
-const PlaylistPageContent: React.FC<PlaylistPageContentProps> = ({
+const PlaylistPageContent: React.FC<PlaylistPageContentProps> = async ({
   playlistId,
   playlistTitle,
   songs,
+  // imagePath,
 }) => {
+  // const imageUrl = imagePath ? useLoadImage(imagePath) : "/default-image-path";
   return (
     <div className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
       <Header>
@@ -25,7 +28,7 @@ const PlaylistPageContent: React.FC<PlaylistPageContentProps> = ({
             <div className="relative h-32 w-32 lg:h-44 lg:w-44">
               <Image
                 fill
-                src="/images/playlist.png"
+                src={"/images/playlist.png"}
                 alt="Playlist"
                 className="object-cover"
               />

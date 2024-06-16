@@ -4,13 +4,14 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import { Playlist } from "@/types";
-import useLoadImage from "@/hooks/useLoadImage";
+import useLoadImages from "@/hooks/useLoadImages";
 
 interface PlaylistContentProps {
   playlists: Playlist[];
 }
 
 const PlaylistContent = ({ playlists }: PlaylistContentProps) => {
+  const imageUrl = useLoadImages(playlists);
   const router = useRouter();
   if (playlists.length === 0) {
     return (
@@ -22,7 +23,7 @@ const PlaylistContent = ({ playlists }: PlaylistContentProps) => {
 
   return (
     <div className="flex flex-col gap-y-2 w-full px-6">
-      {playlists.map((playlist) => {
+      {playlists.map((playlist, index) => {
         return (
           <div
             key={playlist.id}
@@ -38,7 +39,7 @@ const PlaylistContent = ({ playlists }: PlaylistContentProps) => {
             <div className="relative rounded-md overflow-hidden min-h-[48px] min-w-[48px]">
               <Image
                 fill
-                src={"/images/playlist.png"}
+                src={imageUrl[index] || "/images/playlist.png"}
                 alt="PlaylistItem"
                 className="object-cover"
               />
