@@ -36,7 +36,7 @@ const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
       <div className="relative aspect-square w-full h-full rounded-md overflow-hidden">
         <Image
           className="object-cover w-full h-full"
-          src={imagePath || "/images/liked.png"}
+          src={imagePath || "/images/wait.jpg"}
           fill
           alt="Image"
           onClick={() => onClick(data.id)}
