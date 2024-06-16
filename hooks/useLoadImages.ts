@@ -10,7 +10,7 @@ const useLoadImages = (data: Song[] | Playlist[]) => {
     const fetchImageUrls = async () => {
       const urls = await Promise.all(
         data.map(async (data) => {
-          if (!data.image_path) return ""; // nullの代わりに空文字列を返す
+          if (!data.image_path) return "";
 
           const { data: imageData } = await supabaseClient.storage
             .from("images")
@@ -19,7 +19,7 @@ const useLoadImages = (data: Song[] | Playlist[]) => {
           return imageData.publicUrl;
         })
       );
-      setImageUrls(urls); // filterを除去
+      setImageUrls(urls);
     };
 
     fetchImageUrls();

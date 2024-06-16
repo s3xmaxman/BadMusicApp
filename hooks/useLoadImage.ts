@@ -1,26 +1,36 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Song } from "@/types";
-import { Playlist } from "@/types";
+import { useState, useEffect } from "react";
+import { Song, Playlist } from "@/types";
 
-const useLoadImage = (data: Song | Playlist) => {
+const useLoadImage = (data: Song | Playlist | null) => {
   const supabaseClient = useSupabaseClient();
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
-  if (!data) {
-    return null;
-  }
+  useEffect(() => {
+    if (!data) {
+      setImageUrl(null);
+      return;
+    }
 
-  // Song と Playlist で image_path の有無を判定
-  const imagePath = "image_path" in data ? data.image_path : null;
+    const loadImage = async () => {
+      const imagePath = "image_path" in data ? data.image_path : null;
 
-  if (!imagePath) {
-    return null;
-  }
+      if (!imagePath) {
+        setImageUrl(null);
+        return;
+      }
 
-  const { data: imageData } = supabaseClient.storage
-    .from("images")
-    .getPublicUrl(imagePath);
+      const { data: imageData } = await supabaseClient.storage
+        .from("images")
+        .getPublicUrl(imagePath);
 
-  return imageData.publicUrl;
+      setImageUrl(imageData?.publicUrl || null);
+    };
+
+    loadImage();
+  }, [data, supabaseClient]);
+
+  return imageUrl;
 };
 
 export default useLoadImage;
