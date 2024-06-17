@@ -22,9 +22,10 @@ const Modal: React.FC<ModalProps> = ({
         <Dialog.Overlay
           className="
             bg-neutral-900/90 
-            backdrop-blur-sm 
+            backdrop-blur-xl 
             fixed 
             inset-0
+            z-10
           "
         />
         <Dialog.Content
@@ -32,7 +33,9 @@ const Modal: React.FC<ModalProps> = ({
             fixed 
             drop-shadow-md 
             border 
-            border-neutral-700 
+            bg-gradient-to-b 
+            from-gray-950 
+            to-black
             top-[50%] 
             left-[50%] 
             max-h-full 
@@ -48,6 +51,7 @@ const Modal: React.FC<ModalProps> = ({
             bg-neutral-800 
             p-[25px] 
             focus:outline-none
+            z-20
           "
         >
           <Dialog.Title

@@ -60,7 +60,6 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
     try {
       setIsLoading(true);
 
-      // Update song info in Supabase
       const { error } = await supabaseClient
         .from("songs")
         .update({
