@@ -2,6 +2,7 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import { AiFillHome, AiOutlineBars, AiOutlineSearch } from "react-icons/ai";
+import { FaHeart } from "react-icons/fa6";
 
 const MobileTabs = () => {
   const [activeTab, setActiveTab] = useState("home");
@@ -20,9 +21,9 @@ const MobileTabs = () => {
           }`}
         >
           <Link href="/">
-            <AiFillHome size={24} />
+            <AiFillHome size={22} />
           </Link>
-          <span className="text-xs mt-1">Home</span>
+          <span className="text-xs mt-1">ホーム</span>
         </button>
         <button
           onClick={() => handleTabClick("add")}
@@ -31,20 +32,31 @@ const MobileTabs = () => {
           }`}
         >
           <Link href="/search">
-            <AiOutlineSearch size={28} />
+            <AiOutlineSearch size={24} />
           </Link>
-          <span className="text-xs mt-1">Search</span>
+          <span className="text-xs mt-1">検索</span>
         </button>
         <button
-          onClick={() => handleTabClick("menu")}
+          onClick={() => handleTabClick("playlist")}
           className={`flex flex-col items-center text-white ${
-            activeTab === "menu" ? "active-tab" : ""
+            activeTab === "playlist" ? "active-tab" : ""
           }`}
         >
           <Link href="/playlist">
-            <AiOutlineBars size={24} />
+            <AiOutlineBars size={22} />
           </Link>
-          <span className="text-xs mt-1">Playlist</span>
+          <span className="text-xs mt-1">プレイリスト</span>
+        </button>
+        <button
+          onClick={() => handleTabClick("liked")}
+          className={`flex flex-col items-center text-white ${
+            activeTab === "liked" ? "active-tab" : ""
+          }`}
+        >
+          <Link href="/liked">
+            <FaHeart size={22} />
+          </Link>
+          <span className="text-xs mt-1">お気に入り</span>
         </button>
       </div>
     </div>
