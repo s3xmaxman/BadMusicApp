@@ -25,7 +25,7 @@ const RightSidebar = () => {
   }
 
   return (
-    <div className="scroll-container bg-gradient-to-b from-gray-900 to-black text-white p-4 h-full flex flex-col rounded-lg overflow-y-auto">
+    <div className="scroll-container bg-gradient-to-b from-gray-950 to-black  text-white p-4 h-full flex flex-col rounded-lg overflow-y-auto">
       <div className="relative w-full mt-4 aspect-square overflow-hidden rounded-xl">
         <BackgroundGradient className="relative aspect-square overflow-hidden rounded-xl ">
           <Image

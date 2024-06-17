@@ -53,7 +53,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   };
 
   return (
-    <div className="bg-gradient-to-b from-gray-900 to-black text-white px-4 md:px-10 lg:px-20 py-8">
+    <div className="bg-gradient-to-b from-gray-950 to-black text-white px-4 md:px-10 lg:px-20 py-8">
       <div className="flex flex-col lg:flex-row items-start gap-8">
         <div className="w-full lg:w-1/3 flex-shrink-0">
           <motion.div
