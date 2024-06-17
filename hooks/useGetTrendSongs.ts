@@ -1,3 +1,14 @@
+/**
+ * 指定された期間に基づいてトレンドの曲データを取得するReactカスタムフック。
+ *
+ * @param {("all" | "month" | "week" | "day")} period - 取得するトレンドデータの期間を指定。デフォルトは"all"。
+ * @returns {{ trends: Song[], isLoading: boolean, error: string | null }} - トレンドの曲データ、ローディング状態、エラー情報を含むオブジェクト。
+ *
+ * 制限事項:
+ * - トレンドデータは最大3曲まで取得される。
+ * - 期間が指定されていない場合、全期間のデータが取得される。
+ * - エラーが発生した場合、エラーメッセージが返される。
+ */
 "use client";
 import { Song } from "@/types";
 import dayjs from "dayjs";

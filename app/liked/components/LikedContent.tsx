@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 
 import { Song } from "@/types";
@@ -18,8 +18,8 @@ interface LikedContentProps {
 const LikedContent: React.FC<LikedContentProps> = ({ songs, playlistId }) => {
   const router = useRouter();
   const { isLoading, user } = useUser();
-
   const onPlay = useOnPlay(songs);
+  const displayedSongs = playlistId ? [...songs].reverse() : songs;
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -42,9 +42,10 @@ const LikedContent: React.FC<LikedContentProps> = ({ songs, playlistId }) => {
       </div>
     );
   }
+
   return (
     <div className="flex flex-col gap-y-2 w-full p-6">
-      {songs.map((song: any) => (
+      {displayedSongs.map((song: any) => (
         <div key={song.id} className="flex items-center gap-x-4 w-full">
           <div className="flex-1">
             <MediaItem onClick={(id: string) => onPlay(id)} data={song} />
