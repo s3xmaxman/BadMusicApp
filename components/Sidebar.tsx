@@ -11,6 +11,7 @@ import Library from "./Library";
 import { Playlist, Song } from "@/types";
 import usePlayer from "@/hooks/usePlayer";
 import { RiPlayListFill } from "react-icons/ri";
+import { FaHeart } from "react-icons/fa6";
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -41,12 +42,12 @@ const Sidebar: React.FC<SidebarProps> = ({ children, songs, playlists }) => {
         active: pathname === "/playlist",
         href: "/playlist",
       },
-      // {
-      //   icon: BiSearch,
-      //   label: "お気に入り",
-      //   active: pathname === "/liked",
-      //   href: "/liked",
-      // },
+      {
+        icon: FaHeart,
+        label: "お気に入り",
+        active: pathname === "/liked",
+        href: "/liked",
+      },
     ],
     [pathname]
   );
