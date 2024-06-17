@@ -8,7 +8,6 @@ const getPlaylists = async (): Promise<Playlist[]> => {
     cookies: cookies,
   });
 
-  // 現在のユーザーセッションを取得
   const {
     data: { session },
   } = await supabase.auth.getSession();
