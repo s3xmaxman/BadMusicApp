@@ -18,14 +18,32 @@ interface PlaylistMenuProps {
   playlists: Playlist[];
   songId: string;
 }
-
+/**
+ * プレイリストに追加するドロップダウンメニューコンポーネント
+ *
+ * @param playlists プレイリストの配列
+ * @param songId 曲のID
+ */
 const AddPlaylist: React.FC<PlaylistMenuProps> = ({ playlists, songId }) => {
   const { supabaseClient } = useSessionContext();
   const { user } = useUser();
+  /**
+   * プレイリストに曲が追加済みかどうかを保持する状態
+   *
+   * @type {Record<string, boolean>}
+   */
   const [isAdded, setIsAdded] = useState<Record<string, boolean>>({});
   const authModal = useAuthModal();
   const { song } = useGetSongById(songId);
 
+  /**
+   * プレイリストに曲が追加済みかどうかを判定する
+   *
+   * @param songId 曲のID
+   * @param playlists プレイリストの配列
+   * @param supabaseClient Supabaseクライアント
+   * @param userId ユーザーID
+   */
   useEffect(() => {
     const fetchAddedSongs = async () => {
       if (!user?.id) {
@@ -57,6 +75,11 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({ playlists, songId }) => {
     fetchAddedSongs();
   }, [songId, playlists, supabaseClient, user?.id]);
 
+  /**
+   * プレイリストに曲をを追加する
+   *
+   * @param playlistId プレイリストのID
+   */
   const handleAddToPlaylist = async (playlistId: string) => {
     if (!user) {
       console.log("User not found, opening auth modal");
