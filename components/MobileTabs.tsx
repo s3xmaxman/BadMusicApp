@@ -13,7 +13,7 @@ const MobileTabs = () => {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 h-[70px] bg-black flex items-center justify-center z-50">
-      <div className="flex space-x-20">
+      <div className="flex space-x-12">
         <button
           onClick={() => handleTabClick("home")}
           className={`flex flex-col items-center text-white ${
@@ -23,7 +23,7 @@ const MobileTabs = () => {
           <Link href="/">
             <AiFillHome size={22} />
           </Link>
-          <span className="text-xs mt-1">ホーム</span>
+          <span className="text-[10px] mt-3">ホーム</span>
         </button>
         <button
           onClick={() => handleTabClick("add")}
@@ -34,7 +34,7 @@ const MobileTabs = () => {
           <Link href="/search">
             <AiOutlineSearch size={24} />
           </Link>
-          <span className="text-xs mt-1">検索</span>
+          <span className="text-[10px] mt-3">検索</span>
         </button>
         <button
           onClick={() => handleTabClick("playlist")}
@@ -45,7 +45,7 @@ const MobileTabs = () => {
           <Link href="/playlist">
             <AiOutlineBars size={22} />
           </Link>
-          <span className="text-xs mt-1">プレイリスト</span>
+          <span className="text-[10px] mt-3">プレイリスト</span>
         </button>
         <button
           onClick={() => handleTabClick("liked")}
@@ -56,7 +56,7 @@ const MobileTabs = () => {
           <Link href="/liked">
             <FaHeart size={22} />
           </Link>
-          <span className="text-xs mt-1">お気に入り</span>
+          <span className="text-[10px] mt-3">お気に入り</span>
         </button>
       </div>
     </div>
