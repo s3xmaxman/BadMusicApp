@@ -9,6 +9,7 @@ export interface Song {
   image_path: string;
   genre?: string;
   count?: string;
+  like_count?: string;
   lyrics?: string;
 }
 

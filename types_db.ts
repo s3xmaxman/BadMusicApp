@@ -236,6 +236,7 @@ export interface Database {
           user_id: string | null;
           genre?: string | null;
           count?: number | null;
+          like_count?: number | null;
           lyrics?: string | null;
         };
         Insert: {
@@ -248,6 +249,7 @@ export interface Database {
           user_id?: string | null;
           genre?: string | null;
           count?: number | null;
+          like_count?: number | null;
           lyrics?: string | null;
         };
         Update: {
@@ -260,6 +262,7 @@ export interface Database {
           user_id?: string | null;
           genre?: string | null;
           count?: number | null;
+          like_count?: number | null;
           lyrics?: string | null;
         };
         Relationships: [
