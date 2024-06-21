@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { FaPlay, FaRandom } from "react-icons/fa";
+import { FaRandom } from "react-icons/fa";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { BsRepeat1 } from "react-icons/bs";

@@ -4,7 +4,6 @@ import useLoadImage from "@/hooks/useLoadImage";
 import { Song } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
-import PlayButton from "./PlayButton";
 import { CiHeart, CiPlay1 } from "react-icons/ci";
 
 interface SongItemProps {
@@ -54,11 +53,11 @@ const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
         <div className="flex items-center justify-end w-full">
           <div className="flex items-center">
             <CiPlay1 />
-            <div className="text-white ml-1">{data.count}</div>
+            <div className="text-white ml-1 text-[12px]">{data.count}</div>
           </div>
           <div className="flex items-center ml-2">
             <CiHeart />
-            <div className="text-white ml-1">{data.like_count}</div>
+            <div className="text-white ml-1 text-[12px]">{data.like_count}</div>
           </div>
         </div>
       </div>
