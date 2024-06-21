@@ -56,9 +56,6 @@ const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
           <div className="text-white ml-1">{data.count}</div>
         </div>
       </div>
-      <div className="absolute bottom-35 right-5">
-        <PlayButton />
-      </div>
     </div>
   );
 };
