@@ -138,7 +138,7 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
               isRepeating ? "text-[#4c1d95]" : "text-neutral-400"
             }`}
           />
-          <div className="absolute bottom-2 right-2 flex items-center space-x-2">
+          <div className="absolute bottom-6 right-2 flex items-center space-x-2">
             <div className="flex items-center space-x-1.5">
               <CiPlay1 size={14} className="text-white" />
               <span className="text-white">{song.count}</span>
