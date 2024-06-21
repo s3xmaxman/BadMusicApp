@@ -52,11 +52,11 @@ const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
         </p>
         <div className="flex items-center justify-end w-full">
           <div className="flex items-center">
-            <CiPlay1 />
+            <CiPlay1 size={12} />
             <div className="text-white ml-1 text-[12px]">{data.count}</div>
           </div>
           <div className="flex items-center ml-2">
-            <CiHeart />
+            <CiHeart size={12} />
             <div className="text-white ml-1 text-[12px]">{data.like_count}</div>
           </div>
         </div>
