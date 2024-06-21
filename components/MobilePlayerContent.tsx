@@ -11,6 +11,7 @@ import LikeButton from "./LikeButton";
 import AddPlaylist from "./AddPlaylist";
 import { BackgroundGradient } from "./ui/background-gradient";
 import Link from "next/link";
+import { CiHeart, CiPlay1 } from "react-icons/ci";
 
 interface MobilePlayerContentProps {
   song: Song;
@@ -87,8 +88,6 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
             <p className="text-gray-400 text-base mt-2">{song.author}</p>
           </div>
           <div className="flex items-center space-x-4">
-            <FaPlay size={13} />
-            <span>{song.count}</span>
             <AddPlaylist playlists={playlists} songId={song.id} />
             <LikeButton songId={song.id} />
           </div>
@@ -139,6 +138,16 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
               isRepeating ? "text-[#4c1d95]" : "text-neutral-400"
             }`}
           />
+          <div className="absolute bottom-2 right-2 flex items-center space-x-2">
+            <div className="flex items-center space-x-1.5">
+              <CiPlay1 size={14} className="text-white" />
+              <span className="text-white">{song.count}</span>
+            </div>
+            <div className="flex items-center space-x-1.5">
+              <CiHeart size={14} className="text-white" />
+              <span className="text-white">{song.like_count}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
