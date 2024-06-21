@@ -5,7 +5,7 @@ import { Song } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import PlayButton from "./PlayButton";
-import { CiPlay1 } from "react-icons/ci";
+import { CiHeart, CiPlay1 } from "react-icons/ci";
 
 interface SongItemProps {
   onClick: (id: string) => void;
@@ -51,9 +51,15 @@ const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
         <p className="text-neutral-400 text-sm pb-4 w-full truncate">
           {data.author}
         </p>
-        <div className="flex items-center self-end">
-          <CiPlay1 />
-          <div className="text-white ml-1">{data.count}</div>
+        <div className="flex items-center justify-end w-full">
+          <div className="flex items-center">
+            <CiPlay1 />
+            <div className="text-white ml-1">{data.count}</div>
+          </div>
+          <div className="flex items-center ml-2">
+            <CiHeart />
+            <div className="text-white ml-1">{data.like_count}</div>
+          </div>
         </div>
       </div>
     </div>

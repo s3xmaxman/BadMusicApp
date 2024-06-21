@@ -82,7 +82,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
               <CiHeart />
             </button>
             <span className="text-white opacity-70 hover:opacity-100 transition duration-300">
-              {song?.count}
+              {song?.like_count}
             </span>
           </div>
         </div>

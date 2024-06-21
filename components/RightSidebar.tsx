@@ -84,6 +84,7 @@ const RightSidebar = () => {
             <FaPlay size={13} />
             <span>{song.count}</span>
             <LikeButton songId={song.id} size={18} />
+            <span>{song.like_count}</span>
           </div>
         </div>
       </div>
