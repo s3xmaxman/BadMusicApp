@@ -72,11 +72,17 @@ export const sanitizeTitle = (title: string) => {
 
 const MAX_CACHE_SIZE = 500 * 1024 * 1024; // 500MB
 
+/**
+ * キャッシュのサイズを管理し、上限を超えた場合に古いエントリを削除する関数。
+ * @param {Cache} cache - 管理対象のキャッシュオブジェクト。
+ */
 export async function manageCacheSize(cache: Cache) {
+  // キャッシュの全てのキーを取得
   const keys = await cache.keys();
   let cacheSize = 0;
   const cacheEntries: { key: Request; size: number; date: Date }[] = [];
 
+  // 各キーに対応するキャッシュエントリを処理
   for (const key of keys) {
     const response = await cache.match(key);
     if (response) {
@@ -87,6 +93,7 @@ export async function manageCacheSize(cache: Cache) {
     }
   }
 
+  // キャッシュサイズが上限を超えている場合、古いエントリを削除
   if (cacheSize > MAX_CACHE_SIZE) {
     console.log(
       "キャッシュサイズが上限を超えています。古いエントリを削除します。"
