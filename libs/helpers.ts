@@ -69,3 +69,40 @@ export const sanitizeTitle = (title: string) => {
     return generateRandomString(10);
   }
 };
+
+const MAX_CACHE_SIZE = 500 * 1024 * 1024; // 500MB
+
+export async function manageCacheSize(cache: Cache) {
+  const keys = await cache.keys();
+  let cacheSize = 0;
+  const cacheEntries: { key: Request; size: number; date: Date }[] = [];
+
+  for (const key of keys) {
+    const response = await cache.match(key);
+    if (response) {
+      const blob = await response.clone().blob();
+      cacheSize += blob.size;
+      const cacheDate = new Date(response.headers.get("x-cache-date") || "");
+      cacheEntries.push({ key, size: blob.size, date: cacheDate });
+    }
+  }
+
+  if (cacheSize > MAX_CACHE_SIZE) {
+    console.log(
+      "キャッシュサイズが上限を超えています。古いエントリを削除します。"
+    );
+    cacheEntries.sort((a, b) => a.date.getTime() - b.date.getTime());
+
+    while (cacheSize > MAX_CACHE_SIZE && cacheEntries.length > 0) {
+      const oldestEntry = cacheEntries.shift();
+      if (oldestEntry) {
+        await cache.delete(oldestEntry.key);
+        cacheSize -= oldestEntry.size;
+        console.log(
+          "キャッシュからエントリを削除しました:",
+          oldestEntry.key.url
+        );
+      }
+    }
+  }
+}

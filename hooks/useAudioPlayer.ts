@@ -1,3 +1,180 @@
+// import { useEffect, useState, useRef, useMemo } from "react";
+// import usePlayer from "@/hooks/usePlayer";
+// import { isMobile } from "react-device-detect";
+// import { BsPauseFill, BsPlayFill } from "react-icons/bs";
+// import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
+
+// const useAudioPlayer = (songUrl: string) => {
+//   const player = usePlayer();
+//   const [currentTime, setCurrentTime] = useState(0);
+//   const [duration, setDuration] = useState(0);
+//   const [isPlaying, setIsPlaying] = useState(false);
+//   const [volume, setVolume] = useState(isMobile ? 1 : 0.1);
+//   const audioRef = useRef<HTMLAudioElement>(null);
+//   const isRepeating = usePlayer((state) => state.isRepeating);
+//   const isShuffling = usePlayer((state) => state.isShuffling);
+//   const isLoading = usePlayer((state) => state.isLoading);
+//   const setIsLoading = usePlayer((state) => state.setIsLoading);
+
+//   const Icon = isPlaying ? BsPauseFill : BsPlayFill;
+//   const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
+
+//   const handlePlay = () => {
+//     if (audioRef.current) {
+//       if (isPlaying) {
+//         audioRef.current.pause();
+//       } else {
+//         audioRef.current.play();
+//       }
+//       setIsPlaying(!isPlaying);
+//     }
+//   };
+
+//   const handleSeek = (time: number) => {
+//     if (audioRef.current) {
+//       audioRef.current.currentTime = time;
+//       setCurrentTime(time);
+//     }
+//   };
+
+//   const onPlayNext = () => {
+//     if (isRepeating) {
+//       player.toggleRepeat();
+//     }
+
+//     const nextSongId = player.getNextSongId();
+//     if (nextSongId) {
+//       player.setId(nextSongId);
+//     }
+//   };
+
+//   const onPlayPrevious = () => {
+//     if (isRepeating) {
+//       if (audioRef.current) {
+//         audioRef.current.currentTime = 0;
+//       }
+//     } else {
+//       const prevSongId = player.getPreviousSongId();
+//       if (prevSongId) {
+//         player.setId(prevSongId);
+//       }
+//     }
+//   };
+
+//   const toggleRepeat = () => {
+//     player.toggleRepeat();
+//   };
+
+//   const toggleShuffle = () => {
+//     player.toggleShuffle();
+//   };
+
+//   const toggleMute = () => {
+//     setVolume(volume === 0 ? 0.1 : 0);
+//   };
+
+//   useEffect(() => {
+//     const audio = audioRef.current;
+//     if (!audio || !songUrl) return;
+
+//     const playAudio = async () => {
+//       try {
+//         audio.src = songUrl;
+//         await audio.load();
+//         if (isLoading) {
+//           await audio.play();
+//           setIsPlaying(true);
+//           setIsLoading(false);
+//         }
+//       } catch (error) {
+//         console.error("Error loading audio:", error);
+//         setIsLoading(false);
+//       }
+//     };
+
+//     playAudio();
+//   }, [songUrl, isLoading, setIsLoading]);
+
+//   useEffect(() => {
+//     const audio = audioRef.current;
+//     if (!audio) return;
+
+//     const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
+//     const handleLoadedMetadata = () => setDuration(audio.duration);
+//     const handleEnded = () => {
+//       if (isRepeating) {
+//         audio.currentTime = 0;
+//         audio.play();
+//       } else {
+//         onPlayNext();
+//       }
+//     };
+//     const handlePlay = () => setIsPlaying(true);
+//     const handlePause = () => setIsPlaying(false);
+
+//     audio.addEventListener("timeupdate", handleTimeUpdate);
+//     audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+//     audio.addEventListener("ended", handleEnded);
+//     audio.addEventListener("play", handlePlay);
+//     audio.addEventListener("pause", handlePause);
+
+//     return () => {
+//       audio.removeEventListener("timeupdate", handleTimeUpdate);
+//       audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+//       audio.removeEventListener("ended", handleEnded);
+//       audio.removeEventListener("play", handlePlay);
+//       audio.removeEventListener("pause", handlePause);
+//     };
+//   }, [isRepeating, onPlayNext]);
+
+//   useEffect(() => {
+//     const audio = audioRef.current;
+//     if (!audio) return;
+//     audio.volume = volume;
+//   }, [volume]);
+
+//   const formatTime = useMemo(() => {
+//     return (time: number) => {
+//       const minutes = Math.floor(time / 60);
+//       const seconds = Math.floor(time % 60);
+//       return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+//     };
+//   }, []);
+
+//   const formattedCurrentTime = useMemo(
+//     () => formatTime(currentTime),
+//     [currentTime, formatTime]
+//   );
+
+//   const formattedDuration = useMemo(
+//     () => formatTime(duration),
+//     [duration, formatTime]
+//   );
+
+//   return {
+//     Icon,
+//     VolumeIcon,
+//     formattedCurrentTime,
+//     formattedDuration,
+//     toggleMute,
+//     volume,
+//     setVolume,
+//     audioRef,
+//     currentTime,
+//     duration,
+//     isPlaying,
+//     isRepeating,
+//     isShuffling,
+//     handlePlay,
+//     handleSeek,
+//     onPlayNext,
+//     onPlayPrevious,
+//     toggleRepeat,
+//     toggleShuffle,
+//   };
+// };
+
+// export default useAudioPlayer;
 // useAudioPlayer.ts
 import { useEffect, useState, useRef, useMemo } from "react";
 import usePlayer from "@/hooks/usePlayer";

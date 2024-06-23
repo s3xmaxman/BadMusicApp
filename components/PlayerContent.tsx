@@ -13,6 +13,8 @@ import useLoadImage from "@/hooks/useLoadImage";
 import MobilePlayerContent from "./MobilePlayerContent";
 import AddPlaylist from "./AddPlaylist";
 import useAudioPlayer from "@/hooks/useAudioPlayer";
+import { useEffect } from "react";
+import useLoadSongUrl from "@/hooks/useLoadSongUrl";
 
 interface PlayerContentProps {
   song: Song;
@@ -24,12 +26,12 @@ interface PlayerContentProps {
 
 const PlayerContent: React.FC<PlayerContentProps> = ({
   song,
-  songUrl,
   isMobilePlayer,
   toggleMobilePlayer,
   playlists,
 }) => {
   const imageUrl = useLoadImage(song);
+  const songUrl = useLoadSongUrl(song);
   const {
     Icon,
     VolumeIcon,
@@ -51,6 +53,12 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     toggleRepeat,
     toggleShuffle,
   } = useAudioPlayer(songUrl);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.src = songUrl;
+    }
+  }, [songUrl]);
 
   return (
     <>

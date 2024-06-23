@@ -6,6 +6,7 @@ interface PlayerStore {
   isRepeating: boolean;
   isShuffling: boolean;
   shuffledIds: string[];
+  isLoading: boolean;
   setId: (id: string) => void;
   setIds: (ids: string[]) => void;
   toggleRepeat: () => void;
@@ -13,6 +14,8 @@ interface PlayerStore {
   reset: () => void;
   getNextSongId: () => string | undefined;
   getPreviousSongId: () => string | undefined;
+  setIsLoading: (isLoading: boolean) => void;
+  play: () => void;
 }
 
 const usePlayer = create<PlayerStore>((set, get) => ({
@@ -20,7 +23,8 @@ const usePlayer = create<PlayerStore>((set, get) => ({
   activeId: undefined,
   isRepeating: false,
   isShuffling: false,
-  shuffledIds: [] as string[],
+  shuffledIds: [],
+  isLoading: false,
   setId: (id: string) => set({ activeId: id }),
   setIds: (ids: string[]) => set({ ids }),
   toggleRepeat: () => set((state) => ({ isRepeating: !state.isRepeating })),
@@ -28,7 +32,6 @@ const usePlayer = create<PlayerStore>((set, get) => ({
     set((state) => {
       let newShuffledIds = [...state.ids];
       if (!state.isShuffling) {
-        // シャッフルが有効になった時にのみシャッフルする
         for (let i = newShuffledIds.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           [newShuffledIds[i], newShuffledIds[j]] = [
@@ -48,6 +51,7 @@ const usePlayer = create<PlayerStore>((set, get) => ({
       activeId: undefined,
       isRepeating: false,
       isShuffling: false,
+      isLoading: false,
     }),
   getNextSongId: () => {
     const { ids, activeId, isShuffling, isRepeating, shuffledIds } = get();
@@ -91,7 +95,7 @@ const usePlayer = create<PlayerStore>((set, get) => ({
 
     let prevIndex: number;
     if (isShuffling) {
-      prevIndex = (currentIndex + 1) % shuffledIds.length;
+      prevIndex = (currentIndex - 1 + shuffledIds.length) % shuffledIds.length;
       return shuffledIds[prevIndex];
     } else {
       prevIndex = (currentIndex - 1 + ids.length) % ids.length;
@@ -99,6 +103,8 @@ const usePlayer = create<PlayerStore>((set, get) => ({
 
     return ids[prevIndex];
   },
+  setIsLoading: (isLoading: boolean) => set({ isLoading }),
+  play: () => set({ isLoading: true }),
 }));
 
 export default usePlayer;

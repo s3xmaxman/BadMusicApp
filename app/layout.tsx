@@ -10,6 +10,7 @@ import Player from "@/components/Player";
 import getActiveProductsWithPrices from "@/actions/getActiveProductsWithPrices";
 import getPlaylists from "@/actions/getPlaylists";
 import getSongs from "@/actions/getSongs";
+import ServiceWorkerProvider from "@/providers/ServiceWorkerProvider";
 
 const font = Figtree({ subsets: ["latin"] });
 
