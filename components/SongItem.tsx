@@ -4,6 +4,7 @@ import useLoadImage from "@/hooks/useLoadImage";
 import { Song } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { CiHeart, CiPlay1 } from "react-icons/ci";
 
 interface SongItemProps {
@@ -13,6 +14,7 @@ interface SongItemProps {
 
 const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
   const imagePath = useLoadImage(data);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
   return (
     <div
       className="
@@ -33,11 +35,17 @@ const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
         "
     >
       <div className="relative aspect-square w-full h-full rounded-md overflow-hidden">
+        {!isImageLoaded && (
+          <div className="absolute inset-0 bg-gray-300 animate-pulse"></div>
+        )}
         <Image
-          className="object-cover w-full h-full"
+          className={`object-cover w-full h-full transition-opacity duration-300 ${
+            isImageLoaded ? "opacity-100" : "opacity-0"
+          }`}
           src={imagePath || "/images/wait.jpg"}
           fill
           alt="Image"
+          onLoadingComplete={() => setIsImageLoaded(true)}
           onClick={() => onClick(data.id)}
         />
       </div>

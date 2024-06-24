@@ -6,6 +6,7 @@ import useLoadImage from "@/hooks/useLoadImage";
 import { Playlist, Song } from "@/types";
 import usePlayer from "@/hooks/usePlayer";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface MediaItemProps {
   data: Song | Playlist;
@@ -16,6 +17,7 @@ const MediaItem: React.FC<MediaItemProps> = ({ data, onClick }) => {
   const player = usePlayer();
   const imageUrl = useLoadImage(data);
   const router = useRouter();
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   const handleClick = () => {
     if (onClick) {
@@ -33,11 +35,17 @@ const MediaItem: React.FC<MediaItemProps> = ({ data, onClick }) => {
       className="flex items-center gap-x-3 cursor-pointer hover:bg-neutral-800/50 p-2 rounded-md"
     >
       <div className="relative rounded-md overflow-hidden min-h-[48px] min-w-[48px]">
+        {!isImageLoaded && (
+          <div className="absolute inset-0 bg-gray-300 animate-pulse"></div>
+        )}
         <Image
           fill
-          src={imageUrl || "/images/playlist.png"}
+          src={imageUrl || ""}
           alt="MediaItem"
-          className="object-cover"
+          className={`object-cover transition-opacity duration-300 ${
+            isImageLoaded ? "opacity-100" : "opacity-0"
+          }`}
+          onLoadingComplete={() => setIsImageLoaded(true)}
         />
       </div>
       <div className="flex flex-col gap-y-1 overflow-hidden w-[70%]">
