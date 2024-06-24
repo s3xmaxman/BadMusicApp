@@ -16,11 +16,15 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useState, useEffect } from "react";
 
 const useGetTrendSongs = (period: "all" | "month" | "week" | "day" = "all") => {
+  // トレンドの曲データを保持するステート
   const [trends, setTrends] = useState<Song[]>([]);
+  // ローディング状態を保持するステート
   const [isLoading, setIsLoading] = useState(false);
+  // エラー情報を保持するステート
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // トレンドデータを取得する非同期関数
     const fetchTrends = async () => {
       setIsLoading(true);
       setError(null);
@@ -30,6 +34,7 @@ const useGetTrendSongs = (period: "all" | "month" | "week" | "day" = "all") => {
 
         let query = supabase.from("songs").select("*");
 
+        // 指定された期間に基づいてデータをフィルタリング
         switch (period) {
           case "month":
             query = query.filter(
@@ -56,6 +61,7 @@ const useGetTrendSongs = (period: "all" | "month" | "week" | "day" = "all") => {
             break;
         }
 
+        // データを取得し、カウントの降順でソートし、最大3曲まで取得
         const { data, error } = await query
           .order("count", { ascending: false })
           .limit(3);
