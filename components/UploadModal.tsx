@@ -45,7 +45,6 @@ const UploadModal = () => {
 
   const handleGenreChange = (genres: string[]) => {
     setSelectedGenres(genres);
-    console.log("選択されたジャンル:", genres);
   };
 
   const onSubmit: SubmitHandler<FieldValues> = async (values) => {
