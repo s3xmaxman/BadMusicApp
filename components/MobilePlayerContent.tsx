@@ -10,7 +10,6 @@ import { RiCloseLine } from "react-icons/ri";
 import LikeButton from "./LikeButton";
 import AddPlaylist from "./AddPlaylist";
 import { BackgroundGradient } from "./ui/background-gradient";
-import Link from "next/link";
 
 interface MobilePlayerContentProps {
   song: Song;
@@ -69,7 +68,7 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
       />
       <div className="w-full max-w-sm flex flex-col items-center justify-between h-full">
         <div
-          className="flip-container w-full aspect-square perspective-1000 cursor-pointer mb-4"
+          className="flip-container w-full aspect-square perspective-1000 cursor-pointer mb-4 mt-16"
           onClick={toggleLyrics}
         >
           <div
@@ -78,20 +77,22 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
             }`}
           >
             <div className="front absolute w-full h-full backface-hidden">
-              <BackgroundGradient className="relative aspect-square overflow-hidden rounded-2xl">
-                <Image
-                  src={imageUrl || "/images/music-placeholder.png"}
-                  alt={song.title}
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-2xl"
-                />
-              </BackgroundGradient>
+              {!showLyrics && (
+                <BackgroundGradient className="relative aspect-square overflow-hidden rounded-2xl">
+                  <Image
+                    src={imageUrl || "/images/music-placeholder.png"}
+                    alt={song.title}
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-2xl"
+                  />
+                </BackgroundGradient>
+              )}
             </div>
-            <div className="back absolute w-full h-full backface-hidden rotate-y-180 bg-gray-800 rounded-2xl p-6 overflow-y-auto">
+            <div className="back absolute w-full h-full backface-hidden rotate-y-180 bg-gradient-to-b from-gray-900 to-black rounded-2xl p-6 overflow-y-auto">
               <h2 className="text-2xl font-bold mb-4">{song.title}</h2>
               <p className="text-gray-400 mb-4">{song.author}</p>
-              <div className="lyrics-content text-sm leading-relaxed">
+              <div className="text-sm leading-relaxed overflow-y-auto">
                 {song.lyrics?.split("\n").map((line, index) => (
                   <p key={index} className="mb-2">
                     {line}
@@ -105,6 +106,7 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
           <div className="flex justify-between items-center mb-4">
             <div>
               <h1 className="text-xl font-bold">{song.title}</h1>
+              <p className="text-sm text-gray-400">#{song.genre}</p>
               <p className="text-sm text-gray-400">{song.author}</p>
             </div>
             <div className="flex items-center space-x-4">
