@@ -26,7 +26,7 @@ const MediaItem: React.FC<MediaItemProps> = ({ data, onClick }) => {
       player.setId(data.id);
     } else if (data.id) {
       router.push(
-        `/playlist/${data.id}?title=${encodeURIComponent(data.title)}`
+        `/playlists/${data.id}?title=${encodeURIComponent(data.title)}`
       );
     }
   };

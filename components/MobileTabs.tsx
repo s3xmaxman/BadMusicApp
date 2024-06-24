@@ -42,7 +42,7 @@ const MobileTabs = () => {
             activeTab === "playlist" ? "active-tab" : ""
           }`}
         >
-          <Link href="/playlist">
+          <Link href="/playlists">
             <AiOutlineBars size={22} />
           </Link>
           <span className="text-[10px] mt-3">プレイリスト</span>

@@ -30,7 +30,7 @@ const PlaylistContent = ({ playlists }: PlaylistContentProps) => {
             className="flex items-center gap-x-3 cursor-pointer hover:bg-neutral-800/50 p-2 rounded-md"
             onClick={() =>
               router.push(
-                `/playlist/${playlist.id}?title=${encodeURIComponent(
+                `/playlists/${playlist.id}?title=${encodeURIComponent(
                   playlist.title
                 )}`
               )

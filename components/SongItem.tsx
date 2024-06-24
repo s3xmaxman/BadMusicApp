@@ -42,7 +42,7 @@ const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
           className={`object-cover w-full h-full transition-opacity duration-300 ${
             isImageLoaded ? "opacity-100" : "opacity-0"
           }`}
-          src={imagePath || ""}
+          src={imagePath || "/images/wait.jpg"}
           fill
           alt="Image"
           onLoadingComplete={() => setIsImageLoaded(true)}
