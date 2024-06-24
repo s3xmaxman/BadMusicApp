@@ -25,7 +25,9 @@ const MediaItem: React.FC<MediaItemProps> = ({ data, onClick }) => {
     } else if ("author" in data && data.id) {
       player.setId(data.id);
     } else if (data.id) {
-      router.push(`/playlist/${data.id}`);
+      router.push(
+        `/playlist/${data.id}?title=${encodeURIComponent(data.title)}`
+      );
     }
   };
 
@@ -40,7 +42,7 @@ const MediaItem: React.FC<MediaItemProps> = ({ data, onClick }) => {
         )}
         <Image
           fill
-          src={imageUrl || ""}
+          src={imageUrl || "/images/playlist.png"}
           alt="MediaItem"
           className={`object-cover transition-opacity duration-300 ${
             isImageLoaded ? "opacity-100" : "opacity-0"
