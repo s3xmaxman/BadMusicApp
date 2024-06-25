@@ -10,6 +10,7 @@ import { RiCloseLine } from "react-icons/ri";
 import LikeButton from "./LikeButton";
 import AddPlaylist from "./AddPlaylist";
 import { BackgroundGradient } from "./ui/background-gradient";
+import Link from "next/link";
 
 interface MobilePlayerContentProps {
   song: Song;
@@ -90,7 +91,11 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
               )}
             </div>
             <div className="back absolute w-full h-full backface-hidden rotate-y-180 bg-gradient-to-b from-gray-900 to-black rounded-2xl p-6 overflow-y-auto">
-              <h2 className="text-2xl font-bold mb-4">{song.title}</h2>
+              <Link href={`/songs/${song.id}`}>
+                <h2 className="cursor-pointer hover:underline text-2xl font-bold mb-4">
+                  {song.title}
+                </h2>
+              </Link>
               <p className="text-gray-400 mb-4">{song.author}</p>
               <div className="text-sm leading-relaxed overflow-y-auto">
                 {song.lyrics?.split("\n").map((line, index) => (
@@ -105,8 +110,23 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
         <div className="w-full">
           <div className="flex justify-between items-center mb-4">
             <div>
-              <h1 className="text-xl font-bold">{song.title}</h1>
-              <p className="text-sm text-gray-400">#{song.genre}</p>
+              <Link href={`/songs/${song.id}`}>
+                <h1 className="cursor-pointer hover:underline text-xl font-bold">
+                  {song.title}
+                </h1>
+              </Link>
+              {song?.genre
+                ?.split(", ")
+                .slice(0, 2)
+                .map((g) => (
+                  <Link
+                    key={g}
+                    className="ml-1 cursor-pointer hover:underline"
+                    href={`/genre/${g}`}
+                  >
+                    #{g}
+                  </Link>
+                ))}
               <p className="text-sm text-gray-400">{song.author}</p>
             </div>
             <div className="flex items-center space-x-4">
