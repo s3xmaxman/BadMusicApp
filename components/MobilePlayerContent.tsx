@@ -6,11 +6,12 @@ import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { BsRepeat1 } from "react-icons/bs";
 import SeekBar from "./Seekbar";
 import { Playlist, Song } from "@/types";
-import { RiCloseLine } from "react-icons/ri";
 import LikeButton from "./LikeButton";
 import AddPlaylist from "./AddPlaylist";
 import { BackgroundGradient } from "./ui/background-gradient";
 import Link from "next/link";
+import { useSpring, animated } from "@react-spring/web";
+import { useDrag } from "@use-gesture/react";
 
 interface MobilePlayerContentProps {
   song: Song;
@@ -60,13 +61,28 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
     setShowLyrics(!showLyrics);
   };
 
+  const [{ y }, api] = useSpring(() => ({ y: 0 }));
+
+  const bind = useDrag(
+    ({ down, movement: [mx, my], velocity }) => {
+      api.start({ y: down ? my : 0, immediate: down });
+      if (!down && my > 50) {
+        toggleMobilePlayer();
+      }
+    },
+    { axis: "y", bounds: { top: 0 } }
+  );
+
   return (
-    <div className="md:hidden fixed top-0 left-0 right-0 bottom-0 bg-gradient-to-b from-gray-900 to-black text-white px-4 py-6 flex flex-col items-center justify-between">
-      <RiCloseLine
-        size={25}
-        onClick={toggleMobilePlayer}
-        className="absolute top-4 left-4 cursor-pointer"
-      />
+    <animated.div
+      {...bind()}
+      style={{
+        y,
+        touchAction: "none",
+      }}
+      className="md:hidden fixed top-0 left-0 right-0 bottom-0 bg-gradient-to-b from-gray-900 to-black text-white px-4 py-6 flex flex-col items-center justify-between"
+    >
+      <div className="w-full h-1 bg-gray-700 rounded-full mb-4" />
       <div className="w-full max-w-sm flex flex-col items-center justify-between h-full">
         <div
           className="flip-container w-full aspect-square perspective-1000 cursor-pointer mb-4 mt-12"
@@ -178,7 +194,7 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
           </div>
         </div>
       </div>
-    </div>
+    </animated.div>
   );
 };
 
