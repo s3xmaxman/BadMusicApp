@@ -18,6 +18,7 @@ const genres = [
   "City Pop",
   "Electro",
   "Electro House",
+  "Chill House",
   "Tropical House",
   "Deep House",
   "Dance Pop",

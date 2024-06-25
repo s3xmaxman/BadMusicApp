@@ -68,7 +68,7 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
       />
       <div className="w-full max-w-sm flex flex-col items-center justify-between h-full">
         <div
-          className="flip-container w-full aspect-square perspective-1000 cursor-pointer mb-4 mt-16"
+          className="flip-container w-full aspect-square perspective-1000 cursor-pointer mb-4 mt-12"
           onClick={toggleLyrics}
         >
           <div
