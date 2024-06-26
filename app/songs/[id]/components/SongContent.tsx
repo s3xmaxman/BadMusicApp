@@ -71,7 +71,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
             onClick={() => onPlay(songId)}
           >
             <Image
-              src={imageUrl || "/images/placeholder.png"}
+              src={imageUrl || "/images/wait.jpg"}
               alt="Song Image"
               fill
               className="object-cover"

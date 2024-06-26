@@ -97,7 +97,7 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
               {!showLyrics && (
                 <BackgroundGradient className="relative aspect-square overflow-hidden rounded-2xl">
                   <Image
-                    src={imageUrl || "/images/music-placeholder.png"}
+                    src={imageUrl || "/images/wait.jpg"}
                     alt={song.title}
                     layout="fill"
                     objectFit="cover"
