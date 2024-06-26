@@ -10,7 +10,7 @@ interface HomeClientProps {
   songs: Song[];
 }
 
-export default function HomeContent({ songs }: HomeClientProps) {
+const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
 
   return (
@@ -50,4 +50,6 @@ export default function HomeContent({ songs }: HomeClientProps) {
       )}
     </div>
   );
-}
+};
+
+export default HomeContent;
