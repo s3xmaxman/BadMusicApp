@@ -44,7 +44,7 @@ const useLoadSongUrl = (song: Song) => {
 
           if (!response) {
             // キャッシュにない場合、曲をフェッチしてキャッシュ
-            console.log("曲をフェッチしてキャッシュします:", song.title);
+            // console.log("曲をフェッチしてキャッシュします:", song.title);
             response = await fetch(songData.publicUrl);
             const clonedResponse = response.clone();
 
@@ -59,17 +59,17 @@ const useLoadSongUrl = (song: Song) => {
             });
             await cache.put(songData.publicUrl, responseToCache);
           } else {
-            console.log("キャッシュから曲が見つかりました:", song.title);
+            // console.log("キャッシュから曲が見つかりました:", song.title);
             // キャッシュの有効期限をチェック
             const cacheDate = new Date(
               response.headers.get("x-cache-date") || ""
             );
             if (Date.now() - cacheDate.getTime() > CACHE_EXPIRATION) {
               // キャッシュが期限切れの場合、再フェッチ
-              console.log(
-                "キャッシュが期限切れです。再フェッチします:",
-                song.title
-              );
+              // console.log(
+              //   "キャッシュが期限切れです。再フェッチします:",
+              //   song.title
+              // );
               response = await fetch(songData.publicUrl);
               const clonedResponse = response.clone();
               await cache.put(songData.publicUrl, clonedResponse);
