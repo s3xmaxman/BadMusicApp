@@ -32,7 +32,7 @@ const LyricsDrawer: React.FC<LyricsDrawerProps> = ({
         color: "white",
         padding: "20px",
         overflowY: "auto",
-        touchAction: "none",
+        touchAction: "pan-y",
       }}
     >
       <div className="flex justify-between items-center mb-4">

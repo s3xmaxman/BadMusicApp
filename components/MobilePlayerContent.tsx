@@ -188,7 +188,7 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
       <LyricsDrawer
         showLyrics={showLyrics}
         toggleLyrics={toggleLyrics}
-        lyrics={song.lyrics || ""} // Assuming song.lyrics contains the lyrics
+        lyrics={song.lyrics || ""}
       />
     </animated.div>
   );
