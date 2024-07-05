@@ -99,10 +99,22 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
             <div className="flex justify-between items-end">
               <div>
                 <Link href={`/songs/${song.id}`}>
-                  <h1 className="text-2xl font-bold text-white drop-shadow-lg">
+                  <h1 className="text-2xl font-bold text-white drop-shadow-lg hover:underline">
                     {song.title}
                   </h1>
                 </Link>
+                {song?.genre
+                  ?.split(", ")
+                  .slice(0, 2)
+                  .map((g) => (
+                    <Link
+                      key={g}
+                      className="ml-1 cursor-pointer hover:underline"
+                      href={`/genre/${g}`}
+                    >
+                      #{g}
+                    </Link>
+                  ))}
                 <p className="text-lg text-gray-200 drop-shadow-lg">
                   {song.author}
                 </p>
