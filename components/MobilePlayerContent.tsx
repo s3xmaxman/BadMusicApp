@@ -142,7 +142,7 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
                 onClick={toggleShuffle}
                 size={20}
                 className={`cursor-pointer transition ${
-                  isShuffling ? "text-purple-500" : "text-gray-400"
+                  isShuffling ? "text-[#4c1d95]" : "text-gray-400"
                 }`}
               />
               <AiFillStepBackward
@@ -152,7 +152,7 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
               />
               <div
                 onClick={handlePlay}
-                className="flex items-center justify-center h-14 w-14 rounded-full bg-purple-600 cursor-pointer"
+                className="flex items-center justify-center h-14 w-14 rounded-full bg-[#4c1d95] cursor-pointer"
               >
                 <Icon size={24} className="text-white" />
               </div>
@@ -165,7 +165,7 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
                 onClick={toggleRepeat}
                 size={20}
                 className={`cursor-pointer transition ${
-                  isRepeating ? "text-purple-500" : "text-gray-400"
+                  isRepeating ? "text-[#4c1d95]" : "text-gray-400"
                 }`}
               />
             </div>
