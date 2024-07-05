@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { animated, useSpring } from "@react-spring/web";
-import { useDrag } from "@use-gesture/react";
 
 interface LyricsDrawerProps {
   showLyrics: boolean;
@@ -21,22 +20,16 @@ const LyricsDrawer: React.FC<LyricsDrawerProps> = ({
 
   return (
     <animated.div
+      className="fixed bottom-0 left-0 right-0 h-1/2 text-white p-5 overflow-y-auto touch-pan-y"
       style={{
         transform: y.to((value) => `translateY(${value}%)`),
-        position: "fixed",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        height: "50%",
-        backgroundColor: "rgba(0, 0, 0, 0.9)",
-        color: "white",
-        padding: "20px",
-        overflowY: "auto",
-        touchAction: "pan-y",
+        background:
+          "linear-gradient(to bottom, rgba(24, 24, 24, 0.8), rgba(0, 0, 0, 0.8))",
+        backdropFilter: "blur(10px)",
+        WebkitBackdropFilter: "blur(10px)",
       }}
     >
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold">歌詞</h2>
+      <div className="flex justify-end items-center mb-4">
         <button onClick={toggleLyrics} className="text-white">
           閉じる
         </button>
