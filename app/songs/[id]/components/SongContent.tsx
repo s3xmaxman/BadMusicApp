@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaPlay, FaHeart, FaShare, FaDownload, FaEdit } from "react-icons/fa";
 import Image from "next/image";
@@ -21,16 +21,19 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   const { song } = useGetSongById(songId);
   const { user } = useUser();
   const imageUrl = useLoadImage(song!);
-  const { songGenres } = useGetSongsByGenres(
-    song?.genre ? song.genre.split(",") : [],
-    songId
-  );
-  const imageUrls = useLoadImages(songGenres);
-  const { fileUrl, loading } = useDownload(song?.song_path!);
   const onPlay = useOnPlay([song!]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showLyrics, setShowLyrics] = useState(false);
+
+  const genres = useMemo(
+    () => song?.genre?.split(",").map((g) => g.trim()) || [],
+    [song?.genre]
+  );
+
+  const { songGenres } = useGetSongsByGenres(genres, songId);
+  const imageUrls = useLoadImages(songGenres);
+  const { fileUrl, loading } = useDownload(song?.song_path!);
 
   useEffect(() => {
     const timer = setTimeout(() => setShowLyrics(true), 500);
@@ -51,6 +54,8 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
     }
     setIsLoading(false);
   };
+
+  if (!song) return null;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 to-black text-white px-4 md:px-10 lg:px-20 py-12">
@@ -237,4 +242,4 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   );
 };
 
-export default SongContent;
+export default React.memo(SongContent);
