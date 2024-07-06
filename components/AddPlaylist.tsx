@@ -135,7 +135,7 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <RiPlayListAddFill size={20} />
+        {children || <RiPlayListAddFill size={20} />}
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         {playlists.map((playlist) => (

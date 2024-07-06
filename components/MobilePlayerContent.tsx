@@ -198,7 +198,7 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
               />
               <BsRepeat1
                 onClick={toggleRepeat}
-                size={22}
+                size={28}
                 className={`cursor-pointer transition ${
                   isRepeating ? "text-[#4c1d95]" : "text-gray-400"
                 }`}
