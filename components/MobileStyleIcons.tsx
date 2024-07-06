@@ -43,4 +43,6 @@ const MobileStyleIcons: React.FC<MobileStyleIconsProps> = memo(
   )
 );
 
+MobileStyleIcons.displayName = "MobileStyleIcons";
+
 export default MobileStyleIcons;
