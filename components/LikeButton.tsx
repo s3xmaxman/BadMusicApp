@@ -26,6 +26,8 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId, size }) => {
         return;
       }
 
+      setIsLiked(false);
+
       console.log("Fetching liked songs for user:", user.id);
 
       const { data, error } = await supabaseClient
