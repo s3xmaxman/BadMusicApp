@@ -17,6 +17,7 @@ import useGetSongById from "@/hooks/useGetSongById";
 interface PlaylistMenuProps {
   playlists: Playlist[];
   songId: string;
+  children?: React.ReactNode;
 }
 /**
  * プレイリストに追加するドロップダウンメニューコンポーネント
@@ -24,7 +25,11 @@ interface PlaylistMenuProps {
  * @param playlists プレイリストの配列
  * @param songId 曲のID
  */
-const AddPlaylist: React.FC<PlaylistMenuProps> = ({ playlists, songId }) => {
+const AddPlaylist: React.FC<PlaylistMenuProps> = ({
+  playlists,
+  songId,
+  children,
+}) => {
   const { supabaseClient } = useSessionContext();
   const { user } = useUser();
   /**

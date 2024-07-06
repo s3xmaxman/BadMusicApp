@@ -3,8 +3,8 @@ import Image from "next/image";
 import { FaRandom } from "react-icons/fa";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import { LiaMicrophoneAltSolid } from "react-icons/lia";
-import { BsPauseFill, BsPlayFill } from "react-icons/bs";
-import { BsRepeat1 } from "react-icons/bs";
+import { BsPauseFill, BsPlayFill, BsRepeat1 } from "react-icons/bs";
+import { RiPlayListAddFill } from "react-icons/ri";
 import SeekBar from "./Seekbar";
 import { Playlist, Song } from "@/types";
 import LikeButton from "./LikeButton";
@@ -76,6 +76,36 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
     { axis: "y", bounds: { top: 0 } }
   );
 
+  const MobileStyleIcons = () => (
+    <div className="flex flex-col items-center space-y-6">
+      <button
+        onClick={toggleLyrics}
+        className="flex flex-col items-center text-white"
+      >
+        <div className="w-12 h-12 bg-black bg-opacity-50 rounded-full flex items-center justify-center">
+          <LiaMicrophoneAltSolid size={24} />
+        </div>
+        <span className="text-xs mt-1">Lyrics</span>
+      </button>
+
+      <div className="flex flex-col items-center text-white">
+        <div className="w-12 h-12 bg-black bg-opacity-50 rounded-full flex items-center justify-center">
+          <AddPlaylist playlists={playlists} songId={song.id}>
+            <RiPlayListAddFill size={24} />
+          </AddPlaylist>
+        </div>
+        <span className="text-xs mt-1">Playlist</span>
+      </div>
+
+      <div className="flex flex-col items-center text-white">
+        <div className="w-12 h-12 bg-black bg-opacity-50 rounded-full flex items-center justify-center">
+          <LikeButton songId={song.id} size={24} />
+        </div>
+        <span className="text-xs mt-1">Like</span>
+      </div>
+    </div>
+  );
+
   return (
     <animated.div
       {...bind()}
@@ -125,15 +155,7 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
                   {song.author}
                 </p>
               </div>
-              <div className="flex flex-col items-center space-y-6">
-                <LiaMicrophoneAltSolid
-                  size={28}
-                  className="cursor-pointer"
-                  onClick={toggleLyrics}
-                />
-                <AddPlaylist playlists={playlists} songId={song.id} />
-                <LikeButton songId={song.id} />
-              </div>
+              <MobileStyleIcons />
             </div>
 
             <div className="space-y-2">
