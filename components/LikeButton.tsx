@@ -1,11 +1,3 @@
-/**
- * LikeButtonコンポーネントは、ユーザーが曲に「いいね」を付けるためのボタンを提供します。
- * ユーザーがログインしている場合、「いいね」の状態をトグルし、そうでない場合はログインモーダルを表示します。
- *
- * @param {string} songId - いいねを付ける曲のID
- * @param {number} [size] - アイコンのサイズ（デフォルトは25）
- */
-
 import useAuthModal from "@/hooks/useAuthModal";
 import { useUser } from "@/hooks/useUser";
 import { useSessionContext } from "@supabase/auth-helpers-react";
@@ -29,29 +21,29 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId, size }) => {
   const Icon = isLiked ? AiFillHeart : AiOutlineHeart;
 
   useEffect(() => {
-    /**
-     * ユーザーがログインしていない場合、何もしない
-     */
-    if (!user?.id) {
-      return;
-    }
-
-    setIsLiked(false);
-
-    /**
-     * ユーザーが曲にいいねを付けているかどうかをチェックする
-     */
     const fetchData = async () => {
+      if (!user?.id) {
+        return;
+      }
+
+      console.log("Fetching liked songs for user:", user.id);
+
       const { data, error } = await supabaseClient
         .from("liked_songs")
         .select("*")
         .eq("user_id", user.id)
         .eq("song_id", songId)
-        .single();
+        .maybeSingle();
 
-      if (!error && data) {
+      if (error) {
+        if (error.code !== "PGRST116") {
+          console.error("Error fetching liked songs:", error);
+        }
+      } else if (data) {
         setIsLiked(true);
       }
+
+      console.log("Finished fetching liked songs for user:", user.id);
     };
 
     fetchData();
@@ -65,35 +57,42 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId, size }) => {
       return authModal.onOpen();
     }
 
-    if (isLiked) {
-      const { error } = await supabaseClient
-        .from("liked_songs")
-        .delete()
-        .eq("user_id", user.id)
-        .eq("song_id", songId);
+    console.log("User is liking/unliking a song:", user.id, songId);
 
-      if (error) {
-        toast.error(error.message);
-      } else {
+    try {
+      if (isLiked) {
+        // いいねを取り消す
+        const { error } = await supabaseClient
+          .from("liked_songs")
+          .delete()
+          .eq("user_id", user.id)
+          .eq("song_id", songId);
+
+        if (error) {
+          throw error;
+        }
+
         setIsLiked(false);
-        updateLikeCount(songId, -1);
-      }
-    } else {
-      const { error } = await supabaseClient.from("liked_songs").insert({
-        song_id: songId,
-        user_id: user.id,
-      });
-
-      if (error) {
-        toast.error(error.message);
+        await updateLikeCount(songId, -1);
       } else {
-        setIsLiked(true);
-        toast.success("いいねしました！");
-        updateLikeCount(songId, 1);
-      }
-    }
+        // いいねを追加する
+        const { error } = await supabaseClient.from("liked_songs").insert({
+          song_id: songId,
+          user_id: user.id,
+        });
 
-    router.refresh();
+        if (error) {
+          throw error;
+        }
+
+        setIsLiked(true);
+        await updateLikeCount(songId, 1);
+        toast.success("いいねしました！");
+      }
+    } catch (error) {
+      console.error("Error liking/unliking song:", error);
+      toast.error("エラーが発生しました。もう一度お試しください。");
+    }
   };
 
   /**
@@ -102,32 +101,36 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId, size }) => {
    * @param {number} increment - いいね数の増減値
    */
   const updateLikeCount = async (songId: string, increment: number) => {
-    const { data, error } = await supabaseClient
-      .from("songs")
-      .select("like_count")
-      .eq("id", songId)
-      .single();
+    try {
+      const { data, error } = await supabaseClient
+        .from("songs")
+        .select("like_count")
+        .eq("id", songId)
+        .single();
 
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
+      if (error) {
+        throw error;
+      }
 
-    const newLikeCount = (data?.like_count || 0) + increment;
+      const newLikeCount = (data?.like_count || 0) + increment;
 
-    const { error: updateError } = await supabaseClient
-      .from("songs")
-      .update({ like_count: newLikeCount })
-      .eq("id", songId);
+      const { error: updateError } = await supabaseClient
+        .from("songs")
+        .update({ like_count: newLikeCount })
+        .eq("id", songId);
 
-    if (updateError) {
-      toast.error(updateError.message);
+      if (updateError) {
+        throw updateError;
+      }
+    } catch (error) {
+      console.error("Error updating like count:", error);
+      toast.error("エラーが発生しました。もう一度お試しください。");
     }
   };
 
   return (
     <button onClick={handleLike} className="hover:opacity-75 transition">
-      <Icon color={isLiked ? "#4c1d95" : "white"} size={size || 25} />
+      <Icon color={isLiked ? "#FF69B4" : "white"} size={size || 25} />
     </button>
   );
 };

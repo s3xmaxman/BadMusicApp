@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Image from "next/image";
 import { FaRandom } from "react-icons/fa";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
@@ -13,6 +13,7 @@ import Link from "next/link";
 import { useSpring, animated } from "@react-spring/web";
 import { useDrag } from "@use-gesture/react";
 import LyricsDrawer from "./LyricsDrawer";
+import MobileStyleIcons from "./MobileStyleIcons";
 
 interface MobilePlayerContentProps {
   song: Song;
@@ -35,7 +36,7 @@ interface MobilePlayerContentProps {
   onPlayPrevious: () => void;
 }
 
-const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
+const MobilePlayerContent = ({
   song,
   playlists,
   songUrl,
@@ -54,7 +55,7 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
   toggleMobilePlayer,
   onPlayNext,
   onPlayPrevious,
-}) => {
+}: MobilePlayerContentProps) => {
   const Icon = isPlaying ? BsPauseFill : BsPlayFill;
   const [showLyrics, setShowLyrics] = useState(false);
 
@@ -74,36 +75,6 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
       }
     },
     { axis: "y", bounds: { top: 0 } }
-  );
-
-  const MobileStyleIcons = () => (
-    <div className="flex flex-col items-center space-y-6">
-      <button
-        onClick={toggleLyrics}
-        className="flex flex-col items-center text-white"
-      >
-        <div className="w-12 h-12 bg-black bg-opacity-50 rounded-full flex items-center justify-center">
-          <LiaMicrophoneAltSolid size={24} />
-        </div>
-        <span className="text-xs mt-1">Lyrics</span>
-      </button>
-
-      <div className="flex flex-col items-center text-white">
-        <div className="w-12 h-12 bg-black bg-opacity-50 rounded-full flex items-center justify-center">
-          <AddPlaylist playlists={playlists} songId={song.id}>
-            <RiPlayListAddFill size={24} />
-          </AddPlaylist>
-        </div>
-        <span className="text-xs mt-1">Playlist</span>
-      </div>
-
-      <div className="flex flex-col items-center text-white">
-        <div className="w-12 h-12 bg-black bg-opacity-50 rounded-full flex items-center justify-center">
-          <LikeButton songId={song.id} size={24} />
-        </div>
-        <span className="text-xs mt-1">Like</span>
-      </div>
-    </div>
   );
 
   return (
@@ -133,11 +104,11 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
             <div className="flex justify-between items-end">
               <div className="max-w-[70%]">
                 <Link href={`/songs/${song.id}`}>
-                  <h1 className="text-3xl font-bold text-white drop-shadow-lg hover:underline truncate">
+                  <h1 className="text-4xl font-bold text-white drop-shadow-lg hover:underline truncate mb-4">
                     {song.title}
                   </h1>
                 </Link>
-                <div className="flex flex-wrap mt-1">
+                <div className="flex flex-wrap mb-1">
                   {song?.genre
                     ?.split(", ")
                     .slice(0, 2)
@@ -155,7 +126,11 @@ const MobilePlayerContent: React.FC<MobilePlayerContentProps> = ({
                   {song.author}
                 </p>
               </div>
-              <MobileStyleIcons />
+              <MobileStyleIcons
+                toggleLyrics={toggleLyrics}
+                playlists={playlists}
+                songId={song.id}
+              />
             </div>
 
             <div className="space-y-2">
