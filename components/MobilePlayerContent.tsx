@@ -104,11 +104,14 @@ const MobilePlayerContent = ({
             <div className="flex justify-between items-end">
               <div className="max-w-[70%]">
                 <Link href={`/songs/${song.id}`}>
-                  <h1 className="text-4xl font-bold text-white drop-shadow-lg hover:underline truncate mb-4">
+                  <h1 className="text-4xl font-bold text-white drop-shadow-lg hover:underline truncate">
                     {song.title}
                   </h1>
                 </Link>
-                <div className="flex flex-wrap mb-1">
+                <p className="text-lg text-gray-200 drop-shadow-lg mt-1 truncate">
+                  {song.author}
+                </p>
+                <div className="flex flex-wrap mb-2 mt-2">
                   {song?.genre
                     ?.split(", ")
                     .slice(0, 2)
@@ -122,9 +125,6 @@ const MobilePlayerContent = ({
                       </Link>
                     ))}
                 </div>
-                <p className="text-lg text-gray-200 drop-shadow-lg mt-1 truncate">
-                  {song.author}
-                </p>
               </div>
               <MobileStyleIcons
                 toggleLyrics={toggleLyrics}
