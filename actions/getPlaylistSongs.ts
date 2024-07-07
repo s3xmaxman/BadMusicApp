@@ -6,11 +6,10 @@ import {
 import { cookies } from "next/headers";
 
 const getPlaylistSongs = async (playlistId: string): Promise<Song[]> => {
-  // Supabaseクライアントを初期化
   const supabase = createServerComponentClient({
     cookies: cookies,
   });
-  // 現在のユーザーセッションを取得 (必要であれば)
+
   const {
     data: { session },
   } = await supabase.auth.getSession();
