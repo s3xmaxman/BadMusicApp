@@ -7,9 +7,9 @@ import usePlayer from "@/hooks/usePlayer";
 import useGetSongById from "@/hooks/useGetSongById";
 import { FaMusic } from "react-icons/fa";
 import { motion } from "framer-motion";
-import LikeButton from "./LikeButton";
 import { BackgroundGradient } from "./ui/background-gradient";
 import { CiPlay1 } from "react-icons/ci";
+import { AiOutlineHeart } from "react-icons/ai";
 
 const ON_ANIMATION = 500;
 
@@ -66,6 +66,10 @@ const RightSidebar = () => {
               {song.title}
             </Link>
           </motion.h1>
+          <p className="text-gray-300 mt-1">{song.author}</p>
+        </motion.div>
+
+        <div className="flex items-center justify-between">
           <p className=" text-gray-400 text-lg">
             {song?.genre?.split(", ").map((g) => (
               <Link
@@ -77,14 +81,10 @@ const RightSidebar = () => {
               </Link>
             ))}
           </p>
-        </motion.div>
-
-        <div className="flex items-center justify-between">
-          <p className="text-gray-300">{song.author}</p>
           <div className="flex items-center gap-2">
             <CiPlay1 size={16} />
             <span>{song.count}</span>
-            <LikeButton songId={song.id} size={18} />
+            <AiOutlineHeart size={16} />
             <span>{song.like_count}</span>
           </div>
         </div>
