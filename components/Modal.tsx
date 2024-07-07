@@ -74,7 +74,7 @@ const Modal: React.FC<ModalProps> = ({
           >
             {description}
           </Dialog.Description>
-          <div>{children}</div>
+          <div className="z-999">{children}</div>
           <Dialog.Close asChild>
             <button
               className="

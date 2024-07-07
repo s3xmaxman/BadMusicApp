@@ -11,7 +11,6 @@ import { BackgroundGradient } from "./ui/background-gradient";
 import { CiPlay1 } from "react-icons/ci";
 import { AiOutlineHeart } from "react-icons/ai";
 import { IoMdSwap } from "react-icons/io";
-import { FaChevronUp } from "react-icons/fa";
 
 const ON_ANIMATION = 500;
 
@@ -45,7 +44,7 @@ const RightSidebar = () => {
 
       {/* Current Song Info */}
       <motion.div
-        className="absolute bottom-20 left-0 right-0 p-6 z-20"
+        className="absolute bottom-20 left-0 right-0 p-6 z-10"
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
@@ -95,7 +94,7 @@ const RightSidebar = () => {
       </motion.div>
 
       {/* Next Song Preview */}
-      <div className="absolute bottom-0 left-0 right-0 z-30 p-6 bg-gradient-to-t from-black via-black/80 to-transparent">
+      <div className="absolute bottom-0 left-0 right-0 z-10 p-6 bg-gradient-to-t from-black via-black/80 to-transparent">
         {nextSong && (
           <div className="flex items-center">
             <div className="relative w-16 h-16 rounded-full overflow-hidden shrink-0 mr-4">
@@ -119,7 +118,7 @@ const RightSidebar = () => {
       </div>
 
       {/* Layout Toggle Button */}
-      <div className="absolute top-4 right-4 z-40">
+      <div className="absolute top-4 right-4 z-10">
         <motion.button
           onClick={toggleLayout}
           className="bg-white/10 hover:bg-white/20 rounded-full p-2 transition-colors duration-200"
