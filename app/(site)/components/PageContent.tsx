@@ -33,6 +33,7 @@ const PageContent: React.FC<PageContentProps> = ({
       <div className="flex justify-end mb-4"></div>
       <div className="flex-grow">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 mt-3">
+          {/* TODO: Add pagination or infinite scroll */}
           {songs.map((item) => (
             <SongItem
               onClick={(id) => handlePlay(id)}
