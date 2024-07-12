@@ -1,14 +1,10 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { FaRandom } from "react-icons/fa";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
-import { LiaMicrophoneAltSolid } from "react-icons/lia";
 import { BsPauseFill, BsPlayFill, BsRepeat1 } from "react-icons/bs";
-import { RiPlayListAddFill } from "react-icons/ri";
 import SeekBar from "./Seekbar";
 import { Playlist, Song } from "@/types";
-import LikeButton from "./LikeButton";
-import AddPlaylist from "./AddPlaylist";
 import Link from "next/link";
 import { useSpring, animated } from "@react-spring/web";
 import { useDrag } from "@use-gesture/react";
@@ -93,7 +89,9 @@ const MobilePlayerContent = ({
           layout="fill"
           objectFit="cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black/90" />
+
+        <div className="absolute bottom-0 w-full h-1/3 bg-gradient-to-t from-black to-transparent" />
 
         <div className="absolute inset-0 flex flex-col justify-between p-4">
           <div className="w-full h-1 bg-white/20 rounded-full" />
