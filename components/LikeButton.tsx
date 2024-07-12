@@ -55,8 +55,6 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId, size }) => {
       return authModal.onOpen();
     }
 
-    console.log("User is liking/unliking a song:", user.id, songId);
-
     try {
       if (isLiked) {
         // いいねを取り消す
@@ -88,7 +86,6 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId, size }) => {
         toast.success("いいねしました！");
       }
     } catch (error) {
-      console.error("Error liking/unliking song:", error);
       toast.error("エラーが発生しました。もう一度お試しください。");
     }
   };
@@ -121,7 +118,6 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId, size }) => {
         throw updateError;
       }
     } catch (error) {
-      console.error("Error updating like count:", error);
       toast.error("エラーが発生しました。もう一度お試しください。");
     }
   };
