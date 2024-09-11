@@ -1,4 +1,4 @@
-"use client"; // クライアントコンポーネント
+"use client";
 
 import React, { useState } from "react";
 import { MdOutlinePlaylistRemove } from "react-icons/md";
@@ -61,7 +61,7 @@ const DeletePlaylistButton: React.FC<DeletePlaylistButtonProps> = ({
   return (
     <div>
       <MdOutlinePlaylistRemove
-        onClick={handleDeletePlaylist} // 削除ボタンクリック時に実行
+        onClick={handleDeletePlaylist}
         className="text-neutral-400 hover:text-red-500 cursor-pointer"
         size={40}
       />

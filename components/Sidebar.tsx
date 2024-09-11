@@ -39,14 +39,14 @@ const Sidebar: React.FC<SidebarProps> = ({ children, songs, playlists }) => {
         active: pathname === "/search",
         href: "/search",
       },
-      {
-        icon: RiPlayListFill,
-        label: "プレイリスト",
-        active: pathname === "/playlists",
-        href: "/playlists",
-      },
       ...(user
         ? [
+            {
+              icon: RiPlayListFill,
+              label: "プレイリスト",
+              active: pathname === "/playlists",
+              href: "/playlists",
+            },
             {
               icon: FaHeart,
               label: "お気に入り",
