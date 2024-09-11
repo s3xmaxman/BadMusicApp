@@ -12,6 +12,7 @@ import { Playlist, Song } from "@/types";
 import usePlayer from "@/hooks/usePlayer";
 import { RiPlayListFill } from "react-icons/ri";
 import { FaHeart } from "react-icons/fa6";
+import { useUser } from "@/hooks/useUser";
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -22,6 +23,8 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ children, songs, playlists }) => {
   const pathname = usePathname();
   const player = usePlayer();
+  const { user } = useUser();
+
   const routes = useMemo(
     () => [
       {
@@ -42,14 +45,18 @@ const Sidebar: React.FC<SidebarProps> = ({ children, songs, playlists }) => {
         active: pathname === "/playlists",
         href: "/playlists",
       },
-      {
-        icon: FaHeart,
-        label: "お気に入り",
-        active: pathname === "/liked",
-        href: "/liked",
-      },
+      ...(user
+        ? [
+            {
+              icon: FaHeart,
+              label: "お気に入り",
+              active: pathname === "/liked",
+              href: "/liked",
+            },
+          ]
+        : []),
     ],
-    [pathname]
+    [pathname, user]
   );
 
   return (
