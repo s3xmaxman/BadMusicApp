@@ -8,11 +8,11 @@ import {
 
 // ユーザーコンテキストの型を定義
 type UserContextType = {
-  accessToken: string | null; // アクセストークンの型を定義
-  user: User | null; // ユーザーの型を定義
-  userDetails: UserDetails | null; // ユーザーの詳細情報の型を定義
-  isLoading: boolean; // ローディング状態の型を定義
-  subscription: Subscription | null; // サブスクリプションの型を定義
+  accessToken: string | null;
+  user: User | null;
+  userDetails: UserDetails | null;
+  isLoading: boolean;
+  subscription: Subscription | null;
 };
 
 // ユーザーコンテキストを作成
