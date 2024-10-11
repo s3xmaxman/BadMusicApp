@@ -231,6 +231,7 @@ export interface Database {
           created_at: string;
           id: number;
           image_path: string | null;
+          video_path?: string | null;
           song_path: string | null;
           title: string | null;
           user_id: string | null;
@@ -244,6 +245,7 @@ export interface Database {
           created_at?: string;
           id?: number;
           image_path?: string | null;
+          video_path?: string | null;
           song_path?: string | null;
           title?: string | null;
           user_id?: string | null;
@@ -257,6 +259,7 @@ export interface Database {
           created_at?: string;
           id?: number;
           image_path?: string | null;
+          video_path?: string | null;
           song_path?: string | null;
           title?: string | null;
           user_id?: string | null;

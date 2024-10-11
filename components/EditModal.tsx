@@ -12,6 +12,10 @@ import GenreSelect from "./GenreSelect";
 import { Song } from "@/types";
 import { Textarea } from "./ui/textarea";
 
+interface EditFormValues extends Partial<Song> {
+  video?: FileList;
+}
+
 interface EditModalProps {
   song: Song;
   isOpen: boolean;
@@ -25,40 +29,86 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
   );
   const supabaseClient = useSupabaseClient();
 
-  const { register, handleSubmit, reset, setValue } = useForm<Song>({
-    defaultValues: {
-      id: undefined,
-      user_id: undefined,
-      author: "",
-      title: "",
-      lyrics: "",
-      image_path: "",
-      song_path: "",
-      genre: "",
-    },
-  });
+  const { register, handleSubmit, reset, setValue, watch } =
+    useForm<EditFormValues>({
+      defaultValues: {
+        id: song.id,
+        user_id: song.user_id,
+        title: song.title,
+        author: song.author,
+        lyrics: song.lyrics,
+        image_path: song.image_path,
+        video_path: song.video_path || "",
+        song_path: song.song_path,
+        genre: song.genre || "All",
+      },
+    });
+
+  const watchVideo = watch("video");
 
   useEffect(() => {
     if (isOpen) {
-      setValue("id", song.id);
-      setValue("user_id", song.user_id);
-      setValue("title", song.title);
-      setValue("author", song.author);
-      setValue("lyrics", song.lyrics);
-      setValue("image_path", song.image_path);
-      setValue("song_path", song.song_path);
-      setValue("genre", song.genre || "All");
+      reset({
+        id: song.id,
+        user_id: song.user_id,
+        title: song.title,
+        author: song.author,
+        lyrics: song.lyrics,
+        image_path: song.image_path,
+        song_path: song.song_path,
+        genre: song.genre || "All",
+        video_path: song.video_path || "",
+        video: undefined,
+      });
       setSelectedGenres(song.genre ? song.genre.split(", ") : []);
     }
-  }, [isOpen, song, setValue]);
+  }, [isOpen, song, reset]);
 
   const handleGenreChange = (genre: string[]) => {
     setSelectedGenres(genre);
   };
 
-  const onSubmit: SubmitHandler<Song> = async (values) => {
+  const handleVideoUpload = async (videoFile: File): Promise<string | null> => {
+    try {
+      const uniqueID = `${Date.now()}-${videoFile.name}`;
+      const { data, error } = await supabaseClient.storage
+        .from("videos")
+        .upload(`video-${uniqueID}`, videoFile, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (error) {
+        console.error("Video upload error:", error);
+        toast.error("ビデオのアップロードに失敗しました");
+        return null;
+      }
+
+      return data.path;
+    } catch (error) {
+      console.error("Unexpected error during video upload:", error);
+      toast.error("ビデオのアップロード中に不具合が発生しました");
+      return null;
+    }
+  };
+
+  const onSubmit: SubmitHandler<EditFormValues> = async (values) => {
     try {
       setIsLoading(true);
+
+      let updatedVideoPath = song.video_path;
+
+      if (values.video && values.video.length > 0) {
+        const videoFile = values.video[0];
+        const videoPath = await handleVideoUpload(videoFile);
+
+        if (!videoPath) {
+          setIsLoading(false);
+          return;
+        }
+
+        updatedVideoPath = videoPath;
+      }
 
       const { error } = await supabaseClient
         .from("songs")
@@ -67,12 +117,13 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
           author: values.author,
           lyrics: values.lyrics,
           genre: selectedGenres.join(", "),
+          video_path: updatedVideoPath,
         })
         .eq("id", song.id);
 
       if (error) {
-        toast.error("Failed to update song");
-        console.error(error);
+        toast.error("曲の更新に失敗しました");
+        console.error("Supabase update error:", error);
         return;
       }
 
@@ -80,7 +131,7 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
       onClose();
     } catch (error) {
       toast.error("曲の編集に失敗しました");
-      console.error(error);
+      console.error("Unexpected error during update:", error);
     } finally {
       setIsLoading(false);
     }
@@ -97,17 +148,17 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
         <Input
           disabled={isLoading}
           {...register("title", { required: true })}
-          placeholder="Song title"
+          placeholder="曲のタイトル"
         />
         <Input
           disabled={isLoading}
           {...register("author", { required: true })}
-          placeholder="Song author"
+          placeholder="曲の作者"
         />
         <Textarea
           disabled={isLoading}
           {...register("lyrics")}
-          placeholder="Lyrics"
+          placeholder="歌詞"
           className="bg-neutral-700"
         />
         <GenreSelect
@@ -115,8 +166,33 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
           onGenreChange={handleGenreChange}
           defaultValue={selectedGenres}
         />
+        <div>
+          <div className="pb-1">ビデオを選択（オプション）</div>
+          <Input
+            disabled={isLoading}
+            type="file"
+            accept="video/*"
+            {...register("video")}
+          />
+          {song.video_path && (
+            <div className="mt-2">
+              <a
+                href={`${
+                  supabaseClient.storage
+                    .from("videos")
+                    .getPublicUrl(song.video_path).data.publicUrl
+                }`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 underline"
+              >
+                既存のビデオを確認
+              </a>
+            </div>
+          )}
+        </div>
         <Button disabled={isLoading} type="submit">
-          {isLoading ? "編集中" : "編集"}
+          {isLoading ? "編集中..." : "編集"}
         </Button>
       </form>
     </Modal>
