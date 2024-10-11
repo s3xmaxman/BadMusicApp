@@ -40,6 +40,13 @@ const RightSidebar = () => {
         objectFit="cover"
         className="z-0"
       />
+      {/* <video
+        src="/video.mp4"
+        autoPlay
+        loop
+        muted
+        className="z-0 h-full w-full object-cover"
+      /> */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-black z-10" />
 
       {/* Current Song Info */}
