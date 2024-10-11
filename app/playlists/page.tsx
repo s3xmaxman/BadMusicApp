@@ -2,7 +2,7 @@ import Header from "@/components/Header";
 import getPlaylists from "@/actions/getPlaylists";
 import PlaylistContent from "./components/PlaylistContent";
 
-export const revalidate = 0;
+// export const revalidate = 0;
 
 const Playlist = async () => {
   const playlists = await getPlaylists();

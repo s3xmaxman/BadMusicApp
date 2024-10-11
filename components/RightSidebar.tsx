@@ -40,6 +40,7 @@ const RightSidebar = () => {
         objectFit="cover"
         className="z-0"
       />
+      {/* TODO: Add video */}
       {/* <video
         src="/video.mp4"
         autoPlay
@@ -139,7 +140,7 @@ const RightSidebar = () => {
   );
 
   const StandardLayout = () => (
-    <div className="scroll-container bg-gradient-to-b from-gray-950 to-black  text-white p-4 h-full flex flex-col rounded-lg overflow-y-auto">
+    <div className="scroll-container bg-black text-white p-4 h-full flex flex-col rounded-lg overflow-y-auto">
       <div className="absolute top-4 right-4">
         <button
           onClick={toggleLayout}
