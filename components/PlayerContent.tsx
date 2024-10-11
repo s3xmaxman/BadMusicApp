@@ -15,6 +15,7 @@ import AddPlaylist from "./AddPlaylist";
 import useAudioPlayer from "@/hooks/useAudioPlayer";
 import { useEffect } from "react";
 import useLoadSongUrl from "@/hooks/useLoadSongUrl";
+import useLoadVideo from "@/hooks/useLoadVideo";
 
 interface PlayerContentProps {
   song: Song;
@@ -31,6 +32,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
   playlists,
 }) => {
   const imageUrl = useLoadImage(song);
+  const videoUrl = useLoadVideo(song);
   const songUrl = useLoadSongUrl(song);
   const {
     Icon,
@@ -151,6 +153,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
             playlists={playlists}
             songUrl={songUrl}
             imageUrl={imageUrl || "/images/wait.jpg"}
+            videoUrl={videoUrl!}
             currentTime={currentTime}
             duration={duration}
             formattedCurrentTime={formattedCurrentTime}

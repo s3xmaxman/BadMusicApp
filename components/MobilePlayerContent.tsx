@@ -16,6 +16,7 @@ interface MobilePlayerContentProps {
   playlists: Playlist[];
   songUrl: string;
   imageUrl: string;
+  videoUrl?: string;
   currentTime: number;
   duration: number;
   formattedCurrentTime: string;
@@ -37,6 +38,7 @@ const MobilePlayerContent = ({
   playlists,
   songUrl,
   imageUrl,
+  videoUrl,
   currentTime,
   formattedCurrentTime,
   formattedDuration,
@@ -82,20 +84,26 @@ const MobilePlayerContent = ({
       }}
       className="md:hidden fixed inset-0 bg-black text-white"
     >
-      <div className="relative w-full h-full">
-        <Image
-          src={imageUrl || "/images/wait.jpg"}
-          alt={song.title}
-          layout="fill"
-          objectFit="cover"
-        />
+      <div className="relative w-full h-full ">
+        {videoUrl ? (
+          <video
+            className=" w-full h-full object-cover"
+            src={videoUrl}
+            autoPlay
+            loop
+          />
+        ) : (
+          <Image
+            src={imageUrl || "/images/wait.jpg"}
+            alt={song.title}
+            layout="fill"
+            objectFit="cover"
+          />
+        )}
+
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black/90" />
-
         <div className="absolute bottom-0 w-full h-1/3 bg-gradient-to-t from-black to-transparent" />
-
         <div className="absolute inset-0 flex flex-col justify-between p-4">
-          <div className="w-full h-1 bg-white/20 rounded-full" />
-
           <div className="flex-1" />
 
           <div className="space-y-6">
