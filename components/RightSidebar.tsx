@@ -11,6 +11,7 @@ import { BackgroundGradient } from "./ui/background-gradient";
 import { CiPlay1 } from "react-icons/ci";
 import { AiOutlineHeart } from "react-icons/ai";
 import { IoMdSwap } from "react-icons/io";
+import useLoadVideo from "@/hooks/useLoadVideo";
 
 const ON_ANIMATION = 500;
 
@@ -19,7 +20,7 @@ const RightSidebar = () => {
   const player = usePlayer();
   const { song } = useGetSongById(player.activeId);
   const { song: nextSong } = useGetSongById(player.getNextSongId());
-
+  const videoPath = useLoadVideo(song!);
   const imagePath = useLoadImage(song!);
   const nextImagePath = useLoadImage(nextSong!);
 
@@ -33,21 +34,23 @@ const RightSidebar = () => {
 
   const FullScreenLayout = () => (
     <div className="relative w-full h-full overflow-hidden">
-      <Image
-        src={imagePath || "/images/loading.jpg"}
-        alt="Song Image"
-        layout="fill"
-        objectFit="cover"
-        className="z-0"
-      />
-      {/* TODO: Add video */}
-      {/* <video
-        src="/video.mp4"
-        autoPlay
-        loop
-        muted
-        className="z-0 h-full w-full object-cover"
-      /> */}
+      {song.video_path ? (
+        <video
+          src={videoPath!}
+          autoPlay
+          loop
+          muted
+          className="z-0 h-full w-full object-cover"
+        />
+      ) : (
+        <Image
+          src={imagePath || "/images/loading.jpg"}
+          alt="Song Image"
+          layout="fill"
+          objectFit="cover"
+          className="z-0"
+        />
+      )}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-black z-10" />
 
       {/* Current Song Info */}

@@ -11,6 +11,9 @@ import Button from "./Button";
 import GenreSelect from "./GenreSelect";
 import { Song } from "@/types";
 import { Textarea } from "./ui/textarea";
+import { sanitizeTitle } from "@/libs/helpers";
+
+// TODO: 後でリファクタリングするかもしれない
 
 interface EditFormValues extends Partial<Song> {
   video?: FileList;
@@ -70,10 +73,9 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
 
   const handleVideoUpload = async (videoFile: File): Promise<string | null> => {
     try {
-      const uniqueID = `${Date.now()}-${videoFile.name}`;
       const { data, error } = await supabaseClient.storage
         .from("videos")
-        .upload(`video-${uniqueID}`, videoFile, {
+        .upload(`video-${sanitizeTitle(videoFile.name)}`, videoFile, {
           cacheControl: "3600",
           upsert: false,
         });
