@@ -14,7 +14,7 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
 
   return (
-    <div className="flex bg-gradient-to-b from-gray-950 to-black h-full overflow-hidden">
+    <div className="flex bg-[#0d0d0d] h-full overflow-hidden">
       <div
         className={`${
           isMusicPlaying ? "w-[1250px]" : "w-full"
