@@ -72,6 +72,13 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
   };
 
   const handleVideoUpload = async (videoFile: File): Promise<string | null> => {
+    const maxVideoSize = 5 * 1024 * 1024; // 5MB
+
+    if (videoFile.size > maxVideoSize) {
+      toast.error("動画のサイズが5MBを超えています");
+      return null;
+    }
+
     try {
       const { data, error } = await supabaseClient.storage
         .from("videos")
@@ -169,7 +176,7 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
           defaultValue={selectedGenres}
         />
         <div>
-          <div className="pb-1">ビデオを選択（オプション）</div>
+          <div className="pb-1">ビデオを選択（5MB以下）</div>
           <Input
             disabled={isLoading}
             type="file"
