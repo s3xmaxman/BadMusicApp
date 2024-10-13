@@ -38,7 +38,7 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
     <div className={twMerge(`h-fit p-6`, className)}>
       <div className="w-full mb-4 flex items-center md:justify-between justify-end">
         <div className="hidden md:flex gap-x-2 items-center">
-          <button
+          {/* <button
             onClick={() => router.back()}
             className="rounded-full bg-black flex items-center justify-center hover:opacity-75 transition"
           >
@@ -49,7 +49,7 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
             className="rounded-full bg-black flex items-center justify-center hover:opacity-75 transition"
           >
             <RxCaretRight className="text-white" size={35} />
-          </button>
+          </button> */}
         </div>
 
         <div className="flex justify-between items-center gap-x-4">
