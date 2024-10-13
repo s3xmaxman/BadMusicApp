@@ -74,7 +74,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children, songs, playlists }) => {
             ))}
           </div>
         </Box>
-        <Box className="overflow-y-auto h-full">
+        <Box className="overflow-y-auto h-full custom-scrollbar">
           <Library songs={songs} playlists={playlists} />
         </Box>
       </div>
