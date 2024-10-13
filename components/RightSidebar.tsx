@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import useLoadImage from "@/hooks/useLoadImage";
@@ -23,6 +23,14 @@ const RightSidebar = () => {
   const videoPath = useLoadVideo(song!);
   const imagePath = useLoadImage(song!);
   const nextImagePath = useLoadImage(nextSong!);
+
+  useEffect(() => {
+    if (song && song.video_path) {
+      setIsFullScreenLayout(true);
+    } else {
+      setIsFullScreenLayout(false);
+    }
+  }, [song]);
 
   if (!song || !nextSong) {
     return null;
