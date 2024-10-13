@@ -15,7 +15,7 @@ const LyricsDrawer: React.FC<LyricsDrawerProps> = ({
   lyrics,
 }) => {
   const screenHeight = typeof window !== "undefined" ? window.innerHeight : 800;
-  const drawerHeight = screenHeight * 0.7; // 高さを70%に設定
+  const drawerHeight = screenHeight * 0.7;
 
   const [{ y }, api] = useSpring(() => ({ y: drawerHeight }));
 
@@ -57,7 +57,7 @@ const LyricsDrawer: React.FC<LyricsDrawerProps> = ({
         touchAction: "none",
       }}
     >
-      <div className="w-full h-full bg-black bg-opacity-80 backdrop-blur-md rounded-t-2xl shadow-lg overflow-hidden">
+      <div className="w-full h-full bg-black bg-opacity-80 backdrop-blur-md rounded-t-2xl shadow-lg overflow-hidden custom-scrollbar">
         <div className="relative h-full overflow-y-auto p-6">
           <div className="absolute top-2 left-0 right-0 flex justify-center">
             <div className="w-10 h-1 rounded-full bg-white opacity-50" />
