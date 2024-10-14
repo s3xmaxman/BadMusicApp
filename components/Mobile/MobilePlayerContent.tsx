@@ -3,13 +3,14 @@ import Image from "next/image";
 import { FaRandom } from "react-icons/fa";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import { BsPauseFill, BsPlayFill, BsRepeat1 } from "react-icons/bs";
-import SeekBar from "./Seekbar";
+
 import { Playlist, Song } from "@/types";
 import Link from "next/link";
 import { useSpring, animated } from "@react-spring/web";
 import { useDrag } from "@use-gesture/react";
-import LyricsDrawer from "./LyricsDrawer";
+import SeekBar from "../Seekbar";
 import MobileStyleIcons from "./MobileStyleIcons";
+import LyricsDrawer from "../LyricsDrawer";
 
 interface MobilePlayerContentProps {
   song: Song;

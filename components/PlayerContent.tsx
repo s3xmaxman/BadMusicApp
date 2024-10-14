@@ -10,12 +10,13 @@ import MediaItem from "./MediaItem";
 import Slider from "./Slider";
 import SeekBar from "./Seekbar";
 import useLoadImage from "@/hooks/useLoadImage";
-import MobilePlayerContent from "./MobilePlayerContent";
+
 import AddPlaylist from "./AddPlaylist";
 import useAudioPlayer from "@/hooks/useAudioPlayer";
 import { useEffect } from "react";
 import useLoadSongUrl from "@/hooks/useLoadSongUrl";
 import useLoadVideo from "@/hooks/useLoadVideo";
+import MobilePlayerContent from "./Mobile/MobilePlayerContent";
 
 interface PlayerContentProps {
   song: Song;

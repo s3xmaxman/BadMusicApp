@@ -9,9 +9,10 @@ import useLoadImage from "@/hooks/useLoadImage";
 import useOnPlay from "@/hooks/useOnPlay";
 import useLoadImages from "@/hooks/useLoadImages";
 import useDownload from "@/hooks/useDownload";
-import EditModal from "@/components/EditModal";
+
 import { useUser } from "@/hooks/useUser";
 import useGetSongsByGenres from "@/hooks/useGetSongGenres";
+import EditModal from "@/components/Modals/EditModal";
 
 interface SongContentProps {
   songId: string;

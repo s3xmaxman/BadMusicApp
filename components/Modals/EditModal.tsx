@@ -5,13 +5,14 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
 
-import Modal from "./Modal";
-import Input from "./Input";
-import Button from "./Button";
-import GenreSelect from "./GenreSelect";
 import { Song } from "@/types";
-import { Textarea } from "./ui/textarea";
+
 import { sanitizeTitle } from "@/libs/helpers";
+import Modal from "./Modal";
+import Input from "../Input";
+import { Textarea } from "../ui/textarea";
+import GenreSelect from "../GenreSelect";
+import Button from "../Button";
 
 // TODO: 後でリファクタリングするかもしれない
 

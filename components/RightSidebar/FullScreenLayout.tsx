@@ -1,6 +1,5 @@
-// FullScreenLayout.tsx
 import React from "react";
-import { Song } from "@/types"; // Song 型を適切にインポートしてください
+import { Song } from "@/types";
 import NextSongPreview from "./NextSongPreview";
 import CurrentSongDisplay from "./CurrentSongDisplay";
 

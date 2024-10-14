@@ -2,8 +2,8 @@ import React, { memo } from "react";
 import { LiaMicrophoneAltSolid } from "react-icons/lia";
 import { RiPlayListAddFill } from "react-icons/ri";
 import { Playlist } from "@/types";
-import LikeButton from "./LikeButton";
-import AddPlaylist from "./AddPlaylist";
+import AddPlaylist from "../AddPlaylist";
+import LikeButton from "../LikeButton";
 
 interface MobileStyleIconsProps {
   toggleLyrics: () => void;
