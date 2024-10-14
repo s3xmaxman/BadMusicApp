@@ -58,7 +58,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   if (!song) return null;
 
   return (
-    <div className="min-h-screen bg-[#0d0d0d] text-white px-4 md:px-10 lg:px-20 py-12">
+    <div className="min-h-screen bg-[#0d0d0d] text-white px-4 md:px-10 lg:px-20 py-12 ">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -67,7 +67,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
       >
         <div className="w-full lg:w-2/5 flex-shrink-0">
           <motion.div
-            className="relative w-full aspect-square rounded-2xl shadow-2xl overflow-hidden cursor-pointer"
+            className="relative w-full aspect-square rounded-2xl shadow-2xl overflow-hidden cursor-pointer "
             whileHover={{
               scale: 1.05,
               boxShadow: "0 0 30px rgba(79, 209, 197, 0.3)",
