@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Header from "@/components/Header";
 import PageContent from "./PageContent";
-import RightSidebar from "@/components/RightSidebar";
+import RightSidebar from "@/components/RightSidebar/RightSidebar";
 import TrendBoard from "@/components/TrendBoard";
 import { Song } from "@/types";
 import GenreCard from "@/components/GenreCard";
