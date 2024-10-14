@@ -35,7 +35,6 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
         <main className="px-6 py-8 space-y-8">
           {/* Trending Section */}
           <section>
-            <h2 className="text-white text-2xl font-semibold mb-4">Trending</h2>
             <TrendBoard />
           </section>
 
@@ -57,7 +56,7 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
 
           {/* Latest Songs Section */}
           <section>
-            <h2 className="text-white text-2xl font-semibold mb-4">Latest</h2>
+            <h2 className="text-white text-2xl font-semibold">Latest</h2>
             <PageContent songs={songs} setIsMusicPlaying={setIsMusicPlaying} />
           </section>
         </main>

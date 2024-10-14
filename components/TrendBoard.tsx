@@ -31,7 +31,8 @@ const TrendBoard: React.FC = () => {
   };
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-end mr-1">
+      <div className="flex items-center justify-between mr-1">
+        <h2 className="text-white text-2xl font-semibold">Trending</h2>
         <select
           value={selectedPeriod}
           onChange={(e) => handleChange(e.target.value)}
