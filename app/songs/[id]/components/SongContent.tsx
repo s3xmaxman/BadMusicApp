@@ -58,7 +58,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   if (!song) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-950 to-black text-white px-4 md:px-10 lg:px-20 py-12">
+    <div className="min-h-screen bg-[#0d0d0d] text-white px-4 md:px-10 lg:px-20 py-12">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
