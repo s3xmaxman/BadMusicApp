@@ -7,6 +7,7 @@ import TrendBoard from "@/components/TrendBoard";
 import { Song } from "@/types";
 import GenreCard from "@/components/GenreCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import YouTubePlayer from "@/components/YouTubePlayer";
 
 interface HomeClientProps {
   songs: Song[];
@@ -21,6 +22,12 @@ const genres = [
   { name: "Vapor Wave", color: "bg-indigo-500" },
   { name: "Trance", color: "bg-pink-500" },
   { name: "Drum and Bass", color: "bg-orange-500" },
+];
+
+const videoIds = [
+  { name: "synthwave radio", videoId: "4xDzrJKXOOY" },
+  { name: "lofi hip hop radio", videoId: "jfKfPfyJRdk" },
+  { name: "dark ambient radio", videoId: "S_MOd40zlYU" },
 ];
 
 const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
@@ -52,6 +59,14 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
           {/* Trending Section */}
           <section>
             <TrendBoard />
+          </section>
+          {/* YouTubePlayer Section */}
+          <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {videoIds.map((video) => (
+              <div key={video.videoId} className="col-span-1">
+                <YouTubePlayer name={video.name} videoId={video.videoId} />
+              </div>
+            ))}
           </section>
           {/* Genres Section */}
           <section
