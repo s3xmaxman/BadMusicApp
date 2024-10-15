@@ -4,7 +4,6 @@ import ReactPlayer from "react-player/youtube";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import * as RadixSlider from "@radix-ui/react-slider";
-
 import useYouTubePlayer from "@/hooks/useYoutubePlayer";
 
 interface YouTubePlayerContentProps {
