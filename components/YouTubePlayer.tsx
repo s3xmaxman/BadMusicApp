@@ -57,23 +57,25 @@ const YouTubePlayerContent: React.FC<YouTubePlayerContentProps> = ({
         width="100%"
         height="100%"
       />
-      <div className="flex items-center justify-between w-full mt-4">
+      <div className="flex items-center justify-center w-full mt-4 space-x-4">
         <div
           onClick={togglePlay}
-          className="flex items-center justify-center h-10 w-10 rounded-full bg-white p-1 cursor-pointer"
+          className="flex items-center justify-center h-8 w-8 rounded-full bg-white p-1 cursor-pointer"
         >
-          <Icon size={30} className="text-black" />
+          <Icon size={20} className="text-black" />
         </div>
-        <div className="flex items-center gap-x-2 w-[120px]">
+        <div className="flex items-center space-x-2">
           <VolumeIcon
             onClick={() => handleVolumeChange(volume === 0 ? 50 : 0)}
-            className="cursor-pointer"
-            size={34}
+            className="cursor-pointer text-white"
+            size={24}
           />
-          <Slider
-            value={volume}
-            onChange={(value) => handleVolumeChange(value)}
-          />
+          <div className="w-24">
+            <Slider
+              value={volume}
+              onChange={(value) => handleVolumeChange(value)}
+            />
+          </div>
         </div>
       </div>
     </div>
