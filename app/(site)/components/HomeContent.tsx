@@ -118,7 +118,7 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
                   name={videoIds[currentVideoIndex].name}
                   videoId={videoIds[currentVideoIndex].videoId}
                 />
-                <div className="flex justify-between mt-4">
+                <div className="flex justify-between mt-2">
                   <button
                     onClick={() => changeVideo("prev")}
                     className="bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-all"

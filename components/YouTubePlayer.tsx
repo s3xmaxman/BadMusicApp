@@ -35,7 +35,7 @@ const YouTubePlayerContent: React.FC<YouTubePlayerContentProps> = ({
         value={[value]}
         onValueChange={(values) => onChange(values[0])}
         max={100}
-        step={10}
+        step={5}
         aria-label="Volume"
       >
         <RadixSlider.Track className=" relative grow rounded-full h-[6px] bg-gray-300">

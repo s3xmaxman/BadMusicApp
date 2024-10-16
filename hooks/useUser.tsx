@@ -21,7 +21,7 @@ export const UserContext = createContext<UserContextType | undefined>(
 );
 
 export interface Props {
-  [propName: string]: any; // プロパティの型を定義
+  [propName: string]: any;
 }
 
 // ユーザーコンテキストプロバイダーを作成
@@ -80,12 +80,11 @@ export const MyUserContextProvider = (props: Props) => {
     subscription,
   };
 
-  return <UserContext.Provider value={value} {...props} />; // ユーザーコンテキストを提供
+  return <UserContext.Provider value={value} {...props} />;
 };
 
-// ユーザーコンテキストを取得するカスタムフック
 export const useUser = () => {
-  const context = useContext(UserContext); // ユーザーコンテキストを取得
+  const context = useContext(UserContext);
   if (context === undefined) {
     throw new Error("useUser must be used within a MyUserContextProvider");
   }
