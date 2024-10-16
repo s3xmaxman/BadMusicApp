@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useEffect, use } from "react";
+import { useState, useRef, useEffect } from "react";
 import Header from "@/components/Header";
 import PageContent from "./PageContent";
 import RightSidebar from "@/components/RightSidebar/RightSidebar";
@@ -42,14 +42,19 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
   const [showArrows, setShowArrows] = useState(false);
   const [showVideoArrows, setShowVideoArrows] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const genreScrollRef = useRef<HTMLDivElement>(null);
   const videoScrollRef = useRef<HTMLDivElement>(null);
 
-  const initialVideos = videoIds.slice(0, 3);
-  const remainingVideos = videoIds.slice(3);
-
   useEffect(() => {
     setIsClient(true);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   if (!isClient) {
@@ -64,6 +69,16 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
         behavior: "smooth",
       });
     }
+  };
+
+  const changeVideo = (direction: "prev" | "next") => {
+    setCurrentVideoIndex((prevIndex) => {
+      if (direction === "prev") {
+        return prevIndex > 0 ? prevIndex - 1 : videoIds.length - 1;
+      } else {
+        return prevIndex < videoIds.length - 1 ? prevIndex + 1 : 0;
+      }
+    });
   };
 
   const scroll = (direction: "left" | "right") => {
@@ -97,40 +112,61 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
             onMouseEnter={() => setShowVideoArrows(true)}
             onMouseLeave={() => setShowVideoArrows(false)}
           >
-            <div className="relative">
-              {showVideoArrows && initialVideos.length < videoIds.length && (
-                <button
-                  onClick={() => scrollVideos("left")}
-                  className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full z-10 hover:bg-opacity-75 transition-all"
-                >
-                  <ChevronLeft size={24} />
-                </button>
-              )}
-              <div
-                ref={videoScrollRef}
-                className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide"
-                style={{ width: "calc(100% + 1rem)" }}
-              >
-                {initialVideos.map((video) => (
-                  <div key={video.id} className="w-1/3 shrink-0">
-                    <YouTubePlayer name={video.name} videoId={video.videoId} />
-                  </div>
-                ))}
-                {remainingVideos.map((video) => (
-                  <div key={video.id} className="w-1/3 shrink-0">
-                    <YouTubePlayer name={video.name} videoId={video.videoId} />
-                  </div>
-                ))}
+            {isMobile ? (
+              <div className="w-full">
+                <YouTubePlayer
+                  name={videoIds[currentVideoIndex].name}
+                  videoId={videoIds[currentVideoIndex].videoId}
+                />
+                <div className="flex justify-between mt-4">
+                  <button
+                    onClick={() => changeVideo("prev")}
+                    className="bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-all"
+                  >
+                    <ChevronLeft size={24} />
+                  </button>
+                  <button
+                    onClick={() => changeVideo("next")}
+                    className="bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-all"
+                  >
+                    <ChevronRight size={24} />
+                  </button>
+                </div>
               </div>
-              {showVideoArrows && initialVideos.length < videoIds.length && (
-                <button
-                  onClick={() => scrollVideos("right")}
-                  className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full z-10 hover:bg-opacity-75 transition-all"
+            ) : (
+              <div className="relative">
+                {showVideoArrows && (
+                  <button
+                    onClick={() => scrollVideos("left")}
+                    className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full z-10 hover:bg-opacity-75 transition-all"
+                  >
+                    <ChevronLeft size={24} />
+                  </button>
+                )}
+                <div
+                  ref={videoScrollRef}
+                  className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide"
+                  style={{ width: "calc(100% + 1rem)" }}
                 >
-                  <ChevronRight size={24} />
-                </button>
-              )}
-            </div>
+                  {videoIds.map((video) => (
+                    <div key={video.id} className="w-1/3 shrink-0">
+                      <YouTubePlayer
+                        name={video.name}
+                        videoId={video.videoId}
+                      />
+                    </div>
+                  ))}
+                </div>
+                {showVideoArrows && (
+                  <button
+                    onClick={() => scrollVideos("right")}
+                    className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full z-10 hover:bg-opacity-75 transition-all"
+                  >
+                    <ChevronRight size={24} />
+                  </button>
+                )}
+              </div>
+            )}
           </section>
           {/* Genres Section */}
           <section
@@ -142,7 +178,7 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
               Top Genres
             </h2>
             <div className="relative">
-              {showArrows && (
+              {showArrows && !isMobile && (
                 <button
                   onClick={() => scroll("left")}
                   className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full z-10 hover:bg-opacity-75 transition-all"
@@ -162,7 +198,7 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
                   />
                 ))}
               </div>
-              {showArrows && (
+              {showArrows && !isMobile && (
                 <button
                   onClick={() => scroll("right")}
                   className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full z-10 hover:bg-opacity-75 transition-all"
