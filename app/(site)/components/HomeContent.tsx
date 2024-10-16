@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, use } from "react";
 import Header from "@/components/Header";
 import PageContent from "./PageContent";
 import RightSidebar from "@/components/RightSidebar/RightSidebar";
@@ -18,34 +18,43 @@ interface HomeClientProps {
 }
 
 const videoIds = [
-  { name: "synthwave radio", videoId: "4xDzrJKXOOY" },
-  { name: "lofi hip hop radio", videoId: "jfKfPfyJRdk" },
-  { name: "dark ambient radio", videoId: "S_MOd40zlYU" },
-  { name: "Blade Runner Radio", videoId: "RrkrdYm3HPQ" },
-  { name: "Future Funk Radio ♫", videoId: "37oqv4Tjny4" },
-  { name: "tokyo night drive", videoId: "Lcdi9O2XB4E" },
+  { id: 1, name: "synthwave radio", videoId: "4xDzrJKXOOY" },
+  { id: 2, name: "lofi hip hop radio", videoId: "jfKfPfyJRdk" },
+  { id: 3, name: "dark ambient radio", videoId: "S_MOd40zlYU" },
+  { id: 4, name: "Blade Runner Radio", videoId: "RrkrdYm3HPQ" },
+  { id: 5, name: "Future Funk Radio ♫", videoId: "37oqv4Tjny4" },
+  { id: 6, name: "tokyo night drive", videoId: "Lcdi9O2XB4E" },
 ];
 
 const genreCards = [
-  { name: "Retro Wave", color: "bg-purple-500" },
-  { name: "Electro House", color: "bg-blue-500" },
-  { name: "Nu Disco", color: "bg-red-500" },
-  { name: "City Pop", color: "bg-green-500" },
-  { name: "Tropical House", color: "bg-yellow-500" },
-  { name: "Vapor Wave", color: "bg-indigo-500" },
-  { name: "Trance", color: "bg-pink-500" },
-  { name: "Drum and Bass", color: "bg-orange-500" },
+  { id: 1, name: "Retro Wave", color: "bg-purple-500" },
+  { id: 2, name: "Electro House", color: "bg-blue-500" },
+  { id: 3, name: "Nu Disco", color: "bg-red-500" },
+  { id: 4, name: "City Pop", color: "bg-green-500" },
+  { id: 5, name: "Tropical House", color: "bg-yellow-500" },
+  { id: 6, name: "Vapor Wave", color: "bg-indigo-500" },
+  { id: 7, name: "Trance", color: "bg-pink-500" },
+  { id: 8, name: "Drum and Bass", color: "bg-orange-500" },
 ];
 
 const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const [showArrows, setShowArrows] = useState(false);
   const [showVideoArrows, setShowVideoArrows] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const genreScrollRef = useRef<HTMLDivElement>(null);
   const videoScrollRef = useRef<HTMLDivElement>(null);
 
   const initialVideos = videoIds.slice(0, 3);
   const remainingVideos = videoIds.slice(3);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null;
+  }
 
   const scrollVideos = (direction: "left" | "right") => {
     if (videoScrollRef.current) {
@@ -66,16 +75,6 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
       });
     }
   };
-
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) {
-    return null;
-  }
 
   return (
     <div className="flex bg-[#0d0d0d] h-full overflow-hidden">
@@ -113,12 +112,12 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
                 style={{ width: "calc(100% + 1rem)" }}
               >
                 {initialVideos.map((video) => (
-                  <div key={video.videoId} className="w-1/3 shrink-0">
+                  <div key={video.id} className="w-1/3 shrink-0">
                     <YouTubePlayer name={video.name} videoId={video.videoId} />
                   </div>
                 ))}
-                {remainingVideos.map((video, index) => (
-                  <div key={index} className="w-1/3 shrink-0">
+                {remainingVideos.map((video) => (
+                  <div key={video.id} className="w-1/3 shrink-0">
                     <YouTubePlayer name={video.name} videoId={video.videoId} />
                   </div>
                 ))}
@@ -157,7 +156,7 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
               >
                 {genreCards.map((genre) => (
                   <GenreCard
-                    key={genre.name}
+                    key={genre.id}
                     genre={genre.name}
                     color={genre.color}
                   />
