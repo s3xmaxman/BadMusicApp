@@ -7,13 +7,30 @@ export const videoIds = [
   { id: 6, name: "tokyo night drive", videoId: "Lcdi9O2XB4E" },
 ];
 
-export const genreCards = [
-  { id: 1, name: "Retro Wave", color: "bg-purple-500" },
-  { id: 2, name: "Electro House", color: "bg-blue-500" },
-  { id: 3, name: "Nu Disco", color: "bg-red-500" },
-  { id: 4, name: "City Pop", color: "bg-green-500" },
-  { id: 5, name: "Tropical House", color: "bg-yellow-500" },
-  { id: 6, name: "Vapor Wave", color: "bg-indigo-500" },
-  { id: 7, name: "Trance", color: "bg-pink-500" },
-  { id: 8, name: "Drum and Bass", color: "bg-orange-500" },
+export const SoundCloudUrls = [
+  {
+    id: 1,
+    name: "Under Bright Lights Ft. Indy Skies",
+    url: "https://soundcloud.com/nightmoderecs/underbrightlights",
+  },
+  {
+    id: 2,
+    name: "FLYDAY CHINATOWN",
+    url: "https://soundcloud.com/saturn_sun/evade-from-outerspace-flight-day-89",
+  },
+  {
+    id: 3,
+    name: "Emotional Prism",
+    url: "https://soundcloud.com/okarutomusic/bigwave-emotional-prism",
+  },
+  {
+    id: 4,
+    name: "You're On",
+    url: "https://soundcloud.com/madeon/madeon-youre-on-ft-kyan-bbc-radio-1",
+  },
+  {
+    id: 5,
+    name: "I Try",
+    url: "https://soundcloud.com/viperrecordings/smooth-i-try-free-download",
+  },
 ];

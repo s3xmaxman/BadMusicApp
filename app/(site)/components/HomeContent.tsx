@@ -8,7 +8,7 @@ import { Song } from "@/types";
 import GenreCard from "@/components/GenreCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import dynamic from "next/dynamic";
-import { genreCards, videoIds } from "@/constants";
+import { SoundCloudUrls, videoIds } from "@/constants";
 
 const YouTubePlayer = dynamic(() => import("@/components/YouTubePlayer"), {
   ssr: false,
@@ -17,6 +17,17 @@ const YouTubePlayer = dynamic(() => import("@/components/YouTubePlayer"), {
 const SoundCloudPlayer = dynamic(() => import("@/components/SoundCloud"), {
   ssr: false,
 });
+
+export const genreCards = [
+  { id: 1, name: "Retro Wave", color: "bg-purple-500" },
+  { id: 2, name: "Electro House", color: "bg-blue-500" },
+  { id: 3, name: "Nu Disco", color: "bg-red-500" },
+  { id: 4, name: "City Pop", color: "bg-green-500" },
+  { id: 5, name: "Tropical House", color: "bg-yellow-500" },
+  { id: 6, name: "Vapor Wave", color: "bg-indigo-500" },
+  { id: 7, name: "Trance", color: "bg-pink-500" },
+  { id: 8, name: "Drum and Bass", color: "bg-orange-500" },
+];
 
 interface HomeClientProps {
   songs: Song[];
@@ -156,7 +167,14 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
 
           {/* SoundCloud Player */}
           <section>
-            <SoundCloudPlayer />
+            {SoundCloudUrls.map((soundCloud) => (
+              <SoundCloudPlayer
+                key={soundCloud.id}
+                name={soundCloud.name}
+                url={soundCloud.url}
+                id={soundCloud.id}
+              />
+            ))}
           </section>
 
           {/* Genres Section */}
