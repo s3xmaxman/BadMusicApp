@@ -17,9 +17,10 @@ import Hover from "./Hover";
 interface LibraryProps {
   songs: Song[];
   playlists: Playlist[];
+  isCollapsed: boolean;
 }
 
-const Library: React.FC<LibraryProps> = ({ songs, playlists }) => {
+const Library: React.FC<LibraryProps> = ({ songs, playlists, isCollapsed }) => {
   const authModal = useAuthModal();
   const { user } = useUser();
   const uploadModal = useUploadModal();
@@ -46,46 +47,63 @@ const Library: React.FC<LibraryProps> = ({ songs, playlists }) => {
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-between px-5 pt-4">
-        <div className=" inline-flex items-center gap-x-4">
-          <Tabs value={selectedTab} onValueChange={setSelectedTab}>
-            <TabsList className="rounded-full">
-              <TabsTrigger value="music" className="rounded-full">
-                <MdMusicNote size={25} />
-              </TabsTrigger>
-              <TabsTrigger value="playlist" className="rounded-full">
-                <MdOutlineQueueMusic size={25} />
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
+        <div className="inline-flex items-center gap-x-4">
+          {!isCollapsed && (
+            <Tabs value={selectedTab} onValueChange={setSelectedTab}>
+              <TabsList className="rounded-full">
+                <TabsTrigger value="music" className="rounded-full">
+                  {isCollapsed ? <MdMusicNote size={25} /> : "音楽"}
+                </TabsTrigger>
+                <TabsTrigger value="playlist" className="rounded-full">
+                  {isCollapsed ? (
+                    <MdOutlineQueueMusic size={25} />
+                  ) : (
+                    "プレイリスト"
+                  )}
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          )}
         </div>
 
-        <Hover contentSize="w-40" description="プレイリストを作成">
-          <AiOutlineBars
-            className="text-neutral-400 cursor-pointer hover:text-white transition"
-            size={20}
-            onClick={openPlaylist}
-          />
-        </Hover>
+        {!isCollapsed && (
+          <div className="flex items-center gap-x-2">
+            <Hover contentSize="w-40" description="プレイリストを作成">
+              <AiOutlineBars
+                className="text-neutral-400 cursor-pointer hover:text-white transition"
+                size={20}
+                onClick={openPlaylist}
+              />
+            </Hover>
 
-        <Hover contentSize="w-24" description="曲を追加">
-          <AiOutlinePlus
-            onClick={openCreate}
-            size={20}
-            className="text-neutral-400 cursor-pointer hover:text-white transition"
-          />
-        </Hover>
+            <Hover contentSize="w-24" description="曲を追加">
+              <AiOutlinePlus
+                onClick={openCreate}
+                size={20}
+                className="text-neutral-400 cursor-pointer hover:text-white transition"
+              />
+            </Hover>
+          </div>
+        )}
       </div>
-      <div className="flex flex-col gap-y-2 mt-4 px-3">
+      <div
+        className={`flex flex-col gap-y-2 mt-4 px-3 ${
+          isCollapsed ? "items-center" : ""
+        }`}
+      >
         {selectedTab === "music" &&
           songs.map((item) => (
             <MediaItem
               onClick={(id: string) => onPlay(id)}
               key={item.id}
               data={item}
+              isCollapsed={isCollapsed}
             />
           ))}
         {selectedTab === "playlist" &&
-          playlists.map((item) => <MediaItem key={item.id} data={item} />)}
+          playlists.map((item) => (
+            <MediaItem key={item.id} data={item} isCollapsed={isCollapsed} />
+          ))}
       </div>
     </div>
   );

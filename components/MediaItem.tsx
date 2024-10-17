@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-
 import useLoadImage from "@/hooks/useLoadImage";
 import { Playlist, Song } from "@/types";
 import usePlayer from "@/hooks/usePlayer";
@@ -11,9 +10,14 @@ import { useState } from "react";
 interface MediaItemProps {
   data: Song | Playlist;
   onClick?: (id: string) => void;
+  isCollapsed?: boolean;
 }
 
-const MediaItem: React.FC<MediaItemProps> = ({ data, onClick }) => {
+const MediaItem: React.FC<MediaItemProps> = ({
+  data,
+  onClick,
+  isCollapsed,
+}) => {
   const player = usePlayer();
   const imageUrl = useLoadImage(data);
   const router = useRouter();
@@ -34,9 +38,17 @@ const MediaItem: React.FC<MediaItemProps> = ({ data, onClick }) => {
   return (
     <div
       onClick={handleClick}
-      className="flex items-center gap-x-3 cursor-pointer hover:bg-neutral-800/50 p-2 rounded-md"
+      className={`cursor-pointer hover:bg-neutral-800/50 p-2 rounded-md ${
+        isCollapsed
+          ? "flex items-center justify-center"
+          : "flex items-center gap-x-3"
+      }`}
     >
-      <div className="relative rounded-md overflow-hidden min-h-[48px] min-w-[48px]">
+      <div
+        className={`relative rounded-md overflow-hidden min-h-[48px] min-w-[48px] ${
+          isCollapsed ? "" : ""
+        }`}
+      >
         {!isImageLoaded && (
           <div className="absolute inset-0 bg-gray-300 animate-pulse"></div>
         )}
@@ -50,12 +62,14 @@ const MediaItem: React.FC<MediaItemProps> = ({ data, onClick }) => {
           onLoadingComplete={() => setIsImageLoaded(true)}
         />
       </div>
-      <div className="flex flex-col gap-y-1 overflow-hidden w-[70%]">
-        <p className="text-white truncate w-full">{data.title}</p>
-        {"author" in data && (
-          <p className="text-neutral-400 text-sm truncate">{data.author}</p>
-        )}
-      </div>
+      {!isCollapsed && (
+        <div className="flex flex-col gap-y-1 overflow-hidden w-[70%]">
+          <p className="text-white truncate w-full">{data.title}</p>
+          {"author" in data && (
+            <p className="text-neutral-400 text-sm truncate">{data.author}</p>
+          )}
+        </div>
+      )}
     </div>
   );
 };
