@@ -19,9 +19,9 @@ const SoundCloudItem: React.FC<SoundCloudItemProps> = ({ data }) => {
   };
 
   return (
-    <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg bg-neutral-400/5 rounded-lg text-card-foreground shadow-sm">
+    <Card className="group overflow-hidden transition-all duration-300 hover:shadow-lg hover:bg-neutral-400/10 rounded-lg text-card-foreground shadow-sm">
       <CardContent className="p-0">
-        <div className="relative group aspect-square w-full">
+        <div className="relative aspect-square w-full">
           <div className="absolute inset-0">
             <ReactPlayer
               url={data.url}
