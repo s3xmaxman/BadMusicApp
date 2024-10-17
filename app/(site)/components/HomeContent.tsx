@@ -1,14 +1,15 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import Header from "@/components/Header";
+import Header from "@/components/Header"; // 正しいパスに修正
 import PageContent from "./PageContent";
-import RightSidebar from "@/components/RightSidebar/RightSidebar";
-import TrendBoard from "@/components/TrendBoard";
-import { Song } from "@/types";
-import GenreCard from "@/components/GenreCard";
+import RightSidebar from "@/components/RightSidebar/RightSidebar"; // 正しいパスに修正
+import TrendBoard from "@/components/TrendBoard"; // 正しいパスに修正
+import { Song } from "@/types"; // 正しいパスに修正
+import GenreCard from "@/components/GenreCard"; // 正しいパスに修正
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import dynamic from "next/dynamic";
-import { SoundCloudUrls, videoIds } from "@/constants";
+import { SoundCloudUrls, videoIds } from "@/constants"; // 正しいパスに修正
+import SoundCloudItem from "@/components/SoundCloudItem"; // 正しいパスに修正
 
 const YouTubePlayer = dynamic(() => import("@/components/YouTubePlayer"), {
   ssr: false,
@@ -168,12 +169,7 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
           {/* SoundCloud Player */}
           <section>
             {SoundCloudUrls.map((soundCloud) => (
-              <SoundCloudPlayer
-                key={soundCloud.id}
-                name={soundCloud.name}
-                url={soundCloud.url}
-                id={soundCloud.id}
-              />
+              <SoundCloudItem key={soundCloud.id} data={soundCloud} />
             ))}
           </section>
 

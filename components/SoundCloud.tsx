@@ -1,14 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactPlayer from "react-player";
 
 interface SoundCloudProps {
-  name: string;
   url: string;
-  id: number;
+
+  volume?: number;
+  playing?: boolean;
 }
 
-const SoundCloud = ({ name, url, id }: SoundCloudProps) => {
-  return <ReactPlayer url={url} width="100%" height="100%" volume={0.1} />;
+const SoundCloud: React.FC<SoundCloudProps> = ({
+  url,
+  volume = 0.1,
+  playing,
+}) => {
+  return (
+    <ReactPlayer
+      url={url}
+      width="100%"
+      height="100%"
+      volume={volume}
+      playing={playing}
+    />
+  );
 };
 
 export default SoundCloud;
