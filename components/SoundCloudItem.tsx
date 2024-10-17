@@ -1,6 +1,9 @@
 import { useState } from "react";
 import SoundCloud from "./SoundCloud";
-
+import { Play, Pause } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
 interface SoundCloudItemProps {
   data: {
     id: number;
@@ -17,19 +20,19 @@ const SoundCloudItem: React.FC<SoundCloudItemProps> = ({ data }) => {
   };
 
   return (
-    <div
-      className="relative group flex  flex-row items-center justify-center rounded-md overflow-hidden gap-x-4 bg-neutral-400/5 cursor-pointer hover:bg-neutral-400/10 transition p-3 w-full"
-      onClick={togglePlay}
-    >
-      <div className="relative aspect-square w-24 h-24 rounded-md overflow-hidden">
-        <SoundCloud url={data.url} volume={0.1} playing={isPlaying} />
-      </div>
-      <div className="flex flex-col items-start justify-between w-full pt-4 gap-y-1">
-        <p className="font-semibold truncate w-full hover:underline">
-          {data.name}
-        </p>
-      </div>
-    </div>
+    <Card className="overflow-hidden" onClick={togglePlay}>
+      <CardContent className="p-0">
+        <div className="relative group aspect-square w-full h-48">
+          <div className="absolute inset-0">
+            <SoundCloud url={data.url} volume={0.1} playing={isPlaying} />
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        </div>
+        <div className="p-3">
+          <h3 className="text-sm font-medium line-clamp-1">{data.name}</h3>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
