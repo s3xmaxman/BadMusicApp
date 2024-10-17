@@ -13,6 +13,10 @@ const YouTubePlayer = dynamic(() => import("@/components/YouTubePlayer"), {
   ssr: false,
 });
 
+const SoundCloudPlayer = dynamic(() => import("@/components/SoundCloud"), {
+  ssr: false,
+});
+
 interface HomeClientProps {
   songs: Song[];
 }
@@ -168,6 +172,11 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
               </div>
             )}
           </section>
+          {/* SoundCloud Player */}
+          <section>
+            <SoundCloudPlayer />
+          </section>
+
           {/* Genres Section */}
           <section
             className="relative"
