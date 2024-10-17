@@ -33,4 +33,19 @@ export const SoundCloudUrls = [
     name: "I Try",
     url: "https://soundcloud.com/viperrecordings/smooth-i-try-free-download",
   },
+  {
+    id: 6,
+    name: "Moonlit Siren",
+    url: "https://soundcloud.com/dad-bads1de-sd/moonlit-siren?in=dad-bads1de-sd/sets/retro-mix",
+  },
+  {
+    id: 7,
+    name: "Roller Mobster",
+    url: "https://soundcloud.com/carpenter_brut/roller-mobster",
+  },
+  {
+    id: 8,
+    name: "Fainted",
+    url: "https://soundcloud.com/musicofnarvent/narvent-fainted",
+  },
 ];

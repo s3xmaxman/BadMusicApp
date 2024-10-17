@@ -1,9 +1,8 @@
 import { useState } from "react";
-import SoundCloud from "./SoundCloud";
-import { Play, Pause } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import { Play, Pause } from "lucide-react";
+import ReactPlayer from "react-player";
+
 interface SoundCloudItemProps {
   data: {
     id: number;
@@ -20,16 +19,39 @@ const SoundCloudItem: React.FC<SoundCloudItemProps> = ({ data }) => {
   };
 
   return (
-    <Card className="overflow-hidden" onClick={togglePlay}>
+    <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg bg-neutral-400/5 rounded-lg text-card-foreground shadow-sm">
       <CardContent className="p-0">
-        <div className="relative group aspect-square w-full h-48">
+        <div className="relative group aspect-square w-full">
           <div className="absolute inset-0">
-            <SoundCloud url={data.url} volume={0.1} playing={isPlaying} />
+            <ReactPlayer
+              url={data.url}
+              width="100%"
+              height="100%"
+              volume={0.1}
+              playing={isPlaying}
+              config={{
+                soundcloud: {
+                  options: {
+                    visual: true,
+                    show_artwork: false,
+                  },
+                },
+              }}
+            />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div
+            className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center cursor-pointer"
+            onClick={togglePlay}
+          >
+            {isPlaying ? (
+              <Pause className="w-16 h-16 text-white" />
+            ) : (
+              <Play className="w-16 h-16 text-white" />
+            )}
+          </div>
         </div>
-        <div className="p-3">
-          <h3 className="text-sm font-medium line-clamp-1">{data.name}</h3>
+        <div className="p-4">
+          <h3 className="text-lg font-semibold line-clamp-1">{data.name}</h3>
         </div>
       </CardContent>
     </Card>

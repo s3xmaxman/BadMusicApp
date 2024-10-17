@@ -1,21 +1,17 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import Header from "@/components/Header"; // 正しいパスに修正
+import Header from "@/components/Header";
 import PageContent from "./PageContent";
-import RightSidebar from "@/components/RightSidebar/RightSidebar"; // 正しいパスに修正
-import TrendBoard from "@/components/TrendBoard"; // 正しいパスに修正
-import { Song } from "@/types"; // 正しいパスに修正
-import GenreCard from "@/components/GenreCard"; // 正しいパスに修正
+import RightSidebar from "@/components/RightSidebar/RightSidebar";
+import TrendBoard from "@/components/TrendBoard";
+import { Song } from "@/types";
+import GenreCard from "@/components/GenreCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import dynamic from "next/dynamic";
-import { SoundCloudUrls, videoIds } from "@/constants"; // 正しいパスに修正
-import SoundCloudItem from "@/components/SoundCloudItem"; // 正しいパスに修正
+import { SoundCloudUrls, videoIds } from "@/constants";
+import SoundCloudItem from "@/components/SoundCloudItem";
 
 const YouTubePlayer = dynamic(() => import("@/components/YouTubePlayer"), {
-  ssr: false,
-});
-
-const SoundCloudPlayer = dynamic(() => import("@/components/SoundCloud"), {
   ssr: false,
 });
 
@@ -167,7 +163,7 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
           </section>
 
           {/* SoundCloud Player */}
-          <section>
+          <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {SoundCloudUrls.map((soundCloud) => (
               <SoundCloudItem key={soundCloud.id} data={soundCloud} />
             ))}
