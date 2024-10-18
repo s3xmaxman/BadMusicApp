@@ -13,6 +13,7 @@ import usePlayer from "@/hooks/usePlayer";
 import { RiPlayListFill } from "react-icons/ri";
 import { FaHeart } from "react-icons/fa6";
 import { useUser } from "@/hooks/useUser";
+import { Button } from "./ui/button";
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -74,12 +75,12 @@ const Sidebar: React.FC<SidebarProps> = ({ children, songs, playlists }) => {
           "hidden md:flex"
         )}
       >
-        <button
+        <Button
           className="text-white text-2xl mb-4 ml-auto mr-2"
           onClick={() => setIsCollapsed(!isCollapsed)}
         >
           {isCollapsed ? ">" : "<"}
-        </button>
+        </Button>
         <Box>
           <div className="flex flex-col gap-y-4 px-5 py-4">
             {routes.map((item) => (
