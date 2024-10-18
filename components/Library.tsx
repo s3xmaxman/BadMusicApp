@@ -52,14 +52,14 @@ const Library: React.FC<LibraryProps> = ({ songs, playlists, isCollapsed }) => {
             <Tabs value={selectedTab} onValueChange={setSelectedTab}>
               <TabsList className="rounded-full">
                 <TabsTrigger value="music" className="rounded-full">
-                  {isCollapsed ? <MdMusicNote size={25} /> : "音楽"}
+                  <Hover contentSize="w-24" description="楽曲">
+                    <MdMusicNote size={25} />
+                  </Hover>
                 </TabsTrigger>
                 <TabsTrigger value="playlist" className="rounded-full">
-                  {isCollapsed ? (
+                  <Hover contentSize="w-24" description="プレイリスト">
                     <MdOutlineQueueMusic size={25} />
-                  ) : (
-                    "プレイリスト"
-                  )}
+                  </Hover>
                 </TabsTrigger>
               </TabsList>
             </Tabs>
@@ -67,7 +67,7 @@ const Library: React.FC<LibraryProps> = ({ songs, playlists, isCollapsed }) => {
         </div>
 
         {!isCollapsed && (
-          <div className="flex items-center gap-x-2">
+          <div className="flex gap-x-6">
             <Hover contentSize="w-40" description="プレイリストを作成">
               <AiOutlineBars
                 className="text-neutral-400 cursor-pointer hover:text-white transition"

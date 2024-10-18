@@ -70,7 +70,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children, songs, playlists }) => {
       <div
         className={twMerge(
           "flex flex-col gap-y-2 bg-black h-full p-2 transition-width duration-300",
-          isCollapsed ? "w-20" : "w-72", // 幅をTailwindの数値に変更
+          isCollapsed ? "w-20" : "w-72",
           "hidden md:flex"
         )}
       >
