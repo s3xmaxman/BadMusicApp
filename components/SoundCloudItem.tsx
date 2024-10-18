@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Play, Pause, Repeat } from "lucide-react";
 import ReactPlayer from "react-player";
 import Image from "next/image";
+import { formatTime } from "@/libs/helpers";
 
 interface SoundCloudItemProps {
   data: {
@@ -42,12 +43,6 @@ const SoundCloudItem: React.FC<SoundCloudItemProps> = ({ data }) => {
     setIsPlaying((prev) => !prev);
   };
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
-  };
-
   const handleSeekMouseDown = () => {
     setSeeking(true);
   };
@@ -78,7 +73,6 @@ const SoundCloudItem: React.FC<SoundCloudItemProps> = ({ data }) => {
         setPlayedSeconds(playedSeconds);
       }
 
-      // Check if the track has ended
       if (duration > 0 && playedSeconds >= duration - 0.5) {
         if (isLooping) {
           playerRef.current?.seekTo(0);
