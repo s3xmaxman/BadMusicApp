@@ -6,13 +6,9 @@ import { Song } from "@/types";
 
 interface PageContentProps {
   songs: Song[];
-  setIsMusicPlaying: (isPlaying: boolean) => void;
 }
 
-const PageContent: React.FC<PageContentProps> = ({
-  songs,
-  setIsMusicPlaying,
-}) => {
+const PageContent: React.FC<PageContentProps> = ({ songs }) => {
   const onPlay = useOnPlay(songs);
 
   if (!songs) {
@@ -25,7 +21,6 @@ const PageContent: React.FC<PageContentProps> = ({
 
   const handlePlay = (id: string) => {
     onPlay(id);
-    setIsMusicPlaying(true);
   };
 
   return (

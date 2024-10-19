@@ -282,7 +282,7 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
           {/* Latest Songs Section */}
           <section>
             <h2 className="text-white text-2xl font-semibold">Latest</h2>
-            <PageContent songs={songs} setIsMusicPlaying={setIsMusicPlaying} />
+            <PageContent songs={songs} />
           </section>
         </main>
       </div>
