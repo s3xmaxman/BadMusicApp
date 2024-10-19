@@ -1,12 +1,13 @@
-import { useState, useRef, MouseEvent, useCallback, useEffect } from "react";
+import { MouseEvent, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Play, Pause, Repeat } from "lucide-react";
-import ReactPlayer from "react-player";
 import Image from "next/image";
 import { formatTime } from "@/libs/helpers";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import Slider from "./Slider";
+import { useSoundCloudPlayer } from "@/hooks/useSoundCloudPlayer";
+import ReactPlayer from "react-player";
 
 interface SoundCloudItemProps {
   data: {
@@ -27,94 +28,29 @@ const SoundCloudItem: React.FC<SoundCloudItemProps> = ({
   onPause,
   onEnded,
 }) => {
-  const [isLooping, setIsLooping] = useState(false);
-  const [playedSeconds, setPlayedSeconds] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [played, setPlayed] = useState(0);
-  const [seeking, setSeeking] = useState(false);
-  const [trackImage, setTrackImage] = useState("");
-  const [volume, setVolume] = useState(0.5);
+  const {
+    isLooping,
+    playedSeconds,
+    duration,
+    played,
+    trackImage,
+    volume,
+    seeking,
+    setSeeking,
+    playerRef,
+    togglePlay,
+    handleSeekMouseDown,
+    handleSeekChange,
+    handleSeekMouseUp,
+    handleProgress,
+    handleDuration,
+    handleVolumeChange,
+    toggleMute,
+    setIsLooping,
+  } = useSoundCloudPlayer({ url: data.url, onEnded });
 
   const Icon = isPlaying ? BsPauseFill : BsPlayFill;
   const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
-
-  const playerRef = useRef<ReactPlayer>(null);
-
-  useEffect(() => {
-    fetch(
-      `https://soundcloud.com/oembed?format=json&url=${encodeURIComponent(
-        data.url
-      )}`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.thumbnail_url) {
-          setTrackImage(data.thumbnail_url);
-        }
-      })
-      .catch((error) => console.error("Error fetching track info:", error));
-  }, [data.url]);
-
-  const togglePlay = () => {
-    if (isPlaying) {
-      onPause();
-    } else {
-      onPlay();
-    }
-  };
-
-  const handleSeekMouseDown = () => {
-    setSeeking(true);
-  };
-
-  const handleSeekChange = (e: MouseEvent<HTMLDivElement>) => {
-    if (seeking) {
-      const rect = e.currentTarget.getBoundingClientRect();
-      const newPlayed = (e.clientX - rect.left) / rect.width;
-
-      setPlayed(newPlayed);
-      playerRef.current?.seekTo(newPlayed);
-    }
-  };
-
-  const handleSeekMouseUp = (e: MouseEvent<HTMLDivElement>) => {
-    setSeeking(false);
-    const rect = e.currentTarget.getBoundingClientRect();
-    const newPlayed = (e.clientX - rect.left) / rect.width;
-
-    setPlayed(newPlayed);
-    playerRef.current?.seekTo(newPlayed);
-  };
-
-  const handleProgress = useCallback(
-    ({ played, playedSeconds }: { played: number; playedSeconds: number }) => {
-      if (!seeking) {
-        setPlayed(played);
-        setPlayedSeconds(playedSeconds);
-      }
-
-      if (duration > 0 && playedSeconds >= duration - 0.5) {
-        if (isLooping) {
-          playerRef.current?.seekTo(0);
-        } else {
-          onEnded();
-        }
-      }
-    },
-    [seeking, isLooping, duration, onEnded]
-  );
-
-  const handleDuration = (newDuration: number) => {
-    setDuration(newDuration);
-  };
-
-  const handleVolumeChange = (newVolume: number) => {
-    setVolume(newVolume);
-  };
-
-  const toggleMute = () => {
-    setVolume((prev) => (prev === 0 ? 0.1 : 0));
-  };
 
   return (
     <Card className="group overflow-hidden transition-all duration-300 hover:shadow-lg hover:bg-neutral-400/10 rounded-lg text-card-foreground shadow-sm">
@@ -136,7 +72,7 @@ const SoundCloudItem: React.FC<SoundCloudItemProps> = ({
           {/* Control overlay */}
           <div
             className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center cursor-pointer"
-            onClick={togglePlay}
+            onClick={() => togglePlay(isPlaying, onPlay, onPause)}
           >
             <div className="flex items-center space-x-6">
               <button className="bg-white/20 backdrop-blur-md rounded-full p-4 transition-transform duration-300 hover:scale-110">
@@ -189,7 +125,11 @@ const SoundCloudItem: React.FC<SoundCloudItemProps> = ({
             onMouseDown={handleSeekMouseDown}
             onMouseMove={handleSeekChange}
             onMouseUp={handleSeekMouseUp}
-            onMouseLeave={() => setSeeking(false)}
+            onMouseLeave={() => {
+              if (seeking) {
+                setSeeking(false);
+              }
+            }}
           >
             <div
               className="absolute top-0 left-0 h-2 bg-blue-500 rounded-full"
