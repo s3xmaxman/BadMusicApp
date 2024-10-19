@@ -14,6 +14,7 @@ import { RiPlayListFill } from "react-icons/ri";
 import { FaHeart } from "react-icons/fa6";
 import { useUser } from "@/hooks/useUser";
 import { Button } from "./ui/button";
+import Image from "next/image";
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -75,12 +76,22 @@ const Sidebar: React.FC<SidebarProps> = ({ children, songs, playlists }) => {
           "hidden md:flex"
         )}
       >
-        <Button
-          className="text-white text-2xl mb-4 ml-auto mr-2"
-          onClick={() => setIsCollapsed(!isCollapsed)}
-        >
-          {isCollapsed ? ">" : "<"}
-        </Button>
+        <div className="flex items-center justify-between">
+          <Image
+            src="/logo.svg"
+            alt="Logo"
+            width={isCollapsed ? 32 : 48}
+            height={isCollapsed ? 32 : 48}
+            className="mr-auto ml-2"
+          />
+          {!isCollapsed && <h1 className="font-bold text-xl">BadMusicApp</h1>}
+          <Button
+            className="text-white text-2xl mb-4 ml-auto mr-2"
+            onClick={() => setIsCollapsed(!isCollapsed)}
+          >
+            {isCollapsed ? ">" : "<"}
+          </Button>
+        </div>
         <Box>
           <div className="flex flex-col gap-y-4 px-5 py-4">
             {routes.map((item) => (
