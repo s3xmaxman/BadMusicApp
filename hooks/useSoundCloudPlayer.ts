@@ -16,7 +16,7 @@ export const useSoundCloudPlayer = ({
   const [played, setPlayed] = useState(0);
   const [seeking, setSeeking] = useState(false);
   const [trackImage, setTrackImage] = useState("");
-  const [volume, setVolume] = useState(0.5);
+  const [volume, setVolume] = useState(0.1);
 
   const playerRef = useRef<ReactPlayer>(null);
 
@@ -49,7 +49,7 @@ export const useSoundCloudPlayer = ({
     setSeeking(true);
   };
 
-  const handleSeekChange = (e: any) => {
+  const handleSeekChange = (e: React.MouseEvent<HTMLDivElement>) => {
     if (seeking) {
       const rect = e.currentTarget.getBoundingClientRect();
       const newPlayed = (e.clientX - rect.left) / rect.width;
@@ -59,7 +59,7 @@ export const useSoundCloudPlayer = ({
     }
   };
 
-  const handleSeekMouseUp = (e: any) => {
+  const handleSeekMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
     setSeeking(false);
     const rect = e.currentTarget.getBoundingClientRect();
     const newPlayed = (e.clientX - rect.left) / rect.width;
@@ -75,12 +75,12 @@ export const useSoundCloudPlayer = ({
         setPlayedSeconds(playedSeconds);
       }
 
-      if (duration > 0 && playedSeconds >= duration - 0.5) {
-        if (isLooping) {
-          playerRef.current?.seekTo(0);
-        } else {
-          onEnded();
-        }
+      if (isLooping && duration > 0 && playedSeconds >= duration - 1) {
+        playerRef.current?.seekTo(0);
+      }
+
+      if (!isLooping && duration > 0 && playedSeconds >= duration) {
+        onEnded();
       }
     },
     [seeking, isLooping, duration, onEnded]
