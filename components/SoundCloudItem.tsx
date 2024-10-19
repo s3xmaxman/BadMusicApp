@@ -14,10 +14,19 @@ interface SoundCloudItemProps {
     name: string;
     url: string;
   };
+  isPlaying: boolean;
+  onPlay: () => void;
+  onPause: () => void;
+  onEnded: () => void;
 }
 
-const SoundCloudItem: React.FC<SoundCloudItemProps> = ({ data }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
+const SoundCloudItem: React.FC<SoundCloudItemProps> = ({
+  data,
+  isPlaying,
+  onPlay,
+  onPause,
+  onEnded,
+}) => {
   const [isLooping, setIsLooping] = useState(false);
   const [playedSeconds, setPlayedSeconds] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -47,7 +56,11 @@ const SoundCloudItem: React.FC<SoundCloudItemProps> = ({ data }) => {
   }, [data.url]);
 
   const togglePlay = () => {
-    setIsPlaying((prev) => !prev);
+    if (isPlaying) {
+      onPause();
+    } else {
+      onPlay();
+    }
   };
 
   const handleSeekMouseDown = () => {
@@ -83,13 +96,12 @@ const SoundCloudItem: React.FC<SoundCloudItemProps> = ({ data }) => {
       if (duration > 0 && playedSeconds >= duration - 0.5) {
         if (isLooping) {
           playerRef.current?.seekTo(0);
-          setIsPlaying(true);
         } else {
-          setIsPlaying(false);
+          onEnded();
         }
       }
     },
-    [seeking, isLooping, duration]
+    [seeking, isLooping, duration, onEnded]
   );
 
   const handleDuration = (newDuration: number) => {
@@ -118,6 +130,7 @@ const SoundCloudItem: React.FC<SoundCloudItemProps> = ({ data }) => {
               playing={isPlaying}
               onProgress={handleProgress}
               onDuration={handleDuration}
+              onEnded={onEnded}
             />
           </div>
           {/* Control overlay */}

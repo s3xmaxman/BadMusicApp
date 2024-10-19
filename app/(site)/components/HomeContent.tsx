@@ -1,12 +1,12 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import Header from "@/components/Header";
 import PageContent from "./PageContent";
 import RightSidebar from "@/components/RightSidebar/RightSidebar";
 import TrendBoard from "@/components/TrendBoard";
 import { Song } from "@/types";
 import GenreCard from "@/components/GenreCard";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Shuffle } from "lucide-react";
 import dynamic from "next/dynamic";
 import { SoundCloudUrls, videoIds } from "@/constants";
 import SoundCloudItem from "@/components/SoundCloudItem";
@@ -37,6 +37,9 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
   const [isClient, setIsClient] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [currentSoundCloudIndex, setCurrentSoundCloudIndex] = useState(0);
+  const [playOrder, setPlayOrder] = useState<number[]>([]);
+  const [isShuffled, setIsShuffled] = useState(false);
   const genreScrollRef = useRef<HTMLDivElement>(null);
   const videoScrollRef = useRef<HTMLDivElement>(null);
 
@@ -49,6 +52,43 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    setPlayOrder(SoundCloudUrls.map((_, index) => index));
+  }, []);
+
+  const shufflePlayOrder = useCallback(() => {
+    setPlayOrder((prevOrder) => {
+      const newOrder = [...prevOrder];
+      for (let i = newOrder.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newOrder[i], newOrder[j]] = [newOrder[j], newOrder[i]];
+      }
+      return newOrder;
+    });
+    setIsShuffled(true);
+  }, []);
+
+  const unshufflePlayOrder = useCallback(() => {
+    setPlayOrder(SoundCloudUrls.map((_, index) => index));
+    setIsShuffled(false);
+  }, []);
+
+  const toggleShuffle = useCallback(() => {
+    if (isShuffled) {
+      unshufflePlayOrder();
+    } else {
+      shufflePlayOrder();
+    }
+  }, [isShuffled, shufflePlayOrder, unshufflePlayOrder]);
+
+  const playNextTrack = useCallback(() => {
+    setCurrentSoundCloudIndex((prevIndex) => {
+      const currentOrderIndex = playOrder.indexOf(prevIndex);
+      const nextOrderIndex = (currentOrderIndex + 1) % playOrder.length;
+      return playOrder[nextOrderIndex];
+    });
+  }, [playOrder]);
 
   if (!isClient) {
     return null;
@@ -163,10 +203,39 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
           </section>
 
           {/* SoundCloud Player */}
-          <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {SoundCloudUrls.map((soundCloud) => (
-              <SoundCloudItem key={soundCloud.id} data={soundCloud} />
-            ))}
+          <section>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-white text-2xl font-semibold">
+                SoundCloud Tracks
+              </h2>
+              <button
+                onClick={toggleShuffle}
+                className={`p-2 rounded-full transition-colors duration-200 ${
+                  isShuffled
+                    ? "text-blue-500 bg-blue-500/10"
+                    : "text-neutral-500 hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                }`}
+              >
+                <Shuffle className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {SoundCloudUrls.map((soundCloud, index) => (
+                <SoundCloudItem
+                  key={soundCloud.id}
+                  data={soundCloud}
+                  isPlaying={isMusicPlaying && index === currentSoundCloudIndex}
+                  onPlay={() => {
+                    setIsMusicPlaying(true);
+                    setCurrentSoundCloudIndex(index);
+                  }}
+                  onPause={() => {
+                    setIsMusicPlaying(false);
+                  }}
+                  onEnded={playNextTrack}
+                />
+              ))}
+            </div>
           </section>
 
           {/* Genres Section */}
