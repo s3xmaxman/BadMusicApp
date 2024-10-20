@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
 import { HiHome } from "react-icons/hi";
 import { BiSearch } from "react-icons/bi";
-import Box from "./Box";
+import Box from "../Box";
 import SidebarItem from "./SidebarItem";
 import Library from "./Library";
 import { Playlist, Song } from "@/types";
@@ -13,7 +13,7 @@ import usePlayer from "@/hooks/usePlayer";
 import { RiPlayListFill } from "react-icons/ri";
 import { FaHeart } from "react-icons/fa6";
 import { useUser } from "@/hooks/useUser";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import Image from "next/image";
 
 interface SidebarProps {

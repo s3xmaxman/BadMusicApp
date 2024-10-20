@@ -7,12 +7,12 @@ import { useUser } from "@/hooks/useUser";
 import useUploadModal from "@/hooks/useUploadModal";
 import usePlaylistModal from "@/hooks/usePlaylistModal";
 import { Playlist, Song } from "@/types";
-import MediaItem from "./MediaItem";
+import MediaItem from "../MediaItem";
 import useOnPlay from "@/hooks/useOnPlay";
 import { useState } from "react";
 import { MdMusicNote } from "react-icons/md";
 import { MdOutlineQueueMusic } from "react-icons/md";
-import Hover from "./Hover";
+import Hover from "../Hover";
 
 interface LibraryProps {
   songs: Song[];

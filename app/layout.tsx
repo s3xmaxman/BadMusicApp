@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Figtree } from "next/font/google";
 import "./globals.css";
-import Sidebar from "@/components/Sidebar";
+
 import SupabaseProvider from "@/providers/SupabaseProvider";
 import UserProvider from "@/providers/UserProvider";
 import ModalProvider from "@/providers/ModelProvider";
@@ -11,6 +11,7 @@ import getActiveProductsWithPrices from "@/actions/getActiveProductsWithPrices";
 import getPlaylists from "@/actions/getPlaylists";
 import getSongs from "@/actions/getSongs";
 import ServiceWorkerProvider from "@/providers/ServiceWorkerProvider";
+import Sidebar from "@/components/Sidebar/Sidebar";
 
 const font = Figtree({ subsets: ["latin"] });
 
