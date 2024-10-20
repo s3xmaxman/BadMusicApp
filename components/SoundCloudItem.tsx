@@ -1,12 +1,5 @@
-import { MouseEvent, useState, useContext } from "react";
+import { useContext } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Play, Pause, Repeat } from "lucide-react";
-import Image from "next/image";
-import { formatTime } from "@/libs/helpers";
-import { BsPauseFill, BsPlayFill } from "react-icons/bs";
-import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
-import Slider from "./Slider";
-import { useSoundCloudPlayer } from "@/hooks/useSoundCloudPlayer";
 import ReactPlayer from "react-player";
 import { SoundCloudContext } from "@/providers/SoundCloudProvider";
 

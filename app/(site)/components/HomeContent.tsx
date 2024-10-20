@@ -1,16 +1,15 @@
 "use client";
-import { useState, useRef, useEffect, useCallback, useContext } from "react";
+import { useState, useRef, useEffect } from "react";
 import Header from "@/components/Header";
 import PageContent from "./PageContent";
 import RightSidebar from "@/components/RightSidebar/RightSidebar";
 import TrendBoard from "@/components/TrendBoard";
 import { Song } from "@/types";
 import GenreCard from "@/components/GenreCard";
-import { ChevronLeft, ChevronRight, Shuffle } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import dynamic from "next/dynamic";
 import { SoundCloudUrls, videoIds } from "@/constants";
 import SoundCloudItem from "@/components/SoundCloudItem";
-import { SoundCloudContext } from "@/providers/SoundCloudProvider";
 
 const YouTubePlayer = dynamic(() => import("@/components/YouTubePlayer"), {
   ssr: false,
@@ -32,16 +31,11 @@ interface HomeClientProps {
 }
 
 const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
-  const { setCurrentUrl } = useContext(SoundCloudContext);
-  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const [showArrows, setShowArrows] = useState(false);
   const [showVideoArrows, setShowVideoArrows] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  const [currentSoundCloudIndex, setCurrentSoundCloudIndex] = useState(0);
-  const [playOrder, setPlayOrder] = useState<number[]>([]);
-  const [isShuffled, setIsShuffled] = useState(false);
   const genreScrollRef = useRef<HTMLDivElement>(null);
   const videoScrollRef = useRef<HTMLDivElement>(null);
 
@@ -87,14 +81,6 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
         behavior: "smooth",
       });
     }
-  };
-
-  const handlePlay = () => {
-    setIsMusicPlaying(true);
-  };
-
-  const handlePause = () => {
-    setIsMusicPlaying(false);
   };
 
   return (

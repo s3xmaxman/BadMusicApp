@@ -9,6 +9,8 @@ import { Playlist } from "@/types";
 import SoundCloudPlayerContent from "./SoundCloudPlayerContent";
 import { SoundCloudContext } from "@/providers/SoundCloudProvider";
 
+// TODO: SoundCloudPlayerContentとPlayerContentのシームレスな切り替えを行えるようにする
+
 interface PlayerProps {
   playlists: Playlist[];
 }
