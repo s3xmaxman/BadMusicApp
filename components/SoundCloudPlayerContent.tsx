@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback, useContext } from "react";
 import { BsPauseFill, BsPlayFill, BsRepeat1 } from "react-icons/bs";
 import { FaRandom } from "react-icons/fa";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
@@ -9,6 +9,8 @@ import { useSoundCloudPlayer } from "@/hooks/useSoundCloudPlayer";
 import ReactPlayer from "react-player";
 import { formatTime } from "@/libs/helpers";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
+import { SoundCloudContext } from "@/providers/SoundCloudProvider";
+import { SoundCloudUrls } from "@/constants";
 
 interface SoundCloudPlayerContentProps {
   url: string;
@@ -17,6 +19,24 @@ interface SoundCloudPlayerContentProps {
 const SoundCloudPlayerContent: React.FC<SoundCloudPlayerContentProps> = ({
   url,
 }) => {
+  const { setCurrentUrl } = useContext(SoundCloudContext);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentSoundCloudIndex, setCurrentSoundCloudIndex] = useState(0);
+  const [playOrder, setPlayOrder] = useState<number[]>([]);
+  const [isShuffled, setIsShuffled] = useState(false);
+
+  const playNextTrack = useCallback(() => {
+    setCurrentSoundCloudIndex((prevIndex) => {
+      const currentOrderIndex = playOrder.indexOf(prevIndex);
+      const nextOrderIndex = (currentOrderIndex + 1) % playOrder.length;
+      const nextIndex = playOrder[nextOrderIndex];
+      const nextUrl = SoundCloudUrls[nextIndex].url;
+      setCurrentUrl(nextUrl);
+      return nextIndex;
+    });
+    setIsPlaying(true);
+  }, [playOrder, setCurrentUrl]);
+
   const {
     isLooping,
     setIsLooping,
@@ -28,7 +48,6 @@ const SoundCloudPlayerContent: React.FC<SoundCloudPlayerContentProps> = ({
     trackImage,
     volume,
     playerRef,
-    togglePlay,
     handleSeekMouseDown,
     handleSeekChange,
     handleSeekMouseUp,
@@ -36,15 +55,47 @@ const SoundCloudPlayerContent: React.FC<SoundCloudPlayerContentProps> = ({
     handleDuration,
     handleVolumeChange,
     toggleMute,
-  } = useSoundCloudPlayer({ url, onEnded: () => {} });
+  } = useSoundCloudPlayer({ url, onEnded: playNextTrack });
 
-  const [isPlaying, setIsPlaying] = useState(false);
   const Icon = isPlaying ? BsPauseFill : BsPlayFill;
   const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
   const formattedCurrentTime = formatTime(playedSeconds);
   const formattedDuration = formatTime(duration);
 
-  const handlePlay = () => {
+  useEffect(() => {
+    setPlayOrder(SoundCloudUrls.map((_, index) => index));
+  }, []);
+
+  const toggleShuffle = useCallback(() => {
+    setIsShuffled((prev) => !prev);
+    setPlayOrder((prevOrder) => {
+      if (!isShuffled) {
+        const newOrder = [...prevOrder];
+        for (let i = newOrder.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [newOrder[i], newOrder[j]] = [newOrder[j], newOrder[i]];
+        }
+        return newOrder;
+      } else {
+        return SoundCloudUrls.map((_, index) => index);
+      }
+    });
+  }, [isShuffled]);
+
+  const playPreviousTrack = useCallback(() => {
+    setCurrentSoundCloudIndex((prevIndex) => {
+      const currentOrderIndex = playOrder.indexOf(prevIndex);
+      const previousOrderIndex =
+        (currentOrderIndex - 1 + playOrder.length) % playOrder.length;
+      const previousIndex = playOrder[previousOrderIndex];
+      const previousUrl = SoundCloudUrls[previousIndex].url;
+      setCurrentUrl(previousUrl);
+      return previousIndex;
+    });
+    setIsPlaying(true);
+  }, [playOrder, setCurrentUrl]);
+
+  const togglePlay = () => {
     setIsPlaying((prev) => !prev);
   };
 
@@ -66,12 +117,36 @@ const SoundCloudPlayerContent: React.FC<SoundCloudPlayerContentProps> = ({
 
       <div className="flex flex-col w-full md:justify-center items-center max-w-[722px] gap-x-6">
         <div className="flex items-center gap-x-8">
+          <FaRandom
+            onClick={toggleShuffle}
+            size={20}
+            className={`cursor-pointer transition ${
+              isShuffled ? "text-[#4c1d95]" : "text-neutral-400"
+            }`}
+          />
+          <AiFillStepBackward
+            onClick={playPreviousTrack}
+            size={30}
+            className="text-neutral-400 cursor-pointer hover:text-white transition"
+          />
           <div
-            onClick={handlePlay}
+            onClick={togglePlay}
             className="flex items-center justify-center h-10 w-10 rounded-full bg-white p-1 cursor-pointer"
           >
             <Icon size={30} className="text-black" />
           </div>
+          <AiFillStepForward
+            onClick={playNextTrack}
+            size={30}
+            className="text-neutral-400 cursor-pointer hover:text-white transition"
+          />
+          <BsRepeat1
+            onClick={() => setIsLooping((prev) => !prev)}
+            size={25}
+            className={`cursor-pointer transition ${
+              isLooping ? "text-[#4c1d95]" : "text-neutral-400"
+            }`}
+          />
         </div>
 
         <div className="flex items-center gap-x-2 mt-4 w-full lg:max-w-[800px] md:max-w-[300px]">
@@ -79,7 +154,7 @@ const SoundCloudPlayerContent: React.FC<SoundCloudPlayerContentProps> = ({
             {formattedCurrentTime}
           </span>
           <SeekBar
-            currentTime={0}
+            currentTime={playedSeconds}
             duration={duration}
             onSeek={(time) => playerRef.current?.seekTo(time / duration)}
             className="flex-1 h-2"
@@ -92,7 +167,6 @@ const SoundCloudPlayerContent: React.FC<SoundCloudPlayerContentProps> = ({
 
       <div className="hidden md:flex w-full justify-end pr-2">
         <div className="flex items-center gap-x-2 w-full md:w-[170px] lg:w-[200px]">
-          <div className="mx-1" />
           <VolumeIcon
             onClick={toggleMute}
             className="cursor-pointer"
@@ -109,6 +183,7 @@ const SoundCloudPlayerContent: React.FC<SoundCloudPlayerContentProps> = ({
         onProgress={handleProgress}
         onDuration={handleDuration}
         loop={isLooping}
+        style={{ display: "none" }}
       />
     </div>
   );
