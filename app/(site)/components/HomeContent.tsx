@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useContext } from "react";
 import Header from "@/components/Header";
 import PageContent from "./PageContent";
 import RightSidebar from "@/components/RightSidebar/RightSidebar";
@@ -10,6 +10,7 @@ import { ChevronLeft, ChevronRight, Shuffle } from "lucide-react";
 import dynamic from "next/dynamic";
 import { SoundCloudUrls, videoIds } from "@/constants";
 import SoundCloudItem from "@/components/SoundCloudItem";
+import { SoundCloudContext } from "@/providers/SoundCloudProvider";
 
 const YouTubePlayer = dynamic(() => import("@/components/YouTubePlayer"), {
   ssr: false,
@@ -31,6 +32,7 @@ interface HomeClientProps {
 }
 
 const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
+  const { setCurrentUrl } = useContext(SoundCloudContext);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const [showArrows, setShowArrows] = useState(false);
   const [showVideoArrows, setShowVideoArrows] = useState(false);
@@ -86,9 +88,13 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
     setCurrentSoundCloudIndex((prevIndex) => {
       const currentOrderIndex = playOrder.indexOf(prevIndex);
       const nextOrderIndex = (currentOrderIndex + 1) % playOrder.length;
-      return playOrder[nextOrderIndex];
+      const nextIndex = playOrder[nextOrderIndex];
+      const nextUrl = SoundCloudUrls[nextIndex].url;
+      setCurrentUrl(nextUrl);
+      return nextIndex;
     });
-  }, [playOrder]);
+    setIsMusicPlaying(true);
+  }, [playOrder, setCurrentUrl]);
 
   if (!isClient) {
     return null;
@@ -122,6 +128,14 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
         behavior: "smooth",
       });
     }
+  };
+
+  const handlePlay = () => {
+    setIsMusicPlaying(true);
+  };
+
+  const handlePause = () => {
+    setIsMusicPlaying(false);
   };
 
   return (

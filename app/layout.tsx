@@ -12,6 +12,7 @@ import getPlaylists from "@/actions/getPlaylists";
 import getSongs from "@/actions/getSongs";
 import ServiceWorkerProvider from "@/providers/ServiceWorkerProvider";
 import Sidebar from "@/components/Sidebar/Sidebar";
+import { SoundCloudProvider } from "@/providers/SoundCloudProvider";
 
 const font = Figtree({ subsets: ["latin"] });
 
@@ -34,16 +35,18 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={font.className}>
-        <ToasterProvider />
-        <SupabaseProvider>
-          <UserProvider>
-            <ModalProvider products={products} />
-            <Sidebar songs={songs} playlists={playlists}>
-              {children}
-            </Sidebar>
-            <Player playlists={playlists} />
-          </UserProvider>
-        </SupabaseProvider>
+        <SoundCloudProvider>
+          <ToasterProvider />
+          <SupabaseProvider>
+            <UserProvider>
+              <ModalProvider products={products} />
+              <Sidebar songs={songs} playlists={playlists}>
+                {children}
+              </Sidebar>
+              <Player playlists={playlists} />
+            </UserProvider>
+          </SupabaseProvider>
+        </SoundCloudProvider>
       </body>
     </html>
   );

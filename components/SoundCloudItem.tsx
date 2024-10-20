@@ -1,4 +1,4 @@
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useState, useContext } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Play, Pause, Repeat } from "lucide-react";
 import Image from "next/image";
@@ -8,6 +8,7 @@ import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import Slider from "./Slider";
 import { useSoundCloudPlayer } from "@/hooks/useSoundCloudPlayer";
 import ReactPlayer from "react-player";
+import { SoundCloudContext } from "@/providers/SoundCloudProvider";
 
 interface SoundCloudItemProps {
   data: {
@@ -28,6 +29,7 @@ const SoundCloudItem: React.FC<SoundCloudItemProps> = ({
   onPause,
   onEnded,
 }) => {
+  const { setCurrentUrl } = useContext(SoundCloudContext);
   const {
     isLooping,
     playedSeconds,
@@ -52,8 +54,20 @@ const SoundCloudItem: React.FC<SoundCloudItemProps> = ({
   const Icon = isPlaying ? BsPauseFill : BsPlayFill;
   const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
 
+  const handleItemClick = () => {
+    setCurrentUrl(data.url);
+    if (isPlaying) {
+      onPause();
+    } else {
+      onPlay();
+    }
+  };
+
   return (
-    <Card className="group overflow-hidden transition-all duration-300 hover:shadow-lg hover:bg-neutral-400/10 rounded-lg text-card-foreground shadow-sm">
+    <Card
+      className="group overflow-hidden transition-all duration-300 hover:shadow-lg hover:bg-neutral-400/10 rounded-lg text-card-foreground shadow-sm cursor-pointer"
+      onClick={handleItemClick}
+    >
       <CardContent className="p-0">
         <div className="relative aspect-square w-full">
           <div className="absolute inset-0">
@@ -72,7 +86,10 @@ const SoundCloudItem: React.FC<SoundCloudItemProps> = ({
           {/* Control overlay */}
           <div
             className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center cursor-pointer"
-            onClick={() => togglePlay(isPlaying, onPlay, onPause)}
+            onClick={(e) => {
+              e.stopPropagation();
+              togglePlay(isPlaying, onPlay, onPause);
+            }}
           >
             <div className="flex items-center space-x-6">
               <button className="bg-white/20 backdrop-blur-md rounded-full p-4 transition-transform duration-300 hover:scale-110">
