@@ -10,7 +10,7 @@ import { useSpring, animated } from "@react-spring/web";
 import { useDrag } from "@use-gesture/react";
 import SeekBar from "../Seekbar";
 import MobileStyleIcons from "./MobileStyleIcons";
-import LyricsDrawer from "../LyricsDrawer";
+import LyricsDrawer from "./LyricsDrawer";
 
 interface MobilePlayerContentProps {
   song: Song;
