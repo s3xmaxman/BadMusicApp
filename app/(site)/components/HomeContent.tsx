@@ -55,47 +55,6 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  useEffect(() => {
-    setPlayOrder(SoundCloudUrls.map((_, index) => index));
-  }, []);
-
-  const shufflePlayOrder = useCallback(() => {
-    setPlayOrder((prevOrder) => {
-      const newOrder = [...prevOrder];
-      for (let i = newOrder.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [newOrder[i], newOrder[j]] = [newOrder[j], newOrder[i]];
-      }
-      return newOrder;
-    });
-    setIsShuffled(true);
-  }, []);
-
-  const unshufflePlayOrder = useCallback(() => {
-    setPlayOrder(SoundCloudUrls.map((_, index) => index));
-    setIsShuffled(false);
-  }, []);
-
-  const toggleShuffle = useCallback(() => {
-    if (isShuffled) {
-      unshufflePlayOrder();
-    } else {
-      shufflePlayOrder();
-    }
-  }, [isShuffled, shufflePlayOrder, unshufflePlayOrder]);
-
-  const playNextTrack = useCallback(() => {
-    setCurrentSoundCloudIndex((prevIndex) => {
-      const currentOrderIndex = playOrder.indexOf(prevIndex);
-      const nextOrderIndex = (currentOrderIndex + 1) % playOrder.length;
-      const nextIndex = playOrder[nextOrderIndex];
-      const nextUrl = SoundCloudUrls[nextIndex].url;
-      setCurrentUrl(nextUrl);
-      return nextIndex;
-    });
-    setIsMusicPlaying(true);
-  }, [playOrder, setCurrentUrl]);
-
   if (!isClient) {
     return null;
   }
@@ -222,32 +181,10 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
               <h2 className="text-white text-2xl font-semibold">
                 SoundCloud Tracks
               </h2>
-              <button
-                onClick={toggleShuffle}
-                className={`p-2 rounded-full transition-colors duration-200 ${
-                  isShuffled
-                    ? "text-blue-500 bg-blue-500/10"
-                    : "text-neutral-500 hover:bg-neutral-200 dark:hover:bg-neutral-700"
-                }`}
-              >
-                <Shuffle className="w-5 h-5" />
-              </button>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {SoundCloudUrls.map((soundCloud, index) => (
-                <SoundCloudItem
-                  key={soundCloud.id}
-                  data={soundCloud}
-                  isPlaying={isMusicPlaying && index === currentSoundCloudIndex}
-                  onPlay={() => {
-                    setIsMusicPlaying(true);
-                    setCurrentSoundCloudIndex(index);
-                  }}
-                  onPause={() => {
-                    setIsMusicPlaying(false);
-                  }}
-                  onEnded={playNextTrack}
-                />
+                <SoundCloudItem key={soundCloud.id} data={soundCloud} />
               ))}
             </div>
           </section>
