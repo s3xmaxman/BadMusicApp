@@ -4,6 +4,7 @@ import { SoundCloudUrls } from "@/constants";
 
 interface SoundCloudPlayerStore {
   currentUrl: string;
+  currentTitle: string;
   isPlaying: boolean;
   isLooping: boolean;
   playedSeconds: number;
@@ -19,6 +20,7 @@ interface SoundCloudPlayerStore {
 
   // State setters
   setCurrentUrl: (url: string) => void;
+  setCurrentTitle: (title: string) => void;
   setIsPlaying: (isPlaying: boolean) => void;
   setIsLooping: (isLooping: boolean) => void;
   setPlayedSeconds: (seconds: number) => void;
@@ -50,6 +52,8 @@ interface SoundCloudPlayerStore {
 export const useSoundCloudPlayerStore = create<SoundCloudPlayerStore>(
   (set, get) => ({
     currentUrl: "",
+    currentTitle: "",
+    currentAuthor: "",
     isPlaying: false,
     isLooping: false,
     playedSeconds: 0,
@@ -65,6 +69,7 @@ export const useSoundCloudPlayerStore = create<SoundCloudPlayerStore>(
 
     // State setters
     setCurrentUrl: (url) => set({ currentUrl: url }),
+    setCurrentTitle: (title) => set({ currentTitle: title }),
     setIsPlaying: (isPlaying) => set({ isPlaying }),
     setIsLooping: (isLooping) => set({ isLooping }),
     setPlayedSeconds: (seconds) => set({ playedSeconds: seconds }),
@@ -110,8 +115,13 @@ export const useSoundCloudPlayerStore = create<SoundCloudPlayerStore>(
           )}`
         );
         const data = await response.json();
+
         if (data.thumbnail_url) {
           set({ trackImage: data.thumbnail_url });
+        }
+
+        if (data.title) {
+          set({ currentTitle: data.title });
         }
       } catch (error) {
         console.error("Error fetching track info:", error);
@@ -119,8 +129,13 @@ export const useSoundCloudPlayerStore = create<SoundCloudPlayerStore>(
     },
 
     playNextTrack: () => {
-      const { currentSoundCloudIndex, playOrder, setCurrentUrl, setIsPlaying } =
-        get();
+      const {
+        currentSoundCloudIndex,
+        playOrder,
+        setCurrentUrl,
+        setIsPlaying,
+        setCurrentTitle,
+      } = get();
       const currentOrderIndex = playOrder.indexOf(currentSoundCloudIndex);
       const nextOrderIndex = (currentOrderIndex + 1) % playOrder.length;
       const nextIndex = playOrder[nextOrderIndex];
@@ -162,7 +177,6 @@ export const useSoundCloudPlayerStore = create<SoundCloudPlayerStore>(
       }
     },
 
-    // New method for SeekBar
     seekTo: (time: number) => {
       const { duration, playerRef } = get();
       if (duration > 0) {

@@ -10,42 +10,42 @@ export const videoIds = [
 export const SoundCloudUrls = [
   {
     id: 1,
-    name: "Under Bright Lights Ft. Indy Skies",
+    title: "Under Bright Lights Ft. Indy Skies",
     url: "https://soundcloud.com/nightmoderecs/underbrightlights",
   },
   {
     id: 2,
-    name: "FLYDAY CHINATOWN",
+    title: "FLYDAY CHINATOWN",
     url: "https://soundcloud.com/saturn_sun/evade-from-outerspace-flight-day-89",
   },
   {
     id: 3,
-    name: "Emotional Prism",
+    title: "Emotional Prism",
     url: "https://soundcloud.com/okarutomusic/bigwave-emotional-prism",
   },
   {
     id: 4,
-    name: "You're On",
+    title: "You're On",
     url: "https://soundcloud.com/madeon/madeon-youre-on-ft-kyan-bbc-radio-1",
   },
   {
     id: 5,
-    name: "I Try",
+    title: "I Try",
     url: "https://soundcloud.com/viperrecordings/smooth-i-try-free-download",
   },
   {
     id: 6,
-    name: "Moonlit Siren",
+    title: "Moonlit Siren",
     url: "https://soundcloud.com/dad-bads1de-sd/moonlit-siren?in=dad-bads1de-sd/sets/retro-mix",
   },
   {
     id: 7,
-    name: "Roller Mobster",
+    title: "Roller Mobster",
     url: "https://soundcloud.com/carpenter_brut/roller-mobster",
   },
   {
     id: 8,
-    name: "Fainted",
+    title: "Fainted",
     url: "https://soundcloud.com/musicofnarvent/narvent-fainted",
   },
 ];

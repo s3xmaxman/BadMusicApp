@@ -10,6 +10,7 @@ import { formatTime } from "@/libs/helpers";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import { SoundCloudUrls } from "@/constants";
 import { useSoundCloudPlayerStore } from "@/hooks/useSoundCloudPlayerStore";
+import { title } from "process";
 
 interface SoundCloudPlayerContentProps {
   url: string;
@@ -41,6 +42,7 @@ const SoundCloudPlayerContent: React.FC<SoundCloudPlayerContentProps> = ({
     togglePlay,
     toggleShuffle,
     seekTo,
+    currentTitle,
   } = useSoundCloudPlayerStore((state) => ({
     isPlaying: state.isPlaying,
     isLooping: state.isLooping,
@@ -61,6 +63,7 @@ const SoundCloudPlayerContent: React.FC<SoundCloudPlayerContentProps> = ({
     togglePlay: state.togglePlay,
     toggleShuffle: state.toggleShuffle,
     seekTo: state.seekTo,
+    currentTitle: state.currentTitle,
   }));
 
   useEffect(() => {
@@ -82,6 +85,21 @@ const SoundCloudPlayerContent: React.FC<SoundCloudPlayerContentProps> = ({
   const formattedCurrentTime = formatTime(playedSeconds);
   const formattedDuration = formatTime(duration);
 
+  const splitTitle = (title: string): JSX.Element => {
+    if (title.includes("by")) {
+      const parts = title.split("by");
+      return (
+        <span>
+          {parts[0]}
+          <br />
+          by {parts[1]}
+        </span>
+      );
+    } else {
+      return <span>{title}</span>;
+    }
+  };
+
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 h-full">
       {/* トラック画像セクション */}
@@ -90,12 +108,15 @@ const SoundCloudPlayerContent: React.FC<SoundCloudPlayerContentProps> = ({
           {trackImage && (
             <Image
               src={trackImage}
-              alt="トラック画像"
+              alt="track image"
               width={80}
               height={80}
               className="rounded-md"
             />
           )}
+          <h1 className="text-white text-2xl font-semibold">
+            {splitTitle(currentTitle)}
+          </h1>
         </div>
       </div>
 

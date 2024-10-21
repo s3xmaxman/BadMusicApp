@@ -2,18 +2,19 @@ import { useContext } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import ReactPlayer from "react-player";
 import { useSoundCloudPlayerStore } from "@/hooks/useSoundCloudPlayerStore";
+import { set } from "react-hook-form";
 
 interface SoundCloudItemProps {
   data: {
     id: number;
-    name: string;
+    title: string;
     url: string;
   };
 }
 
 // TODO: クリック時に再生
 const SoundCloudItem: React.FC<SoundCloudItemProps> = ({ data }) => {
-  const { setCurrentUrl } = useSoundCloudPlayerStore();
+  const { setCurrentUrl, setCurrentTitle } = useSoundCloudPlayerStore();
 
   const handleItemClick = () => {
     setCurrentUrl(data.url);
@@ -32,7 +33,7 @@ const SoundCloudItem: React.FC<SoundCloudItemProps> = ({ data }) => {
         </div>
         {/* Track title */}
         <div className="p-4">
-          <h3 className="text-lg font-semibold line-clamp-1">{data.name}</h3>
+          <h3 className="text-lg font-semibold line-clamp-1">{data.title}</h3>
         </div>
       </CardContent>
     </Card>
