@@ -162,7 +162,7 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
           </section>
 
           {/* SoundCloud Player */}
-          <section>
+          {/* <section>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-white text-2xl font-semibold">
                 SoundCloud Tracks
@@ -173,7 +173,7 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
                 <SoundCloudItem key={soundCloud.id} data={soundCloud} />
               ))}
             </div>
-          </section>
+          </section> */}
 
           {/* Genres Section */}
           <section

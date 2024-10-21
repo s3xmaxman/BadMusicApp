@@ -48,4 +48,24 @@ export const SoundCloudUrls = [
     title: "Fainted",
     url: "https://soundcloud.com/musicofnarvent/narvent-fainted",
   },
+  {
+    id: 9,
+    title: "Apollo",
+    url: "https://soundcloud.com/astronautuk/astronaut-apollo-electro-mix-1",
+  },
+  {
+    id: 10,
+    title: "Funky Town",
+    url: "https://soundcloud.com/katfyr/funky-town-feat-the-hair-kid",
+  },
+  {
+    id: 11,
+    title: "Mastodon",
+    url: "https://soundcloud.com/aoilucky/milk-n-cookies-mastodon-ft-alina-renae-louis-the-child-remix",
+  },
+  {
+    id: 12,
+    title: "All Night",
+    url: "https://soundcloud.com/jpk-entertainment/icona-pop-all-night-thefatrat-remix",
+  },
 ];
