@@ -26,10 +26,14 @@ const MediaItem: React.FC<MediaItemProps> = ({
   const handleClick = () => {
     if (onClick) {
       return onClick(data.id);
-    } else if ("author" in data && data.id) {
-      player.setId(data.id);
-    } else if (data.id) {
-      router.push(
+    }
+
+    if ("author" in data && data.id) {
+      return player.setId(data.id);
+    }
+
+    if (data.id) {
+      return router.push(
         `/playlists/${data.id}?title=${encodeURIComponent(data.title)}`
       );
     }

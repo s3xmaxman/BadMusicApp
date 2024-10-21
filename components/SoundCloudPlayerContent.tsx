@@ -182,7 +182,6 @@ const SoundCloudPlayerContent: React.FC<SoundCloudPlayerContentProps> = ({
         volume={volume}
         onProgress={handleProgress}
         onDuration={handleDuration}
-        loop={isLooping}
         style={{ display: "none" }}
       />
     </div>
