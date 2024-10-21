@@ -2,14 +2,13 @@
 import useGetSongById from "@/hooks/useGetSongById";
 import useLoadSongUrl from "@/hooks/useLoadSongUrl";
 import usePlayer from "@/hooks/usePlayer";
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import PlayerContent from "./PlayerContent";
 import MobileTabs from "./Mobile/MobileTabs";
 import { Playlist } from "@/types";
 import SoundCloudPlayerContent from "./SoundCloudPlayerContent";
 import { useSoundCloudPlayerStore } from "@/hooks/useSoundCloudPlayerStore";
-
-// TODO: SoundCloudPlayerContentとPlayerContentのシームレスな切り替えを行えるようにする
+import { SoundCloudUrls } from "@/constants";
 
 interface PlayerProps {
   playlists: Playlist[];
@@ -17,7 +16,8 @@ interface PlayerProps {
 
 const Player = ({ playlists }: PlayerProps) => {
   const player = usePlayer();
-  const { currentUrl } = useSoundCloudPlayerStore();
+  const { setCurrentUrl, currentUrl, setCurrentSoundCloudIndex } =
+    useSoundCloudPlayerStore();
   const { song } = useGetSongById(player.activeId);
   const songUrl = useLoadSongUrl(song!);
   const [isSoundCloudPlaying, setIsSoundCloudPlaying] = useState(false);
@@ -30,10 +30,20 @@ const Player = ({ playlists }: PlayerProps) => {
   useEffect(() => {
     if (currentUrl) {
       setIsSoundCloudPlaying(true);
+      player.reset();
+
+      const index = SoundCloudUrls.findIndex((item) => item.url === currentUrl);
+      setCurrentSoundCloudIndex(index);
     } else {
       setIsSoundCloudPlaying(false);
     }
   }, [currentUrl]);
+
+  useEffect(() => {
+    if (songUrl) {
+      setCurrentUrl("");
+    }
+  }, [songUrl]);
 
   if (!songUrl && !currentUrl) {
     return (
