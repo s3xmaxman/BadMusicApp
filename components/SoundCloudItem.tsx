@@ -11,8 +11,9 @@ interface SoundCloudItemProps {
   };
 }
 
+// TODO: クリック時に再生
 const SoundCloudItem: React.FC<SoundCloudItemProps> = ({ data }) => {
-  const { setCurrentUrl, setIsPlaying } = useSoundCloudPlayerStore();
+  const { setCurrentUrl } = useSoundCloudPlayerStore();
 
   const handleItemClick = () => {
     setCurrentUrl(data.url);

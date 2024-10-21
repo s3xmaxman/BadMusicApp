@@ -17,6 +17,7 @@ interface SoundCloudPlayerStore {
   playOrder: number[];
   isShuffled: boolean;
 
+  // State setters
   setCurrentUrl: (url: string) => void;
   setIsPlaying: (isPlaying: boolean) => void;
   setIsLooping: (isLooping: boolean) => void;
@@ -31,9 +32,9 @@ interface SoundCloudPlayerStore {
   setPlayOrder: (order: number[]) => void;
   setIsShuffled: (isShuffled: boolean) => void;
 
+  // Event handlers
   handleSeekMouseDown: () => void;
-  handleSeekChange: (e: React.MouseEvent<HTMLDivElement>) => void;
-  handleSeekMouseUp: (e: React.MouseEvent<HTMLDivElement>) => void;
+  handleSeekMouseUp: () => void;
   handleProgress: (state: { played: number; playedSeconds: number }) => void;
   handleDuration: (duration: number) => void;
   handleVolumeChange: (volume: number) => void;
@@ -43,6 +44,7 @@ interface SoundCloudPlayerStore {
   playPreviousTrack: () => void;
   togglePlay: () => void;
   toggleShuffle: () => void;
+  seekTo: (time: number) => void;
 }
 
 export const useSoundCloudPlayerStore = create<SoundCloudPlayerStore>(
@@ -58,9 +60,10 @@ export const useSoundCloudPlayerStore = create<SoundCloudPlayerStore>(
     volume: 0.1,
     playerRef: null,
     currentSoundCloudIndex: 0,
-    playOrder: [],
+    playOrder: SoundCloudUrls.map((_, index) => index),
     isShuffled: false,
 
+    // State setters
     setCurrentUrl: (url) => set({ currentUrl: url }),
     setIsPlaying: (isPlaying) => set({ isPlaying }),
     setIsLooping: (isLooping) => set({ isLooping }),
@@ -76,26 +79,10 @@ export const useSoundCloudPlayerStore = create<SoundCloudPlayerStore>(
     setPlayOrder: (order) => set({ playOrder: order }),
     setIsShuffled: (isShuffled) => set({ isShuffled }),
 
+    // Event handlers
     handleSeekMouseDown: () => set({ seeking: true }),
 
-    handleSeekChange: (e) => {
-      const { seeking, playerRef } = get();
-      if (seeking) {
-        const rect = e.currentTarget.getBoundingClientRect();
-        const newPlayed = (e.clientX - rect.left) / rect.width;
-        set({ played: newPlayed });
-        playerRef?.current?.seekTo(newPlayed);
-      }
-    },
-
-    handleSeekMouseUp: (e) => {
-      set({ seeking: false });
-      const { playerRef } = get();
-      const rect = e.currentTarget.getBoundingClientRect();
-      const newPlayed = (e.clientX - rect.left) / rect.width;
-      set({ played: newPlayed });
-      playerRef?.current?.seekTo(newPlayed);
-    },
+    handleSeekMouseUp: () => set({ seeking: false }),
 
     handleProgress: ({ played, playedSeconds }) => {
       const { seeking, isLooping, duration, playerRef } = get();
@@ -159,7 +146,7 @@ export const useSoundCloudPlayerStore = create<SoundCloudPlayerStore>(
     togglePlay: () => set((state) => ({ isPlaying: !state.isPlaying })),
 
     toggleShuffle: () => {
-      const { isShuffled, playOrder } = get();
+      const { isShuffled, playOrder, setPlayOrder } = get();
       const newIsShuffled = !isShuffled;
       set({ isShuffled: newIsShuffled });
 
@@ -169,9 +156,19 @@ export const useSoundCloudPlayerStore = create<SoundCloudPlayerStore>(
           const j = Math.floor(Math.random() * (i + 1));
           [newOrder[i], newOrder[j]] = [newOrder[j], newOrder[i]];
         }
-        set({ playOrder: newOrder });
+        setPlayOrder(newOrder);
       } else {
-        set({ playOrder: SoundCloudUrls.map((_, index) => index) });
+        setPlayOrder(SoundCloudUrls.map((_, index) => index));
+      }
+    },
+
+    // New method for SeekBar
+    seekTo: (time: number) => {
+      const { duration, playerRef } = get();
+      if (duration > 0) {
+        const newPlayed = time / duration;
+        set({ played: newPlayed, playedSeconds: time, seeking: false });
+        playerRef?.current?.seekTo(newPlayed);
       }
     },
   })
