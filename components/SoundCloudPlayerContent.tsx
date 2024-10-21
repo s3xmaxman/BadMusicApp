@@ -19,8 +19,8 @@ interface SoundCloudPlayerContentProps {
 const SoundCloudPlayerContent: React.FC<SoundCloudPlayerContentProps> = ({
   url,
 }) => {
-  const { setCurrentUrl } = useContext(SoundCloudContext);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const { setCurrentUrl, isPlaying, setIsPlaying } =
+    useContext(SoundCloudContext);
   const [currentSoundCloudIndex, setCurrentSoundCloudIndex] = useState(0);
   const [playOrder, setPlayOrder] = useState<number[]>([]);
   const [isShuffled, setIsShuffled] = useState(false);
@@ -35,7 +35,7 @@ const SoundCloudPlayerContent: React.FC<SoundCloudPlayerContentProps> = ({
       return nextIndex;
     });
     setIsPlaying(true);
-  }, [playOrder, setCurrentUrl]);
+  }, [playOrder, setCurrentUrl, setIsPlaying]);
 
   const {
     isLooping,
@@ -93,10 +93,10 @@ const SoundCloudPlayerContent: React.FC<SoundCloudPlayerContentProps> = ({
       return previousIndex;
     });
     setIsPlaying(true);
-  }, [playOrder, setCurrentUrl]);
+  }, [playOrder, setCurrentUrl, setIsPlaying]);
 
   const togglePlay = () => {
-    setIsPlaying((prev) => !prev);
+    setIsPlaying(!isPlaying);
   };
 
   return (

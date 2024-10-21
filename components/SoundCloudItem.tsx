@@ -12,10 +12,11 @@ interface SoundCloudItemProps {
 }
 
 const SoundCloudItem: React.FC<SoundCloudItemProps> = ({ data }) => {
-  const { setCurrentUrl } = useContext(SoundCloudContext);
+  const { setCurrentUrl, setIsPlaying } = useContext(SoundCloudContext);
 
   const handleItemClick = () => {
     setCurrentUrl(data.url);
+    setIsPlaying(true);
   };
 
   return (
