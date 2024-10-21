@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import ReactPlayer from "react-player";
-import { SoundCloudContext } from "@/providers/SoundCloudProvider";
+import { useSoundCloudPlayerStore } from "@/hooks/useSoundCloudPlayerStore";
 
 interface SoundCloudItemProps {
   data: {
@@ -12,11 +12,10 @@ interface SoundCloudItemProps {
 }
 
 const SoundCloudItem: React.FC<SoundCloudItemProps> = ({ data }) => {
-  const { setCurrentUrl, setIsPlaying } = useContext(SoundCloudContext);
+  const { setCurrentUrl, setIsPlaying } = useSoundCloudPlayerStore();
 
   const handleItemClick = () => {
     setCurrentUrl(data.url);
-    setIsPlaying(true);
   };
 
   return (

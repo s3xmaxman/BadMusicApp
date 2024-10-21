@@ -7,7 +7,7 @@ import PlayerContent from "./PlayerContent";
 import MobileTabs from "./Mobile/MobileTabs";
 import { Playlist } from "@/types";
 import SoundCloudPlayerContent from "./SoundCloudPlayerContent";
-import { SoundCloudContext } from "@/providers/SoundCloudProvider";
+import { useSoundCloudPlayerStore } from "@/hooks/useSoundCloudPlayerStore";
 
 // TODO: SoundCloudPlayerContentとPlayerContentのシームレスな切り替えを行えるようにする
 
@@ -20,7 +20,7 @@ const Player = ({ playlists }: PlayerProps) => {
   const { song } = useGetSongById(player.activeId);
   const songUrl = useLoadSongUrl(song!);
   const [isMobilePlayer, setIsMobilePlayer] = useState(false);
-  const { currentUrl } = useContext(SoundCloudContext);
+  const { currentUrl } = useSoundCloudPlayerStore();
   const [isSoundCloudPlaying, setIsSoundCloudPlaying] = useState(false);
 
   const toggleMobilePlayer = () => {
