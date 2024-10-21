@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BsPauseFill, BsPlayFill, BsRepeat1 } from "react-icons/bs";
 import { FaRandom } from "react-icons/fa";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
@@ -10,16 +10,8 @@ import { formatTime } from "@/libs/helpers";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import { SoundCloudUrls } from "@/constants";
 import { useSoundCloudPlayerStore } from "@/hooks/useSoundCloudPlayerStore";
-import { title } from "process";
 
-interface SoundCloudPlayerContentProps {
-  url: string;
-}
-
-// TODO: Durationの切り替わらないバグを修正
-const SoundCloudPlayerContent: React.FC<SoundCloudPlayerContentProps> = ({
-  url,
-}) => {
+const SoundCloudPlayerContent: React.FC = () => {
   const internalPlayerRef = useRef<ReactPlayer>(null);
 
   const {
@@ -43,6 +35,7 @@ const SoundCloudPlayerContent: React.FC<SoundCloudPlayerContentProps> = ({
     toggleShuffle,
     seekTo,
     currentTitle,
+    currentUrl,
   } = useSoundCloudPlayerStore((state) => ({
     isPlaying: state.isPlaying,
     isLooping: state.isLooping,
@@ -64,6 +57,7 @@ const SoundCloudPlayerContent: React.FC<SoundCloudPlayerContentProps> = ({
     toggleShuffle: state.toggleShuffle,
     seekTo: state.seekTo,
     currentTitle: state.currentTitle,
+    currentUrl: state.currentUrl,
   }));
 
   useEffect(() => {
@@ -71,8 +65,8 @@ const SoundCloudPlayerContent: React.FC<SoundCloudPlayerContentProps> = ({
   }, [setPlayerRef, internalPlayerRef]);
 
   useEffect(() => {
-    fetchTrackInfo(url);
-  }, [url, fetchTrackInfo]);
+    fetchTrackInfo(currentUrl);
+  }, [currentUrl, fetchTrackInfo]);
 
   useEffect(() => {
     useSoundCloudPlayerStore
@@ -102,21 +96,21 @@ const SoundCloudPlayerContent: React.FC<SoundCloudPlayerContentProps> = ({
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 h-full">
-      {/* トラック画像セクション */}
       <div className="flex w-full justify-start">
-        <div className="flex items-center gap-x-4">
-          {trackImage && (
+        <div
+          className={`cursor-pointer hover:bg-neutral-800/50 p-2 rounded-md flex items-center gap-x-3 ${false}`}
+        >
+          <div className="relative rounded-md overflow-hidden min-h-[48px] min-w-[48px]">
             <Image
               src={trackImage}
-              alt="track image"
-              width={80}
-              height={80}
-              className="rounded-md"
+              alt="Track Image"
+              fill
+              className={`object-cover transition-opacity duration-300 `}
             />
-          )}
-          <h1 className="text-white text-2xl font-semibold">
-            {splitTitle(currentTitle)}
-          </h1>
+          </div>
+          <div className="flex flex-col gap-y-1 overflow-hidden">
+            <p className="text-white  truncate">{splitTitle(currentTitle)}</p>
+          </div>
         </div>
       </div>
 
@@ -195,8 +189,9 @@ const SoundCloudPlayerContent: React.FC<SoundCloudPlayerContentProps> = ({
 
       {/* ReactPlayerコンポーネント */}
       <ReactPlayer
+        key={currentUrl}
         ref={internalPlayerRef}
-        url={url}
+        url={currentUrl}
         playing={isPlaying}
         volume={volume}
         onProgress={handleProgress}

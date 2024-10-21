@@ -129,13 +129,8 @@ export const useSoundCloudPlayerStore = create<SoundCloudPlayerStore>(
     },
 
     playNextTrack: () => {
-      const {
-        currentSoundCloudIndex,
-        playOrder,
-        setCurrentUrl,
-        setIsPlaying,
-        setCurrentTitle,
-      } = get();
+      const { currentSoundCloudIndex, playOrder, setCurrentUrl, setIsPlaying } =
+        get();
       const currentOrderIndex = playOrder.indexOf(currentSoundCloudIndex);
       const nextOrderIndex = (currentOrderIndex + 1) % playOrder.length;
       const nextIndex = playOrder[nextOrderIndex];

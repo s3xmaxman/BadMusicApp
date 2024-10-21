@@ -52,7 +52,7 @@ const Player = ({ playlists }: PlayerProps) => {
       <div className="fixed bottom-0 left-0 w-full ">
         <div className="bg-black w-full py-2 px-4 h-[100px] pb-[130px] md:pb-0">
           {currentUrl ? (
-            <SoundCloudPlayerContent url={currentUrl} />
+            <SoundCloudPlayerContent />
           ) : (
             <PlayerContent
               song={song!}
