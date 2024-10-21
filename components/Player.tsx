@@ -17,11 +17,11 @@ interface PlayerProps {
 
 const Player = ({ playlists }: PlayerProps) => {
   const player = usePlayer();
+  const { currentUrl } = useSoundCloudPlayerStore();
   const { song } = useGetSongById(player.activeId);
   const songUrl = useLoadSongUrl(song!);
-  const [isMobilePlayer, setIsMobilePlayer] = useState(false);
-  const { currentUrl } = useSoundCloudPlayerStore();
   const [isSoundCloudPlaying, setIsSoundCloudPlaying] = useState(false);
+  const [isMobilePlayer, setIsMobilePlayer] = useState(false);
 
   const toggleMobilePlayer = () => {
     setIsMobilePlayer(!isMobilePlayer);

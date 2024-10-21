@@ -97,9 +97,7 @@ const SoundCloudPlayerContent: React.FC = () => {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 h-full">
       <div className="flex w-full justify-start">
-        <div
-          className={`cursor-pointer hover:bg-neutral-800/50 p-2 rounded-md flex items-center gap-x-3 ${false}`}
-        >
+        <div className="cursor-pointer hover:bg-neutral-800/50 p-2 rounded-md flex items-center gap-x-3">
           <div className="relative rounded-md overflow-hidden min-h-[48px] min-w-[48px]">
             <Image
               src={trackImage}

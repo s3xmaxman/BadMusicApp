@@ -61,7 +61,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     if (audioRef.current) {
       audioRef.current.src = songUrl;
     }
-  }, [songUrl]);
+  }, [songUrl, audioRef]);
 
   return (
     <>
