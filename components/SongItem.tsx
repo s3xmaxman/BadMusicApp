@@ -45,7 +45,7 @@ const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
           src={imagePath || "/images/wait.jpg"}
           fill
           alt="Image"
-          onLoadingComplete={() => setIsImageLoaded(true)}
+          onLoad={() => setIsImageLoaded(true)}
           onClick={() => onClick(data.id)}
         />
       </div>

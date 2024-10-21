@@ -63,7 +63,7 @@ const MediaItem: React.FC<MediaItemProps> = ({
           className={`object-cover transition-opacity duration-300 ${
             isImageLoaded ? "opacity-100" : "opacity-0"
           }`}
-          onLoadingComplete={() => setIsImageLoaded(true)}
+          onLoad={() => setIsImageLoaded(true)}
         />
       </div>
       {!isCollapsed && (
