@@ -13,6 +13,8 @@ import { useState } from "react";
 import { MdMusicNote } from "react-icons/md";
 import { MdOutlineQueueMusic } from "react-icons/md";
 import Hover from "../Hover";
+import useSunoModal from "@/hooks/useSunoModal";
+import Image from "next/image";
 
 interface LibraryProps {
   songs: Song[];
@@ -25,6 +27,7 @@ const Library: React.FC<LibraryProps> = ({ songs, playlists, isCollapsed }) => {
   const { user } = useUser();
   const uploadModal = useUploadModal();
   const playlistModal = usePlaylistModal();
+  const sunoModal = useSunoModal();
   const onPlay = useOnPlay(songs);
   const [selectedTab, setSelectedTab] = useState("music");
 
@@ -67,7 +70,18 @@ const Library: React.FC<LibraryProps> = ({ songs, playlists, isCollapsed }) => {
         </div>
 
         {!isCollapsed && (
-          <div className="flex gap-x-6">
+          <div className="flex gap-x-4">
+            <Hover contentSize="w-24" description="SUNO">
+              <Image
+                src="/suno.png"
+                alt="suno"
+                width={20}
+                height={20}
+                onClick={sunoModal.onOpen}
+                className="text-neutral-400 cursor-pointer hover:text-white transition"
+              />
+            </Hover>
+
             <Hover contentSize="w-40" description="プレイリストを作成">
               <AiOutlineBars
                 className="text-neutral-400 cursor-pointer hover:text-white transition"
