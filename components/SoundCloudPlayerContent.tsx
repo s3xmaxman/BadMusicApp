@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { BsPauseFill, BsPlayFill, BsRepeat1 } from "react-icons/bs";
 import { FaRandom } from "react-icons/fa";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
