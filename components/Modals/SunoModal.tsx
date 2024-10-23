@@ -1,33 +1,68 @@
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import Modal from "./Modal";
 import { Button } from "@/components/ui/button";
-import Input from "../Input";
-import { Label } from "../ui/label";
-import { Switch } from "../ui/switch";
+
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import Modal from "./Modal";
 import useSunoModal from "@/hooks/useSunoModal";
+import toast from "react-hot-toast";
+import Input from "../Input";
 
 const SunoModal: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [isCustom, setIsCustom] = useState(false);
   const sunoModal = useSunoModal();
 
-  const initialValues = {
+  const [formData, setFormData] = useState({
     prompt: "",
+    lyrics: "",
+    tags: "",
+    title: "",
     make_instrumental: false,
     wait_audio: true,
+    negative_tags: [],
+  });
+
+  const handleInputChange = (field: string, value: any) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
   };
 
-  const onSubmit = async (data: typeof initialValues) => {
+  const onSubmit = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch("/api/suno/generate", {
+      const endpoint = isCustom
+        ? "/api/suno/custom_generate"
+        : "/api/suno/generate";
+
+      const requestData = isCustom
+        ? {
+            prompt: formData.lyrics,
+            tags: formData.tags
+              .split(",")
+              .map((tag) => tag.trim())
+              .filter((tag) => tag), // Split by comma, trim whitespace, and remove empty tags
+            title: formData.title,
+            make_instrumental: formData.make_instrumental,
+            wait_audio: formData.wait_audio,
+            negative_tags: formData.negative_tags,
+          }
+        : {
+            prompt: formData.prompt,
+            make_instrumental: formData.make_instrumental,
+            wait_audio: formData.wait_audio,
+          };
+
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(requestData),
       });
 
       const result = await response.json();
@@ -37,10 +72,10 @@ const SunoModal: React.FC = () => {
       }
 
       setAudioUrl(result.audio_url);
-      toast.success("Audio generated successfully!");
+      toast.success("音声を生成しました！");
     } catch (error) {
       console.error("Error generating audio:", error);
-      toast.error("Failed to generate audio");
+      toast.error("音声の生成に失敗しました");
     } finally {
       setIsLoading(false);
     }
@@ -54,34 +89,96 @@ const SunoModal: React.FC = () => {
       onChange={sunoModal.onClose}
     >
       <div className="space-y-4">
-        <div>
-          <Label htmlFor="prompt">プロンプト</Label>
-          <Input
-            id="prompt"
-            placeholder="曲のプロンプトを入力してください..."
-            className="mt-1"
+        <div className="flex items-center space-x-2 mb-4">
+          <Switch
+            id="mode"
+            checked={isCustom}
+            onCheckedChange={setIsCustom}
             disabled={isLoading}
-            onChange={(e) => (initialValues.prompt = e.target.value)}
           />
+          <Label htmlFor="mode">カスタム生成モード</Label>
         </div>
+
+        {isCustom ? (
+          <>
+            <div>
+              <Label htmlFor="lyrics">歌詞</Label>
+              <Textarea
+                id="lyrics"
+                placeholder="歌詞を入力してください..."
+                className="mt-1"
+                disabled={isLoading}
+                value={formData.lyrics}
+                onChange={(e) => handleInputChange("lyrics", e.target.value)}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="title">タイトル</Label>
+              <Input
+                id="title"
+                placeholder="曲のタイトルを入力..."
+                disabled={isLoading}
+                value={formData.title}
+                onChange={(e) => handleInputChange("title", e.target.value)}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="tags">
+                ジャンル (タグ)
+                <span className="ml-1 text-sm text-muted-foreground">
+                  カンマ区切りで複数入力可能
+                </span>
+              </Label>
+              <Textarea
+                id="tags"
+                placeholder="例: pop, rock, electronic..."
+                className="mt-1"
+                disabled={isLoading}
+                value={formData.tags}
+                onChange={(e) => handleInputChange("tags", e.target.value)}
+              />
+              <p className="text-sm text-muted-foreground mt-1">
+                推奨: pop, rock, jazz, classical, electronic, hip-hop, r&b,
+                country, folk, metal など
+              </p>
+            </div>
+          </>
+        ) : (
+          <div>
+            <Label htmlFor="prompt">プロンプト</Label>
+            <Input
+              id="prompt"
+              placeholder="音楽のジャンルやスタイルを入力..."
+              className="mt-1"
+              disabled={isLoading}
+              value={formData.prompt}
+              onChange={(e) => handleInputChange("prompt", e.target.value)}
+            />
+          </div>
+        )}
 
         <div className="flex items-center space-x-2">
           <Switch
             id="instrumental"
+            checked={formData.make_instrumental}
             disabled={isLoading}
             onCheckedChange={(checked) =>
-              (initialValues.make_instrumental = checked)
+              handleInputChange("make_instrumental", checked)
             }
           />
-          <Label htmlFor="instrumental">instrumental</Label>
+          <Label htmlFor="instrumental">インストゥルメンタル</Label>
         </div>
 
         <div className="flex items-center space-x-2">
           <Switch
             id="wait"
-            defaultChecked
+            checked={formData.wait_audio}
             disabled={isLoading}
-            onCheckedChange={(checked) => (initialValues.wait_audio = checked)}
+            onCheckedChange={(checked) =>
+              handleInputChange("wait_audio", checked)
+            }
           />
           <Label htmlFor="wait">音声生成を待つ</Label>
         </div>
@@ -96,10 +193,14 @@ const SunoModal: React.FC = () => {
         )}
 
         <div className="flex justify-end space-x-2">
-          <Button disabled={isLoading} onClick={sunoModal.onClose}>
+          <Button
+            variant="outline"
+            disabled={isLoading}
+            onClick={sunoModal.onClose}
+          >
             キャンセル
           </Button>
-          <Button disabled={isLoading} onClick={() => onSubmit(initialValues)}>
+          <Button disabled={isLoading} onClick={onSubmit}>
             {isLoading ? "生成中..." : "作成"}
           </Button>
         </div>

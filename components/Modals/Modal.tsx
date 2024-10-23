@@ -1,3 +1,4 @@
+import React from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { IoMdClose } from "react-icons/io";
 
@@ -19,56 +20,68 @@ const Modal: React.FC<ModalProps> = ({
   return (
     <Dialog.Root open={isOpen} defaultOpen={isOpen} onOpenChange={onChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="bg-neutral-900/90 backdrop-blur-xl fixed inset-0 z-10" />
+        <Dialog.Overlay
+          className="
+            fixed inset-0 z-40 bg-black/80 
+            backdrop-blur-sm 
+            data-[state=open]:animate-in 
+            data-[state=closed]:animate-out 
+            data-[state=closed]:fade-out-0 
+            data-[state=open]:fade-in-0
+          "
+        />
         <Dialog.Content
           className="
-          fixed 
-          drop-shadow-md 
-          border 
-          bg-black
-          top-[50%] 
-          left-[50%] 
-          max-h-full 
-          h-auto
-          md:max-h-[85vh] 
-          w-full 
-          md:w-[90vw] 
-          md:max-w-[800px] 
-          translate-x-[-50%] 
-          translate-y-[-50%] 
-          rounded-md 
-          p-[25px] 
-          focus:outline-none
-          z-20
-        "
+            fixed left-[50%] top-[50%] z-50 
+            grid w-full max-w-3xl translate-x-[-50%] 
+            translate-y-[-50%] gap-4 
+            bg-zinc-900 
+            p-8 
+            shadow-lg 
+            duration-200 
+            data-[state=open]:animate-in 
+            data-[state=closed]:animate-out 
+            data-[state=closed]:fade-out-0 
+            data-[state=open]:fade-in-0 
+            data-[state=closed]:zoom-out-95 
+            data-[state=open]:zoom-in-95 
+            data-[state=closed]:slide-out-to-left-1/2 
+            data-[state=closed]:slide-out-to-top-[48%] 
+            data-[state=open]:slide-in-from-left-1/2 
+            data-[state=open]:slide-in-from-top-[48%] 
+            rounded-lg
+            border border-zinc-800
+            sm:max-w-lg
+          "
         >
-          <Dialog.Title className="text-xl text-center font-bold mb-4">
-            {title}
-          </Dialog.Title>
-          <Dialog.Description className="mb-5 text-sm leading-normal text-center">
-            {description}
-          </Dialog.Description>
-          <div className="z-999">{children}</div>
+          <div className="flex flex-col space-y-2 text-center">
+            <Dialog.Title className="text-2xl font-semibold tracking-tight text-white">
+              {title}
+            </Dialog.Title>
+            <Dialog.Description className="text-sm text-zinc-400">
+              {description}
+            </Dialog.Description>
+          </div>
+          <div>{children}</div>
           <Dialog.Close asChild>
             <button
               className="
-              text-neutral-400 
-              hover:text-white 
-              absolute 
-              top-[10px] 
-              right-[10px] 
-              inline-flex 
-              h-[25px] 
-              w-[25px] 
-              appearance-none 
-              items-center 
-              justify-center 
-              rounded-full 
-              focus:outline-none
-            "
+                absolute right-4 top-4 
+                rounded-sm 
+                opacity-70 
+                ring-offset-zinc-900 
+                transition-opacity 
+                hover:opacity-100 
+                focus:outline-none 
+                focus:ring-2 
+                focus:ring-zinc-400 
+                focus:ring-offset-2
+                disabled:pointer-events-none
+                data-[state=open]:bg-zinc-800
+              "
               aria-label="Close"
             >
-              <IoMdClose />
+              <IoMdClose className="h-4 w-4 text-zinc-400" />
             </button>
           </Dialog.Close>
         </Dialog.Content>
