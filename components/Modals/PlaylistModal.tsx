@@ -73,8 +73,12 @@ const PlaylistModal = () => {
           {...register("title", { required: true })}
           placeholder="プレイリスト名"
         />
-        <Button disabled={isLoading} type="submit">
-          作成
+        <Button
+          disabled={isLoading}
+          type="submit"
+          className="col-span-full py-6 text-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 transition-all duration-300 shadow-lg hover:shadow-blue-500/25"
+        >
+          {isLoading ? "作成中" : "作成"}
         </Button>
       </form>
     </Modal>

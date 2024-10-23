@@ -67,10 +67,10 @@ const SunoModal: React.FC = () => {
         throw new Error(result.error || "Something went wrong");
       }
 
-      toast.success("音声を生成しました！");
+      toast.success("音楽を生成しました！");
     } catch (error) {
       console.error("Error generating audio:", error);
-      toast.error("音声の生成に失敗しました");
+      toast.error("音楽の生成に失敗しました");
     } finally {
       setIsLoading(false);
     }
@@ -158,7 +158,7 @@ const SunoModal: React.FC = () => {
               handleInputChange("make_instrumental", checked)
             }
           />
-          <Label htmlFor="instrumental">インストゥルメンタル</Label>
+          <Label htmlFor="instrumental">Instrumental</Label>
         </div>
 
         <div className="flex items-center space-x-2">

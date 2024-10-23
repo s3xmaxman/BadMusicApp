@@ -201,7 +201,11 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
             </div>
           )}
         </div>
-        <Button disabled={isLoading} type="submit">
+        <Button
+          disabled={isLoading}
+          type="submit"
+          className="col-span-full py-6 text-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 transition-all duration-300 shadow-lg hover:shadow-blue-500/25"
+        >
           {isLoading ? "編集中..." : "編集"}
         </Button>
       </form>

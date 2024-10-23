@@ -22,23 +22,25 @@ const Modal: React.FC<ModalProps> = ({
       <Dialog.Portal>
         <Dialog.Overlay
           className="
-            fixed inset-0 z-40 bg-black/80 
-            backdrop-blur-sm 
+            fixed inset-0 z-40 
+            bg-black/90 
+            backdrop-blur-md 
             data-[state=open]:animate-in 
             data-[state=closed]:animate-out 
             data-[state=closed]:fade-out-0 
             data-[state=open]:fade-in-0
+            duration-300
           "
         />
         <Dialog.Content
           className="
             fixed left-[50%] top-[50%] z-50 
-            grid w-full max-w-3xl translate-x-[-50%] 
-            translate-y-[-50%] gap-4 
-            bg-zinc-900 
-            p-8 
-            shadow-lg 
-            duration-200 
+            w-full max-w-[90vw] md:max-w-[800px] lg:max-w-[1000px]
+            translate-x-[-50%] translate-y-[-50%] 
+            bg-gradient-to-b from-zinc-800/95 to-zinc-900/95
+            p-8 md:p-10
+            shadow-2xl 
+            duration-500 
             data-[state=open]:animate-in 
             data-[state=closed]:animate-out 
             data-[state=closed]:fade-out-0 
@@ -49,39 +51,66 @@ const Modal: React.FC<ModalProps> = ({
             data-[state=closed]:slide-out-to-top-[48%] 
             data-[state=open]:slide-in-from-left-1/2 
             data-[state=open]:slide-in-from-top-[48%] 
-            rounded-lg
-            border border-zinc-800
-            sm:max-w-lg
+            rounded-2xl
+            border border-zinc-700/50
+            backdrop-blur-sm
+            overflow-y-auto
+            custom-scrollbar
+            max-h-[90vh]
           "
         >
-          <div className="flex flex-col space-y-2 text-center">
-            <Dialog.Title className="text-2xl font-semibold tracking-tight text-white">
+          <div className="flex flex-col space-y-4 mb-8">
+            <Dialog.Title
+              className="
+              text-3xl md:text-4xl 
+              font-bold 
+              tracking-tight 
+              text-white
+              text-center
+              bg-clip-text text-transparent
+              bg-gradient-to-r from-white to-gray-200
+            "
+            >
               {title}
             </Dialog.Title>
-            <Dialog.Description className="text-sm text-zinc-400">
+            <Dialog.Description
+              className="
+              text-base md:text-lg
+              text-zinc-300
+              text-center
+              max-w-2xl
+              mx-auto
+            "
+            >
               {description}
             </Dialog.Description>
           </div>
-          <div>{children}</div>
+          <div className="relative">{children}</div>
           <Dialog.Close asChild>
             <button
               className="
-                absolute right-4 top-4 
-                rounded-sm 
-                opacity-70 
-                ring-offset-zinc-900 
-                transition-opacity 
-                hover:opacity-100 
-                focus:outline-none 
-                focus:ring-2 
-                focus:ring-zinc-400 
+                absolute right-6 top-6
+                rounded-full
+                p-2
+                opacity-70
+                bg-zinc-800/50
+                border border-zinc-700/50
+                backdrop-blur-sm
+                ring-offset-zinc-900
+                transition-all
+                duration-200
+                hover:opacity-100
+                hover:bg-zinc-700/50
+                hover:scale-110
+                focus:outline-none
+                focus:ring-2
+                focus:ring-white/40
                 focus:ring-offset-2
                 disabled:pointer-events-none
-                data-[state=open]:bg-zinc-800
               "
               aria-label="Close"
             >
-              <IoMdClose className="h-4 w-4 text-zinc-400" />
+              <IoMdClose className="h-5 w-5 text-zinc-300" />
             </button>
           </Dialog.Close>
         </Dialog.Content>

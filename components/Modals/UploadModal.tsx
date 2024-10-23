@@ -1,7 +1,7 @@
 "use client";
 
 import uniqid from "uniqid";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, DragEvent } from "react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
@@ -23,25 +23,61 @@ const UploadModal: React.FC = () => {
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [audioPreview, setAudioPreview] = useState<string | null>(null);
+  const [isDraggingAudio, setIsDraggingAudio] = useState(false);
+  const [isDraggingImage, setIsDraggingImage] = useState(false);
+
   const audioRef = useRef<HTMLAudioElement>(null);
+  const audioDropRef = useRef<HTMLDivElement>(null);
+  const imageDropRef = useRef<HTMLDivElement>(null);
 
   const uploadModal = useUploadModal();
   const supabaseClient = useSupabaseClient();
   const { user } = useUser();
   const router = useRouter();
 
-  const { register, handleSubmit, reset, watch } = useForm<FieldValues>({
-    defaultValues: {
-      author: "",
-      title: "",
-      lyrics: "",
-      song: null,
-      image: null,
-    },
-  });
+  const { register, handleSubmit, reset, watch, setValue } =
+    useForm<FieldValues>({
+      defaultValues: {
+        author: "",
+        title: "",
+        lyrics: "",
+        song: null,
+        image: null,
+      },
+    });
 
   const song = watch("song");
   const image = watch("image");
+
+  const handleAudioDrop = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDraggingAudio(false);
+
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith("audio/")) {
+      setValue("song", [file]);
+      setAudioPreview(URL.createObjectURL(file));
+    } else {
+      toast.error("音声ファイルをアップロードしてください");
+    }
+  };
+
+  const handleImageDrop = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDraggingImage(false);
+
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith("image/")) {
+      setValue("image", [file]);
+      setImagePreview(URL.createObjectURL(file));
+    } else {
+      toast.error("画像ファイルをアップロードしてください");
+    }
+  };
+
+  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
 
   useEffect(() => {
     if (image && image.length > 0) {
@@ -156,77 +192,141 @@ const UploadModal: React.FC = () => {
     >
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="grid grid-cols-1 md:grid-cols-2 gap-4"
+        className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8"
       >
-        <div className="space-y-4">
-          <Input
-            id="title"
-            disabled={isLoading}
-            {...register("title", { required: true })}
-            placeholder="曲のタイトル"
-          />
-          <Input
-            id="author"
-            disabled={isLoading}
-            {...register("author", { required: true })}
-            placeholder="アーティスト名"
-          />
-          <Textarea
-            id="lyrics"
-            disabled={isLoading}
-            {...register("lyrics")}
-            placeholder="歌詞"
-            className="text-neutral-400 bg-neutral-900 h-32"
-          />
-          <GenreSelect
-            className="w-full bg-neutral-900"
-            onGenreChange={handleGenreChange}
-          />
-        </div>
-        <div className="space-y-4">
-          <div>
-            <div className="pb-1">曲を選択</div>
+        <div className="space-y-6">
+          <div className="space-y-2">
+            <label htmlFor="title" className="text-sm text-zinc-400">
+              タイトル
+            </label>
             <Input
-              placeholder="test"
+              id="title"
               disabled={isLoading}
-              type="file"
-              accept=".mp3"
-              id="song"
-              {...register("song", { required: true })}
+              {...register("title", { required: true })}
+              placeholder="曲のタイトル"
+              className="bg-zinc-800/50 border-zinc-700/50 focus:border-white/30"
             />
           </div>
-          <div>
-            <div className="pb-1">画像を選択</div>
+          <div className="space-y-2">
+            <label htmlFor="author" className="text-sm text-zinc-400">
+              アーティスト
+            </label>
             <Input
-              placeholder="test"
+              id="author"
               disabled={isLoading}
-              type="file"
-              accept="image/*"
-              id="image"
-              {...register("image", { required: true })}
+              {...register("author", { required: true })}
+              placeholder="アーティスト名"
+              className="bg-zinc-800/50 border-zinc-700/50 focus:border-white/30"
             />
+          </div>
+          <div className="space-y-2">
+            <label htmlFor="lyrics" className="text-sm text-zinc-400">
+              歌詞
+            </label>
+            <Textarea
+              id="lyrics"
+              disabled={isLoading}
+              {...register("lyrics")}
+              placeholder="歌詞"
+              className="bg-zinc-800/50 border-zinc-700/50 focus:border-white/30 h-40 resize-none"
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm text-zinc-400">ジャンル</label>
+            <GenreSelect
+              className="w-full bg-zinc-800/50 border-zinc-700/50"
+              onGenreChange={handleGenreChange}
+            />
+          </div>
+        </div>
+        <div className="space-y-6">
+          <div className="space-y-2">
+            <label className="text-sm text-zinc-400">曲を選択</label>
+            <div
+              ref={audioDropRef}
+              onDragOver={handleDragOver}
+              onDragEnter={() => setIsDraggingAudio(true)}
+              onDragLeave={() => setIsDraggingAudio(false)}
+              onDrop={handleAudioDrop}
+              className={`relative p-4 border-2 border-dashed rounded-lg transition-colors ${
+                isDraggingAudio
+                  ? "border-blue-500 bg-blue-500/10"
+                  : "border-zinc-700/50 bg-zinc-800/50"
+              }`}
+            >
+              <Input
+                type="file"
+                accept=".mp3"
+                id="song"
+                disabled={isLoading}
+                {...register("song", { required: true })}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              />
+              <div className="text-center">
+                <p className="text-sm text-zinc-400">
+                  クリックまたはドラッグ&ドロップで音声ファイルをアップロード
+                </p>
+                <p className="text-xs text-zinc-500 mt-1">MP3形式のみ</p>
+              </div>
+            </div>
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm text-zinc-400">画像を選択</label>
+            <div
+              ref={imageDropRef}
+              onDragOver={handleDragOver}
+              onDragEnter={() => setIsDraggingImage(true)}
+              onDragLeave={() => setIsDraggingImage(false)}
+              onDrop={handleImageDrop}
+              className={`relative p-4 border-2 border-dashed rounded-lg transition-colors ${
+                isDraggingImage
+                  ? "border-blue-500 bg-blue-500/10"
+                  : "border-zinc-700/50 bg-zinc-800/50"
+              }`}
+            >
+              <Input
+                type="file"
+                accept="image/*"
+                id="image"
+                disabled={isLoading}
+                {...register("image", { required: true })}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              />
+              <div className="text-center">
+                <p className="text-sm text-zinc-400">
+                  クリックまたはドラッグ&ドロップで画像をアップロード
+                </p>
+                <p className="text-xs text-zinc-500 mt-1">PNG, JPG</p>
+              </div>
+            </div>
           </div>
           <div className="space-y-4">
             {imagePreview && (
-              <div className="aspect-square relative overflow-hidden">
+              <div className="aspect-square relative overflow-hidden rounded-lg border border-zinc-700/50 shadow-lg">
                 <Image
                   src={imagePreview}
                   alt="アップロードされた画像のプレビュー"
-                  className="object-cover"
+                  className="object-cover transition-transform duration-300 hover:scale-105"
                   fill
                 />
               </div>
             )}
             {audioPreview && (
-              <audio ref={audioRef} controls className="w-full">
-                <source src={audioPreview} type="audio/mpeg" />
-                お使いのブラウザは音声再生をサポートしていません。
-              </audio>
+              <div className="p-4 rounded-lg bg-zinc-800/50 border border-zinc-700/50">
+                <audio ref={audioRef} controls className="w-full">
+                  <source src={audioPreview} type="audio/mpeg" />
+                  お使いのブラウザは音声再生をサポートしていません。
+                </audio>
+              </div>
             )}
           </div>
         </div>
-        <Button disabled={isLoading} type="submit" className="col-span-full">
-          アップロード
+        <Button
+          disabled={isLoading}
+          type="submit"
+          className="col-span-full py-6 text-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 transition-all duration-300 shadow-lg hover:shadow-blue-500/25"
+        >
+          {isLoading ? "アップロード中..." : "アップロード"}
         </Button>
       </form>
     </Modal>
