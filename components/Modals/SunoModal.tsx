@@ -11,7 +11,6 @@ import Input from "../Input";
 
 const SunoModal: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [isCustom, setIsCustom] = useState(false);
   const sunoModal = useSunoModal();
 
@@ -22,7 +21,7 @@ const SunoModal: React.FC = () => {
     title: "",
     make_instrumental: false,
     wait_audio: true,
-    negative_tags: [],
+    negative_tags: "",
   });
 
   const handleInputChange = (field: string, value: any) => {
@@ -42,10 +41,7 @@ const SunoModal: React.FC = () => {
       const requestData = isCustom
         ? {
             prompt: formData.lyrics,
-            tags: formData.tags
-              .split(",")
-              .map((tag) => tag.trim())
-              .filter((tag) => tag), // Split by comma, trim whitespace, and remove empty tags
+            tags: formData.tags,
             title: formData.title,
             make_instrumental: formData.make_instrumental,
             wait_audio: formData.wait_audio,
@@ -71,7 +67,6 @@ const SunoModal: React.FC = () => {
         throw new Error(result.error || "Something went wrong");
       }
 
-      setAudioUrl(result.audio_url);
       toast.success("音声を生成しました！");
     } catch (error) {
       console.error("Error generating audio:", error);
@@ -83,8 +78,8 @@ const SunoModal: React.FC = () => {
 
   return (
     <Modal
-      title="音声生成"
-      description="AIを使ってカスタム音声を作成します"
+      title="Suno AI"
+      description="AIを使ってカスタムソングを作成します"
       isOpen={sunoModal.isOpen}
       onChange={sunoModal.onClose}
     >
@@ -125,12 +120,7 @@ const SunoModal: React.FC = () => {
             </div>
 
             <div>
-              <Label htmlFor="tags">
-                ジャンル (タグ)
-                <span className="ml-1 text-sm text-muted-foreground">
-                  カンマ区切りで複数入力可能
-                </span>
-              </Label>
+              <Label htmlFor="tags">ジャンル (タグ)</Label>
               <Textarea
                 id="tags"
                 placeholder="例: pop, rock, electronic..."
@@ -180,24 +170,11 @@ const SunoModal: React.FC = () => {
               handleInputChange("wait_audio", checked)
             }
           />
-          <Label htmlFor="wait">音声生成を待つ</Label>
+          <Label htmlFor="wait">生成を待つ</Label>
         </div>
 
-        {audioUrl && (
-          <div className="mt-4">
-            <audio controls className="w-full">
-              <source src={audioUrl} type="audio/mpeg" />
-              お使いのブラウザは音声要素をサポートしていません。
-            </audio>
-          </div>
-        )}
-
         <div className="flex justify-end space-x-2">
-          <Button
-            variant="outline"
-            disabled={isLoading}
-            onClick={sunoModal.onClose}
-          >
+          <Button disabled={isLoading} onClick={sunoModal.onClose}>
             キャンセル
           </Button>
           <Button disabled={isLoading} onClick={onSubmit}>
