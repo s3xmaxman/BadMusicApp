@@ -13,8 +13,9 @@ import { useState } from "react";
 import { MdMusicNote } from "react-icons/md";
 import { MdOutlineQueueMusic } from "react-icons/md";
 import Hover from "../Hover";
-import useSunoModal from "@/hooks/useSunoModal";
+
 import Image from "next/image";
+import useSunoModal from "@/hooks/useSunoModal";
 
 interface LibraryProps {
   songs: Song[];

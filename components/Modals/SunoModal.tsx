@@ -48,17 +48,17 @@ const SunoModal: React.FC = () => {
 
   return (
     <Modal
-      title="Generate Audio"
-      description="Create custom audio using AI"
+      title="音声生成"
+      description="AIを使ってカスタム音声を作成します"
       isOpen={sunoModal.isOpen}
       onChange={sunoModal.onClose}
     >
       <div className="space-y-4">
         <div>
-          <Label htmlFor="prompt">Prompt</Label>
+          <Label htmlFor="prompt">プロンプト</Label>
           <Input
             id="prompt"
-            placeholder="Describe the audio you want to generate..."
+            placeholder="曲のプロンプトを入力してください..."
             className="mt-1"
             disabled={isLoading}
             onChange={(e) => (initialValues.prompt = e.target.value)}
@@ -73,7 +73,7 @@ const SunoModal: React.FC = () => {
               (initialValues.make_instrumental = checked)
             }
           />
-          <Label htmlFor="instrumental">Make Instrumental</Label>
+          <Label htmlFor="instrumental">instrumental</Label>
         </div>
 
         <div className="flex items-center space-x-2">
@@ -83,24 +83,24 @@ const SunoModal: React.FC = () => {
             disabled={isLoading}
             onCheckedChange={(checked) => (initialValues.wait_audio = checked)}
           />
-          <Label htmlFor="wait">Wait for Audio</Label>
+          <Label htmlFor="wait">音声生成を待つ</Label>
         </div>
 
         {audioUrl && (
           <div className="mt-4">
             <audio controls className="w-full">
               <source src={audioUrl} type="audio/mpeg" />
-              Your browser does not support the audio element.
+              お使いのブラウザは音声要素をサポートしていません。
             </audio>
           </div>
         )}
 
         <div className="flex justify-end space-x-2">
           <Button disabled={isLoading} onClick={sunoModal.onClose}>
-            Cancel
+            キャンセル
           </Button>
           <Button disabled={isLoading} onClick={() => onSubmit(initialValues)}>
-            {isLoading ? "Generating..." : "Generate Audio"}
+            {isLoading ? "生成中..." : "作成"}
           </Button>
         </div>
       </div>

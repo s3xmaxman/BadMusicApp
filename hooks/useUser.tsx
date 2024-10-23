@@ -6,16 +6,23 @@ import {
   User,
 } from "@supabase/auth-helpers-react";
 
-// ユーザーコンテキストの型を定義
+// Sunoクレジット情報の型定義
+interface SunoCredits {
+  credits_left: number;
+  period: string;
+  monthly_limit: number;
+  monthly_usage: number;
+}
+
 type UserContextType = {
   accessToken: string | null;
   user: User | null;
   userDetails: UserDetails | null;
   isLoading: boolean;
   subscription: Subscription | null;
+  creditsLeft: number | null;
 };
 
-// ユーザーコンテキストを作成
 export const UserContext = createContext<UserContextType | undefined>(
   undefined
 );
@@ -24,22 +31,20 @@ export interface Props {
   [propName: string]: any;
 }
 
-// ユーザーコンテキストプロバイダーを作成
 export const MyUserContextProvider = (props: Props) => {
   const {
     session,
     isLoading: isLoadingUser,
     supabaseClient: supabase,
-  } = useSessionContext(); // セッション情報とSupabaseクライアントを取得
-  const user = useSupaUser(); // ユーザー情報を取得
-  const accessToken = session?.access_token ?? null; // アクセストークンを取得
-  const [isLoadingData, setIsloadingData] = useState(false); // ローディング状態のステートとその更新関数を定義
-  const [userDetails, setUserDetails] = useState<UserDetails | null>(null); // ユーザーの詳細情報のステートとその更新関数を定義
-  const [subscription, setSubscription] = useState<Subscription | null>(null); // サブスクリプションのステートとその更新関数を定義
+  } = useSessionContext();
+  const user = useSupaUser();
+  const accessToken = session?.access_token ?? null;
+  const [isLoadingData, setIsloadingData] = useState(false);
+  const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
+  const [subscription, setSubscription] = useState<Subscription | null>(null);
+  const [creditsLeft, setCreditsLeft] = useState<number | null>(null);
 
-  // ユーザーの詳細情報を取得する関数
   const getUserDetails = () => supabase.from("users").select("*").single();
-  // サブスクリプションの詳細情報を取得する関数
   const getSubscription = () =>
     supabase
       .from("subscriptions")
@@ -47,9 +52,26 @@ export const MyUserContextProvider = (props: Props) => {
       .in("status", ["trialing", "active"])
       .single();
 
-  // ユーザーとサブスクリプションの詳細情報を取得する処理
+  // クレジット情報を取得する関数
+  const fetchCredits = async () => {
+    try {
+      const response = await fetch("/api/suno/get_limit");
+      if (!response.ok) {
+        throw new Error("Failed to fetch credits");
+      }
+      const data: SunoCredits = await response.json();
+      setCreditsLeft(data.credits_left);
+    } catch (error) {
+      console.error("Failed to fetch credits:", error);
+      // エラーの場合でも既存の値を保持
+    }
+  };
+
+  // ユーザー情報とサブスクリプション情報の取得
   useEffect(() => {
     if (user && !isLoadingData && !userDetails && !subscription) {
+      setIsloadingData(true);
+
       Promise.allSettled([getUserDetails(), getSubscription()]).then(
         (results) => {
           const userDetailsPromise = results[0];
@@ -69,8 +91,24 @@ export const MyUserContextProvider = (props: Props) => {
     } else if (!user && !isLoadingUser && !isLoadingData) {
       setUserDetails(null);
       setSubscription(null);
+      setCreditsLeft(null);
+      setIsloadingData(false);
     }
   }, [user, isLoadingUser]);
+
+  // クレジット情報の定期的な更新
+  useEffect(() => {
+    if (user) {
+      // 初回のクレジット情報取得
+      fetchCredits();
+
+      // 5分ごとにクレジット情報を更新
+      const intervalId = setInterval(fetchCredits, 5 * 60 * 1000);
+
+      // クリーンアップ関数
+      return () => clearInterval(intervalId);
+    }
+  }, [user]);
 
   const value = {
     accessToken,
@@ -78,6 +116,7 @@ export const MyUserContextProvider = (props: Props) => {
     userDetails,
     isLoading: isLoadingUser || isLoadingData,
     subscription,
+    creditsLeft,
   };
 
   return <UserContext.Provider value={value} {...props} />;
