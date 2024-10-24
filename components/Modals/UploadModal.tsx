@@ -192,34 +192,37 @@ const UploadModal: React.FC = () => {
     >
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8"
+        className="grid grid-cols-1 md:grid-cols-2 gap-4"
       >
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <label htmlFor="title" className="text-sm text-zinc-400">
-              タイトル
-            </label>
-            <Input
-              id="title"
-              disabled={isLoading}
-              {...register("title", { required: true })}
-              placeholder="曲のタイトル"
-              className="bg-zinc-800/50 border-zinc-700/50 focus:border-white/30"
-            />
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <label htmlFor="title" className="text-sm text-zinc-400">
+                タイトル
+              </label>
+              <Input
+                id="title"
+                disabled={isLoading}
+                {...register("title", { required: true })}
+                placeholder="曲のタイトル"
+                className="h-9 bg-zinc-800/50 border-zinc-700/50 focus:border-white/30"
+              />
+            </div>
+            <div className="space-y-1">
+              <label htmlFor="author" className="text-sm text-zinc-400">
+                アーティスト
+              </label>
+              <Input
+                id="author"
+                disabled={isLoading}
+                {...register("author", { required: true })}
+                placeholder="アーティスト名"
+                className="h-9 bg-zinc-800/50 border-zinc-700/50 focus:border-white/30"
+              />
+            </div>
           </div>
-          <div className="space-y-2">
-            <label htmlFor="author" className="text-sm text-zinc-400">
-              アーティスト
-            </label>
-            <Input
-              id="author"
-              disabled={isLoading}
-              {...register("author", { required: true })}
-              placeholder="アーティスト名"
-              className="bg-zinc-800/50 border-zinc-700/50 focus:border-white/30"
-            />
-          </div>
-          <div className="space-y-2">
+
+          <div className="space-y-1">
             <label htmlFor="lyrics" className="text-sm text-zinc-400">
               歌詞
             </label>
@@ -228,10 +231,11 @@ const UploadModal: React.FC = () => {
               disabled={isLoading}
               {...register("lyrics")}
               placeholder="歌詞"
-              className="bg-zinc-800/50 border-zinc-700/50 focus:border-white/30 h-40 resize-none"
+              className="bg-zinc-800/50 border-zinc-700/50 focus:border-white/30 h-28 resize-none"
             />
           </div>
-          <div className="space-y-2">
+
+          <div className="space-y-1">
             <label className="text-sm text-zinc-400">ジャンル</label>
             <GenreSelect
               className="w-full bg-zinc-800/50 border-zinc-700/50"
@@ -239,8 +243,9 @@ const UploadModal: React.FC = () => {
             />
           </div>
         </div>
-        <div className="space-y-6">
-          <div className="space-y-2">
+
+        <div className="space-y-4">
+          <div className="space-y-1">
             <label className="text-sm text-zinc-400">曲を選択</label>
             <div
               ref={audioDropRef}
@@ -248,7 +253,7 @@ const UploadModal: React.FC = () => {
               onDragEnter={() => setIsDraggingAudio(true)}
               onDragLeave={() => setIsDraggingAudio(false)}
               onDrop={handleAudioDrop}
-              className={`relative p-4 border-2 border-dashed rounded-lg transition-colors ${
+              className={`relative p-3 border-2 border-dashed rounded-lg transition-colors ${
                 isDraggingAudio
                   ? "border-blue-500 bg-blue-500/10"
                   : "border-zinc-700/50 bg-zinc-800/50"
@@ -262,15 +267,16 @@ const UploadModal: React.FC = () => {
                 {...register("song", { required: true })}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               />
-              <div className="text-center">
+              <div className="text-center py-2">
                 <p className="text-sm text-zinc-400">
-                  クリックまたはドラッグ&ドロップで音声ファイルをアップロード
+                  クリックまたはドラッグ&ドロップ
                 </p>
-                <p className="text-xs text-zinc-500 mt-1">MP3形式のみ</p>
+                <p className="text-xs text-zinc-500">MP3形式のみ</p>
               </div>
             </div>
           </div>
-          <div className="space-y-2">
+
+          <div className="space-y-1">
             <label className="text-sm text-zinc-400">画像を選択</label>
             <div
               ref={imageDropRef}
@@ -278,7 +284,7 @@ const UploadModal: React.FC = () => {
               onDragEnter={() => setIsDraggingImage(true)}
               onDragLeave={() => setIsDraggingImage(false)}
               onDrop={handleImageDrop}
-              className={`relative p-4 border-2 border-dashed rounded-lg transition-colors ${
+              className={`relative p-3 border-2 border-dashed rounded-lg transition-colors ${
                 isDraggingImage
                   ? "border-blue-500 bg-blue-500/10"
                   : "border-zinc-700/50 bg-zinc-800/50"
@@ -292,39 +298,40 @@ const UploadModal: React.FC = () => {
                 {...register("image", { required: true })}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               />
-              <div className="text-center">
+              <div className="text-center py-2">
                 <p className="text-sm text-zinc-400">
-                  クリックまたはドラッグ&ドロップで画像をアップロード
+                  クリックまたはドラッグ&ドロップ
                 </p>
-                <p className="text-xs text-zinc-500 mt-1">PNG, JPG</p>
+                <p className="text-xs text-zinc-500">PNG, JPG</p>
               </div>
             </div>
           </div>
-          <div className="space-y-4">
+
+          <div className="grid grid-cols-2 gap-4">
             {imagePreview && (
-              <div className="aspect-square relative overflow-hidden rounded-lg border border-zinc-700/50 shadow-lg">
+              <div className="aspect-square relative overflow-hidden rounded-lg border border-zinc-700/50">
                 <Image
                   src={imagePreview}
                   alt="アップロードされた画像のプレビュー"
-                  className="object-cover transition-transform duration-300 hover:scale-105"
+                  className="object-cover"
                   fill
                 />
               </div>
             )}
             {audioPreview && (
-              <div className="p-4 rounded-lg bg-zinc-800/50 border border-zinc-700/50">
-                <audio ref={audioRef} controls className="w-full">
+              <div className="flex items-center p-2 rounded-lg bg-zinc-800/50 border border-zinc-700/50">
+                <audio ref={audioRef} controls className="w-full h-8">
                   <source src={audioPreview} type="audio/mpeg" />
-                  お使いのブラウザは音声再生をサポートしていません。
                 </audio>
               </div>
             )}
           </div>
         </div>
+
         <Button
           disabled={isLoading}
           type="submit"
-          className="col-span-full py-6 text-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 transition-all duration-300 shadow-lg hover:shadow-blue-500/25"
+          className="col-span-full py-3 text-base bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 transition-all duration-300 shadow-lg hover:shadow-blue-500/25"
         >
           {isLoading ? "アップロード中..." : "アップロード"}
         </Button>
