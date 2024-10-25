@@ -78,8 +78,12 @@ const SunoModal: React.FC = () => {
 
       // 各曲をsuno_songsテーブルに保存
       for (const song of songs) {
+        const songIdMatch = song.audio_url.match(/item_id=([a-f0-9-]+)/);
+        const songId = songIdMatch ? songIdMatch[1] : null;
+
         const { error } = await supabaseClient.from("suno_songs").insert({
           user_id: user.id,
+          song_id: songId,
           title: song.title || "",
           image_url: song.image_url || "",
           lyric: song.lyric || "",
