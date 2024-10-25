@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
 import { SunoSong } from "@/types";
 import { CiMusicNote1 } from "react-icons/ci";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 interface SunoSongItemProps {
   onClick: (id: string) => void;
@@ -12,6 +13,39 @@ interface SunoSongItemProps {
 
 const SunoSongItem: React.FC<SunoSongItemProps> = ({ onClick, data }) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(data.status === "complete");
+  const supabaseClient = useSupabaseClient();
+
+  const updateSongStatus = useCallback(async () => {
+    if (isCompleted) return;
+
+    try {
+      const response = await fetch(`/api/suno/get?id=${data.song_id}`);
+      const [updatedSong] = await response.json();
+
+      if (updatedSong.status === data.status) return;
+
+      await supabaseClient
+        .from("suno_songs")
+        .update({
+          status: updatedSong.status,
+          audio_url: updatedSong.audio_url,
+          video_url: updatedSong.video_url,
+        })
+        .eq("song_id", data.song_id);
+
+      setIsCompleted(updatedSong.status === "complete");
+    } catch (error) {
+      console.error("Failed to update song status:", error);
+    }
+  }, [data.song_id, data.status, supabaseClient, isCompleted]);
+
+  useEffect(() => {
+    if (isCompleted) return;
+
+    const interval = setInterval(updateSongStatus, 30000);
+    return () => clearInterval(interval);
+  }, [isCompleted, updateSongStatus]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("ja-JP", {

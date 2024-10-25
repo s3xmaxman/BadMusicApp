@@ -9,7 +9,6 @@ import GenreCard from "@/components/GenreCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import dynamic from "next/dynamic";
 import { SoundCloudUrls, videoIds } from "@/constants";
-import SoundCloudItem from "@/components/SoundCloudItem";
 import SunoSongItem from "@/components/SunoSongItem";
 
 const YouTubePlayer = dynamic(() => import("@/components/YouTubePlayer"), {
