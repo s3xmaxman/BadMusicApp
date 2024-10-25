@@ -1,8 +1,6 @@
-import { useContext } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import ReactPlayer from "react-player";
 import { useSoundCloudPlayerStore } from "@/hooks/useSoundCloudPlayerStore";
-import { set } from "react-hook-form";
 
 interface SoundCloudItemProps {
   data: {

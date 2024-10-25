@@ -4,12 +4,13 @@ import Header from "@/components/Header";
 import PageContent from "./PageContent";
 import RightSidebar from "@/components/RightSidebar/RightSidebar";
 import TrendBoard from "@/components/TrendBoard";
-import { Song } from "@/types";
+import { Song, SunoSong } from "@/types";
 import GenreCard from "@/components/GenreCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import dynamic from "next/dynamic";
 import { SoundCloudUrls, videoIds } from "@/constants";
 import SoundCloudItem from "@/components/SoundCloudItem";
+import SunoSongItem from "@/components/SunoSongItem";
 
 const YouTubePlayer = dynamic(() => import("@/components/YouTubePlayer"), {
   ssr: false,
@@ -28,9 +29,10 @@ export const genreCards = [
 
 interface HomeClientProps {
   songs: Song[];
+  sunoSongs: SunoSong[];
 }
 
-const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
+const HomeContent: React.FC<HomeClientProps> = ({ songs, sunoSongs }) => {
   const [showArrows, setShowArrows] = useState(false);
   const [showVideoArrows, setShowVideoArrows] = useState(false);
   const [isClient, setIsClient] = useState(false);
@@ -174,6 +176,22 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs }) => {
               ))}
             </div>
           </section> */}
+
+          {/* Suno Songs */}
+          <section>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-white text-2xl font-semibold">Suno Tracks</h2>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {sunoSongs.map((song) => (
+                <SunoSongItem
+                  onClick={(id: string) => {}}
+                  key={song.id}
+                  data={song}
+                />
+              ))}
+            </div>
+          </section>
 
           {/* Genres Section */}
           <section
