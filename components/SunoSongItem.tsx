@@ -11,6 +11,8 @@ interface SunoSongItemProps {
   data: SunoSong;
 }
 
+// TODO: ステータスがgenの場合アニメーションを追加する
+
 const SunoSongItem: React.FC<SunoSongItemProps> = ({ onClick, data }) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [isCompleted, setIsCompleted] = useState(data.status === "complete");

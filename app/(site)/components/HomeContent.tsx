@@ -8,8 +8,7 @@ import { Song, SunoSong } from "@/types";
 import GenreCard from "@/components/GenreCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import dynamic from "next/dynamic";
-import { SoundCloudUrls, videoIds } from "@/constants";
-import SunoSongItem from "@/components/SunoSongItem";
+import { videoIds } from "@/constants";
 
 const YouTubePlayer = dynamic(() => import("@/components/YouTubePlayer"), {
   ssr: false,
@@ -176,22 +175,6 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs, sunoSongs }) => {
             </div>
           </section> */}
 
-          {/* Suno Songs */}
-          <section>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-white text-2xl font-semibold">Suno Tracks</h2>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {sunoSongs.map((song) => (
-                <SunoSongItem
-                  onClick={(id: string) => {}}
-                  key={song.id}
-                  data={song}
-                />
-              ))}
-            </div>
-          </section>
-
           {/* Genres Section */}
           <section
             className="relative"
@@ -235,8 +218,7 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs, sunoSongs }) => {
 
           {/* Latest Songs Section */}
           <section>
-            <h2 className="text-white text-2xl font-semibold">Latest</h2>
-            <PageContent songs={songs} />
+            <PageContent songs={songs} sunoSongs={sunoSongs} />
           </section>
         </main>
       </div>
