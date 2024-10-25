@@ -278,6 +278,68 @@ export interface Database {
           }
         ];
       };
+      suno_songs: {
+        Row: {
+          id: string;
+          song_id: string;
+          user_id: string;
+          title: string;
+          image_url: string;
+          lyric: string | null;
+          audio_url: string;
+          video_url: string | null;
+          created_at: string;
+          model_name: string;
+          status: string | null;
+          gpt_description_prompt: string | null;
+          prompt: string;
+          type: string | null;
+          tags: string | null;
+        };
+        Insert: {
+          id?: string;
+          song_id?: string;
+          user_id: string;
+          title: string;
+          image_url: string;
+          lyric?: string | null;
+          audio_url: string;
+          video_url?: string | null;
+          created_at?: string;
+          model_name: string;
+          status?: string | null;
+          gpt_description_prompt?: string | null;
+          prompt: string;
+          type?: string | null;
+          tags?: string | null;
+        };
+        Update: {
+          id?: string;
+          song_id?: string;
+          user_id?: string;
+          title?: string;
+          image_url?: string;
+          lyric?: string | null;
+          audio_url?: string;
+          video_url?: string | null;
+          created_at?: string;
+          model_name?: string;
+          status?: string | null;
+          gpt_description_prompt?: string | null;
+          prompt?: string;
+          type?: string | null;
+          tags?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "suno_songs_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
       subscriptions: {
         Row: {
           cancel_at: string | null;
