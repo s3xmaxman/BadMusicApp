@@ -5,6 +5,7 @@ const nextConfig = {
       "rhcuyimsqolkjppsevgn.supabase.co",
       "i1.sndcdn.com",
       "soundcloud.com",
+      "cdn2.suno.ai",
     ],
   },
 };

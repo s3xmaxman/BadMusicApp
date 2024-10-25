@@ -16,7 +16,6 @@ export interface Song {
 
 export interface SunoSong {
   id?: string;
-  song_id: string;
   user_id: string;
   title: string;
   image_url: string;

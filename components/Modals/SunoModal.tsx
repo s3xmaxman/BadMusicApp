@@ -199,7 +199,7 @@ const SunoModal: React.FC = () => {
           <Switch
             id="wait"
             checked={formData.wait_audio}
-            disabled={isLoading}
+            disabled={true}
             onCheckedChange={(checked) =>
               handleInputChange("wait_audio", checked)
             }
