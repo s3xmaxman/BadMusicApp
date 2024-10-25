@@ -8,11 +8,15 @@ import Modal from "./Modal";
 import useSunoModal from "@/hooks/useSunoModal";
 import toast from "react-hot-toast";
 import Input from "../Input";
+import { useUser } from "@/hooks/useUser";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 const SunoModal: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isCustom, setIsCustom] = useState(false);
+  const { user } = useUser();
   const sunoModal = useSunoModal();
+  const supabaseClient = useSupabaseClient();
 
   const [formData, setFormData] = useState({
     prompt: "",
@@ -61,13 +65,43 @@ const SunoModal: React.FC = () => {
         body: JSON.stringify(requestData),
       });
 
-      const result = await response.json();
-
       if (!response.ok) {
-        throw new Error(result.error || "Something went wrong");
+        const error = await response.json();
+        throw new Error(error.error || "Something went wrong");
+      }
+
+      const songs = await response.json();
+
+      if (!user) {
+        throw new Error("ユーザーが見つかりません");
+      }
+
+      // 各曲をsuno_songsテーブルに保存
+      for (const song of songs) {
+        const { error } = await supabaseClient.from("suno_songs").insert({
+          user_id: user.id,
+          title: song.title || "",
+          image_url: song.image_url || "",
+          lyric: song.lyric || "",
+          audio_url: song.audio_url || "",
+          video_url: song.video_url || "",
+          created_at: song.created_at,
+          model_name: song.model_name,
+          status: song.status,
+          gpt_description_prompt: song.gpt_description_prompt || "",
+          prompt: song.prompt || "",
+          type: song.type || "",
+          tags: song.tags || "",
+        });
+
+        if (error) {
+          console.error("Error saving song to database:", error);
+          throw new Error("データベースへの保存に失敗しました");
+        }
       }
 
       toast.success("音楽を生成しました！");
+      sunoModal.onClose();
     } catch (error) {
       console.error("Error generating audio:", error);
       toast.error("音楽の生成に失敗しました");
