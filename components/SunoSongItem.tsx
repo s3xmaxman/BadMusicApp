@@ -4,7 +4,7 @@ import Link from "next/link";
 import { SunoSong } from "@/types";
 import { CiMusicNote1 } from "react-icons/ci";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Loader2, MoreVertical, Trash, Video } from "lucide-react";
+import { Download, Loader2, MoreVertical, Trash } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { downloadFile } from "@/libs/helpers";
+import PreviewDownloadModal from "./Modals/DownloadPreviewModal";
 
 interface SunoSongItemProps {
   onClick: (id: string) => void;
@@ -39,6 +40,7 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
   const [isCompleted, setIsCompleted] = useState(data.status === "complete");
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const supabaseClient = useSupabaseClient();
 
   const updateSongStatus = useCallback(async () => {
@@ -95,6 +97,36 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
     await handleDelete();
   };
 
+  const handleItemClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!isDeleteAlertOpen && !isPreviewModalOpen && data.song_id) {
+      onClick(data.song_id);
+    }
+  };
+
+  const handleDownloadClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsDropdownOpen(false);
+    setIsPreviewModalOpen(true);
+  };
+
+  const handleClosePreviewModal = useCallback(() => {
+    setIsPreviewModalOpen(false);
+  }, []);
+
+  const handleDownload = useCallback(
+    async (type: "audio" | "video") => {
+      if (type === "audio" && data.audio_url) {
+        const filename = `${data.title || "Untitled"}.mp3`;
+        await downloadFile(data.audio_url, filename);
+      } else if (type === "video" && data.video_url) {
+        const filename = `${data.title || "Untitled"}.mp4`;
+        await downloadFile(data.video_url, filename);
+      }
+    },
+    [data.audio_url, data.video_url, data.title]
+  );
+
   useEffect(() => {
     if (isCompleted) return;
 
@@ -110,188 +142,150 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
     });
   };
 
-  const handleDownload = useCallback(
-    async (type: "audio" | "video") => {
-      if (type === "audio" && data.audio_url) {
-        const filename = `${data.title || "Untitled"}.mp3`;
-        await downloadFile(data.audio_url, filename);
-      } else if (type === "video" && data.video_url) {
-        const filename = `${data.title || "Untitled"}.mp4`;
-        await downloadFile(data.video_url, filename);
-      }
-    },
-    [data.audio_url, data.video_url, data.title]
-  );
-
   return (
-    <>
-      {/* Song Item Container */}
+    <div
+      className="relative group flex flex-col items-center justify-center rounded-md overflow-hidden gap-x-4 bg-neutral-400/5 cursor-pointer hover:bg-neutral-400/10 transition p-3"
+      onClick={handleItemClick}
+    >
+      {/* Dropdown Menu */}
       <div
-        className="relative group flex flex-col items-center justify-center rounded-md overflow-hidden gap-x-4 bg-neutral-400/5 cursor-pointer hover:bg-neutral-400/10 transition p-3"
-        onClick={(e) => {
-          e.stopPropagation();
-          if (!isDeleteAlertOpen) {
-            onClick(data.song_id || "");
-          }
+        className="absolute top-2 right-2 z-10"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <MoreVertical className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {(data.audio_url || data.video_url) && (
+              <DropdownMenuItem onClick={handleDownloadClick}>
+                <Download className="mr-2 h-4 w-4" />
+                ダウンロード
+              </DropdownMenuItem>
+            )}
+            <DropdownMenuItem
+              className="text-red-600 focus:text-red-600"
+              onClick={handleOpenDeleteAlert}
+            >
+              <Trash className="mr-2 h-4 w-4" />
+              削除
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+
+      {/* Delete Alert Dialog */}
+      <AlertDialog
+        open={isDeleteAlertOpen}
+        onOpenChange={(open) => {
+          if (!open) handleCancelDelete();
         }}
       >
-        {/* Dropdown Menu for Download and Delete Options */}
-        <div
-          className="absolute top-2 right-2 z-10"
+        <AlertDialogContent onClick={(e) => e.stopPropagation()}>
+          <AlertDialogHeader>
+            <AlertDialogTitle>本当に削除しますか？</AlertDialogTitle>
+            <AlertDialogDescription>
+              「{data.title || "Untitled"}」を削除してもよろしいですか？
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleCancelDelete}>
+              キャンセル
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmDelete}>
+              削除
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Preview & Download Modal */}
+      <PreviewDownloadModal
+        isOpen={isPreviewModalOpen}
+        onClose={handleClosePreviewModal}
+        title={data.title || ""}
+        audioUrl={data.audio_url}
+        videoUrl={data.video_url}
+        onDownload={handleDownload}
+      />
+
+      {/* Song Image and Model Name */}
+      <div className="relative aspect-square w-full h-full rounded-md overflow-hidden">
+        {!isImageLoaded && (
+          <div className="absolute inset-0 bg-gray-300 animate-pulse" />
+        )}
+        <Image
+          className={`object-cover w-full h-full transition-opacity duration-300 ${
+            isImageLoaded ? "opacity-100" : "opacity-0"
+          }`}
+          src={data.image_url || "/images/wait.jpg"}
+          fill
+          alt={data.title}
+          onLoad={() => setIsImageLoaded(true)}
+        />
+        <div className="absolute bottom-2 right-2 bg-black/70 px-2 py-1 rounded text-xs text-white">
+          {data.model_name}
+        </div>
+
+        {/* Generating Status Overlay */}
+        {data.status === "gen" && (
+          <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center backdrop-blur-sm">
+            <div className="relative">
+              <div className="absolute -inset-4 bg-blue-500/20 rounded-full animate-ping" />
+              <div className="absolute -inset-4 bg-blue-500/40 rounded-full animate-pulse" />
+              <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+            </div>
+            <div className="mt-4 text-sm font-medium text-white">
+              Generating...
+            </div>
+            <div className="mt-2 text-xs text-blue-200 animate-pulse">
+              This may take a few minutes
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Song Information */}
+      <div className="flex flex-col items-start justify-between w-full pt-4 gap-y-1">
+        <Link
+          href={`/suno-songs/${data.song_id}`}
+          className="w-full"
           onClick={(e) => e.stopPropagation()}
         >
-          <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <MoreVertical className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {data.audio_url && (
-                <DropdownMenuItem
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDownload("audio");
-                  }}
-                >
-                  <CiMusicNote1 className="mr-2 h-4 w-4" />
-                  音楽をDL
-                </DropdownMenuItem>
-              )}
-              {data.video_url && (
-                <DropdownMenuItem
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDownload("video");
-                  }}
-                >
-                  <Video className="mr-2 h-4 w-4" />
-                  動画をDL
-                </DropdownMenuItem>
-              )}
-              <DropdownMenuItem
-                className="text-red-600 focus:text-red-600"
-                onClick={handleOpenDeleteAlert}
-              >
-                <Trash className="mr-2 h-4 w-4" />
-                削除
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+          <p className="font-semibold truncate w-full hover:underline">
+            {data.title || "Untitled"}
+          </p>
+        </Link>
 
-        {/* Delete Confirmation Alert */}
-        <AlertDialog
-          open={isDeleteAlertOpen}
-          onOpenChange={(open) => {
-            if (!open) handleCancelDelete();
-          }}
-        >
-          <AlertDialogContent onClick={(e) => e.stopPropagation()}>
-            <AlertDialogHeader>
-              <AlertDialogTitle>本当に削除しますか？</AlertDialogTitle>
-              <AlertDialogDescription>
-                「{data.title || "Untitled"}」を削除してもよろしいですか？
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel onClick={handleCancelDelete}>
-                キャンセル
-              </AlertDialogCancel>
-              <AlertDialogAction onClick={handleConfirmDelete}>
-                削除
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-
-        {/* Song Image and Model Name */}
-        <div className="relative aspect-square w-full h-full rounded-md overflow-hidden">
-          {/* Loading Placeholder */}
-          {!isImageLoaded && (
-            <div className="absolute inset-0 bg-gray-300 animate-pulse" />
-          )}
-          {/* Song Image */}
-          <Image
-            className={`object-cover w-full h-full transition-opacity duration-300 ${
-              isImageLoaded ? "opacity-100" : "opacity-0"
-            }`}
-            src={data.image_url || "/images/wait.jpg"}
-            fill
-            alt={data.title}
-            onLoad={() => setIsImageLoaded(true)}
-          />
-          {/* Model Name Display */}
-          <div className="absolute bottom-2 right-2 bg-black/70 px-2 py-1 rounded text-xs text-white">
-            {data.model_name}
-          </div>
-
-          {/* Generating Status Overlay */}
-          {data.status === "gen" && (
-            <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center backdrop-blur-sm">
-              <div className="relative">
-                <div className="absolute -inset-4 bg-blue-500/20 rounded-full animate-ping" />
-                <div className="absolute -inset-4 bg-blue-500/40 rounded-full animate-pulse" />
-                <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
-              </div>
-              <div className="mt-4 text-sm font-medium text-white">
-                Generating...
-              </div>
-              <div className="mt-2 text-xs text-blue-200 animate-pulse">
-                This may take a few minutes
-              </div>
+        <div className="flex items-center justify-between w-full mt-2 text-xs text-neutral-400">
+          <div className="flex items-center gap-2">
+            <div className="flex items-center">
+              <CiMusicNote1 className="mr-1" />
+              {data.type || "Generated"}
             </div>
-          )}
+          </div>
+          <div>{formatDate(data.created_at)}</div>
         </div>
 
-        {/* Song Information */}
-        <div className="flex flex-col items-start justify-between w-full pt-4 gap-y-1">
-          {/* Song Title Link */}
-          <Link
-            href={`/suno-songs/${data.song_id}`}
-            className="w-full"
-            onClick={(e) => e.stopPropagation()}
+        {/* Generating Status Indicator */}
+        {data.status && data.status !== "complete" && (
+          <div
+            className={`
+              absolute top-2 left-2 px-2 py-1 rounded-full text-xs
+              ${
+                data.status === "gen"
+                  ? "bg-blue-500/80 text-white animate-pulse"
+                  : "bg-blue-500 text-white"
+              }
+            `}
           >
-            <p className="font-semibold truncate w-full hover:underline">
-              {data.title || "Untitled"}
-            </p>
-          </Link>
-
-          {/* Song Type, Tags, and Created Date */}
-          <div className="flex items-center justify-between w-full mt-2 text-xs text-neutral-400">
-            <div className="flex items-center gap-2">
-              <div className="flex items-center">
-                <CiMusicNote1 className="mr-1" />
-                {data.type || "Generated"}
-              </div>
-              {/* {data.tags && (
-                <div className="flex items-center">
-                  <CiMusicNote1 className="mr-1" />
-                  {data.tags.split(",")[0]}
-                </div>
-              )} */}
-            </div>
-            <div>{formatDate(data.created_at)}</div>
+            {data.status}
           </div>
-
-          {/* Generating Status Indicator */}
-          {data.status && data.status !== "complete" && (
-            <div
-              className={`
-                absolute top-2 left-2 px-2 py-1 rounded-full text-xs
-                ${
-                  data.status === "gen"
-                    ? "bg-blue-500/80 text-white animate-pulse"
-                    : "bg-blue-500 text-white"
-                }
-              `}
-            >
-              {data.status}
-            </div>
-          )}
-        </div>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 
