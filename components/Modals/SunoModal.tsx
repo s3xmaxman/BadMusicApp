@@ -211,11 +211,19 @@ const SunoModal: React.FC = () => {
           <Label htmlFor="wait">生成を待つ</Label>
         </div>
 
-        <div className="flex justify-end space-x-2">
-          <Button disabled={isLoading} onClick={sunoModal.onClose}>
+        <div className="flex justify-end space-x-2 ">
+          <Button
+            disabled={isLoading}
+            onClick={sunoModal.onClose}
+            className="hover:underline"
+          >
             キャンセル
           </Button>
-          <Button disabled={isLoading} onClick={onSubmit}>
+          <Button
+            disabled={isLoading}
+            onClick={onSubmit}
+            className="hover:underline"
+          >
             {isLoading ? "生成中..." : "作成"}
           </Button>
         </div>

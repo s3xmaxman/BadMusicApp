@@ -52,7 +52,10 @@ const GenreSelect: React.FC<GenreSelectProps> = ({
 
   return (
     <div
-      className={cn("flex flex-wrap gap-2 max-h-32 overflow-y-auto", className)}
+      className={cn(
+        "flex flex-wrap gap-2 max-h-32 overflow-y-auto custom-scrollbar",
+        className
+      )}
     >
       {genres.map((genre) => (
         <button

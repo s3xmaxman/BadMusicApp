@@ -23,8 +23,7 @@ const Modal: React.FC<ModalProps> = ({
         <Dialog.Overlay
           className="
             fixed inset-0 z-40 
-            bg-black/90 
-            backdrop-blur-md 
+            bg-black/90
             data-[state=open]:animate-in 
             data-[state=closed]:animate-out 
             data-[state=closed]:fade-out-0 
@@ -37,7 +36,7 @@ const Modal: React.FC<ModalProps> = ({
             fixed left-[50%] top-[50%] z-50 
             w-full max-w-[90vw] md:max-w-[800px] lg:max-w-[1000px]
             translate-x-[-50%] translate-y-[-50%] 
-            bg-gradient-to-b from-zinc-800/95 to-zinc-900/95
+            bg-black
             p-8 md:p-10
             shadow-2xl 
             duration-500 
@@ -53,7 +52,6 @@ const Modal: React.FC<ModalProps> = ({
             data-[state=open]:slide-in-from-top-[48%] 
             rounded-2xl
             border border-zinc-700/50
-            backdrop-blur-sm
             overflow-y-auto
             custom-scrollbar
             max-h-[90vh]
@@ -93,14 +91,12 @@ const Modal: React.FC<ModalProps> = ({
                 rounded-full
                 p-2
                 opacity-70
-                bg-zinc-800/50
+                bg-black
                 border border-zinc-700/50
-                backdrop-blur-sm
-                ring-offset-zinc-900
                 transition-all
                 duration-200
                 hover:opacity-100
-                hover:bg-zinc-700/50
+                hover:bg-zinc-900
                 hover:scale-110
                 focus:outline-none
                 focus:ring-2
