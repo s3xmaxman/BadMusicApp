@@ -4,7 +4,7 @@ import Link from "next/link";
 import { SunoSong } from "@/types";
 import { CiMusicNote1 } from "react-icons/ci";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Loader2, MoreVertical, Trash } from "lucide-react";
+import { Loader2, MoreVertical, Trash, Video } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,7 +29,31 @@ interface SunoSongItemProps {
   onDelete?: () => void;
 }
 
-// TODO: ドロップダウンコンテンツに動画と音楽をダウンロードできるようにする
+const downloadFile = async (url: string, filename: string) => {
+  try {
+    const response = await fetch(url, {
+      mode: "cors",
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const blob = await response.blob();
+    const blobURL = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = blobURL;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(blobURL);
+  } catch (error) {
+    console.error("ダウンロードに失敗しました:", error);
+    // TODO: ユーザーへのフィードバックを追加
+  }
+};
+
 const SunoSongItem: React.FC<SunoSongItemProps> = ({
   onClick,
   data,
@@ -110,8 +134,22 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
     });
   };
 
+  const handleDownload = useCallback(
+    async (type: "audio" | "video") => {
+      if (type === "audio" && data.audio_url) {
+        const filename = `${data.title || "Untitled"}.mp3`;
+        await downloadFile(data.audio_url, filename);
+      } else if (type === "video" && data.video_url) {
+        const filename = `${data.title || "Untitled"}.mp4`;
+        await downloadFile(data.video_url, filename);
+      }
+    },
+    [data.audio_url, data.video_url, data.title]
+  );
+
   return (
     <>
+      {/* Song Item Container */}
       <div
         className="relative group flex flex-col items-center justify-center rounded-md overflow-hidden gap-x-4 bg-neutral-400/5 cursor-pointer hover:bg-neutral-400/10 transition p-3"
         onClick={(e) => {
@@ -121,6 +159,7 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
           }
         }}
       >
+        {/* Dropdown Menu for Download and Delete Options */}
         <div
           className="absolute top-2 right-2 z-10"
           onClick={(e) => e.stopPropagation()}
@@ -132,6 +171,28 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+              {data.audio_url && (
+                <DropdownMenuItem
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDownload("audio");
+                  }}
+                >
+                  <CiMusicNote1 className="mr-2 h-4 w-4" />
+                  音楽をDL
+                </DropdownMenuItem>
+              )}
+              {data.video_url && (
+                <DropdownMenuItem
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDownload("video");
+                  }}
+                >
+                  <Video className="mr-2 h-4 w-4" />
+                  動画をDL
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem
                 className="text-red-600 focus:text-red-600"
                 onClick={handleOpenDeleteAlert}
@@ -143,6 +204,7 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
           </DropdownMenu>
         </div>
 
+        {/* Delete Confirmation Alert */}
         <AlertDialog
           open={isDeleteAlertOpen}
           onOpenChange={(open) => {
@@ -167,10 +229,13 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
           </AlertDialogContent>
         </AlertDialog>
 
+        {/* Song Image and Model Name */}
         <div className="relative aspect-square w-full h-full rounded-md overflow-hidden">
+          {/* Loading Placeholder */}
           {!isImageLoaded && (
             <div className="absolute inset-0 bg-gray-300 animate-pulse" />
           )}
+          {/* Song Image */}
           <Image
             className={`object-cover w-full h-full transition-opacity duration-300 ${
               isImageLoaded ? "opacity-100" : "opacity-0"
@@ -180,10 +245,12 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
             alt={data.title}
             onLoad={() => setIsImageLoaded(true)}
           />
+          {/* Model Name Display */}
           <div className="absolute bottom-2 right-2 bg-black/70 px-2 py-1 rounded text-xs text-white">
             {data.model_name}
           </div>
 
+          {/* Generating Status Overlay */}
           {data.status === "gen" && (
             <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center backdrop-blur-sm">
               <div className="relative">
@@ -201,7 +268,9 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
           )}
         </div>
 
+        {/* Song Information */}
         <div className="flex flex-col items-start justify-between w-full pt-4 gap-y-1">
+          {/* Song Title Link */}
           <Link
             href={`/suno-songs/${data.song_id}`}
             className="w-full"
@@ -212,26 +281,24 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
             </p>
           </Link>
 
-          <div className="text-neutral-400 text-sm w-full truncate">
-            {data.prompt}
-          </div>
-
+          {/* Song Type, Tags, and Created Date */}
           <div className="flex items-center justify-between w-full mt-2 text-xs text-neutral-400">
             <div className="flex items-center gap-2">
               <div className="flex items-center">
                 <CiMusicNote1 className="mr-1" />
                 {data.type || "Generated"}
               </div>
-              {data.tags && (
+              {/* {data.tags && (
                 <div className="flex items-center">
                   <CiMusicNote1 className="mr-1" />
                   {data.tags.split(",")[0]}
                 </div>
-              )}
+              )} */}
             </div>
             <div>{formatDate(data.created_at)}</div>
           </div>
 
+          {/* Generating Status Indicator */}
           {data.status && data.status !== "complete" && (
             <div
               className={`
