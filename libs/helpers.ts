@@ -119,3 +119,28 @@ export const formatTime = (seconds: number) => {
   const secs = Math.floor(seconds % 60);
   return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
 };
+
+export const downloadFile = async (url: string, filename: string) => {
+  try {
+    const response = await fetch(url, {
+      mode: "cors",
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const blob = await response.blob();
+    const blobURL = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = blobURL;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(blobURL);
+  } catch (error) {
+    console.error("ダウンロードに失敗しました:", error);
+    // TODO: ユーザーへのフィードバックを追加
+  }
+};

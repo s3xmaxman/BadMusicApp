@@ -13,6 +13,7 @@ import useDownload from "@/hooks/useDownload";
 import { useUser } from "@/hooks/useUser";
 import useGetSongsByGenres from "@/hooks/useGetSongGenres";
 import EditModal from "@/components/Modals/EditModal";
+import { downloadFile } from "@/libs/helpers";
 
 interface SongContentProps {
   songId: string;
@@ -43,16 +44,13 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
 
   const handleEditClick = () => setIsEditModalOpen(true);
 
-  const handleDownloadClick = () => {
+  const handleDownloadClick = async () => {
     setIsLoading(true);
-    if (fileUrl) {
-      const link = document.createElement("a");
-      link.href = fileUrl;
-      link.setAttribute("download", song?.title || "download");
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
+
+    if (song?.song_path && fileUrl) {
+      await downloadFile(fileUrl, song?.title || "download");
     }
+
     setIsLoading(false);
   };
 
