@@ -48,7 +48,8 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
     setIsLoading(true);
 
     if (song?.song_path && fileUrl) {
-      await downloadFile(fileUrl, song?.title || "download");
+      const filename = `${song.title || "Untitled"}.mp3`;
+      await downloadFile(fileUrl, filename);
     }
 
     setIsLoading(false);
