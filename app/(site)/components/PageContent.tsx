@@ -7,6 +7,7 @@ import { Song, SunoSong } from "@/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Music2, Mic2 } from "lucide-react";
 import useOnPlaySuno from "@/hooks/useOnPlaySuno";
+import { useState } from "react";
 
 interface PageContentProps {
   songs: Song[];
@@ -16,6 +17,7 @@ interface PageContentProps {
 const PageContent: React.FC<PageContentProps> = ({ songs, sunoSongs }) => {
   const onPlay = useOnPlay(songs);
   const onPlaySuno = useOnPlaySuno(sunoSongs);
+  const [activeTab, setActiveTab] = useState<"songs" | "suno">("songs");
 
   if (!songs || !sunoSongs) {
     return (
@@ -25,8 +27,8 @@ const PageContent: React.FC<PageContentProps> = ({ songs, sunoSongs }) => {
     );
   }
 
-  const handlePlay = (id: string, isSuno: boolean = false) => {
-    if (isSuno) {
+  const handlePlay = (id: string) => {
+    if (activeTab === "suno") {
       onPlaySuno(id);
     } else {
       onPlay(id);
@@ -48,9 +50,13 @@ const PageContent: React.FC<PageContentProps> = ({ songs, sunoSongs }) => {
             </div>
           </div>
 
-          <Tabs defaultValue="songs" className="w-full">
+          <Tabs
+            defaultValue="songs"
+            className="w-full"
+            onValueChange={(value) => setActiveTab(value as "songs" | "suno")}
+          >
             <div className="relative border-b border-neutral-800">
-              <TabsList className="bg-transparent relative z-10">
+              <TabsList className="bg-transparent relative">
                 <TabsTrigger
                   value="songs"
                   className="group relative px-8 py-3 data-[state=active]:bg-transparent"
@@ -100,8 +106,7 @@ const PageContent: React.FC<PageContentProps> = ({ songs, sunoSongs }) => {
                   return (
                     <SunoSongItem
                       onClick={(id) => {
-                        console.log("Clicked SunoSong id:", id);
-                        handlePlay(id, true);
+                        handlePlay(id);
                       }}
                       key={item.id}
                       data={item}

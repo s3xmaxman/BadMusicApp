@@ -2,7 +2,7 @@
 import useGetSongById from "@/hooks/useGetSongById";
 import useLoadSongUrl from "@/hooks/useLoadSongUrl";
 import usePlayer from "@/hooks/usePlayer";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import PlayerContent from "./PlayerContent";
 import MobileTabs from "./Mobile/MobileTabs";
 import { Playlist, Song, SunoSong } from "@/types";
@@ -17,11 +17,8 @@ const Player = ({ playlists }: PlayerProps) => {
   const player = usePlayer();
   const [isMobilePlayer, setIsMobilePlayer] = useState(false);
 
-  // 常に両方のフックを呼び出し
-  const { song, isLoading } = useGetSongById(player.activeId);
-  const { song: sunoSong, isLoading: isLoadingSuno } = useGetSunoSongById(
-    player.activeId
-  );
+  const { song } = useGetSongById(player.activeId);
+  const { song: sunoSong } = useGetSunoSongById(player.activeId);
 
   const songUrl = useLoadSongUrl(song!);
 
@@ -45,7 +42,7 @@ const Player = ({ playlists }: PlayerProps) => {
     <>
       <div className="fixed bottom-0 left-0 w-full ">
         <div className="bg-black w-full py-2 px-4 h-[100px] pb-[130px] md:pb-0">
-          {player.isSuno && sunoSong ? (
+          {sunoSong ? (
             <SunoPlayerContent
               song={sunoSong as SunoSong}
               isMobilePlayer={isMobilePlayer}

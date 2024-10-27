@@ -7,11 +7,10 @@ import useGetSongById from "@/hooks/useGetSongById";
 import useLoadVideo from "@/hooks/useLoadVideo";
 import FullScreenLayout from "./FullScreenLayout";
 import StandardLayout from "./StandardLayout";
-import { useSoundCloudPlayerStore } from "@/hooks/useSoundCloudPlayerStore";
 
+// TODO: SunoSong に対応
 const RightSidebar = () => {
   const [isFullScreenLayout, setIsFullScreenLayout] = useState(false);
-  const { currentUrl } = useSoundCloudPlayerStore();
   const player = usePlayer();
   const { song } = useGetSongById(player.activeId);
   const { song: nextSong } = useGetSongById(player.getNextSongId());
@@ -31,7 +30,7 @@ const RightSidebar = () => {
     setIsFullScreenLayout((prev) => !prev);
   }, []);
 
-  if (!song || !nextSong || currentUrl) {
+  if (!song || !nextSong) {
     return null;
   }
 

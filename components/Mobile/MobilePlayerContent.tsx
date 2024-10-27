@@ -34,7 +34,6 @@ interface MobilePlayerContentProps {
   onPlayPrevious: () => void;
 }
 
-// TODO: Tabsがコンポーネントをこのコンポーネントの上にきているので修正する
 const MobilePlayerContent = ({
   song,
   playlists,

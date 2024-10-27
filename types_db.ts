@@ -295,6 +295,7 @@ export interface Database {
           prompt: string;
           type: string | null;
           tags: string | null;
+          count?: string | null;
         };
         Insert: {
           id?: string;
@@ -312,6 +313,7 @@ export interface Database {
           prompt: string;
           type?: string | null;
           tags?: string | null;
+          count?: string | null;
         };
         Update: {
           id?: string;
@@ -329,6 +331,7 @@ export interface Database {
           prompt?: string;
           type?: string | null;
           tags?: string | null;
+          count?: string | null;
         };
         Relationships: [
           {
