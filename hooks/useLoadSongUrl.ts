@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Song } from "@/types";
+import { Song, SunoSong } from "@/types";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { manageCacheSize } from "@/libs/helpers";
 
