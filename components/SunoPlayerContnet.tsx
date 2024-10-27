@@ -4,38 +4,27 @@ import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import { BsRepeat1 } from "react-icons/bs";
 import { FaRandom } from "react-icons/fa";
 
-import { Playlist, Song, SunoSong } from "@/types";
-import LikeButton from "./LikeButton";
+import { Playlist, SunoSong } from "@/types";
 import MediaItem from "./MediaItem";
 import Slider from "./Slider";
 import SeekBar from "./Seekbar";
-import useLoadImage from "@/hooks/useLoadImage";
-
-import AddPlaylist from "./AddPlaylist";
 import useAudioPlayer from "@/hooks/useAudioPlayer";
 import { useEffect } from "react";
-import useLoadSongUrl from "@/hooks/useLoadSongUrl";
-import useLoadVideo from "@/hooks/useLoadVideo";
 import MobilePlayerContent from "./Mobile/MobilePlayerContent";
 
-interface PlayerContentProps {
-  song: Song;
-  songUrl: string;
+interface SunoPlayerContentProps {
+  song: SunoSong;
   isMobilePlayer: boolean;
   toggleMobilePlayer: () => void;
   playlists: Playlist[];
 }
 
-const PlayerContent: React.FC<PlayerContentProps> = ({
+const SunoPlayerContent: React.FC<SunoPlayerContentProps> = ({
   song,
   isMobilePlayer,
   toggleMobilePlayer,
   playlists,
 }) => {
-  const imageUrl = useLoadImage(song);
-  const videoUrl = useLoadVideo(song);
-  const songUrl = useLoadSongUrl(song);
-
   const {
     Icon,
     VolumeIcon,
@@ -56,17 +45,17 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     onPlayPrevious,
     toggleRepeat,
     toggleShuffle,
-  } = useAudioPlayer(songUrl);
+  } = useAudioPlayer(song.audio_url);
 
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.src = songUrl;
+      audioRef.current.src = song.audio_url;
     }
-  }, [songUrl, audioRef]);
+  }, [song.audio_url, audioRef]);
 
   return (
     <>
-      <audio ref={audioRef} src={songUrl} loop={isRepeating} />
+      <audio ref={audioRef} src={song.audio_url} loop={isRepeating} />
       <div className="grid grid-cols-2 md:grid-cols-3 h-full">
         <div className="flex w-full justify-start">
           <div className="flex items-center gap-x-4">
@@ -136,26 +125,24 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
 
         <div className="hidden md:flex w-full justify-end pr-2">
           <div className="flex items-center gap-x-2 w-full md:w-[170px] lg:w-[200px]">
-            {/* <AddPlaylist playlists={playlists} songId={song.id} />
-            <LikeButton songId={song.id} /> */}
             <div className="mx-1" />
             <VolumeIcon
               onClick={toggleMute}
               className="cursor-pointer"
               size={34}
             />
-
             <Slider value={volume} onChange={(value) => setVolume(value)} />
           </div>
         </div>
+
         {/* モバイル版レイアウト */}
-        {isMobilePlayer && (
+        {/* {isMobilePlayer && (
           <MobilePlayerContent
             song={song}
             playlists={playlists}
-            songUrl={songUrl}
-            imageUrl={imageUrl || "/images/wait.jpg"}
-            videoUrl={videoUrl!}
+            songUrl={song.audio_url}
+            imageUrl={song.image_url}
+            videoUrl={song.video_url || ""}
             currentTime={currentTime}
             duration={duration}
             formattedCurrentTime={formattedCurrentTime}
@@ -171,10 +158,10 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
             onPlayNext={onPlayNext}
             onPlayPrevious={onPlayPrevious}
           />
-        )}
+        )} */}
       </div>
     </>
   );
 };
 
-export default PlayerContent;
+export default SunoPlayerContent;

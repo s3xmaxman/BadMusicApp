@@ -3,12 +3,13 @@ import { create } from "zustand";
 interface PlayerStore {
   ids: string[];
   activeId?: string;
+  isSuno: boolean;
   isRepeating: boolean;
   isShuffling: boolean;
   shuffledIds: string[];
   isLoading: boolean;
-  setId: (id: string) => void;
-  setIds: (ids: string[]) => void;
+  setId: (id: string, isSuno?: boolean) => void;
+  setIds: (ids: string[], isSuno?: boolean) => void;
   toggleRepeat: () => void;
   toggleShuffle: () => void;
   reset: () => void;
@@ -21,12 +22,13 @@ interface PlayerStore {
 const usePlayer = create<PlayerStore>((set, get) => ({
   ids: [],
   activeId: undefined,
+  isSuno: false,
   isRepeating: false,
   isShuffling: false,
   shuffledIds: [],
   isLoading: false,
-  setId: (id: string) => set({ activeId: id }),
-  setIds: (ids: string[]) => set({ ids }),
+  setId: (id: string, isSuno: boolean = false) => set({ activeId: id, isSuno }),
+  setIds: (ids: string[], isSuno: boolean = false) => set({ ids, isSuno }),
   toggleRepeat: () => set((state) => ({ isRepeating: !state.isRepeating })),
   toggleShuffle: () =>
     set((state) => {
@@ -49,6 +51,7 @@ const usePlayer = create<PlayerStore>((set, get) => ({
     set({
       ids: [],
       activeId: undefined,
+      isSuno: false,
       isRepeating: false,
       isShuffling: false,
       isLoading: false,

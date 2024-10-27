@@ -5,10 +5,8 @@ import usePlayer from "@/hooks/usePlayer";
 import React, { useState, useEffect } from "react";
 import PlayerContent from "./PlayerContent";
 import MobileTabs from "./Mobile/MobileTabs";
-import { Playlist } from "@/types";
-import SoundCloudPlayerContent from "./SoundCloudPlayerContent";
-import { useSoundCloudPlayerStore } from "@/hooks/useSoundCloudPlayerStore";
-import { SoundCloudUrls } from "@/constants";
+import { Playlist, Song, SunoSong } from "@/types";
+import SunoPlayerContent from "./SunoPlayerContnet";
 
 interface PlayerProps {
   playlists: Playlist[];
@@ -16,36 +14,20 @@ interface PlayerProps {
 
 const Player = ({ playlists }: PlayerProps) => {
   const player = usePlayer();
-  const { setCurrentUrl, currentUrl, setCurrentSoundCloudIndex } =
-    useSoundCloudPlayerStore();
-  const { song } = useGetSongById(player.activeId);
+  const { song } = useGetSongById(player.activeId, player.isSuno);
   const songUrl = useLoadSongUrl(song!);
-  const [isSoundCloudPlaying, setIsSoundCloudPlaying] = useState(false);
   const [isMobilePlayer, setIsMobilePlayer] = useState(false);
+
+  console.log(song);
+  const isSunoSong = (song: Song | SunoSong): song is SunoSong => {
+    return "song_id" in song;
+  };
 
   const toggleMobilePlayer = () => {
     setIsMobilePlayer(!isMobilePlayer);
   };
 
-  useEffect(() => {
-    if (currentUrl) {
-      setIsSoundCloudPlaying(true);
-      player.reset();
-
-      const index = SoundCloudUrls.findIndex((item) => item.url === currentUrl);
-      setCurrentSoundCloudIndex(index);
-    } else {
-      setIsSoundCloudPlaying(false);
-    }
-  }, [currentUrl]);
-
-  useEffect(() => {
-    if (songUrl) {
-      setCurrentUrl("");
-    }
-  }, [songUrl]);
-
-  if (!songUrl && !currentUrl) {
+  if (!songUrl) {
     return (
       <>
         {!isMobilePlayer && (
@@ -57,21 +39,36 @@ const Player = ({ playlists }: PlayerProps) => {
     );
   }
 
+  const renderPlayer = () => {
+    if (song) {
+      if (player.isSuno && song && isSunoSong(song)) {
+        return (
+          <SunoPlayerContent
+            song={song}
+            isMobilePlayer={isMobilePlayer}
+            toggleMobilePlayer={toggleMobilePlayer}
+            playlists={playlists}
+          />
+        );
+      }
+      return (
+        <PlayerContent
+          song={song}
+          songUrl={songUrl}
+          isMobilePlayer={isMobilePlayer}
+          toggleMobilePlayer={toggleMobilePlayer}
+          playlists={playlists}
+        />
+      );
+    }
+    return null;
+  };
+
   return (
     <>
       <div className="fixed bottom-0 left-0 w-full ">
         <div className="bg-black w-full py-2 px-4 h-[100px] pb-[130px] md:pb-0">
-          {currentUrl ? (
-            <SoundCloudPlayerContent />
-          ) : (
-            <PlayerContent
-              song={song!}
-              songUrl={songUrl}
-              isMobilePlayer={isMobilePlayer}
-              toggleMobilePlayer={toggleMobilePlayer}
-              playlists={playlists}
-            />
-          )}
+          {renderPlayer()}
         </div>
       </div>
       {!isMobilePlayer && (

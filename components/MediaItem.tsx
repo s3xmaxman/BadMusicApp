@@ -2,13 +2,13 @@
 
 import Image from "next/image";
 import useLoadImage from "@/hooks/useLoadImage";
-import { Playlist, Song } from "@/types";
+import { Playlist, Song, SunoSong } from "@/types";
 import usePlayer from "@/hooks/usePlayer";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface MediaItemProps {
-  data: Song | Playlist;
+  data: Song | SunoSong | Playlist;
   onClick?: (id: string) => void;
   isCollapsed?: boolean;
 }
@@ -19,13 +19,13 @@ const MediaItem: React.FC<MediaItemProps> = ({
   isCollapsed,
 }) => {
   const player = usePlayer();
-  const imageUrl = useLoadImage(data);
+  const imageUrl = "song_id" in data ? data.image_url : useLoadImage!(data);
   const router = useRouter();
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   const handleClick = () => {
     if (onClick) {
-      return onClick(data.id);
+      return onClick(data.id!);
     }
 
     if ("author" in data && data.id) {

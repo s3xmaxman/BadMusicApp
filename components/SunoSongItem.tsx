@@ -99,8 +99,8 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
 
   const handleItemClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!isDeleteAlertOpen && !isPreviewModalOpen && data.song_id) {
-      onClick(data.song_id);
+    if (!isDeleteAlertOpen && !isPreviewModalOpen) {
+      onClick(data.id);
     }
   };
 

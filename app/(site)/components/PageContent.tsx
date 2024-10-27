@@ -6,6 +6,7 @@ import useOnPlay from "@/hooks/useOnPlay";
 import { Song, SunoSong } from "@/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Music2, Mic2 } from "lucide-react";
+import useOnPlaySuno from "@/hooks/useOnPlaySuno";
 
 interface PageContentProps {
   songs: Song[];
@@ -14,6 +15,7 @@ interface PageContentProps {
 
 const PageContent: React.FC<PageContentProps> = ({ songs, sunoSongs }) => {
   const onPlay = useOnPlay(songs);
+  const onPlaySuno = useOnPlaySuno(sunoSongs);
 
   if (!songs || !sunoSongs) {
     return (
@@ -23,8 +25,12 @@ const PageContent: React.FC<PageContentProps> = ({ songs, sunoSongs }) => {
     );
   }
 
-  const handlePlay = (id: string) => {
-    onPlay(id);
+  const handlePlay = (id: string, isSuno?: boolean) => {
+    if (isSuno) {
+      onPlaySuno(id);
+    } else {
+      onPlay(id);
+    }
   };
 
   return (
@@ -90,13 +96,19 @@ const PageContent: React.FC<PageContentProps> = ({ songs, sunoSongs }) => {
               className="pt-8 transition-all duration-300 animate-in fade-in-50"
             >
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-                {sunoSongs.map((item) => (
-                  <SunoSongItem
-                    onClick={(id) => handlePlay(id)}
-                    key={item.song_id}
-                    data={item}
-                  />
-                ))}
+                {sunoSongs.map((item) => {
+                  console.log("SunoSong item:", item); // 追加
+                  return (
+                    <SunoSongItem
+                      onClick={(id) => {
+                        console.log("Clicked SunoSong id:", id); // 追加
+                        handlePlay(id, true);
+                      }}
+                      key={item.id}
+                      data={item}
+                    />
+                  );
+                })}
               </div>
             </TabsContent>
           </Tabs>

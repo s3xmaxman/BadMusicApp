@@ -4,7 +4,7 @@ import { FaRandom } from "react-icons/fa";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import { BsPauseFill, BsPlayFill, BsRepeat1 } from "react-icons/bs";
 
-import { Playlist, Song } from "@/types";
+import { Playlist, Song, SunoSong } from "@/types";
 import Link from "next/link";
 import { useSpring, animated } from "@react-spring/web";
 import { useDrag } from "@use-gesture/react";
@@ -34,6 +34,7 @@ interface MobilePlayerContentProps {
   onPlayPrevious: () => void;
 }
 
+// TODO: Tabsがコンポーネントをこのコンポーネントの上にきているので修正する
 const MobilePlayerContent = ({
   song,
   playlists,
