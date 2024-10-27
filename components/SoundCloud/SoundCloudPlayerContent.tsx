@@ -3,13 +3,14 @@ import { BsPauseFill, BsPlayFill, BsRepeat1 } from "react-icons/bs";
 import { FaRandom } from "react-icons/fa";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import Image from "next/image";
-import SeekBar from "./Seekbar";
-import Slider from "./Slider";
+
 import ReactPlayer from "react-player";
 import { formatTime } from "@/libs/helpers";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import { SoundCloudUrls } from "@/constants";
 import { useSoundCloudPlayerStore } from "@/hooks/useSoundCloudPlayerStore";
+import SeekBar from "../Seekbar";
+import Slider from "../Slider";
 
 const SoundCloudPlayerContent: React.FC = () => {
   const internalPlayerRef = useRef<ReactPlayer>(null);
