@@ -1,11 +1,11 @@
-import { Song, SunoSong } from "@/types";
+import { SunoSong } from "@/types";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
-const useGetSongById = (id?: string) => {
+const useGetSunoSongById = (id?: string) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [song, setSong] = useState<Song | undefined>(undefined);
+  const [song, setSong] = useState<SunoSong | undefined>(undefined);
   const { supabaseClient } = useSessionContext();
 
   useEffect(() => {
@@ -19,7 +19,7 @@ const useGetSongById = (id?: string) => {
 
     const fetchSong = async () => {
       const { data, error } = await supabaseClient
-        .from("songs")
+        .from("suno_songs")
         .select("*")
         .eq("id", id)
         .maybeSingle();
@@ -27,7 +27,7 @@ const useGetSongById = (id?: string) => {
       if (error) {
         setIsLoading(false);
         setSong(undefined);
-        return toast.error(`Failed to load song: ${error.message}`);
+        return toast.error(`Failed to load Suno song: ${error.message}`);
       }
 
       setSong(data);
@@ -40,4 +40,4 @@ const useGetSongById = (id?: string) => {
   return useMemo(() => ({ isLoading, song }), [isLoading, song]);
 };
 
-export default useGetSongById;
+export default useGetSunoSongById;

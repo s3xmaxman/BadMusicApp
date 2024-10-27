@@ -25,6 +25,7 @@ import { downloadFile } from "@/libs/helpers";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Song } from "@/types";
 
 interface SongContentProps {
   songId: string;
@@ -33,8 +34,8 @@ interface SongContentProps {
 const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   const { song } = useGetSongById(songId);
   const { user } = useUser();
-  const imageUrl = useLoadImage(song!);
-  const onPlay = useOnPlay([song!]);
+  const imageUrl = useLoadImage(song as Song);
+  const onPlay = useOnPlay([song as Song]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<"lyrics" | "similar">("lyrics");

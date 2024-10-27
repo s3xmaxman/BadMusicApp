@@ -48,7 +48,7 @@ const GenreSelect: React.FC<GenreSelectProps> = ({
 
   useEffect(() => {
     onGenreChange(selectedGenres);
-  }, [selectedGenres]);
+  }, [selectedGenres, onGenreChange]);
 
   return (
     <div
