@@ -19,6 +19,7 @@ export interface SunoSong {
   song_id: string;
   user_id: string;
   title: string;
+  author?: string;
   image_url: string;
   lyric?: string;
   audio_url: string;

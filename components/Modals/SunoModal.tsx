@@ -23,6 +23,7 @@ const SunoModal: React.FC = () => {
     lyrics: "",
     tags: "",
     title: "",
+    author: "",
     make_instrumental: false,
     wait_audio: true,
     negative_tags: "",
@@ -47,6 +48,7 @@ const SunoModal: React.FC = () => {
             prompt: formData.lyrics,
             tags: formData.tags,
             title: formData.title,
+            author: formData.author,
             make_instrumental: formData.make_instrumental,
             wait_audio: formData.wait_audio,
             negative_tags: formData.negative_tags,
@@ -85,6 +87,7 @@ const SunoModal: React.FC = () => {
           user_id: user.id,
           song_id: songId,
           title: song.title || "",
+          author: song.author || "",
           image_url: song.image_url || "",
           lyric: song.lyric || "",
           audio_url: song.audio_url || "",
@@ -154,6 +157,18 @@ const SunoModal: React.FC = () => {
                 disabled={isLoading}
                 value={formData.title}
                 onChange={(e) => handleInputChange("title", e.target.value)}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="author">アーティスト</Label>
+              <Input
+                id="author"
+                placeholder="アーティスト名を入力..."
+                className="mt-1"
+                disabled={isLoading}
+                value={formData.author}
+                onChange={(e) => handleInputChange("author", e.target.value)}
               />
             </div>
 

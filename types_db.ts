@@ -283,7 +283,8 @@ export interface Database {
           id: string;
           song_id: string;
           user_id: string;
-          title: string;
+          title: string | null;
+          author: string | null;
           image_url: string;
           lyric: string | null;
           audio_url: string;
@@ -301,7 +302,8 @@ export interface Database {
           id?: string;
           song_id?: string;
           user_id: string;
-          title: string;
+          title: string | null;
+          author: string | null;
           image_url: string;
           lyric?: string | null;
           audio_url: string;
@@ -320,6 +322,7 @@ export interface Database {
           song_id?: string;
           user_id?: string;
           title?: string;
+          author?: string;
           image_url?: string;
           lyric?: string | null;
           audio_url?: string;
