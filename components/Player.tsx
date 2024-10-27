@@ -14,14 +14,19 @@ interface PlayerProps {
 
 const Player = ({ playlists }: PlayerProps) => {
   const player = usePlayer();
-  const { song } = useGetSongById(player.activeId, player.isSuno);
-  const songUrl = useLoadSongUrl(song!);
   const [isMobilePlayer, setIsMobilePlayer] = useState(false);
 
-  console.log(song);
-  const isSunoSong = (song: Song | SunoSong): song is SunoSong => {
-    return "song_id" in song;
-  };
+  // 常に両方のフックを呼び出し
+  const { song: normalSong } = useGetSongById(
+    player.isSuno ? undefined : player.activeId,
+    false
+  );
+  const { song: sunoSong } = useGetSongById(
+    player.isSuno ? player.activeId : undefined,
+    true
+  );
+
+  const songUrl = useLoadSongUrl(player.isSuno ? sunoSong : normalSong);
 
   const toggleMobilePlayer = () => {
     setIsMobilePlayer(!isMobilePlayer);
@@ -39,36 +44,26 @@ const Player = ({ playlists }: PlayerProps) => {
     );
   }
 
-  const renderPlayer = () => {
-    if (song) {
-      if (player.isSuno && song && isSunoSong(song)) {
-        return (
-          <SunoPlayerContent
-            song={song}
-            isMobilePlayer={isMobilePlayer}
-            toggleMobilePlayer={toggleMobilePlayer}
-            playlists={playlists}
-          />
-        );
-      }
-      return (
-        <PlayerContent
-          song={song}
-          songUrl={songUrl}
-          isMobilePlayer={isMobilePlayer}
-          toggleMobilePlayer={toggleMobilePlayer}
-          playlists={playlists}
-        />
-      );
-    }
-    return null;
-  };
-
   return (
     <>
       <div className="fixed bottom-0 left-0 w-full ">
         <div className="bg-black w-full py-2 px-4 h-[100px] pb-[130px] md:pb-0">
-          {renderPlayer()}
+          {player.isSuno && sunoSong ? (
+            <SunoPlayerContent
+              song={sunoSong}
+              isMobilePlayer={isMobilePlayer}
+              toggleMobilePlayer={toggleMobilePlayer}
+              playlists={playlists}
+            />
+          ) : (
+            <PlayerContent
+              song={normalSong as Song}
+              songUrl={songUrl}
+              isMobilePlayer={isMobilePlayer}
+              toggleMobilePlayer={toggleMobilePlayer}
+              playlists={playlists}
+            />
+          )}
         </div>
       </div>
       {!isMobilePlayer && (

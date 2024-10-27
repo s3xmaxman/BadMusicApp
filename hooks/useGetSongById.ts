@@ -5,12 +5,13 @@ import toast from "react-hot-toast";
 
 const useGetSongById = (id?: string, isSuno?: boolean) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [song, setSong] = useState<Song | undefined>(undefined);
-  const [sunoSong, setSunoSong] = useState<SunoSong | undefined>(undefined);
+  const [song, setSong] = useState<Song | SunoSong | undefined>(undefined);
   const { supabaseClient } = useSessionContext();
 
   useEffect(() => {
     if (!id) {
+      setSong(undefined);
+      setIsLoading(false);
       return;
     }
 
@@ -18,11 +19,6 @@ const useGetSongById = (id?: string, isSuno?: boolean) => {
 
     const fetchSong = async () => {
       const tableName = isSuno ? "suno_songs" : "songs";
-      console.log("Fetching song with:", {
-        tableName,
-        id,
-        isSuno,
-      });
 
       const { data, error } = await supabaseClient
         .from(tableName)
@@ -30,29 +26,20 @@ const useGetSongById = (id?: string, isSuno?: boolean) => {
         .eq("id", id)
         .single();
 
-      console.log("Fetch result:", {
-        data,
-        error,
-      });
-
       if (error) {
         setIsLoading(false);
-        return toast.error(`useGetSongById: ${error.message}`);
+        setSong(undefined);
+        return toast.error(`Failed to load song: ${error.message}`);
       }
 
-      // 取得した曲データをセットし、ローディングを終了
-      isSuno ? setSunoSong(data) : setSong(data);
+      setSong(data);
       setIsLoading(false);
     };
 
     fetchSong();
   }, [id, isSuno, supabaseClient]);
 
-  // isLoadingとsongが変わるたびに再計算されるuseMemoフック
-  return useMemo(
-    () => ({ isLoading, song, sunoSong }),
-    [isLoading, song, sunoSong]
-  );
+  return useMemo(() => ({ isLoading, song }), [isLoading, song]);
 };
 
 export default useGetSongById;

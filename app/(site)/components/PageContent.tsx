@@ -25,7 +25,7 @@ const PageContent: React.FC<PageContentProps> = ({ songs, sunoSongs }) => {
     );
   }
 
-  const handlePlay = (id: string, isSuno?: boolean) => {
+  const handlePlay = (id: string, isSuno: boolean = false) => {
     if (isSuno) {
       onPlaySuno(id);
     } else {
@@ -97,11 +97,10 @@ const PageContent: React.FC<PageContentProps> = ({ songs, sunoSongs }) => {
             >
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
                 {sunoSongs.map((item) => {
-                  console.log("SunoSong item:", item); // 追加
                   return (
                     <SunoSongItem
                       onClick={(id) => {
-                        console.log("Clicked SunoSong id:", id); // 追加
+                        console.log("Clicked SunoSong id:", id);
                         handlePlay(id, true);
                       }}
                       key={item.id}
