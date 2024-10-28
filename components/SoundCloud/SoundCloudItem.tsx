@@ -10,7 +10,6 @@ interface SoundCloudItemProps {
   };
 }
 
-// TODO: クリック時に再生
 const SoundCloudItem: React.FC<SoundCloudItemProps> = ({ data }) => {
   const { setCurrentUrl, setCurrentTitle } = useSoundCloudPlayerStore();
 

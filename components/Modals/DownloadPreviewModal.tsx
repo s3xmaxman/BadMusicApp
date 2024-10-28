@@ -17,7 +17,6 @@ interface PreviewDownloadModalProps {
   onDownload: (type: "audio" | "video") => void;
 }
 
-// TODO: このモーダルを閉じた場合にinvalid input syntax for type bigint:のエラーが出るのを解決する
 const PreviewDownloadModal: React.FC<PreviewDownloadModalProps> = ({
   isOpen,
   onClose,

@@ -141,6 +141,5 @@ export const downloadFile = async (url: string, filename: string) => {
     window.URL.revokeObjectURL(blobURL);
   } catch (error) {
     console.error("ダウンロードに失敗しました:", error);
-    // TODO: ユーザーへのフィードバックを追加
   }
 };
