@@ -31,6 +31,7 @@ import { Button } from "@/components/ui/button";
 import { downloadFile } from "@/libs/helpers";
 import PreviewDownloadModal from "./Modals/DownloadPreviewModal";
 import { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
+import { useRouter } from "next/navigation";
 
 interface SunoSongItemProps {
   onClick: (id: string) => void;
@@ -51,6 +52,7 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [currentSongData, setCurrentSongData] = useState(data);
   const supabaseClient = useSupabaseClient();
+  const router = useRouter();
 
   // APIを使用して曲の状態を更新する関数
   const updateSongStatus = useCallback(async () => {
@@ -61,7 +63,7 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
       const songs = await response.json();
 
       const updatedSong = songs.find(
-        (song: any) => song.id === currentSongData.id
+        (song: any) => song.id === currentSongData.song_id
       );
 
       if (!updatedSong || updatedSong.status === currentSongData.status) return;
@@ -98,6 +100,7 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
     data.song_id,
     currentSongData.status,
     currentSongData.id,
+    currentSongData.song_id,
     supabaseClient,
     isCompleted,
   ]);
@@ -164,7 +167,7 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
         .eq("song_id", data.song_id);
 
       setIsDeleteAlertOpen(false);
-      onDelete?.();
+      router.refresh();
     } catch (error) {
       console.error("Failed to delete song:", error);
     }

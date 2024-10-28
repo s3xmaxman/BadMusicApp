@@ -10,6 +10,8 @@ import toast from "react-hot-toast";
 import Input from "../Input";
 import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useRouter } from "next/navigation";
+import { set } from "react-hook-form";
 
 const SunoModal: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -17,6 +19,7 @@ const SunoModal: React.FC = () => {
   const { user } = useUser();
   const sunoModal = useSunoModal();
   const supabaseClient = useSupabaseClient();
+  const router = useRouter();
 
   const [formData, setFormData] = useState({
     prompt: "",
@@ -106,6 +109,8 @@ const SunoModal: React.FC = () => {
         }
       }
 
+      router.refresh();
+      setIsLoading(false);
       toast.success("音楽を生成しました！");
       sunoModal.onClose();
     } catch (error) {

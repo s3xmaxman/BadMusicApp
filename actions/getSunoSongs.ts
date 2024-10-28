@@ -7,9 +7,14 @@ const getSunoSongs = async (): Promise<SunoSong[]> => {
     cookies: cookies,
   });
 
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
   const { data, error } = await supabase
     .from("suno_songs")
     .select("*")
+    .eq("user_id", session?.user.id)
     .order("created_at", { ascending: false });
 
   if (error) {
