@@ -1,6 +1,6 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Playlist, Song } from "@/types";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 const useLoadImages = (data: Song[] | Playlist[]) => {
   const supabaseClient = useSupabaseClient();
@@ -25,7 +25,7 @@ const useLoadImages = (data: Song[] | Playlist[]) => {
     fetchImageUrls();
   }, [data, supabaseClient]);
 
-  return imageUrls;
+  return useMemo(() => imageUrls, [imageUrls]);
 };
 
 export default useLoadImages;

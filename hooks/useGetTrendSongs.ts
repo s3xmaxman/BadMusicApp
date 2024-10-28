@@ -1,30 +1,21 @@
-/**
- * 指定された期間に基づいてトレンドの曲データを取得するReactカスタムフック。
- *
- * @param {("all" | "month" | "week" | "day")} period - 取得するトレンドデータの期間を指定。デフォルトは"all"。
- * @returns {{ trends: Song[], isLoading: boolean, error: string | null }} - トレンドの曲データ、ローディング状態、エラー情報を含むオブジェクト。
- *
- * 制限事項:
- * - トレンドデータは最大3曲まで取得される。
- * - 期間が指定されていない場合、全期間のデータが取得される。
- * - エラーが発生した場合、エラーメッセージが返される。
- */
 "use client";
 import { Song } from "@/types";
 import dayjs from "dayjs";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useState, useEffect } from "react";
 
+/**
+ * 指定された期間に基づいてトレンド曲を取得する
+ *
+ * @param period "all", "month", "week", "day" のいずれか
+ * @returns {trends: Song[], isLoading: boolean, error: string|null}
+ */
 const useGetTrendSongs = (period: "all" | "month" | "week" | "day" = "all") => {
-  // トレンドの曲データを保持するステート
   const [trends, setTrends] = useState<Song[]>([]);
-  // ローディング状態を保持するステート
   const [isLoading, setIsLoading] = useState(false);
-  // エラー情報を保持するステート
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // トレンドデータを取得する非同期関数
     const fetchTrends = async () => {
       setIsLoading(true);
       setError(null);
@@ -69,6 +60,7 @@ const useGetTrendSongs = (period: "all" | "month" | "week" | "day" = "all") => {
         if (error) {
           throw new Error(error.message);
         }
+
         setTrends((data as Song[]) || []);
       } catch (err) {
         setError("トレンドデータの取得に失敗しました。");

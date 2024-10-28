@@ -15,7 +15,6 @@ const useLoadVideo = (data: VideoData) => {
     }
 
     const loadVideo = async () => {
-      // SunoSongの場合は直接video_urlを使用
       if ("video_url" in data) {
         setVideoUrl(data.video_url || null);
         return;
