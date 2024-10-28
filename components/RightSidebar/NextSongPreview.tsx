@@ -1,9 +1,9 @@
 import React from "react";
 import Image from "next/image";
-import { Song } from "@/types";
+import { Song, SunoSong } from "@/types";
 
 interface NextSongPreviewProps {
-  nextSong: Song;
+  nextSong: Song | SunoSong;
   nextImagePath?: string;
 }
 

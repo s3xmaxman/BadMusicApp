@@ -7,16 +7,22 @@ import useGetSongById from "@/hooks/useGetSongById";
 import useLoadVideo from "@/hooks/useLoadVideo";
 import FullScreenLayout from "./FullScreenLayout";
 import StandardLayout from "./StandardLayout";
+import useGetSunoSongById from "@/hooks/useGetSunoSongById";
 
-// TODO: SunoSong に対応
 const RightSidebar = () => {
   const [isFullScreenLayout, setIsFullScreenLayout] = useState(false);
   const player = usePlayer();
   const { song } = useGetSongById(player.activeId);
+  const { sunoSong } = useGetSunoSongById(player.activeId);
   const { song: nextSong } = useGetSongById(player.getNextSongId());
-  const videoPath = useLoadVideo(song!);
-  const imagePath = useLoadImage(song!);
-  const nextImagePath = useLoadImage(nextSong!);
+  const { sunoSong: nextSunoSong } = useGetSunoSongById(player.getNextSongId());
+
+  const currentSong = player.isSuno ? sunoSong : song;
+  const nextTrack = player.isSuno ? nextSunoSong : nextSong;
+
+  const videoPath = useLoadVideo(currentSong!);
+  const imagePath = useLoadImage(currentSong!);
+  const nextImagePath = useLoadImage(nextTrack!);
 
   useEffect(() => {
     if (song && song.video_path) {
@@ -24,30 +30,30 @@ const RightSidebar = () => {
     } else {
       setIsFullScreenLayout(false);
     }
-  }, [song]);
+  }, [song, sunoSong]);
 
   const toggleLayout = useCallback(() => {
     setIsFullScreenLayout((prev) => !prev);
   }, []);
 
-  if (!song || !nextSong) {
+  if (!currentSong || !nextTrack) {
     return null;
   }
 
   return isFullScreenLayout ? (
     <FullScreenLayout
-      song={song}
+      song={currentSong!}
       videoPath={videoPath!}
       imagePath={imagePath!}
-      nextSong={nextSong}
+      nextSong={nextTrack}
       nextImagePath={nextImagePath!}
       toggleLayout={toggleLayout}
     />
   ) : (
     <StandardLayout
-      song={song}
+      song={currentSong!}
       imagePath={imagePath!}
-      nextSong={nextSong}
+      nextSong={nextTrack}
       nextImagePath={nextImagePath!}
       toggleLayout={toggleLayout}
     />

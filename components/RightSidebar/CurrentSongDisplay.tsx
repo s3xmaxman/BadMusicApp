@@ -5,10 +5,10 @@ import { motion } from "framer-motion";
 import { CiPlay1 } from "react-icons/ci";
 import { AiOutlineHeart } from "react-icons/ai";
 import { IoMdSwap } from "react-icons/io";
-import { Song } from "@/types";
+import { Song, SunoSong } from "@/types";
 
 interface CurrentSongDisplayProps {
-  song: Song;
+  song: Song | SunoSong;
   videoPath?: string;
   imagePath?: string;
   toggleLayout: () => void;
@@ -18,9 +18,10 @@ const ON_ANIMATION = 500;
 
 const CurrentSongDisplay: React.FC<CurrentSongDisplayProps> = React.memo(
   ({ song, videoPath, imagePath, toggleLayout }) => {
+    const isSunoSong = "audio_url" in song;
     return (
       <div className="relative w-full h-full overflow-hidden">
-        {song.video_path ? (
+        {(isSunoSong ? song.video_url : song.video_path) ? (
           <video
             src={videoPath!}
             autoPlay
@@ -58,6 +59,7 @@ const CurrentSongDisplay: React.FC<CurrentSongDisplayProps> = React.memo(
           >
             <Link
               className="cursor-pointer hover:underline"
+              // TODO: sunoへのリンクを追加
               href={`/songs/${song.id}`}
             >
               {song.title}
@@ -66,15 +68,17 @@ const CurrentSongDisplay: React.FC<CurrentSongDisplayProps> = React.memo(
           <p className="text-gray-300 text-xl mb-4">{song.author}</p>
           <div className="flex items-center justify-between">
             <p className="text-gray-400 text-lg">
-              {song?.genre?.split(", ").map((g) => (
-                <Link
-                  key={g}
-                  className="mr-2 cursor-pointer hover:underline"
-                  href={`/genre/${g}`}
-                >
-                  #{g}
-                </Link>
-              ))}
+              {isSunoSong
+                ? song.tags?.split(", ").map((g) => (
+                    <Link key={g} href={`/genre/${g}`}>
+                      #{g}
+                    </Link>
+                  ))
+                : song.genre?.split(", ").map((g) => (
+                    <Link key={g} href={`/genre/${g}`}>
+                      #{g}
+                    </Link>
+                  ))}
             </p>
             <div className="flex items-center gap-4">
               <div className="flex items-center">
@@ -83,7 +87,9 @@ const CurrentSongDisplay: React.FC<CurrentSongDisplayProps> = React.memo(
               </div>
               <div className="flex items-center">
                 <AiOutlineHeart size={24} className="text-white mr-1" />
-                <span className="text-white text-lg">{song.like_count}</span>
+                <span className="text-white text-lg">
+                  {isSunoSong ? null : song.like_count}
+                </span>
               </div>
             </div>
           </div>

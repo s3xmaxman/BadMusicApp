@@ -1,13 +1,13 @@
 import React from "react";
-import { Song } from "@/types";
+import { Song, SunoSong } from "@/types";
 import NextSongPreview from "./NextSongPreview";
 import CurrentSongDisplay from "./CurrentSongDisplay";
 
 interface FullScreenLayoutProps {
-  song: Song;
+  song: Song | SunoSong;
   videoPath?: string;
   imagePath?: string;
-  nextSong: Song;
+  nextSong: Song | SunoSong;
   nextImagePath?: string;
   toggleLayout: () => void;
 }
@@ -28,6 +28,6 @@ const FullScreenLayout: React.FC<FullScreenLayoutProps> = React.memo(
   }
 );
 
-FullScreenLayout.displayName = "FullScreenLayout"; // displayName を追加
+FullScreenLayout.displayName = "FullScreenLayout";
 
 export default FullScreenLayout;

@@ -5,14 +5,14 @@ import { motion } from "framer-motion";
 import { FaMusic } from "react-icons/fa";
 import { CiPlay1 } from "react-icons/ci";
 import { AiOutlineHeart } from "react-icons/ai";
-import { Song } from "@/types";
+import { Song, SunoSong } from "@/types";
 import { IoMdSwap } from "react-icons/io";
 import { BackgroundGradient } from "../ui/background-gradient";
 
 interface StandardLayoutProps {
-  song: Song;
+  song: Song | SunoSong;
   imagePath?: string;
-  nextSong: Song;
+  nextSong: Song | SunoSong;
   nextImagePath?: string;
   toggleLayout: () => void;
 }
@@ -21,6 +21,7 @@ const ON_ANIMATION = 500;
 
 const StandardLayout: React.FC<StandardLayoutProps> = React.memo(
   ({ song, imagePath, nextSong, nextImagePath, toggleLayout }) => {
+    const isSunoSong = "audio_url" in song;
     return (
       <div className="scroll-container bg-black text-white p-4 h-full flex flex-col rounded-lg overflow-y-auto">
         <div className="absolute top-4 right-4">
@@ -65,9 +66,10 @@ const StandardLayout: React.FC<StandardLayoutProps> = React.memo(
             >
               <Link
                 className="cursor-pointer hover:underline"
+                // TODO: sunoへのリンクを追加
                 href={`/songs/${song.id}`}
               >
-                {song.title}
+                {song.title || "Untitled"}
               </Link>
             </motion.h1>
             <p className="text-gray-300 mt-1">{song.author}</p>
@@ -75,21 +77,23 @@ const StandardLayout: React.FC<StandardLayoutProps> = React.memo(
 
           <div className="flex items-center justify-between">
             <p className=" text-gray-400 text-lg">
-              {song?.genre?.split(", ").map((g) => (
-                <Link
-                  key={g}
-                  className="ml-1 cursor-pointer hover:underline"
-                  href={`/genre/${g}`}
-                >
-                  #{g}
-                </Link>
-              ))}
+              {isSunoSong
+                ? song.tags?.split(", ").map((g) => (
+                    <Link key={g} href={`/genre/${g}`}>
+                      #{g}
+                    </Link>
+                  ))
+                : song.genre?.split(", ").map((g) => (
+                    <Link key={g} href={`/genre/${g}`}>
+                      #{g}
+                    </Link>
+                  ))}
             </p>
             <div className="flex items-center gap-2">
               <CiPlay1 size={16} />
               <span>{song.count}</span>
               <AiOutlineHeart size={16} />
-              <span>{song.like_count}</span>
+              <span> {isSunoSong ? null : song.like_count}</span>
             </div>
           </div>
         </div>
