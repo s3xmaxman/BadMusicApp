@@ -4,7 +4,13 @@ import Link from "next/link";
 import { SunoSong } from "@/types";
 import { CiMusicNote1 } from "react-icons/ci";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Download, Loader2, MoreVertical, Trash } from "lucide-react";
+import {
+  Download,
+  Loader2,
+  MoreVertical,
+  Trash,
+  CheckCircle2,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,6 +30,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { downloadFile } from "@/libs/helpers";
 import PreviewDownloadModal from "./Modals/DownloadPreviewModal";
+import { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
 
 interface SunoSongItemProps {
   onClick: (id: string) => void;
@@ -38,20 +45,28 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
 }) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [isCompleted, setIsCompleted] = useState(data.status === "complete");
+  const [showCompletionAnimation, setShowCompletionAnimation] = useState(false);
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const [currentSongData, setCurrentSongData] = useState(data);
   const supabaseClient = useSupabaseClient();
 
+  // APIを使用して曲の状態を更新する関数
   const updateSongStatus = useCallback(async () => {
     if (isCompleted) return;
 
     try {
       const response = await fetch(`/api/suno/get?id=${data.song_id}`);
-      const [updatedSong] = await response.json();
+      const songs = await response.json();
 
-      if (updatedSong.status === data.status) return;
+      const updatedSong = songs.find(
+        (song: any) => song.id === currentSongData.id
+      );
 
+      if (!updatedSong || updatedSong.status === currentSongData.status) return;
+
+      // Supabaseのデータを更新
       await supabaseClient
         .from("suno_songs")
         .update({
@@ -59,13 +74,87 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
           audio_url: updatedSong.audio_url,
           video_url: updatedSong.video_url,
         })
-        .eq("song_id", data.song_id);
+        .eq("song_id", data.song_id)
+        .eq("id", currentSongData.id);
 
-      setIsCompleted(updatedSong.status === "complete");
+      setCurrentSongData((prevData) => ({
+        ...prevData,
+        status: updatedSong.status,
+        audio_url: updatedSong.audio_url,
+        video_url: updatedSong.video_url,
+      }));
+
+      if (updatedSong.status === "complete" && !isCompleted) {
+        setShowCompletionAnimation(true);
+        setTimeout(() => {
+          setShowCompletionAnimation(false);
+        }, 3000);
+        setIsCompleted(true);
+      }
     } catch (error) {
       console.error("Failed to update song status:", error);
     }
-  }, [data.song_id, data.status, supabaseClient, isCompleted]);
+  }, [
+    data.song_id,
+    currentSongData.status,
+    currentSongData.id,
+    supabaseClient,
+    isCompleted,
+  ]);
+
+  // Supabaseのリアルタイム更新を監視
+  useEffect(() => {
+    if (isCompleted) return;
+
+    const channel = supabaseClient
+      .channel("schema-db-changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "suno_songs",
+          filter: `song_id=eq.${data.song_id}`,
+        },
+        (payload: RealtimePostgresChangesPayload<SunoSong>) => {
+          const updatedSong = payload.new as SunoSong;
+          if (
+            "id" in updatedSong &&
+            "song_id" in updatedSong &&
+            "user_id" in updatedSong &&
+            "title" in updatedSong &&
+            "status" in updatedSong
+          ) {
+            setCurrentSongData(updatedSong);
+
+            if (updatedSong.status === "complete" && !isCompleted) {
+              setShowCompletionAnimation(true);
+              setTimeout(() => {
+                setShowCompletionAnimation(false);
+              }, 3000);
+              setIsCompleted(true);
+            }
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabaseClient.removeChannel(channel);
+    };
+  }, [data.song_id, isCompleted, supabaseClient]);
+
+  // 定期的なステータス確認
+  useEffect(() => {
+    if (isCompleted) return;
+
+    // 初回確認
+    updateSongStatus();
+
+    // 30秒ごとに確認
+    const interval = setInterval(updateSongStatus, 30000);
+    return () => clearInterval(interval);
+  }, [isCompleted, updateSongStatus]);
 
   const handleDelete = async () => {
     try {
@@ -116,23 +205,20 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
 
   const handleDownload = useCallback(
     async (type: "audio" | "video") => {
-      if (type === "audio" && data.audio_url) {
-        const filename = `${data.title || "Untitled"}.mp3`;
-        await downloadFile(data.audio_url, filename);
-      } else if (type === "video" && data.video_url) {
-        const filename = `${data.title || "Untitled"}.mp4`;
-        await downloadFile(data.video_url, filename);
+      if (type === "audio" && currentSongData.audio_url) {
+        const filename = `${currentSongData.title || "Untitled"}.mp3`;
+        await downloadFile(currentSongData.audio_url, filename);
+      } else if (type === "video" && currentSongData.video_url) {
+        const filename = `${currentSongData.title || "Untitled"}.mp4`;
+        await downloadFile(currentSongData.video_url, filename);
       }
     },
-    [data.audio_url, data.video_url, data.title]
+    [
+      currentSongData.audio_url,
+      currentSongData.video_url,
+      currentSongData.title,
+    ]
   );
-
-  useEffect(() => {
-    if (isCompleted) return;
-
-    const interval = setInterval(updateSongStatus, 30000);
-    return () => clearInterval(interval);
-  }, [isCompleted, updateSongStatus]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("ja-JP", {
@@ -159,7 +245,7 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            {(data.audio_url || data.video_url) && (
+            {(currentSongData.audio_url || currentSongData.video_url) && (
               <DropdownMenuItem onClick={handleDownloadClick}>
                 <Download className="mr-2 h-4 w-4" />
                 ダウンロード
@@ -187,7 +273,8 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
           <AlertDialogHeader>
             <AlertDialogTitle>本当に削除しますか？</AlertDialogTitle>
             <AlertDialogDescription>
-              「{data.title || "Untitled"}」を削除してもよろしいですか？
+              「{currentSongData.title || "Untitled"}
+              」を削除してもよろしいですか？
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -205,9 +292,9 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
       <PreviewDownloadModal
         isOpen={isPreviewModalOpen}
         onClose={handleClosePreviewModal}
-        title={data.title || ""}
-        audioUrl={data.audio_url}
-        videoUrl={data.video_url}
+        title={currentSongData.title || ""}
+        audioUrl={currentSongData.audio_url}
+        videoUrl={currentSongData.video_url}
         onDownload={handleDownload}
       />
 
@@ -220,18 +307,18 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
           className={`object-cover w-full h-full transition-opacity duration-300 ${
             isImageLoaded ? "opacity-100" : "opacity-0"
           }`}
-          src={data.image_url || "/images/wait.jpg"}
+          src={currentSongData.image_url || "/images/wait.jpg"}
           fill
-          alt={data.title}
+          alt={currentSongData.title}
           onLoad={() => setIsImageLoaded(true)}
         />
         <div className="absolute bottom-2 right-2 bg-black/70 px-2 py-1 rounded text-xs text-white">
-          {data.model_name}
+          {currentSongData.model_name}
         </div>
 
         {/* Generating Status Overlay */}
-        {data.status === "gen" && (
-          <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center backdrop-blur-sm">
+        {currentSongData.status !== "complete" && (
+          <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center backdrop-blur-sm transition-opacity duration-500">
             <div className="relative">
               <div className="absolute -inset-4 bg-blue-500/20 rounded-full animate-ping" />
               <div className="absolute -inset-4 bg-blue-500/40 rounded-full animate-pulse" />
@@ -245,17 +332,34 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
             </div>
           </div>
         )}
+
+        {/* Completion Animation Overlay */}
+        {showCompletionAnimation && (
+          <div className="absolute inset-0 bg-green-500/20 flex items-center justify-center backdrop-blur-sm animate-in fade-in slide-in-from-bottom duration-500">
+            <div className="bg-white/10 rounded-full p-8 backdrop-blur-md">
+              <CheckCircle2 className="w-16 h-16 text-green-500 animate-bounce" />
+            </div>
+            <div className="absolute bottom-8 left-0 right-0 text-center">
+              <div className="text-white text-lg font-semibold animate-in fade-in slide-in-from-bottom duration-700 delay-300">
+                Generation Complete!
+              </div>
+              <div className="text-green-200 text-sm animate-in fade-in slide-in-from-bottom duration-700 delay-500">
+                Your song is ready to play
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Song Information */}
       <div className="flex flex-col items-start justify-between w-full pt-4 gap-y-1">
         <Link
-          href={`/suno-songs/${data.song_id}`}
+          href={`/suno-songs/${currentSongData.song_id}`}
           className="w-full"
           onClick={(e) => e.stopPropagation()}
         >
           <p className="font-semibold truncate w-full hover:underline">
-            {data.title || "Untitled"}
+            {currentSongData.title || "Untitled"}
           </p>
         </Link>
 
@@ -263,25 +367,28 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
           <div className="flex items-center gap-2">
             <div className="flex items-center">
               <CiMusicNote1 className="mr-1" />
-              {data.type || "Generated"}
+              {currentSongData.type || "Generated"}
             </div>
           </div>
-          <div>{formatDate(data.created_at)}</div>
+          <div>{formatDate(currentSongData.created_at)}</div>
         </div>
 
-        {/* Generating Status Indicator */}
-        {data.status && data.status !== "complete" && (
+        {/* Status Badge */}
+        {currentSongData.status && (
           <div
             className={`
               absolute top-2 left-2 px-2 py-1 rounded-full text-xs
+              transition-all duration-300 transform
               ${
-                data.status === "gen"
-                  ? "bg-blue-500/80 text-white animate-pulse"
-                  : "bg-blue-500 text-white"
+                currentSongData.status === "complete"
+                  ? "bg-green-500 text-white scale-0 opacity-0"
+                  : currentSongData.status === "gen"
+                  ? "bg-blue-500/80 text-white animate-pulse scale-100 opacity-100"
+                  : "bg-blue-500 text-white scale-100 opacity-100"
               }
             `}
           >
-            {data.status}
+            {currentSongData.status}
           </div>
         )}
       </div>
