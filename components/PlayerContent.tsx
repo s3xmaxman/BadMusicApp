@@ -34,7 +34,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
 }) => {
   const imageUrl = useLoadImage(song);
   const videoUrl = useLoadVideo(song);
-  const songUrl = useLoadSongUrl(song);
+  const songUrl = useLoadSongUrl(song, false);
 
   const {
     Icon,

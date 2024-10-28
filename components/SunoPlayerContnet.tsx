@@ -53,9 +53,7 @@ const SunoPlayerContent: React.FC<SunoPlayerContentProps> = ({
     }
   }, [song?.audio_url, audioRef]);
 
-  if (!song) {
-    return null;
-  }
+  if (!song) return null;
 
   return (
     <>
