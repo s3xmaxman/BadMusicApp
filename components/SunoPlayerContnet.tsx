@@ -45,13 +45,17 @@ const SunoPlayerContent: React.FC<SunoPlayerContentProps> = ({
     onPlayPrevious,
     toggleRepeat,
     toggleShuffle,
-  } = useAudioPlayer(song.audio_url);
+  } = useAudioPlayer(song?.audio_url);
 
   useEffect(() => {
-    if (audioRef.current) {
+    if (audioRef.current && song?.audio_url) {
       audioRef.current.src = song.audio_url;
     }
-  }, [song.audio_url, audioRef]);
+  }, [song?.audio_url, audioRef]);
+
+  if (!song) {
+    return null;
+  }
 
   return (
     <>

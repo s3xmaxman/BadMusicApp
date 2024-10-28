@@ -11,7 +11,7 @@ const debounce = (func: (...args: any[]) => void, wait: number) => {
   };
 };
 
-const useOnPlaySuno = (songs: SunoSong[]) => {
+const useOnPlaySuno = (sunoSongs: SunoSong[]) => {
   const player = usePlayer();
   const supabase = createClientComponentClient();
   const [lastPlayTime, setLastPlayTime] = useState<number>(0);
@@ -22,7 +22,7 @@ const useOnPlaySuno = (songs: SunoSong[]) => {
     try {
       player.setId(id, true);
       player.setIds(
-        songs.map((song) => song.id),
+        sunoSongs.map((song) => song.id),
         true
       );
 
@@ -80,7 +80,7 @@ const useOnPlaySuno = (songs: SunoSong[]) => {
         }
       }, 1000);
     },
-    [lastPlayTime, player, songs, supabase]
+    [lastPlayTime, player, sunoSongs, supabase]
   );
 
   return debounce(onPlay, 500);

@@ -18,9 +18,15 @@ const Player = ({ playlists }: PlayerProps) => {
   const [isMobilePlayer, setIsMobilePlayer] = useState(false);
 
   const { song } = useGetSongById(player.activeId);
-  const { song: sunoSong } = useGetSunoSongById(player.activeId);
+  const { sunoSong } = useGetSunoSongById(player.activeId);
 
-  const songUrl = useLoadSongUrl(song!);
+  const actualSong = player.isSuno ? undefined : song;
+  const actualSunoSong = player.isSuno ? sunoSong : undefined;
+
+  const songUrl = useLoadSongUrl(
+    player.isSuno ? actualSunoSong : actualSong,
+    player.isSuno ?? false
+  );
 
   const toggleMobilePlayer = () => {
     setIsMobilePlayer(!isMobilePlayer);
@@ -42,16 +48,16 @@ const Player = ({ playlists }: PlayerProps) => {
     <>
       <div className="fixed bottom-0 left-0 w-full ">
         <div className="bg-black w-full py-2 px-4 h-[100px] pb-[130px] md:pb-0">
-          {sunoSong ? (
+          {player.isSuno ? (
             <SunoPlayerContent
-              song={sunoSong as SunoSong}
+              song={actualSunoSong as SunoSong}
               isMobilePlayer={isMobilePlayer}
               toggleMobilePlayer={toggleMobilePlayer}
               playlists={playlists}
             />
           ) : (
             <PlayerContent
-              song={song as Song}
+              song={actualSong as Song}
               songUrl={songUrl}
               isMobilePlayer={isMobilePlayer}
               toggleMobilePlayer={toggleMobilePlayer}

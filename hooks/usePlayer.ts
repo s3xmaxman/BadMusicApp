@@ -7,6 +7,7 @@ interface PlayerStore {
   isShuffling: boolean;
   shuffledIds: string[];
   isLoading: boolean;
+  isSuno?: boolean;
   setId: (id: string, isSuno?: boolean) => void;
   setIds: (ids: string[], isSuno?: boolean) => void;
   toggleRepeat: () => void;
@@ -25,8 +26,8 @@ const usePlayer = create<PlayerStore>((set, get) => ({
   isShuffling: false,
   shuffledIds: [],
   isLoading: false,
-  setId: (id: string) => set({ activeId: id }),
-  setIds: (ids: string[]) => set({ ids }),
+  setId: (id: string, isSuno: boolean = false) => set({ activeId: id, isSuno }),
+  setIds: (ids: string[], isSuno: boolean = false) => set({ ids, isSuno }),
   toggleRepeat: () => set((state) => ({ isRepeating: !state.isRepeating })),
   toggleShuffle: () =>
     set((state) => {

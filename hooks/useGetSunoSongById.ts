@@ -5,12 +5,12 @@ import toast from "react-hot-toast";
 
 const useGetSunoSongById = (id?: string) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [song, setSong] = useState<SunoSong | undefined>(undefined);
+  const [sunoSong, setSunoSong] = useState<SunoSong | undefined>(undefined);
   const { supabaseClient } = useSessionContext();
 
   useEffect(() => {
     if (!id) {
-      setSong(undefined);
+      setSunoSong(undefined);
       setIsLoading(false);
       return;
     }
@@ -26,18 +26,18 @@ const useGetSunoSongById = (id?: string) => {
 
       if (error) {
         setIsLoading(false);
-        setSong(undefined);
+        setSunoSong(undefined);
         return toast.error(`Failed to load Suno song: ${error.message}`);
       }
 
-      setSong(data);
+      setSunoSong(data);
       setIsLoading(false);
     };
 
     fetchSong();
   }, [id, supabaseClient]);
 
-  return useMemo(() => ({ isLoading, song }), [isLoading, song]);
+  return useMemo(() => ({ isLoading, sunoSong }), [isLoading, sunoSong]);
 };
 
 export default useGetSunoSongById;

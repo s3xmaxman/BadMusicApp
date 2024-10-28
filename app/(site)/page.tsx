@@ -2,7 +2,7 @@ import getSongs from "@/actions/getSongs";
 import HomeContent from "./components/HomeContent";
 import getSunoSongs from "@/actions/getSunoSongs";
 
-// export const revalidate = 0;
+export const revalidate = 0;
 
 export default async function Home() {
   const songs = await getSongs();
