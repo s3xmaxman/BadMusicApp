@@ -69,7 +69,7 @@ const StandardLayout: React.FC<StandardLayoutProps> = React.memo(
                 // TODO: sunoへのリンクを追加
                 href={`/songs/${song.id}`}
               >
-                {song.title || "Untitled"}
+                {song.title}
               </Link>
             </motion.h1>
             <p className="text-gray-300 mt-1">{song.author}</p>

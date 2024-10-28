@@ -88,8 +88,8 @@ const SunoModal: React.FC = () => {
         const { error } = await supabaseClient.from("suno_songs").insert({
           user_id: user.id,
           song_id: songId,
-          title: song.title || "",
-          author: formData.author || "",
+          title: song.title || "Untitled",
+          author: formData.author || "Unknown",
           image_url: song.image_url || "",
           lyric: song.lyric || "",
           audio_url: song.audio_url || "",
