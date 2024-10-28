@@ -14,6 +14,7 @@ import MobilePlayerContent from "./Mobile/MobilePlayerContent";
 
 interface SunoPlayerContentProps {
   song: SunoSong;
+  songUrl: string;
   isMobilePlayer: boolean;
   toggleMobilePlayer: () => void;
   playlists: Playlist[];
@@ -21,6 +22,7 @@ interface SunoPlayerContentProps {
 
 const SunoPlayerContent: React.FC<SunoPlayerContentProps> = ({
   song,
+  songUrl,
   isMobilePlayer,
   toggleMobilePlayer,
   playlists,
@@ -45,19 +47,19 @@ const SunoPlayerContent: React.FC<SunoPlayerContentProps> = ({
     onPlayPrevious,
     toggleRepeat,
     toggleShuffle,
-  } = useAudioPlayer(song?.audio_url);
+  } = useAudioPlayer(songUrl);
 
   useEffect(() => {
-    if (audioRef.current && song?.audio_url) {
-      audioRef.current.src = song.audio_url;
+    if (audioRef.current && songUrl) {
+      audioRef.current.src = songUrl;
     }
-  }, [song?.audio_url, audioRef]);
+  }, [songUrl, audioRef]);
 
   if (!song) return null;
 
   return (
     <>
-      <audio ref={audioRef} src={song.audio_url} loop={isRepeating} />
+      <audio ref={audioRef} src={songUrl} loop={isRepeating} />
       <div className="grid grid-cols-2 md:grid-cols-3 h-full">
         <div className="flex w-full justify-start">
           <div className="flex items-center gap-x-4">

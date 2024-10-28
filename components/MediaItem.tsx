@@ -68,7 +68,9 @@ const MediaItem: React.FC<MediaItemProps> = ({
       </div>
       {!isCollapsed && (
         <div className="flex flex-col gap-y-1 overflow-hidden w-[70%]">
-          <p className="text-white truncate w-full">{data.title}</p>
+          <p className="text-white truncate w-full">
+            {data.title || "Untitled"}
+          </p>
           {"author" in data && (
             <p className="text-neutral-400 text-sm truncate">{data.author}</p>
           )}

@@ -28,13 +28,13 @@ interface PlayerContentProps {
 
 const PlayerContent: React.FC<PlayerContentProps> = ({
   song,
+  songUrl,
   isMobilePlayer,
   toggleMobilePlayer,
   playlists,
 }) => {
   const imageUrl = useLoadImage(song);
   const videoUrl = useLoadVideo(song);
-  const songUrl = useLoadSongUrl(song, false);
 
   const {
     Icon,

@@ -51,6 +51,7 @@ const Player = ({ playlists }: PlayerProps) => {
           {player.isSuno ? (
             <SunoPlayerContent
               song={actualSunoSong as SunoSong}
+              songUrl={songUrl}
               isMobilePlayer={isMobilePlayer}
               toggleMobilePlayer={toggleMobilePlayer}
               playlists={playlists}
