@@ -23,10 +23,7 @@ const Player = ({ playlists }: PlayerProps) => {
   const actualSong = player.isSuno ? undefined : song;
   const actualSunoSong = player.isSuno ? sunoSong : undefined;
 
-  const songUrl = useLoadSongUrl(
-    player.isSuno ? actualSunoSong : actualSong,
-    player.isSuno ?? false
-  );
+  const songUrl = useLoadSongUrl(player.isSuno ? actualSunoSong : actualSong);
 
   const toggleMobilePlayer = () => {
     setIsMobilePlayer(!isMobilePlayer);

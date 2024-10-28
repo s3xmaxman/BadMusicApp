@@ -162,7 +162,7 @@ const SunoPlayerContent: React.FC<SunoPlayerContentProps> = ({
             onPlayNext={onPlayNext}
             onPlayPrevious={onPlayPrevious}
           />
-        )} */}
+        )}  */}
       </div>
     </>
   );
