@@ -297,6 +297,7 @@ export interface Database {
           type: string | null;
           tags: string | null;
           count?: string | null;
+          like_count?: string | null;
         };
         Insert: {
           id?: string;
@@ -316,6 +317,7 @@ export interface Database {
           type?: string | null;
           tags?: string | null;
           count?: string | null;
+          like_count?: string | null;
         };
         Update: {
           id?: string;
@@ -335,6 +337,7 @@ export interface Database {
           type?: string | null;
           tags?: string | null;
           count?: string | null;
+          like_count?: string | null;
         };
         Relationships: [
           {

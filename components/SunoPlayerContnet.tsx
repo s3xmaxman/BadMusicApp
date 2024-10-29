@@ -11,6 +11,7 @@ import SeekBar from "./Seekbar";
 import useAudioPlayer from "@/hooks/useAudioPlayer";
 import { useEffect } from "react";
 import SunoMobilePlayerContent from "./SunoMobilePlayerContent";
+import LikeButton from "./LikeButton";
 
 interface SunoPlayerContentProps {
   song: SunoSong;
@@ -129,6 +130,7 @@ const SunoPlayerContent: React.FC<SunoPlayerContentProps> = ({
 
         <div className="hidden md:flex w-full justify-end pr-2">
           <div className="flex items-center gap-x-2 w-full md:w-[170px] lg:w-[200px]">
+            <LikeButton songId={song.id} songType="suno" />
             <div className="mx-1" />
             <VolumeIcon
               onClick={toggleMute}
@@ -143,6 +145,7 @@ const SunoPlayerContent: React.FC<SunoPlayerContentProps> = ({
         {isMobilePlayer && (
           <SunoMobilePlayerContent
             song={song}
+            playlists={playlists}
             songUrl={songUrl}
             currentTime={currentTime}
             duration={duration}

@@ -12,6 +12,7 @@ export interface Song {
   count?: string;
   like_count?: string;
   lyrics?: string;
+  created_at: string;
 }
 
 export interface SunoSong {
@@ -19,7 +20,7 @@ export interface SunoSong {
   song_id: string;
   user_id: string;
   title: string;
-  author?: string;
+  author: string;
   image_url: string;
   lyric?: string;
   audio_url: string;
@@ -32,6 +33,7 @@ export interface SunoSong {
   type?: string;
   tags?: string;
   count?: string;
+  like_count?: string;
 }
 
 export interface Product {

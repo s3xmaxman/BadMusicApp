@@ -3,33 +3,40 @@ import { useUser } from "@/hooks/useUser";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { set } from "react-hook-form";
 import toast from "react-hot-toast";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
 interface LikeButtonProps {
   songId: string;
+  songType: "regular" | "suno";
   size?: number;
 }
 
-const LikeButton: React.FC<LikeButtonProps> = ({ songId, size }) => {
+const LikeButton: React.FC<LikeButtonProps> = ({ songId, songType, size }) => {
   const router = useRouter();
   const { supabaseClient } = useSessionContext();
   const { user } = useUser();
   const authModal = useAuthModal();
-
   const [isLiked, setIsLiked] = useState(false);
   const Icon = isLiked ? AiFillHeart : AiOutlineHeart;
 
+  const getTableName = (type: "regular" | "suno") =>
+    type === "regular" ? "liked_songs_regular" : "liked_songs_suno";
+
+  const getSongsTableName = (type: "regular" | "suno") =>
+    type === "regular" ? "songs" : "suno_songs";
+
   useEffect(() => {
     const fetchData = async () => {
-      if (!user?.id) {
-        return;
-      }
+      if (!user?.id) return;
 
       setIsLiked(false);
 
+      const tableName = getTableName(songType);
+
       const { data, error } = await supabaseClient
-        .from("liked_songs")
+        .from(tableName)
         .select("*")
         .eq("user_id", user.id)
         .eq("song_id", songId)
@@ -38,6 +45,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId, size }) => {
       if (error) {
         if (error.code !== "PGRST116") {
           console.error("Error fetching liked songs:", error);
+          toast.error("いいねの状態の取得に失敗しました");
         }
       } else if (data) {
         setIsLiked(true);
@@ -45,44 +53,37 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId, size }) => {
     };
 
     fetchData();
-  }, [songId, user?.id, supabaseClient]);
+  }, [songId, songType, user?.id, supabaseClient]);
 
-  /**
-   * いいねボタンがクリックされたときの処理
-   */
   const handleLike = async () => {
     if (!user) {
       return authModal.onOpen();
     }
 
+    const tableName = getTableName(songType);
+
     try {
       if (isLiked) {
-        // いいねを取り消す
         const { error } = await supabaseClient
-          .from("liked_songs")
+          .from(tableName)
           .delete()
           .eq("user_id", user.id)
           .eq("song_id", songId);
 
-        if (error) {
-          throw error;
-        }
+        if (error) throw error;
 
         setIsLiked(false);
-        await updateLikeCount(songId, -1);
+        await updateLikeCount(songId, songType, -1);
       } else {
-        // いいねを追加する
-        const { error } = await supabaseClient.from("liked_songs").insert({
+        const { error } = await supabaseClient.from(tableName).insert({
           song_id: songId,
           user_id: user.id,
         });
 
-        if (error) {
-          throw error;
-        }
+        if (error) throw error;
 
         setIsLiked(true);
-        await updateLikeCount(songId, 1);
+        await updateLikeCount(songId, songType, 1);
         toast.success("いいねしました！");
       }
     } catch (error) {
@@ -90,40 +91,42 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId, size }) => {
     }
   };
 
-  /**
-   * 曲のいいね数を更新する
-   * @param {string} songId - 曲のID
-   * @param {number} increment - いいね数の増減値
-   */
-  const updateLikeCount = async (songId: string, increment: number) => {
+  const updateLikeCount = async (
+    songId: string,
+    songType: "regular" | "suno",
+    increment: number
+  ) => {
     try {
-      const { data, error } = await supabaseClient
-        .from("songs")
+      const tableName = getSongsTableName(songType);
+
+      // 現在のlike_countを取得
+      const { data, error: fetchError } = await supabaseClient
+        .from(tableName)
         .select("like_count")
         .eq("id", songId)
         .single();
 
-      if (error) {
-        throw error;
-      }
+      if (fetchError) throw fetchError;
 
+      // 新しいlike_countを計算して更新
       const newLikeCount = (data?.like_count || 0) + increment;
-
       const { error: updateError } = await supabaseClient
-        .from("songs")
+        .from(tableName)
         .update({ like_count: newLikeCount })
         .eq("id", songId);
 
-      if (updateError) {
-        throw updateError;
-      }
+      if (updateError) throw updateError;
     } catch (error) {
-      toast.error("エラーが発生しました。もう一度お試しください。");
+      toast.error("いいねの更新に失敗しました");
     }
   };
 
   return (
-    <button onClick={handleLike} className="hover:opacity-75 transition">
+    <button
+      onClick={handleLike}
+      className="hover:opacity-75 transition"
+      aria-label={isLiked ? "Remove like" : "Add like"}
+    >
       <Icon color={isLiked ? "#FF69B4" : "white"} size={size || 25} />
     </button>
   );

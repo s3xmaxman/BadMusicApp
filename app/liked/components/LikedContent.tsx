@@ -3,12 +3,13 @@
 import { useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 
-import { Song } from "@/types";
+import { Song, SunoSong } from "@/types";
 import { useUser } from "@/hooks/useUser";
 import MediaItem from "@/components/MediaItem";
 import LikeButton from "@/components/LikeButton";
 import useOnPlay from "@/hooks/useOnPlay";
 import DeletePlaylistSongsBtn from "@/components/DeletePlaylistSongsBtn";
+import useOnPlaySuno from "@/hooks/useOnPlaySuno";
 
 interface LikedContentProps {
   songs: Song[];
@@ -18,7 +19,18 @@ interface LikedContentProps {
 const LikedContent: React.FC<LikedContentProps> = ({ songs, playlistId }) => {
   const router = useRouter();
   const { isLoading, user } = useUser();
-  const onPlay = useOnPlay(songs);
+  const onPlayRegular = useOnPlay(songs.filter((song) => !("song_id" in song)));
+  const onPlaySuno = useOnPlaySuno(
+    songs.filter(
+      (song) =>
+        "song_id" in song &&
+        "image_url" in song &&
+        "audio_url" in song &&
+        "model_name" in song &&
+        "prompt" in song
+    ) as SunoSong[]
+  );
+
   const displayedSongs = playlistId ? [...songs].reverse() : songs;
 
   useEffect(() => {
@@ -40,9 +52,17 @@ const LikedContent: React.FC<LikedContentProps> = ({ songs, playlistId }) => {
       {displayedSongs.map((song: Song) => (
         <div key={song.id} className="flex items-center gap-x-4 w-full">
           <div className="flex-1">
-            <MediaItem onClick={(id: string) => onPlay(id)} data={song} />
+            <MediaItem
+              onClick={(id: string) =>
+                "song_id" in song ? onPlaySuno(id) : onPlayRegular(id)
+              }
+              data={song}
+            />
           </div>
-          <LikeButton songId={song.id} />
+          <LikeButton
+            songId={song.id}
+            songType={"song_id" in song ? "suno" : "regular"}
+          />
           {playlistId && (
             <DeletePlaylistSongsBtn songId={song.id} playlistId={playlistId} />
           )}

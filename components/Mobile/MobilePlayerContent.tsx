@@ -138,6 +138,7 @@ const MobilePlayerContent = ({
                 toggleLyrics={toggleLyrics}
                 playlists={playlists}
                 songId={song.id}
+                songType="regular"
               />
             </div>
 

@@ -6,11 +6,14 @@ import { BsPauseFill, BsPlayFill, BsRepeat1 } from "react-icons/bs";
 import Link from "next/link";
 import { useSpring, animated } from "@react-spring/web";
 import { useDrag } from "@use-gesture/react";
-import { SunoSong } from "@/types";
+import { Playlist, SunoSong } from "@/types";
 import SeekBar from "./Seekbar";
+import MobileStyleIcons from "./Mobile/MobileStyleIcons";
+import LyricsDrawer from "./Mobile/LyricsDrawer";
 
 interface SunoMobilePlayerContentProps {
   song: SunoSong;
+  playlists: Playlist[];
   songUrl: string;
   currentTime: number;
   duration: number;
@@ -30,6 +33,7 @@ interface SunoMobilePlayerContentProps {
 
 const SunoMobilePlayerContent = ({
   song,
+  playlists,
   songUrl,
   currentTime,
   formattedCurrentTime,
@@ -47,7 +51,12 @@ const SunoMobilePlayerContent = ({
   onPlayPrevious,
 }: SunoMobilePlayerContentProps) => {
   const Icon = isPlaying ? BsPauseFill : BsPlayFill;
+  const [showLyrics, setShowLyrics] = useState(false);
   const [{ y }, api] = useSpring(() => ({ y: 0 }));
+
+  const toggleLyrics = () => {
+    setShowLyrics(!showLyrics);
+  };
 
   const bind = useDrag(
     ({ down, movement: [mx, my] }) => {
@@ -108,6 +117,12 @@ const SunoMobilePlayerContent = ({
                   )}
                 </div>
               </div>
+              <MobileStyleIcons
+                toggleLyrics={toggleLyrics}
+                playlists={playlists}
+                songId={song.id}
+                songType="suno"
+              />
             </div>
 
             <div className="space-y-2">
@@ -159,6 +174,11 @@ const SunoMobilePlayerContent = ({
           </div>
         </div>
       </div>
+      <LyricsDrawer
+        showLyrics={showLyrics}
+        toggleLyrics={toggleLyrics}
+        lyrics={song.lyric || ""}
+      />
     </animated.div>
   );
 };

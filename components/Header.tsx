@@ -13,9 +13,10 @@ import usePlayer from "@/hooks/usePlayer";
 interface HeaderProps {
   children: React.ReactNode;
   className?: string;
+  logout?: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ children, className }) => {
+const Header: React.FC<HeaderProps> = ({ children, className, logout }) => {
   const authModal = useAuthModal();
   const router = useRouter();
   const supabaseClient = useSupabaseClient();
@@ -26,11 +27,10 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
     const { error } = await supabaseClient.auth.signOut();
     player.reset();
     router.refresh();
-
     if (error) {
       toast.error(error.message);
     } else {
-      toast.success("ログアウトしました");
+      toast.success("Logged out");
     }
   };
 
@@ -55,9 +55,11 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
         <div className="flex justify-between items-center gap-x-4">
           {user ? (
             <div className="flex gap-x-4 items-center">
-              <Button onClick={handleLogout} className="bg-white px-6 py-2">
-                Logout
-              </Button>
+              {logout && (
+                <Button onClick={handleLogout} className="bg-white px-6 py-2">
+                  Logout
+                </Button>
+              )}
               <Button
                 onClick={() => router.push("/account")}
                 className="bg-white"

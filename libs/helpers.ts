@@ -76,6 +76,11 @@ export const formatTime = (seconds: number) => {
   return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
 };
 
+/**
+ * URLからファイルをダウンロードする
+ * @param url - ダウンロードするファイルのURL
+ * @param filename - ファイル名
+ */
 export const downloadFile = async (url: string, filename: string) => {
   try {
     const response = await fetch(url, {
