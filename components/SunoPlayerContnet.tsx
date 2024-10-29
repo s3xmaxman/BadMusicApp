@@ -10,7 +10,7 @@ import Slider from "./Slider";
 import SeekBar from "./Seekbar";
 import useAudioPlayer from "@/hooks/useAudioPlayer";
 import { useEffect } from "react";
-import MobilePlayerContent from "./Mobile/MobilePlayerContent";
+import SunoMobilePlayerContent from "./SunoMobilePlayerContent";
 
 interface SunoPlayerContentProps {
   song: SunoSong;
@@ -140,13 +140,10 @@ const SunoPlayerContent: React.FC<SunoPlayerContentProps> = ({
         </div>
 
         {/* モバイル版レイアウト */}
-        {/* {isMobilePlayer && (
-          <MobilePlayerContent
+        {isMobilePlayer && (
+          <SunoMobilePlayerContent
             song={song}
-            playlists={playlists}
-            songUrl={song.audio_url}
-            imageUrl={song.image_url}
-            videoUrl={song.video_url || ""}
+            songUrl={songUrl}
             currentTime={currentTime}
             duration={duration}
             formattedCurrentTime={formattedCurrentTime}
@@ -162,7 +159,7 @@ const SunoPlayerContent: React.FC<SunoPlayerContentProps> = ({
             onPlayNext={onPlayNext}
             onPlayPrevious={onPlayPrevious}
           />
-        )}  */}
+        )}
       </div>
     </>
   );

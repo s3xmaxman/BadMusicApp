@@ -3,21 +3,15 @@ import Image from "next/image";
 import { FaRandom } from "react-icons/fa";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import { BsPauseFill, BsPlayFill, BsRepeat1 } from "react-icons/bs";
-
-import { Playlist, Song } from "@/types";
 import Link from "next/link";
 import { useSpring, animated } from "@react-spring/web";
 import { useDrag } from "@use-gesture/react";
-import SeekBar from "../Seekbar";
-import MobileStyleIcons from "./MobileStyleIcons";
-import LyricsDrawer from "./LyricsDrawer";
+import { SunoSong } from "@/types";
+import SeekBar from "./Seekbar";
 
-interface MobilePlayerContentProps {
-  song: Song;
-  playlists: Playlist[];
+interface SunoMobilePlayerContentProps {
+  song: SunoSong;
   songUrl: string;
-  imageUrl: string;
-  videoUrl?: string;
   currentTime: number;
   duration: number;
   formattedCurrentTime: string;
@@ -34,12 +28,9 @@ interface MobilePlayerContentProps {
   onPlayPrevious: () => void;
 }
 
-const MobilePlayerContent = ({
+const SunoMobilePlayerContent = ({
   song,
-  playlists,
   songUrl,
-  imageUrl,
-  videoUrl,
   currentTime,
   formattedCurrentTime,
   formattedDuration,
@@ -54,23 +45,15 @@ const MobilePlayerContent = ({
   toggleMobilePlayer,
   onPlayNext,
   onPlayPrevious,
-}: MobilePlayerContentProps) => {
+}: SunoMobilePlayerContentProps) => {
   const Icon = isPlaying ? BsPauseFill : BsPlayFill;
-  const [showLyrics, setShowLyrics] = useState(false);
-
-  const toggleLyrics = () => {
-    setShowLyrics(!showLyrics);
-  };
-
   const [{ y }, api] = useSpring(() => ({ y: 0 }));
 
   const bind = useDrag(
-    ({ down, movement: [mx, my], velocity }) => {
-      if (!showLyrics) {
-        api.start({ y: down ? my : 0, immediate: down });
-        if (!down && my > 50) {
-          toggleMobilePlayer();
-        }
+    ({ down, movement: [mx, my] }) => {
+      api.start({ y: down ? my : 0, immediate: down });
+      if (!down && my > 50) {
+        toggleMobilePlayer();
       }
     },
     { axis: "y", bounds: { top: 0 } }
@@ -86,17 +69,17 @@ const MobilePlayerContent = ({
       className="md:hidden fixed inset-0 bg-black text-white"
     >
       <div className="relative w-full h-full ">
-        {videoUrl ? (
+        {song.video_url ? (
           <video
             className=" w-full h-full object-cover"
-            src={videoUrl}
+            src={song.video_url}
             muted
             autoPlay
             loop
           />
         ) : (
           <Image
-            src={imageUrl || "/images/wait.jpg"}
+            src={song.image_url || "/images/wait.jpg"}
             alt={song.title}
             layout="fill"
             objectFit="cover"
@@ -111,34 +94,20 @@ const MobilePlayerContent = ({
           <div className="space-y-6">
             <div className="flex justify-between items-end">
               <div className="max-w-[70%]">
-                <Link href={`/songs/${song.id}`}>
-                  <h1 className="text-4xl font-bold text-white drop-shadow-lg hover:underline truncate">
-                    {song.title}
-                  </h1>
-                </Link>
+                <h1 className="text-4xl font-bold text-white drop-shadow-lg truncate">
+                  {song.title}
+                </h1>
                 <p className="text-lg text-gray-200 drop-shadow-lg mt-1 truncate">
                   {song.author}
                 </p>
                 <div className="flex flex-wrap mb-2 mt-2">
-                  {song?.genre
-                    ?.split(", ")
-                    .slice(0, 2)
-                    .map((g) => (
-                      <Link
-                        key={g}
-                        className="mr-2 text-sm bg-white/20 text-white px-2 py-1 rounded-full hover:bg-white/30 transition-colors"
-                        href={`/genre/${g}`}
-                      >
-                        #{g}
-                      </Link>
-                    ))}
+                  {song.tags && (
+                    <span className="mr-2 text-sm bg-white/20 text-white px-2 py-1 rounded-full">
+                      #{song.tags}
+                    </span>
+                  )}
                 </div>
               </div>
-              <MobileStyleIcons
-                toggleLyrics={toggleLyrics}
-                playlists={playlists}
-                songId={song.id}
-              />
             </div>
 
             <div className="space-y-2">
@@ -190,13 +159,8 @@ const MobilePlayerContent = ({
           </div>
         </div>
       </div>
-      <LyricsDrawer
-        showLyrics={showLyrics}
-        toggleLyrics={toggleLyrics}
-        lyrics={song.lyrics || ""}
-      />
     </animated.div>
   );
 };
 
-export default MobilePlayerContent;
+export default SunoMobilePlayerContent;

@@ -8,6 +8,7 @@ import MobileTabs from "./Mobile/MobileTabs";
 import { Playlist, Song, SunoSong } from "@/types";
 import SunoPlayerContent from "./SunoPlayerContnet";
 import useGetSunoSongById from "@/hooks/useGetSunoSongById";
+import useMobilePlayer from "@/hooks/useMobilePlayer";
 
 interface PlayerProps {
   playlists: Playlist[];
@@ -15,7 +16,7 @@ interface PlayerProps {
 
 const Player = ({ playlists }: PlayerProps) => {
   const player = usePlayer();
-  const [isMobilePlayer, setIsMobilePlayer] = useState(false);
+  const { isMobilePlayer, toggleMobilePlayer } = useMobilePlayer();
 
   const { song } = useGetSongById(player.activeId);
   const { sunoSong } = useGetSunoSongById(player.activeId);
@@ -24,10 +25,6 @@ const Player = ({ playlists }: PlayerProps) => {
   const actualSunoSong = player.isSuno ? sunoSong : undefined;
 
   const songUrl = useLoadSongUrl(player.isSuno ? actualSunoSong : actualSong);
-
-  const toggleMobilePlayer = () => {
-    setIsMobilePlayer(!isMobilePlayer);
-  };
 
   if (!songUrl) {
     return (

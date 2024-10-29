@@ -32,6 +32,7 @@ import { downloadFile } from "@/libs/helpers";
 import PreviewDownloadModal from "./Modals/DownloadPreviewModal";
 import { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
+import useMobilePlayer from "@/hooks/useMobilePlayer";
 
 interface SunoSongItemProps {
   onClick: (id: string) => void;
@@ -51,6 +52,7 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [currentSongData, setCurrentSongData] = useState(data);
+  const { isMobilePlayer, toggleMobilePlayer } = useMobilePlayer();
   const supabaseClient = useSupabaseClient();
   const router = useRouter();
 
@@ -238,7 +240,7 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
     >
       {/* Dropdown Menu */}
       <div
-        className="absolute top-2 right-2 z-10"
+        className={`absolute top-2 right-2 ${!isMobilePlayer ? "z-10" : ""}`}
         onClick={(e) => e.stopPropagation()}
       >
         <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>

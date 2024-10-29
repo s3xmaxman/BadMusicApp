@@ -1,8 +1,10 @@
 import React, { memo } from "react";
 import ReactPlayer from "react-player/youtube";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import * as RadixSlider from "@radix-ui/react-slider";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
-import * as RadixSlider from "@radix-ui/react-slider";
 import useYouTubePlayer from "@/hooks/useYoutubePlayer";
 
 interface YouTubePlayerContentProps {
@@ -36,51 +38,82 @@ const YouTubePlayerContent: React.FC<YouTubePlayerContentProps> = memo(
     }) => {
       return (
         <RadixSlider.Root
-          className="relative flex items-center select-none touch-none w-full h-10"
+          className="relative flex items-center select-none touch-none w-full h-10 group"
           defaultValue={[1]}
           value={[value]}
           onValueChange={(values) => onChange(values[0])}
           max={100}
-          step={5}
+          step={1}
           aria-label="Volume"
         >
-          <RadixSlider.Track className="relative grow rounded-full h-[6px] bg-gray-300">
-            <RadixSlider.Range className="absolute rounded-full h-full bg-[#4c1d95]" />
+          <RadixSlider.Track className="relative grow rounded-full h-[3px] bg-neutral-700 group-hover:bg-neutral-600 transition-colors">
+            <RadixSlider.Range className="absolute rounded-full h-full bg-white group-hover:bg-white/90 transition-all" />
           </RadixSlider.Track>
+          <RadixSlider.Thumb className="hidden group-hover:block h-3 w-3 rounded-full bg-white shadow-sm transition-transform focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#0d0d0d] disabled:pointer-events-none" />
         </RadixSlider.Root>
       );
     };
 
     return (
-      <div className="flex flex-col items-center w-full max-w-4xl mx-auto">
-        <h2 className="text-white text-2xl font-semibold mb-4">{name}</h2>
-        <ReactPlayer
-          url={`https://www.youtube.com/watch?v=${videoId}`}
-          playing={isPlaying}
-          volume={volume / 100}
-          controls={false}
-          width="100%"
-          height="100%"
-        />
-        <div className="flex items-center justify-center w-full mt-4 space-x-4">
-          <div
-            onClick={togglePlay}
-            className="flex items-center justify-center h-8 w-8 rounded-full bg-white p-1 cursor-pointer"
-          >
-            <Icon size={20} className="text-black" />
-          </div>
-          <div className="flex items-center space-x-2">
-            <VolumeIcon
-              onClick={() => handleVolumeChange(volume === 0 ? 50 : 0)}
-              className="cursor-pointer text-white"
-              size={24}
-            />
-            <div className="w-24">
-              <Slider value={volume} onChange={handleVolumeChange} />
+      <Card className="w-full max-w-4xl mx-auto bg-[#0d0d0d] border-neutral-800/50 rounded-xl shadow-lg">
+        <CardContent className="p-6">
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-white tracking-tight">
+                {name}
+              </h2>
+              <div className="text-xs text-neutral-400 uppercase tracking-wider font-medium">
+                Live Stream
+              </div>
+            </div>
+
+            <div className="relative aspect-video rounded-lg overflow-hidden bg-neutral-900 ring-1 ring-white/5">
+              <ReactPlayer
+                url={`https://www.youtube.com/watch?v=${videoId}`}
+                playing={isPlaying}
+                volume={volume / 100}
+                controls={false}
+                width="100%"
+                height="100%"
+                className="absolute top-0 left-0"
+              />
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-6">
+                <Button
+                  onClick={togglePlay}
+                  size="icon"
+                  variant="ghost"
+                  className="h-12 w-12 rounded-full hover:bg-white/5 bg-transparent border border-neutral-800 transition-colors"
+                >
+                  <Icon className="h-6 w-6 text-white" />
+                </Button>
+
+                <div className="flex items-center space-x-4">
+                  <Button
+                    onClick={() => handleVolumeChange(volume === 0 ? 50 : 0)}
+                    size="icon"
+                    variant="ghost"
+                    className="hover:bg-white/5 bg-transparent"
+                  >
+                    <VolumeIcon className="h-5 w-5 text-white" />
+                  </Button>
+
+                  <div className="w-32">
+                    <Slider value={volume} onChange={handleVolumeChange} />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                <span className="text-sm text-neutral-400">Live</span>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     );
   },
   arePropsEqual
