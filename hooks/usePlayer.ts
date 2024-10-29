@@ -8,8 +8,8 @@ interface PlayerStore {
   shuffledIds: string[];
   isLoading: boolean;
   isSuno?: boolean;
-  setId: (id: string, isSuno?: boolean) => void;
-  setIds: (ids: string[], isSuno?: boolean) => void;
+  setId: (id: string, isSuno: boolean) => void;
+  setIds: (ids: string[], isSuno: boolean) => void;
   toggleRepeat: () => void;
   toggleShuffle: () => void;
   reset: () => void;
@@ -26,8 +26,9 @@ const usePlayer = create<PlayerStore>((set, get) => ({
   isShuffling: false,
   shuffledIds: [],
   isLoading: false,
-  setId: (id: string, isSuno: boolean = false) => set({ activeId: id, isSuno }),
-  setIds: (ids: string[], isSuno: boolean = false) => set({ ids, isSuno }),
+  isSuno: false,
+  setId: (id: string, isSuno: boolean) => set({ activeId: id, isSuno }),
+  setIds: (ids: string[], isSuno: boolean) => set({ ids, isSuno }),
   toggleRepeat: () => set((state) => ({ isRepeating: !state.isRepeating })),
   toggleShuffle: () =>
     set((state) => {
@@ -53,9 +54,11 @@ const usePlayer = create<PlayerStore>((set, get) => ({
       isRepeating: false,
       isShuffling: false,
       isLoading: false,
+      isSuno: false,
     }),
   getNextSongId: () => {
-    const { ids, activeId, isShuffling, isRepeating, shuffledIds } = get();
+    const { ids, activeId, isShuffling, isRepeating, shuffledIds, isSuno } =
+      get();
     if (ids.length === 0) {
       return undefined;
     }
@@ -80,7 +83,8 @@ const usePlayer = create<PlayerStore>((set, get) => ({
     }
   },
   getPreviousSongId: () => {
-    const { ids, activeId, isShuffling, isRepeating, shuffledIds } = get();
+    const { ids, activeId, isShuffling, isRepeating, shuffledIds, isSuno } =
+      get();
     if (ids.length === 0) {
       return undefined;
     }

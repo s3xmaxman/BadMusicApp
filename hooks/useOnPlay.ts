@@ -20,8 +20,11 @@ const useOnPlay = (songs: Song[]) => {
 
   const processPlay = async (id: string) => {
     try {
-      player.setId(id);
-      player.setIds(songs.map((song) => song.id));
+      player.setId(id, false);
+      player.setIds(
+        songs.map((song) => song.id),
+        false
+      );
 
       const { data: songData, error: selectError } = await supabase
         .from("songs")

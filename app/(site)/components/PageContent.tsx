@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Music2, Mic2 } from "lucide-react";
 import useOnPlaySuno from "@/hooks/useOnPlaySuno";
 import { useState } from "react";
+import usePlayer from "@/hooks/usePlayer";
 
 interface PageContentProps {
   songs: Song[];
@@ -16,6 +17,7 @@ interface PageContentProps {
 
 //TODO: Sunoタブで曲を再生中にページ遷移すると、アクティブタブがsongsに切り替わり、再生すべき曲IDが正しく保持されない問題を修正する
 const PageContent: React.FC<PageContentProps> = ({ songs, sunoSongs }) => {
+  const player = usePlayer();
   const onPlay = useOnPlay(songs);
   const onPlaySuno = useOnPlaySuno(sunoSongs);
   const [activeTab, setActiveTab] = useState<"songs" | "suno">("songs");
@@ -31,8 +33,10 @@ const PageContent: React.FC<PageContentProps> = ({ songs, sunoSongs }) => {
   const handlePlay = (id: string) => {
     if (activeTab === "suno") {
       onPlaySuno(id);
+      player.setId(id, true);
     } else {
       onPlay(id);
+      player.setId(id, false);
     }
   };
 
