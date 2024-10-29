@@ -15,7 +15,6 @@ interface PageContentProps {
   sunoSongs: SunoSong[];
 }
 
-//TODO: Sunoタブで曲を再生中にページ遷移すると、アクティブタブがsongsに切り替わり、再生すべき曲IDが正しく保持されない問題を修正する
 const PageContent: React.FC<PageContentProps> = ({ songs, sunoSongs }) => {
   const player = usePlayer();
   const onPlay = useOnPlay(songs);

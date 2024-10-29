@@ -57,8 +57,7 @@ const usePlayer = create<PlayerStore>((set, get) => ({
       isSuno: false,
     }),
   getNextSongId: () => {
-    const { ids, activeId, isShuffling, isRepeating, shuffledIds, isSuno } =
-      get();
+    const { ids, activeId, isShuffling, isRepeating, shuffledIds } = get();
     if (ids.length === 0) {
       return undefined;
     }
@@ -83,8 +82,7 @@ const usePlayer = create<PlayerStore>((set, get) => ({
     }
   },
   getPreviousSongId: () => {
-    const { ids, activeId, isShuffling, isRepeating, shuffledIds, isSuno } =
-      get();
+    const { ids, activeId, isShuffling, isRepeating, shuffledIds } = get();
     if (ids.length === 0) {
       return undefined;
     }
