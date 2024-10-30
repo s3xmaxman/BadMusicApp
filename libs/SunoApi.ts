@@ -1,9 +1,11 @@
+// libs/SunoApi.ts
 import axios, { AxiosInstance } from "axios";
 import UserAgent from "user-agents";
 import pino from "pino";
 import { wrapper } from "axios-cookiejar-support";
 import { CookieJar } from "tough-cookie";
 import { sleep } from "./utils";
+import { get } from "http";
 
 const logger = pino();
 export const DEFAULT_MODEL = "chirp-v3-5";

@@ -6,6 +6,7 @@ import Button from "@/components/Button";
 import useSubscribeModal from "@/hooks/useSubscribeModal";
 import { postData } from "@/libs/helpers";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import SunoCookieInput from "@/components/SunoCookieInput";
 
 const AccountContent = () => {
   const router = useRouter();
@@ -100,6 +101,8 @@ const AccountContent = () => {
           </div>
         </CardContent>
       </Card>
+
+      <SunoCookieInput />
 
       {/* アカウント情報 */}
       <Card className="bg-neutral-900 border border-neutral-800 shadow-lg">
