@@ -6,6 +6,7 @@ import { wrapper } from "axios-cookiejar-support";
 import { CookieJar } from "tough-cookie";
 import { sleep } from "./utils";
 import { get } from "http";
+import { getSunoCookie } from "@/actions/getSunoCookie";
 
 const logger = pino();
 export const DEFAULT_MODEL = "chirp-v3-5";
@@ -472,13 +473,15 @@ class SunoApi {
   }
 }
 
-const newSunoApi = async (cookie: string) => {
-  const sunoApi = new SunoApi(cookie);
-  return await sunoApi.init();
-};
-
-if (!process.env.SUNO_COOKIE) {
-  console.log("Environment does not contain SUNO_COOKIE.", process.env);
+export async function createSunoApi(): Promise<SunoApi> {
+  try {
+    const cookie = await getSunoCookie();
+    const sunoApi = new SunoApi(cookie);
+    return await sunoApi.init();
+  } catch (error) {
+    console.error("Error in createSunoApi:", error);
+    throw error;
+  }
 }
 
-export const sunoApi = newSunoApi(process.env.SUNO_COOKIE || "");
+export type { SunoApi };

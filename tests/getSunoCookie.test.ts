@@ -1,6 +1,7 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Encryption } from "@/libs/encryption";
-import { getCookie } from "@/actions/getSunoCookie";
+import { getSunoCookie } from "@/actions/getSunoCookie";
+import { get } from "http";
 
 // モックの設定
 jest.mock("@supabase/auth-helpers-nextjs");
@@ -34,7 +35,7 @@ describe("getCookie", () => {
     (createServerComponentClient as jest.Mock).mockReturnValue(mockSupabase);
     (Encryption.decrypt as jest.Mock).mockResolvedValue("decryptedCookie");
 
-    const result = await getCookie();
+    const result = await getSunoCookie();
 
     expect(result).toBe("decryptedCookie");
   });
@@ -50,7 +51,7 @@ describe("getCookie", () => {
     };
     (createServerComponentClient as jest.Mock).mockReturnValue(mockSupabase);
 
-    await expect(getCookie()).rejects.toThrow("Unauthorized");
+    await expect(getSunoCookie()).rejects.toThrow("Unauthorized");
   });
 
   it("cookieが見つからない場合", async () => {
@@ -68,7 +69,7 @@ describe("getCookie", () => {
     };
     (createServerComponentClient as jest.Mock).mockReturnValue(mockSupabase);
 
-    await expect(getCookie()).rejects.toThrow("Cookie not found");
+    await expect(getSunoCookie()).rejects.toThrow("Cookie not found");
   });
 
   it("復号化に失敗した場合", async () => {
@@ -90,7 +91,7 @@ describe("getCookie", () => {
     (createServerComponentClient as jest.Mock).mockReturnValue(mockSupabase);
     (Encryption.decrypt as jest.Mock).mockResolvedValue(null);
 
-    await expect(getCookie()).rejects.toThrow(
+    await expect(getSunoCookie()).rejects.toThrow(
       "Decryption resulted in null or empty string"
     );
   });

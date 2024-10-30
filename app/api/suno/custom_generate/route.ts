@@ -1,7 +1,7 @@
 //api/suno/custom_generate/route.ts
 
 import { NextResponse, NextRequest } from "next/server";
-import { DEFAULT_MODEL, sunoApi } from "@/libs/SunoApi";
+import { DEFAULT_MODEL, createSunoApi } from "@/libs/SunoApi";
 import { corsHeaders } from "@/libs/utils";
 
 export const maxDuration = 60; // allow longer timeout for wait_audio == true
@@ -21,6 +21,8 @@ export async function POST(req: NextRequest) {
         wait_audio,
         negative_tags,
       } = body;
+
+      const sunoApi = await createSunoApi();
 
       const audioInfo = await (
         await sunoApi

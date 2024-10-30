@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
-import { sunoApi, DEFAULT_MODEL } from "@/libs/SunoApi";
+import { createSunoApi, DEFAULT_MODEL } from "@/libs/SunoApi";
 import { corsHeaders } from "@/libs/utils";
 
 export const dynamic = "force-dynamic";
@@ -9,6 +9,7 @@ export async function POST(req: NextRequest) {
     try {
       const body = await req.json();
       const { prompt, make_instrumental, model, wait_audio } = body;
+      const sunoApi = await createSunoApi();
 
       const audioInfo = await (
         await sunoApi
