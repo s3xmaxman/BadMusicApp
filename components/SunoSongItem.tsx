@@ -372,7 +372,7 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
           <div className="flex items-center gap-2">
             <div className="flex items-center">
               <CiMusicNote1 className="mr-1" />
-              {currentSongData.type || "Generated"}
+              {currentSongData.author}
             </div>
           </div>
           <div>{formatDate(currentSongData.created_at)}</div>

@@ -46,7 +46,7 @@ const StandardLayout = memo(
 
         <div className="h-full w-full overflow-hidden">
           <ScrollArea className="h-full w-full">
-            <div className="flex flex-col gap-8 p-6">
+            <div className="flex flex-col gap-6 p-6">
               {/* Album Art with Layout Switch Button */}
               <div className="relative">
                 <motion.button
@@ -68,7 +68,7 @@ const StandardLayout = memo(
                     <div className="relative aspect-square">
                       <Image
                         src={imagePath || "/images/loading.jpg"}
-                        alt="Song Image"
+                        alt="曲のイメージ"
                         fill
                         className="object-cover transition-transform duration-300 hover:scale-105"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -86,61 +86,64 @@ const StandardLayout = memo(
                 </motion.div>
               </div>
 
-              {/* Song Info */}
+              {/* Song Info, Stats and Tags - Updated Layout */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="text-center"
+                className="flex flex-col md:flex-row justify-between items-center gap-4"
               >
-                <motion.h1
-                  className="text-4xl font-bold tracking-wide line-clamp-2 bg-gradient-to-r from-white via-purple-200 to-white bg-clip-text text-transparent"
-                  initial={{ x: song.title.length > ON_ANIMATION ? "100%" : 0 }}
-                  animate={{ x: 0 }}
-                  transition={{
-                    duration: song.title.length > ON_ANIMATION ? 22 : 0,
-                    repeat: song.title.length > ON_ANIMATION ? Infinity : 0,
-                    ease: "linear",
-                  }}
-                >
-                  <Link
-                    href={`/songs/${song.id}`}
-                    className="hover:opacity-80 transition-opacity"
+                <div className="text-center md:text-left flex-1">
+                  <motion.h1
+                    className="text-3xl md:text-4xl font-bold tracking-wide line-clamp-2 bg-gradient-to-r from-white via-purple-200 to-white bg-clip-text text-transparent"
+                    initial={{
+                      x: song.title.length > ON_ANIMATION ? "100%" : 0,
+                    }}
+                    animate={{ x: 0 }}
+                    transition={{
+                      duration: song.title.length > ON_ANIMATION ? 22 : 0,
+                      repeat: song.title.length > ON_ANIMATION ? Infinity : 0,
+                      ease: "linear",
+                    }}
                   >
-                    {song.title}
-                  </Link>
-                </motion.h1>
-                <p className="text-gray-400 mt-2 text-lg">{song.author}</p>
-              </motion.div>
-
-              {/* Stats and Tags */}
-              <div className="flex flex-col gap-4 items-center">
-                <div className="flex items-center gap-6 text-gray-400">
-                  <div className="flex items-center gap-2">
-                    <CiPlay1 size={20} />
-                    <span className="text-lg">{song.count}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <AiOutlineHeart size={20} />
-                    <span className="text-lg">{song.like_count}</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap justify-center gap-2">
-                  {(isSunoSong
-                    ? song.tags?.split(", ")
-                    : song.genre?.split(", ")
-                  )?.map((tag) => (
                     <Link
-                      key={tag}
-                      href={`/genre/${tag}`}
-                      className="px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-colors"
+                      href={`/songs/${song.id}`}
+                      className="hover:opacity-80 transition-opacity"
                     >
-                      #{tag}
+                      {song.title}
                     </Link>
-                  ))}
+                  </motion.h1>
+                  <p className="text-gray-400 mt-1 text-lg">{song.author}</p>
                 </div>
-              </div>
+
+                <div className="flex flex-col items-center md:items-end gap-2">
+                  <div className="flex items-center gap-4 text-gray-400">
+                    <div className="flex items-center gap-1">
+                      <CiPlay1 size={18} />
+                      <span className="text-base">{song.count}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <AiOutlineHeart size={18} />
+                      <span className="text-base">{song.like_count}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap justify-center md:justify-end gap-2">
+                    {(isSunoSong
+                      ? song.tags?.split(", ")
+                      : song.genre?.split(", ")
+                    )?.map((tag) => (
+                      <Link
+                        key={tag}
+                        href={`/genre/${tag}`}
+                        className="px-2 py-1 text-sm rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-colors"
+                      >
+                        #{tag}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
 
               {/* Lyrics Section */}
               <Accordion type="single" collapsible className="w-full">
@@ -164,16 +167,16 @@ const StandardLayout = memo(
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.4 }}
-                  className="mt-8 mb-4"
+                  className="mt-24"
                 >
-                  <h2 className="text-gray-400 text-sm font-medium mb-4">
+                  <h2 className="text-gray-400 text-sm font-medium mb-2">
                     次の曲
                   </h2>
                   <div className="flex items-center gap-4 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors backdrop-blur-sm cursor-pointer">
                     <div className="relative w-16 h-16 rounded-lg overflow-hidden shrink-0">
                       <Image
                         src={nextImagePath || "/images/playlist.png"}
-                        alt="Next Song"
+                        alt="次の曲"
                         fill
                         className="object-cover"
                         sizes="(max-width: 768px) 64px, 64px"
