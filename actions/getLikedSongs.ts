@@ -2,7 +2,7 @@ import { Song, SunoSong } from "@/types";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
-export type SongType = "regular" | "suno";
+type SongType = "regular" | "suno";
 
 const getLikedSongs = async (
   songType: SongType = "regular"

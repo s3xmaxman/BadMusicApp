@@ -1,125 +1,197 @@
-import React from "react";
+import React, { memo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { FaMusic } from "react-icons/fa";
 import { CiPlay1 } from "react-icons/ci";
 import { AiOutlineHeart } from "react-icons/ai";
-import { Song, SunoSong } from "@/types";
 import { IoMdSwap } from "react-icons/io";
 import { BackgroundGradient } from "../ui/background-gradient";
+import { ScrollArea } from "../ui/scroll-area";
+import { Song, SunoSong } from "@/types";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../ui/accordion";
 
 interface StandardLayoutProps {
   song: Song | SunoSong;
-  imagePath?: string;
+  imagePath: string;
   nextSong: Song | SunoSong;
-  nextImagePath?: string;
+  nextImagePath: string;
   toggleLayout: () => void;
 }
 
 const ON_ANIMATION = 500;
 
-const StandardLayout: React.FC<StandardLayoutProps> = React.memo(
-  ({ song, imagePath, nextSong, nextImagePath, toggleLayout }) => {
+const StandardLayout = memo(
+  ({
+    song,
+    imagePath,
+    nextSong,
+    nextImagePath,
+    toggleLayout,
+  }: StandardLayoutProps) => {
     const isSunoSong = "audio_url" in song;
+
     return (
-      <div className="scroll-container bg-black text-white p-4 h-full flex flex-col rounded-lg overflow-y-auto">
-        <div className="absolute top-4 right-4">
-          <button
-            onClick={toggleLayout}
-            className="bg-white/10 hover:bg-white/20 rounded-full p-2 transition-colors duration-200"
-          >
-            <IoMdSwap className="text-white" size={18} />
-          </button>
-        </div>
-        <div className="relative w-full mt-10 aspect-square overflow-hidden rounded-xl">
-          <BackgroundGradient className="relative aspect-square overflow-hidden rounded-xl ">
-            <Image
-              src={imagePath || "/images/loading.jpg"}
-              alt="Song Image"
-              fill
-              className="object-cover shadow-lg transition-all duration-500 ease-in-out"
-            />
-            <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 bg-black/50">
-              <FaMusic className="text-white text-6xl" />
-            </div>
-          </BackgroundGradient>
+      <div className="relative h-[calc(100vh-6rem)] bg-gradient-to-br from-zinc-900 via-black to-zinc-900 text-white rounded-xl">
+        {/* Decorative background elements */}
+        <div className="absolute top-0 left-0 w-full h-full opacity-30">
+          <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-purple-500/20 blur-[100px] rounded-full" />
+          <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-blue-500/20 blur-[100px] rounded-full" />
         </div>
 
-        <div className="mt-8 space-y-4">
-          <motion.div
-            className="flex flex-col"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <motion.h1
-              className="text-3xl font-bold tracking-wide line-clamp-2"
-              initial={{ x: song.title.length > ON_ANIMATION ? "100%" : 0 }}
-              animate={{ x: 0 }}
-              transition={{
-                duration: song.title.length > ON_ANIMATION ? 22 : 0,
-                repeat: song.title.length > ON_ANIMATION ? Infinity : 0,
-                loop: true,
-                ease: "linear",
-              }}
-            >
-              <Link
-                className="cursor-pointer hover:underline"
-                // TODO: sunoへのリンクを追加
-                href={`/songs/${song.id}`}
+        <div className="h-full w-full overflow-hidden">
+          <ScrollArea className="h-full w-full">
+            <div className="flex flex-col gap-8 p-6">
+              {/* Album Art with Layout Switch Button */}
+              <div className="relative">
+                <motion.button
+                  onClick={toggleLayout}
+                  className="absolute top-2 right-2 z-20 bg-white/10 hover:bg-white/20 rounded-full p-3 backdrop-blur-sm transition-all duration-300"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <IoMdSwap className="text-white" size={20} />
+                </motion.button>
+
+                <motion.div
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                  className="relative w-full aspect-square max-w-md mx-auto"
+                >
+                  <BackgroundGradient className="rounded-2xl overflow-hidden">
+                    <div className="relative aspect-square">
+                      <Image
+                        src={imagePath || "/images/loading.jpg"}
+                        alt="Song Image"
+                        fill
+                        className="object-cover transition-transform duration-300 hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-all duration-300 bg-black/40 backdrop-blur-sm">
+                        <motion.div
+                          whileHover={{ scale: 1.2, rotate: 180 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <FaMusic className="text-white text-6xl" />
+                        </motion.div>
+                      </div>
+                    </div>
+                  </BackgroundGradient>
+                </motion.div>
+              </div>
+
+              {/* Song Info */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="text-center"
               >
-                {song.title}
-              </Link>
-            </motion.h1>
-            <p className="text-gray-300 mt-1">{song.author}</p>
-          </motion.div>
+                <motion.h1
+                  className="text-4xl font-bold tracking-wide line-clamp-2 bg-gradient-to-r from-white via-purple-200 to-white bg-clip-text text-transparent"
+                  initial={{ x: song.title.length > ON_ANIMATION ? "100%" : 0 }}
+                  animate={{ x: 0 }}
+                  transition={{
+                    duration: song.title.length > ON_ANIMATION ? 22 : 0,
+                    repeat: song.title.length > ON_ANIMATION ? Infinity : 0,
+                    ease: "linear",
+                  }}
+                >
+                  <Link
+                    href={`/songs/${song.id}`}
+                    className="hover:opacity-80 transition-opacity"
+                  >
+                    {song.title}
+                  </Link>
+                </motion.h1>
+                <p className="text-gray-400 mt-2 text-lg">{song.author}</p>
+              </motion.div>
 
-          <div className="flex items-center justify-between">
-            <p className=" text-gray-400 text-lg">
-              {isSunoSong
-                ? song.tags?.split(", ").map((g) => (
-                    <Link key={g} href={`/genre/${g}`}>
-                      #{g}
-                    </Link>
-                  ))
-                : song.genre?.split(", ").map((g) => (
-                    <Link key={g} href={`/genre/${g}`}>
-                      #{g}
+              {/* Stats and Tags */}
+              <div className="flex flex-col gap-4 items-center">
+                <div className="flex items-center gap-6 text-gray-400">
+                  <div className="flex items-center gap-2">
+                    <CiPlay1 size={20} />
+                    <span className="text-lg">{song.count}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <AiOutlineHeart size={20} />
+                    <span className="text-lg">{song.like_count}</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap justify-center gap-2">
+                  {(isSunoSong
+                    ? song.tags?.split(", ")
+                    : song.genre?.split(", ")
+                  )?.map((tag) => (
+                    <Link
+                      key={tag}
+                      href={`/genre/${tag}`}
+                      className="px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-colors"
+                    >
+                      #{tag}
                     </Link>
                   ))}
-            </p>
-            <div className="flex items-center gap-2">
-              <CiPlay1 size={16} />
-              <span>{song.count}</span>
-              <AiOutlineHeart size={16} />
-              <span> {isSunoSong ? null : song.like_count}</span>
-            </div>
-          </div>
-        </div>
+                </div>
+              </div>
 
-        <div className="mt-10 border-t border-gray-800 pt-6 flex-grow">
-          <h2 className="text-white text-xl font-semibold mb-4">次の曲</h2>
-          {nextSong && (
-            <div className="flex items-center gap-x-4 py-4 rounded-md">
-              <div className="relative w-24 h-24 rounded-md overflow-hidden shrink-0">
-                <Image
-                  src={nextImagePath || "/images/playlist.png"}
-                  alt="Next Song"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="flex-grow">
-                <h3 className="text-lg font-semibold text-white line-clamp-1">
-                  {nextSong.title}
-                </h3>
-                <p className="text-sm text-gray-400 line-clamp-1">
-                  {nextSong.author}
-                </p>
-              </div>
+              {/* Lyrics Section */}
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="lyrics" className="border-white/10">
+                  <AccordionTrigger className="text-xl font-semibold text-gray-200 hover:no-underline">
+                    歌詞
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className="whitespace-pre-wrap text-gray-300 leading-relaxed">
+                      {isSunoSong
+                        ? song.lyric
+                        : song.lyrics || "歌詞はありません"}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+
+              {/* Next Song */}
+              {nextSong && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
+                  className="mt-8 mb-4"
+                >
+                  <h2 className="text-gray-400 text-sm font-medium mb-4">
+                    次の曲
+                  </h2>
+                  <div className="flex items-center gap-4 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors backdrop-blur-sm cursor-pointer">
+                    <div className="relative w-16 h-16 rounded-lg overflow-hidden shrink-0">
+                      <Image
+                        src={nextImagePath || "/images/playlist.png"}
+                        alt="Next Song"
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 64px, 64px"
+                      />
+                    </div>
+                    <div>
+                      <h3 className="font-medium line-clamp-1">
+                        {nextSong.title}
+                      </h3>
+                      <p className="text-sm text-gray-400 line-clamp-1">
+                        {nextSong.author}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
             </div>
-          )}
+          </ScrollArea>
         </div>
       </div>
     );
