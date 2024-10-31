@@ -111,7 +111,7 @@ const StandardLayout = memo(
                       href={
                         isSunoSong
                           ? `/suno-songs/${song.id}`
-                          : `/song/${song.id}`
+                          : `/songs/${song.id}`
                       }
                     >
                       {song.title}

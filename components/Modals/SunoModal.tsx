@@ -39,7 +39,7 @@ const SunoModal: React.FC = () => {
   };
 
   const checkSunoCookie = async () => {
-    const response = await fetch("/api/suno/check_cookie", {
+    const response = await fetch("/api/suno/check-cookie", {
       method: "GET",
     });
 
