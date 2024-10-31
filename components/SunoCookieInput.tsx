@@ -1,10 +1,8 @@
 "use client";
 import { useState } from "react";
 import { useUser } from "@/hooks/useUser";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import Button from "./Button";
 import { toast } from "react-hot-toast";
-import { set } from "react-hook-form";
 import Input from "./Input";
 
 const SunoCookieInput = () => {
@@ -43,31 +41,24 @@ const SunoCookieInput = () => {
   };
 
   return (
-    <Card className="bg-neutral-900 border border-neutral-800 shadow-lg">
-      <CardHeader>
-        <CardTitle className="text-xl font-bold text-white">
-          SUNO Cookie設定
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            type="password"
-            value={sunoCookie}
-            onChange={(e) => setSunoCookie(e.target.value)}
-            placeholder="SUNO Cookieを入力してください"
-            className="bg-neutral-800 text-white border-neutral-700"
-          />
-          <Button
-            disabled={isLoading || !sunoCookie}
-            type="submit"
-            className="w-full"
-          >
-            {isLoading ? "保存中..." : "保存"}
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="space-y-2">
+        <Input
+          type="password"
+          value={sunoCookie}
+          onChange={(e) => setSunoCookie(e.target.value)}
+          placeholder="SUNO Cookieを入力してください"
+          className="w-full bg-neutral-800/50 border-neutral-700 focus:border-blue-500 transition-colors text-white placeholder-neutral-500"
+        />
+      </div>
+      <Button
+        disabled={isLoading || !sunoCookie}
+        type="submit"
+        className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-neutral-700"
+      >
+        {isLoading ? "保存中..." : "保存"}
+      </Button>
+    </form>
   );
 };
 
