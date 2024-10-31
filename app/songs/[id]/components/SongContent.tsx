@@ -9,8 +9,8 @@ import {
   Edit2,
   Clock,
   Music2,
-  AudioWaveform,
 } from "lucide-react";
+import { MdLyrics } from "react-icons/md";
 import Image from "next/image";
 import Link from "next/link";
 import useGetSongById from "@/hooks/useGetSongById";
@@ -26,7 +26,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Song } from "@/types";
-
+import AudioWaveform from "@/components/AudioWaveform";
 interface SongContentProps {
   songId: string;
 }
@@ -40,7 +40,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<"lyrics" | "similar">("lyrics");
   const [duration, setDuration] = useState<string>("");
-
+  const [isPlaying, setIsPlaying] = useState(false);
   const genres = useMemo(
     () => song?.genre?.split(",").map((g) => g.trim()) || [],
     [song?.genre]
@@ -48,6 +48,11 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   const { songGenres } = useGetSongsByGenres(genres, songId);
   const imageUrls = useLoadImages(songGenres);
   const { fileUrl, loading } = useDownload(song?.song_path!);
+
+  const handlePlayClick = () => {
+    setIsPlaying(!isPlaying);
+    onPlay(songId);
+  };
 
   // 曲の長さを取得
   useEffect(() => {
@@ -81,6 +86,11 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
           fill
           className="object-cover opacity-40"
           priority
+        />
+        <AudioWaveform
+          audioUrl={fileUrl!}
+          isPlaying={isPlaying}
+          onPlayPause={() => setIsPlaying(!isPlaying)}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/60 to-black" />
 
@@ -139,7 +149,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
                 {/* Action Buttons */}
                 <div className="flex flex-wrap gap-3">
                   <Button
-                    onClick={() => onPlay(songId)}
+                    onClick={handlePlayClick}
                     className="bg-blue-600 hover:bg-blue-700"
                   >
                     <Play className="mr-2" size={16} />
@@ -204,7 +214,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
                 }`}
               >
                 <div className="flex items-center gap-2">
-                  <AudioWaveform size={20} />
+                  <MdLyrics size={20} />
                   <span>Lyrics</span>
                 </div>
                 {activeTab === "lyrics" && (

@@ -117,12 +117,6 @@ const AudioWaveform = ({
     animationRef.current = requestAnimationFrame(draw);
   };
 
-  const formatTime = (time: number) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
-  };
-
   return (
     <div className="absolute inset-0 bg-black/40 backdrop-blur-sm">
       <div className="relative h-full">
@@ -133,33 +127,6 @@ const AudioWaveform = ({
           className="w-full h-full cursor-pointer"
           onClick={onPlayPause}
         />
-
-        <div className="absolute inset-0 flex items-center justify-center">
-          <button
-            onClick={onPlayPause}
-            className={`p-4 rounded-full bg-white/10 hover:bg-white/20 transition-all transform hover:scale-105 ${
-              isPlaying ? "scale-90" : "scale-100"
-            }`}
-          >
-            {isPlaying ? (
-              <div className="w-4 h-4 border-l-2 border-r-2 border-white" />
-            ) : (
-              <div className="w-0 h-0 border-l-8 border-t-6 border-b-6 border-l-white border-t-transparent border-b-transparent" />
-            )}
-          </button>
-        </div>
-
-        <div className="absolute bottom-4 left-4 right-4 flex justify-between text-sm text-white/80">
-          <span>{formatTime(currentTime)}</span>
-          <span>{formatTime(duration)}</span>
-        </div>
-
-        <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
-          <div
-            className="h-full bg-blue-500"
-            style={{ width: `${(currentTime / duration) * 100}%` }}
-          />
-        </div>
       </div>
     </div>
   );

@@ -15,7 +15,6 @@ import Image from "next/image";
 import Link from "next/link";
 import useGetSunoSongById from "@/hooks/useGetSunoSongById";
 import useOnPlaySuno from "@/hooks/useOnPlaySuno";
-import useDownload from "@/hooks/useDownload";
 import { useUser } from "@/hooks/useUser";
 import { downloadFile } from "@/libs/helpers";
 import { Card } from "@/components/ui/card";
@@ -78,7 +77,7 @@ const SunoSongContent: React.FC<SunoSongContentProps> = ({ sunoSongId }) => {
   return (
     <div className="min-h-screen bg-gradient-to-b bg-black text-white">
       {/* Hero Section with Integrated Waveform */}
-      <div className="relative h-[90vh] w-full">
+      <div className="relative h-[50vh] md:h-[60vh] w-full">
         {/* Background Image */}
         <Image
           src={song.image_url || "/images/wait.jpg"}
