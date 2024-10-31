@@ -21,7 +21,6 @@ export class Encryption {
     let encrypted = cipher.update(text, "utf8", "hex");
     encrypted += cipher.final("hex");
 
-    // saltとivも暗号文と一緒に保存
     return salt.toString("hex") + ":" + iv.toString("hex") + ":" + encrypted;
   }
 

@@ -174,7 +174,7 @@ const StandardLayout = memo(
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.4 }}
-                  className="mt-24"
+                  className="flex-1"
                 >
                   <h2 className="text-gray-400 text-sm font-medium mb-2">
                     次の曲
