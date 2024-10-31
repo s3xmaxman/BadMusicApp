@@ -24,6 +24,7 @@ import AudioWaveform from "@/components/AudioWaveform";
 import { SunoSong } from "@/types";
 import PreviewDownloadModal from "@/components/Modals/DownloadPreviewModal";
 import { MdLyrics } from "react-icons/md";
+import { getRandomColor } from "@/libs/utils";
 
 interface SunoSongContentProps {
   sunoSongId: string;
@@ -38,6 +39,8 @@ const SunoSongContent: React.FC<SunoSongContentProps> = ({ sunoSongId }) => {
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [duration, setDuration] = useState<string>("");
   const [isPlaying, setIsPlaying] = useState(false);
+  const [primaryColor, setPrimaryColor] = useState(getRandomColor());
+  const [secondaryColor, setSecondaryColor] = useState(getRandomColor());
 
   useEffect(() => {
     if (song?.audio_url) {
@@ -49,25 +52,6 @@ const SunoSongContent: React.FC<SunoSongContentProps> = ({ sunoSongId }) => {
       });
     }
   }, [song?.audio_url]);
-
-  const getRandomColor = () => {
-    const colors = [
-      "#00ff87",
-      "#60efff",
-      "#0061ff",
-      "#ff00a0",
-      "#ff1700",
-      "#fff700",
-      "#a6ff00",
-      "#00ffa3",
-      "#00ffff",
-      "#ff00ff",
-    ];
-    return colors[Math.floor(Math.random() * colors.length)];
-  };
-
-  const [primaryColor, setPrimaryColor] = useState(getRandomColor());
-  const [secondaryColor, setSecondaryColor] = useState(getRandomColor());
 
   useEffect(() => {
     setPrimaryColor(getRandomColor());
@@ -166,12 +150,16 @@ const SunoSongContent: React.FC<SunoSongContentProps> = ({ sunoSongId }) => {
                   {/* Stats */}
                   <div className="flex gap-6 mb-6 text-sm text-gray-400">
                     <div className="flex items-center gap-2">
-                      <Clock size={16} />
-                      <span>{duration}</span>
+                      <Play size={16} />
+                      <span>{song.count} plays</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Music2 size={16} />
-                      <span>{song.model_name}</span>
+                      <Heart size={16} />
+                      <span>{song.like_count} likes</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Clock size={16} />
+                      <span>{duration}</span>
                     </div>
                   </div>
 

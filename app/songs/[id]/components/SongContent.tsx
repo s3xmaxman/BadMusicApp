@@ -9,6 +9,7 @@ import {
   Edit2,
   Clock,
   Music2,
+  Pause,
 } from "lucide-react";
 import { MdLyrics } from "react-icons/md";
 import Image from "next/image";
@@ -27,6 +28,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Song } from "@/types";
 import AudioWaveform from "@/components/AudioWaveform";
+import { getRandomColor } from "@/libs/utils";
 interface SongContentProps {
   songId: string;
 }
@@ -41,6 +43,8 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   const [activeTab, setActiveTab] = useState<"lyrics" | "similar">("lyrics");
   const [duration, setDuration] = useState<string>("");
   const [isPlaying, setIsPlaying] = useState(false);
+  const [primaryColor, setPrimaryColor] = useState(getRandomColor());
+  const [secondaryColor, setSecondaryColor] = useState(getRandomColor());
 
   const genres = useMemo(
     () => song?.genre?.split(",").map((g) => g.trim()) || [],
@@ -49,25 +53,6 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   const { songGenres } = useGetSongsByGenres(genres, songId);
   const imageUrls = useLoadImages(songGenres);
   const { fileUrl, loading } = useDownload(song?.song_path!);
-
-  const getRandomColor = () => {
-    const colors = [
-      "#00ff87",
-      "#60efff",
-      "#0061ff",
-      "#ff00a0",
-      "#ff1700",
-      "#fff700",
-      "#a6ff00",
-      "#00ffa3",
-      "#00ffff",
-      "#ff00ff",
-    ];
-    return colors[Math.floor(Math.random() * colors.length)];
-  };
-
-  const [primaryColor, setPrimaryColor] = useState(getRandomColor());
-  const [secondaryColor, setSecondaryColor] = useState(getRandomColor());
 
   useEffect(() => {
     setPrimaryColor(getRandomColor());
@@ -178,8 +163,12 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
                     onClick={handlePlayClick}
                     className="bg-blue-600 hover:bg-blue-700"
                   >
-                    <Play className="mr-2" size={16} />
-                    Play Now
+                    {isPlaying ? (
+                      <Pause className="mr-2" size={16} />
+                    ) : (
+                      <Play className="mr-2" size={16} />
+                    )}
+                    {isPlaying ? "Pause" : "Play Now"}
                   </Button>
                   <Button
                     onClick={handleDownloadClick}

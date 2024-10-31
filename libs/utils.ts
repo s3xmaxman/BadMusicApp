@@ -37,3 +37,19 @@ export const corsHeaders = {
   "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
+
+export const getRandomColor = () => {
+  const colors = [
+    "#00ff87",
+    "#60efff",
+    "#0061ff",
+    "#ff00a0",
+    "#ff1700",
+    "#fff700",
+    "#a6ff00",
+    "#00ffa3",
+    "#00ffff",
+    "#ff00ff",
+  ];
+  return colors[Math.floor(Math.random() * colors.length)];
+};
