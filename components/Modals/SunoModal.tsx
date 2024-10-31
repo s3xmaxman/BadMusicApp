@@ -11,7 +11,6 @@ import Input from "../Input";
 import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
-import { set } from "react-hook-form";
 
 const SunoModal: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -39,9 +38,31 @@ const SunoModal: React.FC = () => {
     }));
   };
 
+  const checkSunoCookie = async () => {
+    const response = await fetch("/api/suno/check_cookie", {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Something went wrong");
+    }
+  };
+
   const onSubmit = async () => {
     try {
       setIsLoading(true);
+
+      try {
+        await checkSunoCookie();
+      } catch (error) {
+        toast.error(
+          "SunoCookieが設定されていません。アカウント設定で設定してください。"
+        );
+        setIsLoading(false);
+        return;
+      }
+
       const endpoint = isCustom
         ? "/api/suno/custom_generate"
         : "/api/suno/generate";
