@@ -41,6 +41,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   const [activeTab, setActiveTab] = useState<"lyrics" | "similar">("lyrics");
   const [duration, setDuration] = useState<string>("");
   const [isPlaying, setIsPlaying] = useState(false);
+
   const genres = useMemo(
     () => song?.genre?.split(",").map((g) => g.trim()) || [],
     [song?.genre]
@@ -48,6 +49,30 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   const { songGenres } = useGetSongsByGenres(genres, songId);
   const imageUrls = useLoadImages(songGenres);
   const { fileUrl, loading } = useDownload(song?.song_path!);
+
+  const getRandomColor = () => {
+    const colors = [
+      "#00ff87",
+      "#60efff",
+      "#0061ff",
+      "#ff00a0",
+      "#ff1700",
+      "#fff700",
+      "#a6ff00",
+      "#00ffa3",
+      "#00ffff",
+      "#ff00ff",
+    ];
+    return colors[Math.floor(Math.random() * colors.length)];
+  };
+
+  const [primaryColor, setPrimaryColor] = useState(getRandomColor());
+  const [secondaryColor, setSecondaryColor] = useState(getRandomColor());
+
+  useEffect(() => {
+    setPrimaryColor(getRandomColor());
+    setSecondaryColor(getRandomColor());
+  }, [songId]);
 
   const handlePlayClick = () => {
     setIsPlaying(!isPlaying);
@@ -90,6 +115,8 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
           audioUrl={fileUrl!}
           isPlaying={isPlaying}
           onPlayPause={() => setIsPlaying(!isPlaying)}
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/60 to-black" />
 
