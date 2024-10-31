@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { FaMusic } from "react-icons/fa";
 import { CiPlay1 } from "react-icons/ci";
+import { MdLyrics } from "react-icons/md";
 import { AiOutlineHeart } from "react-icons/ai";
 import { IoMdSwap } from "react-icons/io";
 import { BackgroundGradient } from "../ui/background-gradient";
@@ -148,11 +149,14 @@ const StandardLayout = memo(
               {/* Lyrics Section */}
               <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="lyrics" className="border-white/10">
-                  <AccordionTrigger className="text-xl font-semibold text-gray-200 hover:no-underline">
-                    歌詞
+                  <AccordionTrigger className="text-xl font-semibold text-gray-200 hover:no-underline flex items-center gap-2 justify-start group">
+                    <span className="flex items-center gap-2">
+                      <MdLyrics className="text-2xl" />
+                      歌詞
+                    </span>
                   </AccordionTrigger>
                   <AccordionContent>
-                    <div className="whitespace-pre-wrap text-gray-300 leading-relaxed">
+                    <div className="whitespace-pre-wrap text-gray-300 leading-relaxed text-left">
                       {isSunoSong
                         ? song.lyric
                         : song.lyrics || "歌詞はありません"}
