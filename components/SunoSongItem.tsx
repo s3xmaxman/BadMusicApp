@@ -240,7 +240,7 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
     >
       {/* Dropdown Menu */}
       <div
-        className={`absolute top-2 right-2 ${!isMobilePlayer ? "z-10" : ""}`}
+        className={`absolute top-2 right-2  ${!isMobilePlayer ? "z-10" : ""}`}
         onClick={(e) => e.stopPropagation()}
       >
         <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
@@ -359,7 +359,7 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
       {/* Song Information */}
       <div className="flex flex-col items-start justify-between w-full pt-4 gap-y-1">
         <Link
-          href={`/suno-songs/${currentSongData.song_id}`}
+          href={`/suno-songs/${currentSongData.id}`}
           className="w-full"
           onClick={(e) => e.stopPropagation()}
         >

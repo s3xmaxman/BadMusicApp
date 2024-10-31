@@ -96,7 +96,7 @@ const StandardLayout = memo(
               >
                 <div className="text-center md:text-left flex-1">
                   <motion.h1
-                    className="text-3xl md:text-4xl font-bold tracking-wide line-clamp-2 bg-gradient-to-r from-white via-purple-200 to-white bg-clip-text text-transparent"
+                    className=" text-3xl md:text-4xl font-bold tracking-wide line-clamp-2 bg-gradient-to-r from-white via-purple-200 to-white bg-clip-text text-transparent"
                     initial={{
                       x: song.title.length > ON_ANIMATION ? "100%" : 0,
                     }}
@@ -108,8 +108,11 @@ const StandardLayout = memo(
                     }}
                   >
                     <Link
-                      href={`/songs/${song.id}`}
-                      className="hover:opacity-80 transition-opacity"
+                      href={
+                        isSunoSong
+                          ? `/suno-songs/${song.id}`
+                          : `/song/${song.id}`
+                      }
                     >
                       {song.title}
                     </Link>
