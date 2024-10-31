@@ -51,7 +51,6 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
 
   const handlePlayClick = () => {
     setIsPlaying(!isPlaying);
-    onPlay(songId);
   };
 
   // 曲の長さを取得

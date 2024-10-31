@@ -52,7 +52,6 @@ const SunoSongContent: React.FC<SunoSongContentProps> = ({ sunoSongId }) => {
 
   const handlePlayClick = () => {
     setIsPlaying(!isPlaying);
-    onPlay(sunoSongId);
   };
 
   const handleDownloadClick = async () => {
