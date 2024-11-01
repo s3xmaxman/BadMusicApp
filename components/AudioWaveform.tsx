@@ -35,6 +35,8 @@ const AudioWaveform = ({
     audioRef.current = new Audio(audioUrl);
     audioRef.current.crossOrigin = "anonymous";
 
+    audioRef.current.volume = 0.1;
+
     audioRef.current.addEventListener("loadedmetadata", () => {
       setDuration(audioRef.current?.duration || 0);
     });

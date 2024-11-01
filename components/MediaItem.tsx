@@ -19,7 +19,7 @@ const MediaItem: React.FC<MediaItemProps> = ({
   isCollapsed,
 }) => {
   const player = usePlayer();
-  const imageUrl = "song_id" in data ? data.image_url : useLoadImage!(data);
+  const imageUrl = useLoadImage(data);
   const router = useRouter();
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
