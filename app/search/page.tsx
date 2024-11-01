@@ -7,8 +7,9 @@ interface SearchProps {
   searchParams: { title: string };
 }
 
-// export const revalidate = 0;
+export const revalidate = 0;
 
+// TODO:バグがある
 const Search = async ({ searchParams }: SearchProps) => {
   const songs = await getSongsByTitle(searchParams.title);
 
@@ -20,7 +21,7 @@ const Search = async ({ searchParams }: SearchProps) => {
           <SearchInput />
         </div>
       </Header>
-      <SearchContent songs={songs} />
+      <SearchContent songs={songs.songs} sunoSongs={songs.sunoSongs} />
     </div>
   );
 };

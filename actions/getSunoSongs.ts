@@ -9,7 +9,6 @@ const getSunoSongs = async (): Promise<SunoSong[]> => {
 
   const {
     data: { session },
-    error: sessionError,
   } = await supabase.auth.getSession();
 
   const { data, error } = await supabase
