@@ -12,10 +12,6 @@ const getSunoSongs = async (): Promise<SunoSong[]> => {
     error: sessionError,
   } = await supabase.auth.getSession();
 
-  if (sessionError || !session) {
-    throw new Error("Unauthorized");
-  }
-
   const { data, error } = await supabase
     .from("suno_songs")
     .select("*")
