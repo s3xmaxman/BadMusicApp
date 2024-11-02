@@ -18,7 +18,7 @@ const getSunoSongsByTags = async (
   const { data, error } = await supabase
     .from("suno_songs")
     .select("*")
-    .or(tagsArray.map((tag) => `tags.ilike.%${tag}%`).join("," || ", "))
+    .or(tagsArray.map((tag) => `tags.ilike.%${tag}%`).join(","))
     .order("created_at", { ascending: false });
 
   if (error) {
