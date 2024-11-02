@@ -1,20 +1,25 @@
-"use client";
 import React, { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 interface AudioWaveformProps {
   audioUrl: string;
   isPlaying: boolean;
   onPlayPause: () => void;
+  onEnded: () => void;
   primaryColor?: string;
   secondaryColor?: string;
+  imageUrl?: string;
 }
 
 const AudioWaveform = ({
   audioUrl,
   isPlaying,
   onPlayPause,
+  onEnded,
   primaryColor = "#00ff87",
   secondaryColor = "#60efff",
+  imageUrl = "/images/wait.jpg",
 }: AudioWaveformProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -25,16 +30,17 @@ const AudioWaveform = ({
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isEnded, setIsEnded] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
     audioContextRef.current = new (window.AudioContext ||
       (window as any).webkitAudioContext)();
     analyserRef.current = audioContextRef.current.createAnalyser();
-    analyserRef.current.fftSize = 512; // より詳細な周波数データ
+    analyserRef.current.fftSize = 512;
 
     audioRef.current = new Audio(audioUrl);
     audioRef.current.crossOrigin = "anonymous";
-
     audioRef.current.volume = 0.1;
 
     audioRef.current.addEventListener("loadedmetadata", () => {
@@ -46,7 +52,11 @@ const AudioWaveform = ({
     });
 
     audioRef.current.addEventListener("ended", () => {
-      onPlayPause();
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setIsEnded(true);
+        onEnded();
+      }, 500);
     });
 
     sourceRef.current = audioContextRef.current.createMediaElementSource(
@@ -67,12 +77,14 @@ const AudioWaveform = ({
         audioRef.current = null;
       }
     };
-  }, [audioUrl]);
+  }, [audioUrl, onEnded]);
 
   useEffect(() => {
     if (!audioRef.current) return;
 
     if (isPlaying) {
+      setIsEnded(false);
+      setIsTransitioning(false);
       audioRef.current.play();
       draw();
     } else {
@@ -82,6 +94,13 @@ const AudioWaveform = ({
       }
     }
   }, [isPlaying]);
+
+  // Reset audio position when ended
+  useEffect(() => {
+    if (isEnded && audioRef.current) {
+      audioRef.current.currentTime = 0;
+    }
+  }, [isEnded]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
@@ -179,17 +198,46 @@ const AudioWaveform = ({
   };
 
   return (
-    <div className="absolute inset-0 bg-black/40 backdrop-blur-sm">
-      <div className="relative h-full">
-        <canvas
-          ref={canvasRef}
-          width={1000}
-          height={200}
-          className="w-full h-full cursor-pointer transition-transform hover:scale-[1.02]"
-          onClick={onPlayPause}
-          onMouseMove={handleMouseMove}
-        />
-      </div>
+    <div className="absolute inset-0 bg-black/40 backdrop-blur-sm overflow-hidden">
+      <AnimatePresence mode="wait">
+        {isEnded ? (
+          <motion.div
+            key="image"
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.5 }}
+            className="relative h-full w-full"
+          >
+            <Image
+              fill
+              src={imageUrl}
+              alt="Cover"
+              className="object-cover opacity-40"
+            />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="waveform"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.1 }}
+            transition={{ duration: 0.5 }}
+            className="relative h-full"
+          >
+            <canvas
+              ref={canvasRef}
+              width={1000}
+              height={200}
+              className={`w-full h-full cursor-pointer transition-all duration-500 ${
+                isTransitioning ? "opacity-0" : "opacity-100"
+              }`}
+              onClick={onPlayPause}
+              onMouseMove={handleMouseMove}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

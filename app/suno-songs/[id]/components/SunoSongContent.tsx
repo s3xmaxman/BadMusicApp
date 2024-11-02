@@ -61,6 +61,9 @@ const SunoSongContent: React.FC<SunoSongContentProps> = ({ sunoSongId }) => {
   const handlePlayClick = () => {
     setIsPlaying(!isPlaying);
   };
+  const handlePlaybackEnded = () => {
+    setIsPlaying(false);
+  };
 
   const handleDownloadClick = async () => {
     setIsLoading(true);
@@ -99,8 +102,10 @@ const SunoSongContent: React.FC<SunoSongContentProps> = ({ sunoSongId }) => {
           audioUrl={song.audio_url}
           isPlaying={isPlaying}
           onPlayPause={() => setIsPlaying(!isPlaying)}
+          onEnded={handlePlaybackEnded}
           primaryColor={primaryColor}
           secondaryColor={secondaryColor}
+          imageUrl={song.image_url}
         />
 
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/60 to-black" />

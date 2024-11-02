@@ -63,6 +63,10 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
     setIsPlaying(!isPlaying);
   };
 
+  const handlePlaybackEnded = () => {
+    setIsPlaying(false);
+  };
+
   // 曲の長さを取得
   useEffect(() => {
     if (fileUrl) {
@@ -102,6 +106,8 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
           onPlayPause={() => setIsPlaying(!isPlaying)}
           primaryColor={primaryColor}
           secondaryColor={secondaryColor}
+          imageUrl={imageUrl!}
+          onEnded={handlePlaybackEnded}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/60 to-black" />
 
