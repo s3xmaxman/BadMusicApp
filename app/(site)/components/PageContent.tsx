@@ -1,7 +1,7 @@
 "use client";
 
 import SongItem from "@/components/SongItem";
-import SunoSongItem from "@/components/SunoSongItem";
+import SunoSongItem from "@/components/Suno/SunoSongItem";
 import useOnPlay from "@/hooks/useOnPlay";
 import { Song, SunoSong } from "@/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

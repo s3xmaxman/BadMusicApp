@@ -7,9 +7,9 @@ import Link from "next/link";
 import { useSpring, animated } from "@react-spring/web";
 import { useDrag } from "@use-gesture/react";
 import { Playlist, SunoSong } from "@/types";
-import SeekBar from "./Seekbar";
-import MobileStyleIcons from "./Mobile/MobileStyleIcons";
-import LyricsDrawer from "./Mobile/LyricsDrawer";
+import SeekBar from "../Seekbar";
+import MobileStyleIcons from "../Mobile/MobileStyleIcons";
+import LyricsDrawer from "../Mobile/LyricsDrawer";
 
 interface SunoMobilePlayerContentProps {
   song: SunoSong;

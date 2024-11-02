@@ -5,13 +5,14 @@ import { BsRepeat1 } from "react-icons/bs";
 import { FaRandom } from "react-icons/fa";
 
 import { Playlist, SunoSong } from "@/types";
-import MediaItem from "./MediaItem";
-import Slider from "./Slider";
-import SeekBar from "./Seekbar";
+import MediaItem from "../MediaItem";
+import Slider from "../Slider";
+import SeekBar from "../Seekbar";
 import useAudioPlayer from "@/hooks/useAudioPlayer";
 import { useEffect } from "react";
+
+import LikeButton from "../LikeButton";
 import SunoMobilePlayerContent from "./SunoMobilePlayerContent";
-import LikeButton from "./LikeButton";
 
 interface SunoPlayerContentProps {
   song: SunoSong;

@@ -7,7 +7,7 @@ import useSubscribeModal from "@/hooks/useSubscribeModal";
 import { postData } from "@/libs/helpers";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { CircleSlash, CreditCard, User, Cookie } from "lucide-react";
-import SunoCookieInput from "@/components/SunoCookieInput";
+import SunoCookieInput from "@/components/Suno/SunoCookieInput";
 
 const AccountContent = () => {
   const router = useRouter();

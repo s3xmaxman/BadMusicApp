@@ -102,8 +102,8 @@ export const MyUserContextProvider = (props: Props) => {
       // 初回のクレジット情報取得
       fetchCredits();
 
-      // 10分ごとにクレジット情報を更新
-      const intervalId = setInterval(fetchCredits, 10 * 60 * 1000);
+      // 30分ごとにクレジット情報を更新
+      const intervalId = setInterval(fetchCredits, 10 * 60 * 3000);
 
       // クリーンアップ関数
       return () => clearInterval(intervalId);

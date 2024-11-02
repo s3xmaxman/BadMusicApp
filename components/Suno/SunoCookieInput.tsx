@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
 import { useUser } from "@/hooks/useUser";
-import Button from "./Button";
+import Button from "../Button";
 import { toast } from "react-hot-toast";
-import Input from "./Input";
+import Input from "../Input";
 import {
   AlertDialog,
   AlertDialogAction,

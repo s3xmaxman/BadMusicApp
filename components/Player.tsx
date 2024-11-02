@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import PlayerContent from "./PlayerContent";
 import MobileTabs from "./Mobile/MobileTabs";
 import { Playlist, Song, SunoSong } from "@/types";
-import SunoPlayerContent from "./SunoPlayerContnet";
+import SunoPlayerContent from "./Suno/SunoPlayerContnet";
 import useGetSunoSongById from "@/hooks/useGetSunoSongById";
 import useMobilePlayer from "@/hooks/useMobilePlayer";
 

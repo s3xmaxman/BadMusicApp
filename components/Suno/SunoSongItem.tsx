@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { downloadFile } from "@/libs/helpers";
-import PreviewDownloadModal from "./Modals/DownloadPreviewModal";
+import PreviewDownloadModal from "../Modals/DownloadPreviewModal";
 import { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import useMobilePlayer from "@/hooks/useMobilePlayer";
