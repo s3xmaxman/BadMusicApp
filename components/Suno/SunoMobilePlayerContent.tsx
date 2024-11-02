@@ -113,7 +113,7 @@ const SunoMobilePlayerContent = ({
                   {song.author}
                 </p>
                 <div className="flex flex-wrap mb-2 mt-2">
-                  {song.tags?.split("," || ", ")?.map((tag) => (
+                  {song.tags?.split(/,\s*/).map((tag) => (
                     <Link
                       key={tag}
                       href={`/tag/${tag}`}

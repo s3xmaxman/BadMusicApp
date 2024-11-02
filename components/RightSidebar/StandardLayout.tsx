@@ -134,8 +134,8 @@ const StandardLayout = memo(
 
                   <div className="flex flex-wrap justify-center md:justify-end gap-2">
                     {(isSunoSong
-                      ? song.tags?.split("," || ", ")
-                      : song.genre?.split("," || ", ")
+                      ? song.tags?.split(/,\s*/)
+                      : song.genre?.split(/,\s*/)
                     )?.map((tag) => (
                       <Link
                         key={tag}
