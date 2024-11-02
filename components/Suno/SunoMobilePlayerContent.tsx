@@ -103,18 +103,25 @@ const SunoMobilePlayerContent = ({
           <div className="space-y-6">
             <div className="flex justify-between items-end">
               <div className="max-w-[70%]">
-                <h1 className="text-4xl font-bold text-white drop-shadow-lg truncate">
+                <Link
+                  href={`/suno-songs/${song.id}`}
+                  className="text-4xl font-bold text-white drop-shadow-lg truncate"
+                >
                   {song.title}
-                </h1>
+                </Link>
                 <p className="text-lg text-gray-200 drop-shadow-lg mt-1 truncate">
                   {song.author}
                 </p>
                 <div className="flex flex-wrap mb-2 mt-2">
-                  {song.tags && (
-                    <span className="mr-2 text-sm bg-white/20 text-white px-2 py-1 rounded-full">
-                      #{song.tags}
-                    </span>
-                  )}
+                  {song.tags?.split("," || ", ")?.map((tag) => (
+                    <Link
+                      key={tag}
+                      href={`/tag/${tag}`}
+                      className="px-2 py-1 text-sm rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-colors"
+                    >
+                      {tag}
+                    </Link>
+                  ))}
                 </div>
               </div>
               <MobileStyleIcons

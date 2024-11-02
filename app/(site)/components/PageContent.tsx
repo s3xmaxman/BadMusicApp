@@ -4,8 +4,6 @@ import SongItem from "@/components/SongItem";
 import SunoSongItem from "@/components/Suno/SunoSongItem";
 import useOnPlay from "@/hooks/useOnPlay";
 import { Song, SunoSong } from "@/types";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Music2, Mic2 } from "lucide-react";
 import useOnPlaySuno from "@/hooks/useOnPlaySuno";
 import { useState } from "react";
 import usePlayer from "@/hooks/usePlayer";
