@@ -139,10 +139,10 @@ const StandardLayout = memo(
                     )?.map((tag) => (
                       <Link
                         key={tag}
-                        href={`/genre/${tag}`}
+                        href={isSunoSong ? `/tag/${tag}` : `/genre/${tag}`}
                         className="px-2 py-1 text-sm rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-colors"
                       >
-                        #{tag}
+                        {tag}
                       </Link>
                     ))}
                   </div>

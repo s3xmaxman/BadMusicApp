@@ -210,7 +210,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
           {genres.map((genre) => (
             <Link href={`/genre/${encodeURIComponent(genre)}`} key={genre}>
               <span className="px-4 py-2 rounded-full text-sm bg-white/10 hover:bg-white/20 transition-colors">
-                #{genre}
+                {genre}
               </span>
             </Link>
           ))}

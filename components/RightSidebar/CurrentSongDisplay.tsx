@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { CiPlay1 } from "react-icons/ci";
 import { AiOutlineHeart } from "react-icons/ai";
 import { IoMdSwap } from "react-icons/io";
+import { BiChevronRight } from "react-icons/bi";
 import { Song, SunoSong } from "@/types";
 
 interface CurrentSongDisplayProps {
@@ -15,10 +16,20 @@ interface CurrentSongDisplayProps {
 }
 
 const ON_ANIMATION = 500;
+const MAX_VISIBLE_TAGS = 3;
 
 const CurrentSongDisplay: React.FC<CurrentSongDisplayProps> = React.memo(
   ({ song, videoPath, imagePath, toggleLayout }) => {
     const isSunoSong = "audio_url" in song;
+    const [showAllTags, setShowAllTags] = useState(false);
+
+    const tags = isSunoSong
+      ? song.tags?.split(", ") || []
+      : song.genre?.split(", ") || [];
+
+    const visibleTags = showAllTags ? tags : tags.slice(0, MAX_VISIBLE_TAGS);
+    const hasMoreTags = tags.length > MAX_VISIBLE_TAGS;
+
     return (
       <div className="relative w-full h-full overflow-hidden">
         {(isSunoSong ? song.video_url : song.video_path) ? (
@@ -59,27 +70,33 @@ const CurrentSongDisplay: React.FC<CurrentSongDisplayProps> = React.memo(
           >
             <Link
               className="cursor-pointer hover:underline"
-              // TODO: sunoへのリンクを追加
-              href={`/songs/${song.id}`}
+              href={isSunoSong ? `/suno-songs/${song.id}` : `/song/${song.id}`}
             >
               {song.title}
             </Link>
           </motion.h1>
           <p className="text-gray-300 text-xl mb-4">{song.author}</p>
-          <div className="flex items-center justify-between">
-            <p className="text-gray-400 text-lg">
-              {isSunoSong
-                ? song.tags?.split(", ").map((g) => (
-                    <Link key={g} href={`/genre/${g}`}>
-                      #{g}
-                    </Link>
-                  ))
-                : song.genre?.split(", ").map((g) => (
-                    <Link key={g} href={`/genre/${g}`}>
-                      #{g}
-                    </Link>
-                  ))}
-            </p>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-wrap items-center gap-2 text-gray-400 text-lg max-w-[70%]">
+              {visibleTags.map((tag, index) => (
+                <Link
+                  key={tag}
+                  href={isSunoSong ? `/tag/${tag}` : `/genre/${tag}`}
+                  className="bg-white/10 px-3 py-1 rounded-full hover:bg-white/20 transition-colors"
+                >
+                  {tag}
+                </Link>
+              ))}
+              {hasMoreTags && !showAllTags && (
+                <button
+                  onClick={() => setShowAllTags(true)}
+                  className="flex items-center bg-white/10 px-3 py-1 rounded-full hover:bg-white/20 transition-colors"
+                >
+                  +{tags.length - MAX_VISIBLE_TAGS}
+                  <BiChevronRight className="ml-1" />
+                </button>
+              )}
+            </div>
             <div className="flex items-center gap-4">
               <div className="flex items-center">
                 <CiPlay1 size={24} className="text-white mr-1" />
@@ -87,9 +104,7 @@ const CurrentSongDisplay: React.FC<CurrentSongDisplayProps> = React.memo(
               </div>
               <div className="flex items-center">
                 <AiOutlineHeart size={24} className="text-white mr-1" />
-                <span className="text-white text-lg">
-                  {isSunoSong ? null : song.like_count}
-                </span>
+                <span className="text-white text-lg">{song.like_count}</span>
               </div>
             </div>
           </div>

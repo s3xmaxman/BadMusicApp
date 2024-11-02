@@ -223,9 +223,9 @@ const SunoSongContent: React.FC<SunoSongContentProps> = ({ sunoSongId }) => {
         {/* Genre Tags */}
         <div className="flex flex-wrap gap-2 mb-12">
           {song.tags?.split(",").map((tag) => (
-            <Link href={`/genre/${encodeURIComponent(tag.trim())}`} key={tag}>
+            <Link href={`/tag/${encodeURIComponent(tag.trim())}`} key={tag}>
               <span className="px-4 py-2 rounded-full text-sm bg-white/10 hover:bg-white/20 transition-colors">
-                #{tag.trim()}
+                {tag.trim()}
               </span>
             </Link>
           ))}
