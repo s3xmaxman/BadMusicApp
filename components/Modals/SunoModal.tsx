@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 const SunoModal: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isCustom, setIsCustom] = useState(false);
-  const { user } = useUser();
+  const { user, creditsLeft } = useUser();
   const sunoModal = useSunoModal();
   const supabaseClient = useSupabaseClient();
   const router = useRouter();
@@ -251,21 +251,18 @@ const SunoModal: React.FC = () => {
           <Label htmlFor="wait">生成を待つ</Label>
         </div>
 
-        <div className="flex justify-end space-x-2 ">
-          <Button
-            disabled={isLoading}
-            onClick={sunoModal.onClose}
-            className="hover:underline"
-          >
-            キャンセル
-          </Button>
-          <Button
-            disabled={isLoading}
-            onClick={onSubmit}
-            className="hover:underline"
-          >
-            {isLoading ? "生成中..." : "作成"}
-          </Button>
+        <div className="flex justify-between items-center">
+          <div className="text-sm text-muted-foreground">
+            残りクレジット: {creditsLeft}
+          </div>
+          <div className="flex space-x-2">
+            <Button disabled={isLoading} onClick={sunoModal.onClose}>
+              キャンセル
+            </Button>
+            <Button disabled={isLoading} onClick={onSubmit}>
+              {isLoading ? "生成中..." : "作成"}
+            </Button>
+          </div>
         </div>
       </div>
     </Modal>
