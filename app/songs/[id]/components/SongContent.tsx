@@ -45,7 +45,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [primaryColor, setPrimaryColor] = useState(getRandomColor());
   const [secondaryColor, setSecondaryColor] = useState(getRandomColor());
-
+  const [audioWaveformKey, setAudioWaveformKey] = useState(0);
   const genres = useMemo(
     () => song?.genre?.split(",").map((g) => g.trim()) || [],
     [song?.genre]
@@ -65,6 +65,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
 
   const handlePlaybackEnded = () => {
     setIsPlaying(false);
+    setAudioWaveformKey((prevKey) => prevKey + 1);
   };
 
   // 曲の長さを取得
@@ -101,6 +102,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
           priority
         />
         <AudioWaveform
+          key={audioWaveformKey}
           audioUrl={fileUrl!}
           isPlaying={isPlaying}
           onPlayPause={() => setIsPlaying(!isPlaying)}

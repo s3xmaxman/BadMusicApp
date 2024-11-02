@@ -25,6 +25,7 @@ import { SunoSong } from "@/types";
 import PreviewDownloadModal from "@/components/Modals/DownloadPreviewModal";
 import { MdLyrics } from "react-icons/md";
 import { getRandomColor } from "@/libs/utils";
+import { set } from "react-hook-form";
 
 interface SunoSongContentProps {
   sunoSongId: string;
@@ -41,6 +42,7 @@ const SunoSongContent: React.FC<SunoSongContentProps> = ({ sunoSongId }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [primaryColor, setPrimaryColor] = useState(getRandomColor());
   const [secondaryColor, setSecondaryColor] = useState(getRandomColor());
+  const [audioWaveformKey, setAudioWaveformKey] = useState(0);
 
   useEffect(() => {
     if (song?.audio_url) {
@@ -63,6 +65,7 @@ const SunoSongContent: React.FC<SunoSongContentProps> = ({ sunoSongId }) => {
   };
   const handlePlaybackEnded = () => {
     setIsPlaying(false);
+    setAudioWaveformKey((prevKey) => prevKey + 1);
   };
 
   const handleDownloadClick = async () => {
@@ -99,6 +102,7 @@ const SunoSongContent: React.FC<SunoSongContentProps> = ({ sunoSongId }) => {
         {/* Lower Section (Waveform) */}
 
         <AudioWaveform
+          key={audioWaveformKey}
           audioUrl={song.audio_url}
           isPlaying={isPlaying}
           onPlayPause={() => setIsPlaying(!isPlaying)}
