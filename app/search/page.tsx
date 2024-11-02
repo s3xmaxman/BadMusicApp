@@ -9,9 +9,8 @@ interface SearchProps {
 
 export const revalidate = 0;
 
-// TODO:バグがある
 const Search = async ({ searchParams }: SearchProps) => {
-  const songs = await getSongsByTitle(searchParams.title);
+  const { songs, sunoSongs } = await getSongsByTitle(searchParams.title);
 
   return (
     <div className=" bg-[#0d0d0d] rounded-lg w-full h-full overflow-hidden overflow-y-auto custom-scrollbar">
@@ -21,7 +20,7 @@ const Search = async ({ searchParams }: SearchProps) => {
           <SearchInput />
         </div>
       </Header>
-      <SearchContent songs={songs.songs} sunoSongs={songs.sunoSongs} />
+      <SearchContent songs={songs} sunoSongs={sunoSongs} />
     </div>
   );
 };

@@ -55,7 +55,7 @@ const YouTubePlayerContent: React.FC<YouTubePlayerContentProps> = memo(
     };
 
     return (
-      <Card className="w-full max-w-4xl mx-auto bg-[#0d0d0d] border-neutral-800/50 rounded-xl shadow-lg">
+      <Card className="w-full max-w-4xl mx-auto bg-[#0d0d0d]  border-neutral-800/50 rounded-xl shadow-lg">
         <CardContent className="p-6">
           <div className="space-y-6">
             <div className="flex items-center justify-between">

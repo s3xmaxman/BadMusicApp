@@ -25,11 +25,7 @@ const RightSidebar = () => {
   const nextImagePath = useLoadImage(nextTrack!);
 
   useEffect(() => {
-    if (song && song.video_path) {
-      setIsFullScreenLayout(true);
-    } else {
-      setIsFullScreenLayout(false);
-    }
+    setIsFullScreenLayout(!!(song?.video_path && !player.isSuno));
   }, [song, sunoSong]);
 
   const toggleLayout = useCallback(() => {
