@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Header from "@/components/Header";
 import LikedContent from "@/app/liked/components/LikedContent";
-import { Playlist, Song } from "@/types";
+import { Playlist, Song, SunoSong } from "@/types";
 import DeletePlaylistButton from "@/components/DeletePlaylistButton";
 import useLoadImage from "@/hooks/useLoadImage";
 import { useEffect, useState } from "react";
@@ -11,7 +11,7 @@ interface PlaylistPageContentProps {
   playlistId: string;
   playlistTitle: string;
   imageUrl?: string;
-  songs: Song[];
+  songs: any;
 }
 
 const PlaylistPageContent: React.FC<PlaylistPageContentProps> = ({

@@ -4,7 +4,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Playlist } from "@/types";
+import { Playlist, PlaylistSong } from "@/types";
 import { RiPlayListAddFill } from "react-icons/ri";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
@@ -17,8 +17,17 @@ import useGetSongById from "@/hooks/useGetSongById";
 interface PlaylistMenuProps {
   playlists: Playlist[];
   songId: string;
+  songType: "regular" | "suno";
   children?: React.ReactNode;
 }
+
+type PlaylistSongData = {
+  playlist_id: string;
+  user_id: string;
+  song_type: "regular" | "suno";
+  song_id?: string;
+  suno_song_id?: string;
+};
 
 // TODO: SunoSongも追加する
 /**
@@ -30,6 +39,7 @@ interface PlaylistMenuProps {
 const AddPlaylist: React.FC<PlaylistMenuProps> = ({
   playlists,
   songId,
+  songType = "regular",
   children,
 }) => {
   const { supabaseClient } = useSessionContext();
@@ -60,8 +70,9 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({
       const { data, error } = await supabaseClient
         .from("playlist_songs")
         .select("*")
-        .eq("song_id", songId)
-        .eq("user_id", user.id);
+        .eq(songType === "regular" ? "song_id" : "suno_song_id", songId)
+        .eq("user_id", user.id)
+        .eq("song_type", songType);
 
       if (error) {
         console.error("Error fetching added songs:", error);
@@ -80,7 +91,7 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({
     };
 
     fetchAddedSongs();
-  }, [songId, playlists, supabaseClient, user?.id]);
+  }, [songId, playlists, supabaseClient, user?.id, songType]);
 
   /**
    * プレイリストに曲をを追加する
@@ -108,11 +119,16 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({
       return;
     }
 
-    const { error } = await supabaseClient.from("playlist_songs").insert({
+    const playlistSongData: PlaylistSongData = {
       playlist_id: playlistId,
-      song_id: songId,
       user_id: user.id,
-    });
+      song_type: songType,
+      ...(songType === "suno" ? { suno_song_id: songId } : { song_id: songId }),
+    };
+
+    const { error } = await supabaseClient
+      .from("playlist_songs")
+      .insert(playlistSongData);
 
     if (error) {
       console.error("Error adding song to playlist:", error);
@@ -121,6 +137,7 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({
       setIsAdded((prev) => ({ ...prev, [playlistId]: true }));
       toast.success("プレイリストに曲を追加しました");
 
+      // TODO: SUNOの画像にも対応する
       if (playlistData.length === 0 && song?.image_path) {
         const { error: updateError } = await supabaseClient
           .from("playlists")

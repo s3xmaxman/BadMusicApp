@@ -47,8 +47,7 @@ const DeletePlaylistButton: React.FC<DeletePlaylistButtonProps> = ({
         .eq("id", playlistId)
         .eq("user_id", session.user.id);
 
-      // 削除後、プレイリスト一覧に遷移するなどの処理を追加
-      router.push("/playlist");
+      router.push("/playlists");
       router.refresh();
     } catch (error: any) {
       toast.error("Error deleting playlist:", error);

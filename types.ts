@@ -105,12 +105,14 @@ export interface Playlist {
   user_id: string;
   image_path?: string;
   title: string;
-  songs?: Song[];
+  songs?: any[];
 }
 
 export interface PlaylistSong {
   id: string;
   user_id: string;
   playlist_id: string;
-  song_id: string;
+  song_id?: string;
+  suno_song_id?: string;
+  song_type: SongType;
 }

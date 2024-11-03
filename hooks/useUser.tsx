@@ -6,7 +6,6 @@ import {
   User,
 } from "@supabase/auth-helpers-react";
 
-// Sunoクレジット情報の型定義
 interface SunoCredits {
   credits_left: number;
   period: string;
@@ -21,7 +20,7 @@ type UserContextType = {
   isLoading: boolean;
   subscription: Subscription | null;
   creditsLeft: number | null;
-  fetchCredits: () => Promise<void>;
+  fetchCredits: () => void;
 };
 
 export const UserContext = createContext<UserContextType | undefined>(

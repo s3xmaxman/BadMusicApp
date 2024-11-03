@@ -1,6 +1,9 @@
 import getPlaylistSongs from "@/actions/getPlaylistSongs";
 import PlaylistPageContent from "./components/PlaylistPageContent";
 import getPlaylistsImage from "@/actions/getPlaylistsImage";
+import { Song, SunoSong } from "@/types";
+
+type CombinedSong = Song & SunoSong & { songType: "regular" | "suno" };
 
 const PlaylistPage = async ({
   params: { id: playlistId },
@@ -17,7 +20,7 @@ const PlaylistPage = async ({
     <PlaylistPageContent
       playlistId={playlistId}
       playlistTitle={playlistTitle}
-      songs={songs}
+      songs={songs as CombinedSong[]}
       imageUrl={imageUrl}
     />
   );

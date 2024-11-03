@@ -13,6 +13,7 @@ import { useEffect } from "react";
 
 import LikeButton from "../LikeButton";
 import SunoMobilePlayerContent from "./SunoMobilePlayerContent";
+import AddPlaylist from "../AddPlaylist";
 
 interface SunoPlayerContentProps {
   song: SunoSong;
@@ -131,6 +132,11 @@ const SunoPlayerContent: React.FC<SunoPlayerContentProps> = ({
 
         <div className="hidden md:flex w-full justify-end pr-2">
           <div className="flex items-center gap-x-2 w-full md:w-[170px] lg:w-[200px]">
+            <AddPlaylist
+              playlists={playlists}
+              songId={song.id}
+              songType="suno"
+            />
             <LikeButton songId={song.id} songType="suno" />
             <div className="mx-1" />
             <VolumeIcon

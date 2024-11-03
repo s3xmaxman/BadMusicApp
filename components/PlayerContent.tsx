@@ -137,7 +137,11 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
 
         <div className="hidden md:flex w-full justify-end pr-2">
           <div className="flex items-center gap-x-2 w-full md:w-[170px] lg:w-[200px]">
-            <AddPlaylist playlists={playlists} songId={song.id} />
+            <AddPlaylist
+              playlists={playlists}
+              songId={song.id}
+              songType="regular"
+            />
             <LikeButton songId={song.id} songType="regular" />
             <div className="mx-1" />
             <VolumeIcon
