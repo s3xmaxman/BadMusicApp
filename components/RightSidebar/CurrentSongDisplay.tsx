@@ -7,6 +7,7 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { IoMdSwap } from "react-icons/io";
 import { BiChevronRight } from "react-icons/bi";
 import { Song, SunoSong } from "@/types";
+import { splitTags } from "@/libs/utils";
 
 interface CurrentSongDisplayProps {
   song: Song | SunoSong;
@@ -23,11 +24,12 @@ const CurrentSongDisplay: React.FC<CurrentSongDisplayProps> = React.memo(
     const isSunoSong = "audio_url" in song;
     const [showAllTags, setShowAllTags] = useState(false);
 
-    const tags = isSunoSong
-      ? song.tags?.split(", ") || []
-      : song.genre?.split(", ") || [];
+    const tags = isSunoSong ? splitTags(song.tags) : splitTags(song.genre);
 
-    const visibleTags = showAllTags ? tags : tags.slice(0, MAX_VISIBLE_TAGS);
+    const uniqueTags = Array.from(new Set(tags));
+    const visibleTags = showAllTags
+      ? uniqueTags
+      : uniqueTags.slice(0, MAX_VISIBLE_TAGS);
     const hasMoreTags = tags.length > MAX_VISIBLE_TAGS;
 
     return (

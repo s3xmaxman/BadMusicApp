@@ -53,3 +53,7 @@ export const getRandomColor = () => {
   ];
   return colors[Math.floor(Math.random() * colors.length)];
 };
+
+export const splitTags = (tagString?: string): string[] => {
+  return tagString?.split(/\s*,\s*/).filter(Boolean) || [];
+};

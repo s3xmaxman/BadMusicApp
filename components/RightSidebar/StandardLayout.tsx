@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -16,6 +16,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion";
+import { BiChevronRight } from "react-icons/bi";
+import { splitTags } from "@/libs/utils";
 
 interface StandardLayoutProps {
   song: Song | SunoSong;
@@ -26,6 +28,7 @@ interface StandardLayoutProps {
 }
 
 const ON_ANIMATION = 500;
+const MAX_VISIBLE_TAGS = 3;
 
 const StandardLayout = memo(
   ({
@@ -36,6 +39,15 @@ const StandardLayout = memo(
     toggleLayout,
   }: StandardLayoutProps) => {
     const isSunoSong = "audio_url" in song;
+
+    const [showAllTags, setShowAllTags] = useState(false);
+    const tags = isSunoSong ? splitTags(song.tags) : splitTags(song.genre);
+
+    const uniqueTags = Array.from(new Set(tags));
+    const visibleTags = showAllTags
+      ? uniqueTags
+      : uniqueTags.slice(0, MAX_VISIBLE_TAGS);
+    const hasMoreTags = tags.length > MAX_VISIBLE_TAGS;
 
     return (
       <div className="relative h-[calc(100vh-6rem)] bg-gradient-to-br from-zinc-900 via-black to-zinc-900 text-white rounded-xl">
@@ -133,18 +145,24 @@ const StandardLayout = memo(
                   </div>
 
                   <div className="flex flex-wrap justify-center md:justify-end gap-2">
-                    {(isSunoSong
-                      ? song.tags?.split(/,\s*/)
-                      : song.genre?.split(/,\s*/)
-                    )?.map((tag) => (
+                    {visibleTags.map((tag, index) => (
                       <Link
                         key={tag}
                         href={isSunoSong ? `/tag/${tag}` : `/genre/${tag}`}
-                        className="px-2 py-1 text-sm rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-colors"
+                        className="bg-white/10 px-3 py-1 rounded-full hover:bg-white/20 transition-colors"
                       >
                         {tag}
                       </Link>
                     ))}
+                    {hasMoreTags && !showAllTags && (
+                      <button
+                        onClick={() => setShowAllTags(true)}
+                        className="flex items-center bg-white/10 px-3 py-1 rounded-full hover:bg-white/20 transition-colors"
+                      >
+                        +{tags.length - MAX_VISIBLE_TAGS}
+                        <BiChevronRight className="ml-1" />
+                      </button>
+                    )}
                   </div>
                 </div>
               </motion.div>
