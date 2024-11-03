@@ -14,27 +14,24 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import useGetSunoSongById from "@/hooks/useGetSunoSongById";
-import useOnPlaySuno from "@/hooks/useOnPlaySuno";
 import { useUser } from "@/hooks/useUser";
 import { downloadFile } from "@/libs/helpers";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import AudioWaveform from "@/components/AudioWaveform";
-import { SunoSong } from "@/types";
 import PreviewDownloadModal from "@/components/Modals/DownloadPreviewModal";
 import { MdLyrics } from "react-icons/md";
 import { getRandomColor } from "@/libs/utils";
-import { set } from "react-hook-form";
 
 interface SunoSongContentProps {
   sunoSongId: string;
 }
 
+// TODO:　モーダル表示やタブの切替で曲がポーズしないように修正する
 const SunoSongContent: React.FC<SunoSongContentProps> = ({ sunoSongId }) => {
   const { sunoSong: song } = useGetSunoSongById(sunoSongId);
   const { user } = useUser();
-  const onPlay = useOnPlaySuno([song as SunoSong]);
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<"lyrics" | "similar">("lyrics");
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);

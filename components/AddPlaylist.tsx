@@ -19,6 +19,8 @@ interface PlaylistMenuProps {
   songId: string;
   children?: React.ReactNode;
 }
+
+// TODO: SunoSongも追加する
 /**
  * プレイリストに追加するドロップダウンメニューコンポーネント
  *

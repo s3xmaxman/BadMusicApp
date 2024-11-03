@@ -1,8 +1,5 @@
 import { Song } from "@/types";
-import {
-  createClientComponentClient,
-  createServerComponentClient,
-} from "@supabase/auth-helpers-nextjs";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
 const getPlaylistSongs = async (playlistId: string): Promise<Song[]> => {
@@ -24,11 +21,9 @@ const getPlaylistSongs = async (playlistId: string): Promise<Song[]> => {
 
   if (error) {
     console.error("Error fetching playlist songs:", error);
-    // 必要であれば、エラー処理を追加
     return [];
   }
 
-  // データがなければ空の配列を返す
   if (!data) return [];
 
   // 取得したデータから曲の情報のみを新しい配列にして返す

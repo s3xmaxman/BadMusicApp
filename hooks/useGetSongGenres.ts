@@ -9,13 +9,6 @@ const useGetSongsByGenres = (genres: string[], excludeId?: string) => {
 
   useEffect(() => {
     const fetchSongs = async () => {
-      console.log(
-        "useEffect called with genres:",
-        genres,
-        "and excludeId:",
-        excludeId
-      );
-
       setIsLoading(true);
 
       let query = supabaseClient.from("songs").select("*");
