@@ -7,6 +7,7 @@ interface ModalProps {
   onChange: (open: boolean) => void;
   title: string;
   description: string;
+  disabled?: boolean;
   children: React.ReactNode;
 }
 
@@ -15,6 +16,7 @@ const Modal: React.FC<ModalProps> = ({
   onChange,
   title,
   description,
+  disabled,
   children,
 }) => {
   return (
@@ -84,7 +86,7 @@ const Modal: React.FC<ModalProps> = ({
             </Dialog.Description>
           </div>
           <div className="relative">{children}</div>
-          <Dialog.Close asChild>
+          <Dialog.Close asChild disabled={disabled}>
             <button
               className="
                 absolute right-6 top-6

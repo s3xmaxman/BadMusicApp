@@ -21,6 +21,7 @@ type UserContextType = {
   isLoading: boolean;
   subscription: Subscription | null;
   creditsLeft: number | null;
+  fetchCredits: () => Promise<void>;
 };
 
 export const UserContext = createContext<UserContextType | undefined>(
@@ -117,6 +118,7 @@ export const MyUserContextProvider = (props: Props) => {
     isLoading: isLoadingUser || isLoadingData,
     subscription,
     creditsLeft,
+    fetchCredits,
   };
 
   return <UserContext.Provider value={value} {...props} />;

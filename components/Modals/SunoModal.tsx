@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 const SunoModal: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isCustom, setIsCustom] = useState(false);
-  const { user, creditsLeft } = useUser();
+  const { user, creditsLeft, fetchCredits } = useUser();
   const sunoModal = useSunoModal();
   const supabaseClient = useSupabaseClient();
   const router = useRouter();
@@ -130,6 +130,10 @@ const SunoModal: React.FC = () => {
         }
       }
 
+      if (songs) {
+        await fetchCredits();
+      }
+
       router.refresh();
       setIsLoading(false);
       toast.success("音楽を生成しました！");
@@ -148,6 +152,7 @@ const SunoModal: React.FC = () => {
       description="AIを使ってカスタムソングを作成します"
       isOpen={sunoModal.isOpen}
       onChange={sunoModal.onClose}
+      disabled={isLoading}
     >
       <div className="space-y-4">
         <div className="flex items-center space-x-2 mb-4">
