@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useCallback } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -5,12 +6,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Playlist } from "@/types";
-import { RiPlayListAddFill } from "react-icons/ri";
-import { useState, useEffect } from "react";
+import { RiPlayListAddFill, RiPlayListFill } from "react-icons/ri";
 import toast from "react-hot-toast";
 import { useUser } from "@/hooks/useUser";
 import useAuthModal from "@/hooks/useAuthModal";
-import { RiPlayListFill } from "react-icons/ri";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import useGetSongById from "@/hooks/useGetSongById";
 import useGetSunoSongById from "@/hooks/useGetSunoSongById";
@@ -31,10 +30,12 @@ type PlaylistSongData = {
 };
 
 /**
- * プレイリストに追加するドロップダウンメニューコンポーネント
+ * プレイリストに曲を追加するドロップダウンメニューコンポーネント
  *
  * @param playlists プレイリストの配列
  * @param songId 曲のID
+ * @param songType 曲のタイプ ("regular" か "suno")
+ * @param children ドロップダウンのトリガーとなる要素
  */
 const AddPlaylist: React.FC<PlaylistMenuProps> = ({
   playlists,
@@ -44,79 +45,71 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({
 }) => {
   const { supabaseClient } = useSessionContext();
   const { user } = useUser();
-  /**
-   * プレイリストに曲が追加済みかどうかを保持する状態
-   *
-   * @type {Record<string, boolean>}
-   */
-  const [isAdded, setIsAdded] = useState<Record<string, boolean>>({});
   const authModal = useAuthModal();
   const { song } = useGetSongById(songId);
   const { sunoSong } = useGetSunoSongById(songId);
 
-  /**
-   * プレイリストに曲が追加済みかどうかを判定する
-   *
-   * @param songId 曲のID
-   * @param playlists プレイリストの配列
-   * @param supabaseClient Supabaseクライアント
-   * @param userId ユーザーID
-   */
-  useEffect(() => {
-    const fetchAddedSongs = async () => {
-      if (!user?.id) {
-        return;
-      }
+  const [isAdded, setIsAdded] = useState<Record<string, boolean>>({});
 
+  /**
+   * プレイリストに曲が追加済みかどうかを取得し、状態を更新する
+   */
+  const fetchAddedSongs = useCallback(async () => {
+    if (!user?.id) {
+      setIsAdded({});
+      return;
+    }
+
+    try {
+      const column = songType === "regular" ? "song_id" : "suno_song_id";
       const { data, error } = await supabaseClient
         .from("playlist_songs")
-        .select("*")
-        .eq(songType === "regular" ? "song_id" : "suno_song_id", songId)
+        .select("playlist_id")
+        .eq(column, songId)
         .eq("user_id", user.id)
         .eq("song_type", songType);
 
       if (error) {
-        console.error("Error fetching added songs:", error);
+        console.error("プレイリストに追加済みの曲の取得エラー:", error);
         return;
       }
 
-      // データから、各プレイリストに曲が追加済みかどうかを判定
       const addedStatus: Record<string, boolean> = {};
-      playlists.forEach((playlist) => {
-        // ユーザーが作成したプレイリストかつ、データに含まれている場合に追加済みと判定
-        addedStatus[playlist.id] =
-          playlist.user_id === user.id &&
-          data.some((item) => item.playlist_id === playlist.id);
-      });
-      setIsAdded(addedStatus);
-    };
 
+      playlists.forEach((playlist) => {
+        // プレイリストがユーザー所有の場合のみ追加済みを判定
+        if (playlist.user_id !== user.id) {
+          addedStatus[playlist.id] = false;
+          return;
+        }
+        addedStatus[playlist.id] = data.some(
+          (item) => item.playlist_id === playlist.id
+        );
+      });
+
+      setIsAdded(addedStatus);
+    } catch (error) {
+      console.error("プレイリストの追加状況取得中にエラーが発生:", error);
+    }
+  }, [user?.id, songId, songType, supabaseClient, playlists]);
+
+  useEffect(() => {
     fetchAddedSongs();
-  }, [songId, playlists, supabaseClient, user?.id, songType]);
+  }, [fetchAddedSongs]);
 
   /**
-   * プレイリストに曲をを追加する
+   * プレイリストに曲を追加するハンドラー
    *
-   * @param playlistId プレイリストのID
+   * @param playlistId 追加先のプレイリストID
    */
   const handleAddToPlaylist = async (playlistId: string) => {
     if (!user) {
-      console.log("User not found, opening auth modal");
-      return authModal.onOpen();
+      authModal.onOpen();
+      return;
     }
 
     if (isAdded[playlistId]) {
       toast.error("既にプレイリストに追加されています。");
-      return;
-    }
-
-    const { data: playlistData, error: playlistError } = await supabaseClient
-      .from("playlist_songs")
-      .select("*")
-      .eq("playlist_id", playlistId);
-
-    if (playlistError) {
-      console.error("Error fetching playlist songs:", playlistError);
       return;
     }
 
@@ -127,31 +120,39 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({
       ...(songType === "suno" ? { suno_song_id: songId } : { song_id: songId }),
     };
 
-    const { error } = await supabaseClient
-      .from("playlist_songs")
-      .insert(playlistSongData);
+    try {
+      const { error } = await supabaseClient
+        .from("playlist_songs")
+        .insert(playlistSongData);
 
-    if (error) {
-      console.error("Error adding song to playlist:", error);
-      toast.error("プレイリストに曲を追加できませんでした");
-    } else {
+      if (error) {
+        console.error("プレイリストへの曲追加エラー:", error);
+        toast.error("プレイリストに曲を追加できませんでした。");
+        return;
+      }
+
       setIsAdded((prev) => ({ ...prev, [playlistId]: true }));
-      toast.success("プレイリストに曲を追加しました");
+      toast.success("プレイリストに曲を追加しました。");
 
-      // TODO: SUNOの画像にも対応する
-      if (
-        (playlistData.length === 0 && song?.image_path) ||
-        sunoSong?.image_url
-      ) {
+      // プレイリストの画像を更新する必要があるか確認
+      const needsImageUpdate =
+        (songType === "regular" && song?.image_path) ||
+        (songType === "suno" && sunoSong?.image_url);
+
+      if (needsImageUpdate) {
+        const imagePath = song?.image_path || sunoSong?.image_url;
         const { error: updateError } = await supabaseClient
           .from("playlists")
-          .update({ image_path: song?.image_path || sunoSong?.image_url })
+          .update({ image_path: imagePath })
           .eq("id", playlistId);
 
         if (updateError) {
-          console.error("Error updating playlist image:", updateError);
+          console.error("プレイリスト画像の更新エラー:", updateError);
         }
       }
+    } catch (error) {
+      console.error("プレイリスト追加中に予期せぬエラーが発生:", error);
+      toast.error("予期せぬエラーが発生しました。");
     }
   };
 
@@ -165,12 +166,13 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({
           <DropdownMenuItem
             key={playlist.id}
             onClick={() => handleAddToPlaylist(playlist.id)}
+            className="flex items-center justify-between"
           >
-            <div className="mr-1">
-              <RiPlayListFill size={15} />
+            <div className="flex items-center">
+              <RiPlayListFill size={15} className="mr-1" />
+              <span>{playlist.title}</span>
             </div>
-            {playlist.title}
-            {isAdded[playlist.id] && " ✓"}
+            {isAdded[playlist.id] && <span className="ml-2">✓</span>}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
