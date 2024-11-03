@@ -1,25 +1,56 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Playlist, Song } from "@/types";
-import { useEffect, useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { Song, Playlist, SunoSong } from "@/types";
 
-const useLoadImages = (data: Song[] | Playlist[]) => {
+const useLoadImages = (data: Playlist[] | SunoSong[] | Song[]) => {
   const supabaseClient = useSupabaseClient();
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [imageUrls, setImageUrls] = useState<(string | null)[]>([]);
 
   useEffect(() => {
+    if (!data.length) {
+      setImageUrls([]);
+      return;
+    }
+
     const fetchImageUrls = async () => {
-      const urls = await Promise.all(
-        data.map(async (data) => {
-          if (!data.image_path) return "";
+      try {
+        const urls = await Promise.all(
+          data.map(async (item) => {
+            if ("image_url" in item && item.image_url) {
+              return item.image_url;
+            }
 
-          const { data: imageData } = await supabaseClient.storage
-            .from("images")
-            .getPublicUrl(data.image_path);
+            if ("image_path" in item && item.image_path) {
+              if (
+                item.image_path.startsWith("http://") ||
+                item.image_path.startsWith("https://")
+              ) {
+                return item.image_path;
+              }
 
-          return imageData.publicUrl;
-        })
-      );
-      setImageUrls(urls);
+              try {
+                const { data: imageData } = await supabaseClient.storage
+                  .from("images")
+                  .getPublicUrl(item.image_path);
+
+                return imageData?.publicUrl || null;
+              } catch (error) {
+                console.error(
+                  `Error loading image for path ${item.image_path}:`,
+                  error
+                );
+                return null;
+              }
+            }
+            return null;
+          })
+        );
+
+        setImageUrls(urls);
+      } catch (error) {
+        console.error("Error loading images:", error);
+        setImageUrls(data.map(() => null));
+      }
     };
 
     fetchImageUrls();

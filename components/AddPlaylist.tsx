@@ -4,7 +4,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Playlist, PlaylistSong } from "@/types";
+import { Playlist } from "@/types";
 import { RiPlayListAddFill } from "react-icons/ri";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
@@ -13,6 +13,7 @@ import useAuthModal from "@/hooks/useAuthModal";
 import { RiPlayListFill } from "react-icons/ri";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import useGetSongById from "@/hooks/useGetSongById";
+import useGetSunoSongById from "@/hooks/useGetSunoSongById";
 
 interface PlaylistMenuProps {
   playlists: Playlist[];
@@ -51,6 +52,7 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({
   const [isAdded, setIsAdded] = useState<Record<string, boolean>>({});
   const authModal = useAuthModal();
   const { song } = useGetSongById(songId);
+  const { sunoSong } = useGetSunoSongById(songId);
 
   /**
    * プレイリストに曲が追加済みかどうかを判定する
@@ -137,10 +139,13 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({
       toast.success("プレイリストに曲を追加しました");
 
       // TODO: SUNOの画像にも対応する
-      if (playlistData.length === 0 && song?.image_path) {
+      if (
+        (playlistData.length === 0 && song?.image_path) ||
+        sunoSong?.image_url
+      ) {
         const { error: updateError } = await supabaseClient
           .from("playlists")
-          .update({ image_path: song.image_path })
+          .update({ image_path: song?.image_path || sunoSong?.image_url })
           .eq("id", playlistId);
 
         if (updateError) {

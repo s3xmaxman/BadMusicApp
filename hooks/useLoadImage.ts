@@ -20,6 +20,14 @@ const useLoadImage = (data: ImageData) => {
         return;
       }
 
+      if (
+        data.image_path?.startsWith("http://") ||
+        data.image_path?.startsWith("https://")
+      ) {
+        setImageUrl(data?.image_path);
+        return;
+      }
+
       const imagePath = "image_path" in data ? data.image_path : null;
 
       if (!imagePath) {

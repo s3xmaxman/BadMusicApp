@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 interface PlaylistPageContentProps {
   playlistId: string;
   playlistTitle: string;
-  imageUrl?: string;
+  imageUrl: string;
   songs: any;
 }
 
