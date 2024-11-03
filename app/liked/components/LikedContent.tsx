@@ -64,7 +64,11 @@ const LikedContent: React.FC<LikedContentProps> = ({ songs, playlistId }) => {
             songType={"song_id" in song ? "suno" : "regular"}
           />
           {playlistId && (
-            <DeletePlaylistSongsBtn songId={song.id} playlistId={playlistId} />
+            <DeletePlaylistSongsBtn
+              songId={song.id}
+              playlistId={playlistId}
+              songType={"song_id" in song ? "suno" : "regular"}
+            />
           )}
         </div>
       ))}

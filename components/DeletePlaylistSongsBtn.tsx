@@ -9,11 +9,13 @@ import { useRouter } from "next/navigation";
 interface DeletePlaylistSongsBtnProps {
   songId: string;
   playlistId: string;
+  songType: "regular" | "suno";
 }
 
 const DeletePlaylistSongsBtn: React.FC<DeletePlaylistSongsBtnProps> = ({
   songId,
   playlistId,
+  songType,
 }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
@@ -41,7 +43,7 @@ const DeletePlaylistSongsBtn: React.FC<DeletePlaylistSongsBtnProps> = ({
         .delete()
         .eq("playlist_id", playlistId)
         .eq("user_id", session.user.id)
-        .eq("song_id", songId);
+        .eq(songType === "regular" ? "song_id" : "suno_song_id", songId);
 
       toast.success("プレイリストから曲が削除されました！");
       router.refresh();

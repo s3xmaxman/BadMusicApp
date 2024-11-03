@@ -29,7 +29,6 @@ type PlaylistSongData = {
   suno_song_id?: string;
 };
 
-// TODO: SunoSongも追加する
 /**
  * プレイリストに追加するドロップダウンメニューコンポーネント
  *
