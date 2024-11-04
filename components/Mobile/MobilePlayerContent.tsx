@@ -129,7 +129,7 @@ const MobilePlayerContent = ({
                         className="mr-2 text-sm bg-white/20 text-white px-2 py-1 rounded-full hover:bg-white/30 transition-colors"
                         href={`/genre/${g}`}
                       >
-                        #{g}
+                        {g}
                       </Link>
                     ))}
                 </div>
