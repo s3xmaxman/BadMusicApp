@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import useAudioWaveStore from "@/hooks/useAudioWave"; // Import the store
+import useAudioWaveStore from "@/hooks/useAudioWave";
 
 interface AudioWaveformProps {
   audioUrl: string;
@@ -25,6 +25,7 @@ const AudioWaveform = ({
   const animationRef = useRef<number>();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [hasPlaybackStarted, setHasPlaybackStarted] = useState(false);
 
   const {
     analyser,
@@ -35,14 +36,22 @@ const AudioWaveform = ({
     play,
     pause,
     initializeAudio,
+    cleanup,
+    setIsEnded,
   } = useAudioWaveStore();
+
+  useEffect(() => {
+    if (isPlaying) {
+      setHasPlaybackStarted(true);
+    }
+  }, [isPlaying]);
 
   useEffect(() => {
     initializeAudio(audioUrl, songId);
     return () => {
-      useAudioWaveStore.getState().cleanup();
+      cleanup();
     };
-  }, [songId, initializeAudio, audioUrl]);
+  }, [songId, initializeAudio, audioUrl, cleanup]);
 
   useEffect(() => {
     if (isPlaying) {
@@ -64,6 +73,16 @@ const AudioWaveform = ({
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
     });
+  };
+
+  const handleExitComplete = async () => {
+    if (isEnded) {
+      cleanup();
+      await initializeAudio(audioUrl, songId);
+
+      setIsEnded(false);
+      setHasPlaybackStarted(false);
+    }
   };
 
   const draw = () => {
@@ -108,7 +127,6 @@ const AudioWaveform = ({
       gradient.addColorStop(0, primaryColor);
       gradient.addColorStop(1, secondaryColor);
 
-      // Upper waveform
       ctx.beginPath();
       ctx.fillStyle = gradient;
       ctx.moveTo(x, centerY - adjustedHeight);
@@ -146,8 +164,8 @@ const AudioWaveform = ({
 
   return (
     <div className="absolute inset-0 bg-black/40 backdrop-blur-sm overflow-hidden">
-      <AnimatePresence mode="wait">
-        {isEnded ? (
+      <AnimatePresence mode="wait" onExitComplete={handleExitComplete}>
+        {isEnded && !hasPlaybackStarted ? (
           <motion.div
             key="image"
             initial={{ opacity: 0, scale: 1.1 }}

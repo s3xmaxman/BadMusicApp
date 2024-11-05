@@ -38,7 +38,6 @@ const SunoSongContent: React.FC<SunoSongContentProps> = ({ sunoSongId }) => {
   const [duration, setDuration] = useState<string>("");
   const [primaryColor, setPrimaryColor] = useState(getRandomColor());
   const [secondaryColor, setSecondaryColor] = useState(getRandomColor());
-  const [audioWaveformKey, setAudioWaveformKey] = useState(0);
 
   const { isPlaying, play, pause, currentSongId, initializeAudio } =
     useAudioWaveStore();
@@ -75,7 +74,6 @@ const SunoSongContent: React.FC<SunoSongContentProps> = ({ sunoSongId }) => {
   };
   const handlePlaybackEnded = () => {
     pause();
-    setAudioWaveformKey((prevKey) => prevKey + 1);
   };
 
   const handleDownloadClick = async () => {
@@ -110,7 +108,6 @@ const SunoSongContent: React.FC<SunoSongContentProps> = ({ sunoSongId }) => {
           priority
         />
         <AudioWaveform
-          key={audioWaveformKey}
           audioUrl={song.audio_url}
           isPlaying={isPlaying && currentSongId === sunoSongId}
           onPlayPause={handlePlayClick}

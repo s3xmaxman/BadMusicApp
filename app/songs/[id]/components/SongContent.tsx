@@ -16,7 +16,6 @@ import Image from "next/image";
 import Link from "next/link";
 import useGetSongById from "@/hooks/useGetSongById";
 import useLoadImage from "@/hooks/useLoadImage";
-import useOnPlay from "@/hooks/useOnPlay";
 import useLoadImages from "@/hooks/useLoadImages";
 import useDownload from "@/hooks/useDownload";
 import { useUser } from "@/hooks/useUser";
