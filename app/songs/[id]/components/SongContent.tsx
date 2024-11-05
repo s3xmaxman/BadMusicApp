@@ -29,6 +29,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Song } from "@/types";
 import AudioWaveform from "@/components/AudioWaveform";
 import { getRandomColor } from "@/libs/utils";
+import useAudioWaveStore from "@/hooks/useAudioWave";
 interface SongContentProps {
   songId: string;
 }
@@ -37,12 +38,10 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   const { song } = useGetSongById(songId);
   const { user } = useUser();
   const imageUrl = useLoadImage(song as Song);
-  const onPlay = useOnPlay([song as Song]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<"lyrics" | "similar">("lyrics");
   const [duration, setDuration] = useState<string>("");
-  const [isPlaying, setIsPlaying] = useState(false);
   const [primaryColor, setPrimaryColor] = useState(getRandomColor());
   const [secondaryColor, setSecondaryColor] = useState(getRandomColor());
   const [audioWaveformKey, setAudioWaveformKey] = useState(0);
@@ -54,17 +53,31 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   const imageUrls = useLoadImages(songGenres);
   const { fileUrl, loading } = useDownload(song?.song_path!);
 
+  const { isPlaying, play, pause, currentSongId, initializeAudio } =
+    useAudioWaveStore();
+
   useEffect(() => {
     setPrimaryColor(getRandomColor());
     setSecondaryColor(getRandomColor());
   }, [songId]);
 
-  const handlePlayClick = () => {
-    setIsPlaying(!isPlaying);
+  const handlePlayClick = async () => {
+    if (!fileUrl) return;
+
+    if (currentSongId !== songId) {
+      await initializeAudio(fileUrl!, songId);
+      await play();
+    } else {
+      if (isPlaying) {
+        pause();
+      } else {
+        await play();
+      }
+    }
   };
 
   const handlePlaybackEnded = () => {
-    setIsPlaying(false);
+    pause();
     setAudioWaveformKey((prevKey) => prevKey + 1);
   };
 
@@ -104,12 +117,13 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
         <AudioWaveform
           key={audioWaveformKey}
           audioUrl={fileUrl!}
-          isPlaying={isPlaying}
-          onPlayPause={() => setIsPlaying(!isPlaying)}
+          isPlaying={isPlaying && currentSongId === songId}
+          onPlayPause={handlePlayClick}
+          onEnded={handlePlaybackEnded}
           primaryColor={primaryColor}
           secondaryColor={secondaryColor}
           imageUrl={imageUrl!}
-          onEnded={handlePlaybackEnded}
+          songId={songId}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/60 to-black" />
 
@@ -134,7 +148,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
                 />
                 <motion.div
                   className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-all cursor-pointer"
-                  onClick={() => onPlay(songId)}
+                  onClick={handlePlayClick}
                 >
                   <Play size={48} className="text-white" />
                 </motion.div>

@@ -23,12 +23,12 @@ import AudioWaveform from "@/components/AudioWaveform";
 import PreviewDownloadModal from "@/components/Modals/DownloadPreviewModal";
 import { MdLyrics } from "react-icons/md";
 import { getRandomColor } from "@/libs/utils";
+import useAudioWaveStore from "@/hooks/useAudioWave";
 
 interface SunoSongContentProps {
   sunoSongId: string;
 }
 
-// TODO:　モーダル表示やタブの切替で曲がポーズしないように修正する
 const SunoSongContent: React.FC<SunoSongContentProps> = ({ sunoSongId }) => {
   const { sunoSong: song } = useGetSunoSongById(sunoSongId);
   const { user } = useUser();
@@ -36,10 +36,12 @@ const SunoSongContent: React.FC<SunoSongContentProps> = ({ sunoSongId }) => {
   const [activeTab, setActiveTab] = useState<"lyrics" | "similar">("lyrics");
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [duration, setDuration] = useState<string>("");
-  const [isPlaying, setIsPlaying] = useState(false);
   const [primaryColor, setPrimaryColor] = useState(getRandomColor());
   const [secondaryColor, setSecondaryColor] = useState(getRandomColor());
   const [audioWaveformKey, setAudioWaveformKey] = useState(0);
+
+  const { isPlaying, play, pause, currentSongId, initializeAudio } =
+    useAudioWaveStore();
 
   useEffect(() => {
     if (song?.audio_url) {
@@ -57,11 +59,22 @@ const SunoSongContent: React.FC<SunoSongContentProps> = ({ sunoSongId }) => {
     setSecondaryColor(getRandomColor());
   }, [sunoSongId]);
 
-  const handlePlayClick = () => {
-    setIsPlaying(!isPlaying);
+  const handlePlayClick = async () => {
+    if (!song?.audio_url) return;
+
+    if (currentSongId !== sunoSongId) {
+      await initializeAudio(song.audio_url, sunoSongId);
+      await play();
+    } else {
+      if (isPlaying) {
+        pause();
+      } else {
+        await play();
+      }
+    }
   };
   const handlePlaybackEnded = () => {
-    setIsPlaying(false);
+    pause();
     setAudioWaveformKey((prevKey) => prevKey + 1);
   };
 
@@ -96,19 +109,17 @@ const SunoSongContent: React.FC<SunoSongContentProps> = ({ sunoSongId }) => {
           className="object-cover opacity-40"
           priority
         />
-        {/* Lower Section (Waveform) */}
-
         <AudioWaveform
           key={audioWaveformKey}
           audioUrl={song.audio_url}
-          isPlaying={isPlaying}
-          onPlayPause={() => setIsPlaying(!isPlaying)}
+          isPlaying={isPlaying && currentSongId === sunoSongId}
+          onPlayPause={handlePlayClick}
           onEnded={handlePlaybackEnded}
           primaryColor={primaryColor}
           secondaryColor={secondaryColor}
           imageUrl={song.image_url}
+          songId={sunoSongId}
         />
-
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/60 to-black" />
 
         {/* Content Overlay */}
@@ -228,13 +239,17 @@ const SunoSongContent: React.FC<SunoSongContentProps> = ({ sunoSongId }) => {
       <div className="max-w-7xl mx-auto px-6 py-12">
         {/* Genre Tags */}
         <div className="flex flex-wrap gap-2 mb-12">
-          {song.tags?.split(",").map((tag) => (
-            <Link href={`/tag/${encodeURIComponent(tag.trim())}`} key={tag}>
-              <span className="px-4 py-2 rounded-full text-sm bg-white/10 hover:bg-white/20 transition-colors">
-                {tag.trim()}
-              </span>
-            </Link>
-          ))}
+          {song.tags
+            ?.split(/,\s*/)
+            .map((tag) => tag.trim())
+            .filter((tag) => tag !== "")
+            .map((tag) => (
+              <Link href={`/tag/${encodeURIComponent(tag)}`} key={tag}>
+                <span className="px-4 py-2 rounded-full text-sm bg-white/10 hover:bg-white/20 transition-colors">
+                  {tag}
+                </span>
+              </Link>
+            ))}
         </div>
 
         {/* Tabs */}

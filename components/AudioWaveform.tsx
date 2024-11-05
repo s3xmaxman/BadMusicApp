@@ -1,106 +1,59 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import useAudioWaveStore from "@/hooks/useAudioWave"; // Import the store
 
 interface AudioWaveformProps {
   audioUrl: string;
   isPlaying: boolean;
   onPlayPause: () => void;
   onEnded: () => void;
-  primaryColor?: string;
-  secondaryColor?: string;
-  imageUrl?: string;
+  primaryColor: string;
+  secondaryColor: string;
+  imageUrl: string;
+  songId: string;
 }
 
 const AudioWaveform = ({
-  audioUrl,
-  isPlaying,
-  onPlayPause,
-  onEnded,
   primaryColor = "#00ff87",
   secondaryColor = "#60efff",
   imageUrl = "/images/wait.jpg",
+  audioUrl,
+  songId,
 }: AudioWaveformProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const analyserRef = useRef<AnalyserNode | null>(null);
-  const sourceRef = useRef<MediaElementAudioSourceNode | null>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
   const animationRef = useRef<number>();
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isEnded, setIsEnded] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
+  const {
+    analyser,
+    currentTime,
+    duration,
+    isPlaying,
+    isEnded,
+    play,
+    pause,
+    initializeAudio,
+  } = useAudioWaveStore();
+
   useEffect(() => {
-    audioContextRef.current = new (window.AudioContext ||
-      (window as any).webkitAudioContext)();
-    analyserRef.current = audioContextRef.current.createAnalyser();
-    analyserRef.current.fftSize = 512;
-
-    audioRef.current = new Audio(audioUrl);
-    audioRef.current.crossOrigin = "anonymous";
-    audioRef.current.volume = 0.1;
-
-    audioRef.current.addEventListener("loadedmetadata", () => {
-      setDuration(audioRef.current?.duration || 0);
-    });
-
-    audioRef.current.addEventListener("timeupdate", () => {
-      setCurrentTime(audioRef.current?.currentTime || 0);
-    });
-
-    audioRef.current.addEventListener("ended", () => {
-      setIsTransitioning(true);
-      setTimeout(() => {
-        setIsEnded(true);
-        onEnded();
-      }, 500);
-    });
-
-    sourceRef.current = audioContextRef.current.createMediaElementSource(
-      audioRef.current
-    );
-    sourceRef.current.connect(analyserRef.current);
-    analyserRef.current.connect(audioContextRef.current.destination);
-
+    initializeAudio(audioUrl, songId);
     return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-      if (audioContextRef.current) {
-        audioContextRef.current.close();
-      }
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
+      useAudioWaveStore.getState().cleanup();
     };
-  }, [audioUrl, onEnded]);
+  }, [songId, initializeAudio, audioUrl]);
 
   useEffect(() => {
-    if (!audioRef.current) return;
-
     if (isPlaying) {
-      setIsEnded(false);
       setIsTransitioning(false);
-      audioRef.current.play();
       draw();
     } else {
-      audioRef.current.pause();
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
     }
   }, [isPlaying]);
-
-  // Reset audio position when ended
-  useEffect(() => {
-    if (isEnded && audioRef.current) {
-      audioRef.current.currentTime = 0;
-    }
-  }, [isEnded]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
@@ -114,19 +67,18 @@ const AudioWaveform = ({
   };
 
   const draw = () => {
-    if (!canvasRef.current || !analyserRef.current) return;
+    if (!canvasRef.current || !analyser) return;
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const bufferLength = analyserRef.current.frequencyBinCount;
+    const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
-    analyserRef.current.getByteFrequencyData(dataArray);
+    analyser.getByteFrequencyData(dataArray);
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // 背景グラデーション
     const bgGradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
     bgGradient.addColorStop(0, "rgba(0, 0, 0, 0.8)");
     bgGradient.addColorStop(1, "rgba(0, 0, 0, 0.6)");
@@ -140,7 +92,6 @@ const AudioWaveform = ({
     for (let i = 0; i < bufferLength; i++) {
       const barHeight = (dataArray[i] / 255) * (canvas.height / 2);
 
-      // インタラクティブな高さの調整
       const distanceFromMouse = Math.abs(x - mousePosition.x);
       const heightMultiplier = Math.max(
         1,
@@ -148,7 +99,6 @@ const AudioWaveform = ({
       );
       const adjustedHeight = barHeight * heightMultiplier;
 
-      // メインのグラデーション
       const gradient = ctx.createLinearGradient(
         x,
         centerY - adjustedHeight,
@@ -158,7 +108,7 @@ const AudioWaveform = ({
       gradient.addColorStop(0, primaryColor);
       gradient.addColorStop(1, secondaryColor);
 
-      // 上部の波形
+      // Upper waveform
       ctx.beginPath();
       ctx.fillStyle = gradient;
       ctx.moveTo(x, centerY - adjustedHeight);
@@ -168,7 +118,6 @@ const AudioWaveform = ({
       ctx.closePath();
       ctx.fill();
 
-      // 下部の波形（ミラー効果）
       ctx.beginPath();
       ctx.fillStyle = gradient;
       ctx.moveTo(x, centerY);
@@ -178,14 +127,12 @@ const AudioWaveform = ({
       ctx.closePath();
       ctx.fill();
 
-      // グロー効果
       ctx.shadowBlur = 10;
       ctx.shadowColor = primaryColor;
 
       x += barWidth + 1;
     }
 
-    // プログレスライン
     const progress = currentTime / duration;
     ctx.beginPath();
     ctx.strokeStyle = primaryColor;
@@ -232,7 +179,7 @@ const AudioWaveform = ({
               className={`w-full h-full cursor-pointer transition-all duration-500 ${
                 isTransitioning ? "opacity-0" : "opacity-100"
               }`}
-              onClick={onPlayPause}
+              onClick={isPlaying ? pause : play}
               onMouseMove={handleMouseMove}
             />
           </motion.div>
