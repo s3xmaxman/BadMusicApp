@@ -49,31 +49,31 @@ const UploadModal: React.FC = () => {
   const song = watch("song");
   const image = watch("image");
 
-  const handleAudioDrop = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDraggingAudio(false);
+  const handleFileDrop =
+    (fileType: "audio" | "image") => (e: DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      if (fileType === "audio") {
+        setIsDraggingAudio(false);
+      } else {
+        setIsDraggingImage(false);
+      }
 
-    const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith("audio/")) {
-      setValue("song", [file]);
-      setAudioPreview(URL.createObjectURL(file));
-    } else {
-      toast.error("音声ファイルをアップロードしてください");
-    }
-  };
-
-  const handleImageDrop = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDraggingImage(false);
-
-    const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith("image/")) {
-      setValue("image", [file]);
-      setImagePreview(URL.createObjectURL(file));
-    } else {
-      toast.error("画像ファイルをアップロードしてください");
-    }
-  };
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith(`${fileType}/`)) {
+        setValue(fileType === "audio" ? "song" : "image", [file]);
+        if (fileType === "audio") {
+          setAudioPreview(URL.createObjectURL(file));
+        } else {
+          setImagePreview(URL.createObjectURL(file));
+        }
+      } else {
+        toast.error(
+          `${
+            fileType === "audio" ? "音声" : "画像"
+          }ファイルをアップロードしてください`
+        );
+      }
+    };
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -252,7 +252,7 @@ const UploadModal: React.FC = () => {
               onDragOver={handleDragOver}
               onDragEnter={() => setIsDraggingAudio(true)}
               onDragLeave={() => setIsDraggingAudio(false)}
-              onDrop={handleAudioDrop}
+              onDrop={handleFileDrop("audio")}
               className={`relative p-3 border-2 border-dashed rounded-lg transition-colors ${
                 isDraggingAudio
                   ? "border-blue-500 bg-blue-500/10"
@@ -283,7 +283,7 @@ const UploadModal: React.FC = () => {
               onDragOver={handleDragOver}
               onDragEnter={() => setIsDraggingImage(true)}
               onDragLeave={() => setIsDraggingImage(false)}
-              onDrop={handleImageDrop}
+              onDrop={handleFileDrop("image")}
               className={`relative p-3 border-2 border-dashed rounded-lg transition-colors ${
                 isDraggingImage
                   ? "border-blue-500 bg-blue-500/10"

@@ -47,6 +47,12 @@ const AudioWaveform = ({
   }, [isPlaying]);
 
   useEffect(() => {
+    if (isEnded) {
+      setHasPlaybackStarted(false);
+    }
+  }, [isEnded]);
+
+  useEffect(() => {
     initializeAudio(audioUrl, songId);
     return () => {
       cleanup();
