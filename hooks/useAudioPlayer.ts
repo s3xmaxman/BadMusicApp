@@ -1,4 +1,3 @@
-// useAudioPlayer.ts
 import { useEffect, useState, useRef, useMemo } from "react";
 import usePlayer from "@/hooks/usePlayer";
 import { isMobile } from "react-device-detect";
