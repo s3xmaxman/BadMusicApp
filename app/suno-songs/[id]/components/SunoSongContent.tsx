@@ -24,6 +24,7 @@ import PreviewDownloadModal from "@/components/Modals/DownloadPreviewModal";
 import { MdLyrics } from "react-icons/md";
 import { getRandomColor } from "@/libs/utils";
 import useAudioWaveStore from "@/hooks/useAudioWave";
+import SunoEditModal from "@/components/Modals/SunoEditModal";
 
 interface SunoSongContentProps {
   sunoSongId: string;
@@ -35,6 +36,7 @@ const SunoSongContent: React.FC<SunoSongContentProps> = ({ sunoSongId }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<"lyrics" | "similar">("lyrics");
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [duration, setDuration] = useState<string>("");
   const [primaryColor, setPrimaryColor] = useState(getRandomColor());
   const [secondaryColor, setSecondaryColor] = useState(getRandomColor());
@@ -209,6 +211,7 @@ const SunoSongContent: React.FC<SunoSongContentProps> = ({ sunoSongId }) => {
                       <Button
                         variant="outline"
                         className="border-pink-600 text-pink-600 hover:bg-pink-600/10"
+                        onClick={() => setIsEditModalOpen(true)}
                       >
                         <Edit2 className="mr-2" size={16} />
                         Edit
@@ -352,6 +355,11 @@ const SunoSongContent: React.FC<SunoSongContentProps> = ({ sunoSongId }) => {
           )}
         </AnimatePresence>
       </div>
+      <SunoEditModal
+        song={song}
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+      />
     </div>
   );
 };
