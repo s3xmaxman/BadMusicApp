@@ -240,7 +240,7 @@ const SunoSongItem: React.FC<SunoSongItemProps> = ({
     >
       {/* Dropdown Menu */}
       <div
-        className={`absolute top-2 right-2  ${!isMobilePlayer ? "z-10" : ""}`}
+        className={` absolute top-2 right-2  ${!isMobilePlayer ? "z-10" : ""}`}
         onClick={(e) => e.stopPropagation()}
       >
         <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
