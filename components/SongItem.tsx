@@ -15,6 +15,7 @@ interface SongItemProps {
 const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
   const imagePath = useLoadImage(data);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+
   return (
     <div
       className="
@@ -24,48 +25,52 @@ const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
         flex-col 
         items-center 
         justify-center 
-        rounded-md 
+        rounded-xl
         overflow-hidden 
-        gap-x-4 
-        bg-neutral-400/5 
+        bg-gradient-to-b 
+        from-gray-900/90 
+        to-gray-900/95
         cursor-pointer 
-        hover:bg-neutral-400/10 
-        transition 
-        p-3
-        "
+        hover:from-gray-800/90 
+        hover:to-gray-800/95 
+        transition-all 
+        duration-300
+        aspect-[9/16]
+      "
     >
-      <div className="relative aspect-square w-full h-full rounded-md overflow-hidden">
+      <div className="relative w-full h-full">
         {!isImageLoaded && (
-          <div className="absolute inset-0 bg-gray-300 animate-pulse"></div>
+          <div className="absolute inset-0 bg-gray-800 animate-pulse"></div>
         )}
         <Image
-          className={`object-cover w-full h-full transition-opacity duration-300 ${
+          className={`object-cover w-full h-full transition-opacity duration-700 brightness-50 transition-transform duration-300 ${
             isImageLoaded ? "opacity-100" : "opacity-0"
-          }`}
-          src={imagePath || "/images/wait.jpg"}
+          } group-hover:scale-110`}
+          src={imagePath!}
           fill
           alt="Image"
           onLoad={() => setIsImageLoaded(true)}
           onClick={() => onClick(data.id)}
         />
-      </div>
-      <div className="flex flex-col items-start justify-between w-full pt-4 gap-y-1">
-        <Link href={`/songs/${data.id}`} className="w-full">
-          <p className="font-semibold truncate w-full hover:underline">
-            {data.title}
-          </p>
-        </Link>
-        <p className="text-neutral-400 text-sm pb-4 w-full truncate">
-          {data.author}
-        </p>
-        <div className="flex items-center justify-end w-full">
-          <div className="flex items-center">
-            <CiPlay1 size={12} />
-            <div className="text-white ml-1 text-[12px]">{data.count}</div>
-          </div>
-          <div className="flex items-center ml-2">
-            <CiHeart size={12} />
-            <div className="text-white ml-1 text-[12px]">{data.like_count}</div>
+
+        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 to-transparent">
+          <Link href={`/songs/${data.id}`} className="w-full block">
+            <p className="font-medium text-gray-100 truncate text-sm hover:text-gray-300 transition-colors">
+              {data.title}
+            </p>
+          </Link>
+
+          <p className="text-gray-400 text-xs mt-1 truncate">{data.author}</p>
+
+          <div className="flex items-center justify-start mt-2 space-x-4">
+            <div className="flex items-center text-gray-400 hover:text-gray-300 transition-colors">
+              <CiPlay1 size={14} />
+              <span className="ml-1 text-xs">{data.count}</span>
+            </div>
+            <div className="flex items-center text-gray-400 hover:text-gray-300 transition-colors">
+              <CiHeart size={14} />
+              <span className="ml-1 text-xs">{data.like_count}</span>
+            </div>
           </div>
         </div>
       </div>
