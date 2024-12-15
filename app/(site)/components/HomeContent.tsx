@@ -42,7 +42,7 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs, sunoSongs }) => {
   useEffect(() => {
     setIsClient(true);
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
+      setIsMobile(window.innerWidth < 1280);
     };
     handleResize();
     window.addEventListener("resize", handleResize);
@@ -161,20 +161,6 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs, sunoSongs }) => {
             )}
           </section>
 
-          {/* SoundCloud Player */}
-          {/* <section>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-white text-2xl font-semibold">
-                SoundCloud Tracks
-              </h2>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {SoundCloudUrls.map((soundCloud) => (
-                <SoundCloudItem key={soundCloud.id} data={soundCloud} />
-              ))}
-            </div>
-          </section> */}
-
           {/* Genres Section */}
           <section
             className="relative"
@@ -224,7 +210,7 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs, sunoSongs }) => {
       </div>
 
       {/* Right Sidebar */}
-      <aside className="hidden lg:block w-96 h-full overflow-y-auto bg-black custom-scrollbar">
+      <aside className="hidden xl:block w-96 h-full overflow-y-auto bg-black custom-scrollbar">
         <RightSidebar />
       </aside>
     </div>

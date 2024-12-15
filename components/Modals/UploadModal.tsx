@@ -18,6 +18,8 @@ import { Textarea } from "../ui/textarea";
 import GenreSelect from "../GenreSelect";
 import Button from "../Button";
 
+// TODO: ドラッグアンドドロップからアップロードできない問題を解決する
+
 const UploadModal: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
