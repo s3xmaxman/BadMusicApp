@@ -28,11 +28,11 @@ const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
         rounded-xl
         overflow-hidden 
         bg-gradient-to-b 
-        from-gray-900/90 
-        to-gray-900/95
+        from-gray-900/10 
+        to-gray-900/20
         cursor-pointer 
-        hover:from-gray-800/90 
-        hover:to-gray-800/95 
+        hover:from-gray-800/20 
+        hover:to-gray-800/30 
         transition-all 
         duration-300
         aspect-[9/16]
@@ -43,7 +43,7 @@ const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
           <div className="absolute inset-0 bg-gray-800 animate-pulse"></div>
         )}
         <Image
-          className={`object-cover w-full h-full transition-opacity duration-700 brightness-50 transition-transform duration-300 ${
+          className={`object-cover w-full h-full transition-opacity duration-700 transition-transform duration-300 ${
             isImageLoaded ? "opacity-100" : "opacity-0"
           } group-hover:scale-110`}
           src={imagePath || "/images/wait.jpg"}
@@ -53,7 +53,7 @@ const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
           onClick={() => onClick(data.id)}
         />
 
-        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 to-transparent">
+        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
           <Link href={`/songs/${data.id}`} className="w-full block">
             <p className="font-medium text-gray-100 truncate text-sm hover:text-gray-300 transition-colors">
               {data.title}
