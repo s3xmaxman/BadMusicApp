@@ -20,7 +20,7 @@ type UserContextType = {
   isLoading: boolean;
   subscription: Subscription | null;
   creditsLeft: number | null;
-  fetchCredits?: () => void;
+  fetchCredits: () => void;
 };
 
 export const UserContext = createContext<UserContextType | undefined>(
@@ -56,10 +56,13 @@ export const MyUserContextProvider = (props: Props) => {
   const fetchCredits = async () => {
     try {
       const response = await fetch("/api/suno/get_limit");
+
       if (!response.ok) {
         throw new Error("Failed to fetch credits");
       }
+
       const data: SunoCredits = await response.json();
+
       setCreditsLeft(data.credits_left);
     } catch (error) {
       console.error("Failed to fetch credits:", error);
@@ -96,19 +99,19 @@ export const MyUserContextProvider = (props: Props) => {
     }
   }, [user, isLoadingUser]);
 
-  // // クレジット情報の定期的な更新
-  // useEffect(() => {
-  //   if (user) {
-  //     // 初回のクレジット情報取得
-  //     fetchCredits();
+  // クレジット情報の定期的な更新
+  useEffect(() => {
+    if (user) {
+      // 初回のクレジット情報取得
+      fetchCredits();
 
-  //     // 30分ごとにクレジット情報を更新
-  //     const intervalId = setInterval(fetchCredits, 10 * 60 * 3000);
+      // 60分ごとにクレジット情報を更新
+      const intervalId = setInterval(fetchCredits, 10 * 60 * 6000);
 
-  //     // クリーンアップ関数
-  //     return () => clearInterval(intervalId);
-  //   }
-  // }, [user]);
+      // クリーンアップ関数
+      return () => clearInterval(intervalId);
+    }
+  }, [user]);
 
   const value = {
     accessToken,
@@ -117,6 +120,7 @@ export const MyUserContextProvider = (props: Props) => {
     isLoading: isLoadingUser || isLoadingData,
     subscription,
     creditsLeft,
+    fetchCredits,
   };
 
   return <UserContext.Provider value={value} {...props} />;

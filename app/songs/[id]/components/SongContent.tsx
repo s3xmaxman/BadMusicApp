@@ -94,9 +94,11 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
 
   const handleDownloadClick = async () => {
     setIsLoading(true);
+
     if (song?.song_path && fileUrl) {
       await downloadFile(fileUrl, `${song.title || "Untitled"}.mp3`);
     }
+
     setIsLoading(false);
   };
 
