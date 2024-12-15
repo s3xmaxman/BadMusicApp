@@ -55,19 +55,21 @@ const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
 
         <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
           <Link href={`/songs/${data.id}`} className="w-full block">
-            <p className="font-medium text-gray-100 truncate text-sm hover:text-gray-300 transition-colors">
+            <p className="font-medium text-gray-100 truncate text-sm hover:text-gray-300 transition-colors group-hover:text-white group-hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
               {data.title}
             </p>
           </Link>
 
-          <p className="text-gray-400 text-xs mt-1 truncate">{data.author}</p>
+          <p className="text-gray-400 text-xs mt-1 truncate hover:text-gray-300 transition-colors group-hover:text-white group-hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+            {data.author}
+          </p>
 
           <div className="flex items-center justify-start mt-2 space-x-4">
-            <div className="flex items-center text-gray-400 hover:text-gray-300 transition-colors">
+            <div className="flex items-center text-gray-400 hover:text-gray-300 transition-colors group-hover:text-white group-hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
               <CiPlay1 size={14} />
               <span className="ml-1 text-xs">{data.count}</span>
             </div>
-            <div className="flex items-center text-gray-400 hover:text-gray-300 transition-colors">
+            <div className="flex items-center text-gray-400 hover:text-gray-300 transition-colors group-hover:text-white group-hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
               <CiHeart size={14} />
               <span className="ml-1 text-xs">{data.like_count}</span>
             </div>
