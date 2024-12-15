@@ -72,7 +72,7 @@ const CurrentSongDisplay: React.FC<CurrentSongDisplayProps> = React.memo(
           >
             <Link
               className="cursor-pointer hover:underline"
-              href={isSunoSong ? `/suno-songs/${song.id}` : `/song/${song.id}`}
+              href={isSunoSong ? `/suno-songs/${song.id}` : `/songs/${song.id}`}
             >
               {song.title}
             </Link>

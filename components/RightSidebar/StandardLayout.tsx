@@ -6,6 +6,7 @@ import { FaMusic } from "react-icons/fa";
 import { CiPlay1 } from "react-icons/ci";
 import { MdLyrics } from "react-icons/md";
 import { AiOutlineHeart } from "react-icons/ai";
+import { FaHashtag } from "react-icons/fa";
 import { IoMdSwap } from "react-icons/io";
 import { BackgroundGradient } from "../ui/background-gradient";
 import { ScrollArea } from "../ui/scroll-area";
@@ -143,29 +144,42 @@ const StandardLayout = memo(
                       <span className="text-base">{song.like_count}</span>
                     </div>
                   </div>
-
-                  <div className="flex flex-wrap justify-center md:justify-end gap-2">
-                    {visibleTags.map((tag, index) => (
-                      <Link
-                        key={tag}
-                        href={isSunoSong ? `/tag/${tag}` : `/genre/${tag}`}
-                        className="bg-white/10 px-3 py-1 rounded-full hover:bg-white/20 transition-colors"
-                      >
-                        {tag}
-                      </Link>
-                    ))}
-                    {hasMoreTags && !showAllTags && (
-                      <button
-                        onClick={() => setShowAllTags(true)}
-                        className="flex items-center bg-white/10 px-3 py-1 rounded-full hover:bg-white/20 transition-colors"
-                      >
-                        +{tags.length - MAX_VISIBLE_TAGS}
-                        <BiChevronRight className="ml-1" />
-                      </button>
-                    )}
-                  </div>
                 </div>
               </motion.div>
+
+              {/* Tags Section - New Accordion Layout */}
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="tags" className="border-white/10">
+                  <AccordionTrigger className="text-xl font-semibold text-gray-200 hover:no-underline flex items-center gap-2 justify-start group">
+                    <span className="flex items-center gap-2">
+                      <FaHashtag />
+                      {isSunoSong ? "タグ" : "ジャンル"}
+                    </span>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className="flex flex-wrap justify-center md:justify-start gap-2">
+                      {visibleTags.map((tag, index) => (
+                        <Link
+                          key={tag}
+                          href={isSunoSong ? `/tag/${tag}` : `/genre/${tag}`}
+                          className="bg-white/10 px-3 py-1 rounded-full hover:bg-white/20 transition-colors"
+                        >
+                          {tag}
+                        </Link>
+                      ))}
+                      {hasMoreTags && !showAllTags && (
+                        <button
+                          onClick={() => setShowAllTags(true)}
+                          className="flex items-center bg-white/10 px-3 py-1 rounded-full hover:bg-white/20 transition-colors"
+                        >
+                          +{tags.length - MAX_VISIBLE_TAGS}
+                          <BiChevronRight className="ml-1" />
+                        </button>
+                      )}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
 
               {/* Lyrics Section */}
               <Accordion type="single" collapsible className="w-full">
