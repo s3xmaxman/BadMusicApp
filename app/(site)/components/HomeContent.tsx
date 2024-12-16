@@ -60,7 +60,10 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs, sunoSongs }) => {
     direction: "left" | "right"
   ) => {
     if (ref.current) {
-      const scrollAmount = direction === "left" ? -300 : 300;
+      const containerWidth = ref.current.clientWidth;
+      const scrollAmount =
+        direction === "left" ? -containerWidth * 0.8 : containerWidth * 0.8;
+
       ref.current.scrollBy({
         left: scrollAmount,
         behavior: "smooth",
@@ -151,7 +154,7 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs, sunoSongs }) => {
                 )}
                 <div
                   ref={videoScrollRef}
-                  className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide"
+                  className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide smooth-scroll"
                   style={{ width: "calc(100% + 1rem)" }}
                 >
                   {videoIds.map((video) => (
@@ -195,7 +198,7 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs, sunoSongs }) => {
               )}
               <div
                 ref={genreScrollRef}
-                className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide"
+                className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide smooth-scroll"
               >
                 {genreCards.map((genre) => (
                   <GenreCard
