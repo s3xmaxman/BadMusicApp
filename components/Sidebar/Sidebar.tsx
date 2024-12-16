@@ -15,6 +15,7 @@ import { FaHeart } from "react-icons/fa6";
 import { useUser } from "@/hooks/useUser";
 import { Button } from "../ui/button";
 import Image from "next/image";
+import { GoSidebarCollapse } from "react-icons/go";
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -82,14 +83,15 @@ const Sidebar: React.FC<SidebarProps> = ({ children, songs, playlists }) => {
             alt="Logo"
             width={isCollapsed ? 32 : 48}
             height={isCollapsed ? 32 : 48}
-            className="mr-auto ml-2"
+            className="mr-auto ml-2 cursor-pointer"
+            onClick={() => isCollapsed && setIsCollapsed(!isCollapsed)}
           />
           {!isCollapsed && <h1 className="font-bold text-xl">BadMusicApp</h1>}
           <Button
-            className="text-white text-2xl mb-4 ml-auto mr-2"
+            className="text-white text-2xl mt-1 ml-auto"
             onClick={() => setIsCollapsed(!isCollapsed)}
           >
-            {isCollapsed ? ">" : "<"}
+            {isCollapsed ? "" : <GoSidebarCollapse size={20} />}
           </Button>
         </div>
         <Box>

@@ -1,4 +1,5 @@
 "use client";
+import DeleteButton from "@/components/DeleteButton";
 import LikeButton from "@/components/LikeButton";
 import MediaItem from "@/components/MediaItem";
 import useOnPlay from "@/hooks/useOnPlay";
@@ -33,10 +34,10 @@ const GenreContent = ({ songs }: Props) => {
             <div className="flex items-center gap-x-2">
               <LikeButton songId={song.id} songType="regular" />
               {/* <DeleteButton
-                  songId={song.id}
-                  songPath={song.song_path}
-                  imagePath={song.image_path}
-                /> */}
+                songId={song.id}
+                songPath={song.song_path}
+                imagePath={song.image_path}
+              /> */}
             </div>
           )}
         </div>
