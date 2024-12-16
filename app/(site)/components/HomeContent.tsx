@@ -33,11 +33,13 @@ interface HomeClientProps {
 const HomeContent: React.FC<HomeClientProps> = ({ songs, sunoSongs }) => {
   const [showArrows, setShowArrows] = useState(false);
   const [showVideoArrows, setShowVideoArrows] = useState(false);
+  const [showTrendBoardArrows, setShowTrendBoardArrows] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const genreScrollRef = useRef<HTMLDivElement>(null);
   const videoScrollRef = useRef<HTMLDivElement>(null);
+  const trendBoardScrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setIsClient(true);
@@ -53,10 +55,13 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs, sunoSongs }) => {
     return null;
   }
 
-  const scrollVideos = (direction: "left" | "right") => {
-    if (videoScrollRef.current) {
+  const scroll = (
+    ref: React.RefObject<HTMLDivElement>,
+    direction: "left" | "right"
+  ) => {
+    if (ref.current) {
       const scrollAmount = direction === "left" ? -300 : 300;
-      videoScrollRef.current.scrollBy({
+      ref.current.scrollBy({
         left: scrollAmount,
         behavior: "smooth",
       });
@@ -73,14 +78,16 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs, sunoSongs }) => {
     });
   };
 
-  const scroll = (direction: "left" | "right") => {
-    if (genreScrollRef.current) {
-      const scrollAmount = direction === "left" ? -300 : 300;
-      genreScrollRef.current.scrollBy({
-        left: scrollAmount,
-        behavior: "smooth",
-      });
-    }
+  const scrollVideos = (direction: "left" | "right") => {
+    scroll(videoScrollRef, direction);
+  };
+
+  const handleTrendBoardScroll = (direction: "left" | "right") => {
+    scroll(trendBoardScrollRef, direction);
+  };
+
+  const handleGenreScroll = (direction: "left" | "right") => {
+    scroll(genreScrollRef, direction);
   };
 
   return (
@@ -95,8 +102,15 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs, sunoSongs }) => {
         </Header>
         <main className="px-6 py-8 space-y-8">
           {/* Trending Section */}
-          <section>
-            <TrendBoard />
+          <section
+            onMouseEnter={() => setShowTrendBoardArrows(true)}
+            onMouseLeave={() => setShowTrendBoardArrows(false)}
+          >
+            <TrendBoard
+              scrollRef={trendBoardScrollRef}
+              showArrows={showTrendBoardArrows}
+              onScroll={handleTrendBoardScroll}
+            />
           </section>
           {/* YouTubePlayer Section */}
           <section
@@ -173,7 +187,7 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs, sunoSongs }) => {
             <div className="relative">
               {showArrows && !isMobile && (
                 <button
-                  onClick={() => scroll("left")}
+                  onClick={() => handleGenreScroll("left")}
                   className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full z-10 hover:bg-opacity-75 transition-all"
                 >
                   <ChevronLeft size={24} />
@@ -193,7 +207,7 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs, sunoSongs }) => {
               </div>
               {showArrows && !isMobile && (
                 <button
-                  onClick={() => scroll("right")}
+                  onClick={() => handleGenreScroll("right")}
                   className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full z-10 hover:bg-opacity-75 transition-all"
                 >
                   <ChevronRight size={24} />

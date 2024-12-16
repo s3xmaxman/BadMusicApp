@@ -55,7 +55,7 @@ const useGetTrendSongs = (period: "all" | "month" | "week" | "day" = "all") => {
         // データを取得し、カウントの降順でソートし、最大3曲まで取得
         const { data, error } = await query
           .order("count", { ascending: false })
-          .limit(3);
+          .limit(10);
 
         if (error) {
           throw new Error(error.message);
