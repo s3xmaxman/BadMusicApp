@@ -78,10 +78,10 @@ const MobilePlayerContent = ({
 
   return (
     <animated.div
-      {...bind()}
+      {...(showLyrics ? {} : bind())}
       style={{
         y,
-        touchAction: "none",
+        touchAction: showLyrics ? "auto" : "none",
       }}
       className="md:hidden fixed inset-0 bg-black text-white"
     >

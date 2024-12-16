@@ -59,10 +59,12 @@ const SunoMobilePlayerContent = ({
   };
 
   const bind = useDrag(
-    ({ down, movement: [mx, my] }) => {
-      api.start({ y: down ? my : 0, immediate: down });
-      if (!down && my > 50) {
-        toggleMobilePlayer();
+    ({ down, movement: [mx, my], velocity }) => {
+      if (!showLyrics) {
+        api.start({ y: down ? my : 0, immediate: down });
+        if (!down && my > 50) {
+          toggleMobilePlayer();
+        }
       }
     },
     { axis: "y", bounds: { top: 0 } }
@@ -70,10 +72,10 @@ const SunoMobilePlayerContent = ({
 
   return (
     <animated.div
-      {...bind()}
+      {...(showLyrics ? {} : bind())}
       style={{
         y,
-        touchAction: "none",
+        touchAction: showLyrics ? "auto" : "none",
       }}
       className="md:hidden fixed inset-0 bg-black text-white"
     >
