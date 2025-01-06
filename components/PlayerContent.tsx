@@ -1,9 +1,8 @@
-"use client";
-
+import React, { useEffect } from "react";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import { BsRepeat1 } from "react-icons/bs";
 import { FaRandom } from "react-icons/fa";
-import { Playlist, Song, SunoSong } from "@/types";
+import { Playlist, Song } from "@/types";
 import LikeButton from "./LikeButton";
 import MediaItem from "./MediaItem";
 import Slider from "./Slider";
@@ -11,7 +10,6 @@ import SeekBar from "./Seekbar";
 import useLoadImage from "@/hooks/useLoadImage";
 import AddPlaylist from "./AddPlaylist";
 import useAudioPlayer from "@/hooks/useAudioPlayer";
-import { useEffect } from "react";
 import useLoadVideo from "@/hooks/useLoadVideo";
 import MobilePlayerContent from "./Mobile/MobilePlayerContent";
 
@@ -76,49 +74,58 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
         <div className="flex md:hidden col-auto w-full justify-end items-center">
           <div
             onClick={handlePlay}
-            className="h-10 w-10 flex items-center justify-center rounded-full bg-white p-1 cursor-pointer"
+            className="h-10 w-10 flex items-center justify-center rounded-full bg-gradient-to-br from-white to-gray-200 p-1 cursor-pointer group"
           >
-            <Icon size={30} className="text-black" />
+            <Icon
+              size={30}
+              className="text-black group-hover:filter group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
+            />
           </div>
         </div>
 
-        {/* PC版のレイアウト */}
         <div className="hidden md:flex flex-col w-full md:justify-center items-center max-w-[722px] gap-x-6">
           <div className="flex items-center gap-x-8">
             <FaRandom
               onClick={toggleShuffle}
               size={20}
-              className={`cursor-pointer transition ${
-                isShuffling ? "text-[#4c1d95]" : "text-neutral-400"
+              className={`cursor-pointer transition-all duration-300 hover:filter ${
+                isShuffling
+                  ? "text-[#4c1d95] drop-shadow-[0_0_8px_rgba(76,29,149,0.6)] hover:drop-shadow-[0_0_12px_rgba(76,29,149,0.8)]"
+                  : "text-neutral-400 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
               }`}
             />
             <AiFillStepBackward
               onClick={onPlayPrevious}
               size={30}
-              className=" text-neutral-400 cursor-pointer hover:text-white transition"
+              className="text-neutral-400 cursor-pointer hover:text-white hover:filter hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] transition-all duration-300"
             />
             <div
               onClick={handlePlay}
-              className="flex items-center justify-center h-7 w-7 rounded-full bg-white p-1 cursor-pointer"
+              className="flex items-center justify-center h-7 w-7 rounded-full bg-gradient-to-br from-white to-gray-200 p-1 cursor-pointer group"
             >
-              <Icon size={30} className="text-black" />
+              <Icon
+                size={30}
+                className="text-black group-hover:filter group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
+              />
             </div>
             <AiFillStepForward
               onClick={onPlayNext}
               size={30}
-              className=" text-neutral-400 cursor-pointer hover:text-white transition"
+              className="text-neutral-400 cursor-pointer hover:text-white hover:filter hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] transition-all duration-300"
             />
             <BsRepeat1
               onClick={toggleRepeat}
               size={25}
-              className={`cursor-pointer transition ${
-                isRepeating ? "text-[#4c1d95]" : "text-neutral-400"
+              className={`cursor-pointer transition-all duration-300 hover:filter ${
+                isRepeating
+                  ? "text-[#4c1d95] drop-shadow-[0_0_8px_rgba(76,29,149,0.6)] hover:drop-shadow-[0_0_12px_rgba(76,29,149,0.8)]"
+                  : "text-neutral-400 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
               }`}
             />
           </div>
 
           <div className="flex items-center gap-x-2 mt-4 w-full lg:max-w-[800px] md:max-w-[300px]">
-            <span className="w-[50px] text-center inline-block">
+            <span className="w-[50px] text-center inline-block text-neutral-400">
               {formattedCurrentTime}
             </span>
             <SeekBar
@@ -127,7 +134,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
               onSeek={handleSeek}
               className="flex-1 h-2"
             />
-            <span className="w-[50px] text-center inline-block">
+            <span className="w-[50px] text-center inline-block text-neutral-400">
               {formattedDuration}
             </span>
           </div>
@@ -144,7 +151,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
             <div className="relative group">
               <VolumeIcon
                 onClick={toggleMute}
-                className="cursor-pointer"
+                className="cursor-pointer text-neutral-400 hover:text-white hover:filter hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] transition-all duration-300"
                 size={22}
               />
               <div className="absolute bottom-full mb-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
@@ -154,7 +161,6 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
           </div>
         </div>
 
-        {/* モバイル版レイアウト */}
         {isMobilePlayer && (
           <MobilePlayerContent
             song={song}
