@@ -10,7 +10,7 @@ interface NextSongPreviewProps {
 const NextSongPreview: React.FC<NextSongPreviewProps> = React.memo(
   ({ nextSong, nextImagePath }) => {
     return (
-      <div className="absolute bottom-0 left-0 right-0 z-10 p-6 bg-gradient-to-t from-black via-black/80 to-transparent">
+      <div className="absolute bottom-0 left-0 right-0  p-6 bg-gradient-to-t from-black via-black/80 to-transparent">
         {nextSong && (
           <div className="flex items-center">
             <div className="relative w-16 h-16 rounded-full overflow-hidden shrink-0 mr-4">

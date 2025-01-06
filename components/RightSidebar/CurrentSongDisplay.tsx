@@ -21,9 +21,9 @@ const MAX_VISIBLE_TAGS = 3;
 
 const CurrentSongDisplay: React.FC<CurrentSongDisplayProps> = React.memo(
   ({ song, videoPath, imagePath, toggleLayout }) => {
-    const isSunoSong = "audio_url" in song;
     const [showAllTags, setShowAllTags] = useState(false);
 
+    const isSunoSong = "audio_url" in song;
     const tags = isSunoSong ? splitTags(song.tags) : splitTags(song.genre);
 
     const uniqueTags = Array.from(new Set(tags));
@@ -33,7 +33,7 @@ const CurrentSongDisplay: React.FC<CurrentSongDisplayProps> = React.memo(
     const hasMoreTags = tags.length > MAX_VISIBLE_TAGS;
 
     return (
-      <div className="relative w-full h-full overflow-hidden">
+      <div className="relative w-full h-full">
         {(isSunoSong ? song.video_url : song.video_path) ? (
           <video
             src={videoPath!}
@@ -51,11 +51,11 @@ const CurrentSongDisplay: React.FC<CurrentSongDisplayProps> = React.memo(
             priority
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-black z-10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-black " />
 
         {/* Current Song Info */}
         <motion.div
-          className="absolute bottom-20 left-0 right-0 p-6 z-10"
+          className="absolute bottom-20 left-0 right-0 p-6 "
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -113,7 +113,7 @@ const CurrentSongDisplay: React.FC<CurrentSongDisplayProps> = React.memo(
         </motion.div>
 
         {/* Layout Toggle Button */}
-        <div className="absolute top-4 right-4 z-10">
+        <div className="absolute top-4 right-4">
           <button
             onClick={toggleLayout}
             className="bg-white/10 hover:bg-white/20 rounded-full p-2 transition-colors duration-200"
