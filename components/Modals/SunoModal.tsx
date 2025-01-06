@@ -149,7 +149,7 @@ const SunoModal: React.FC = () => {
   return (
     <Modal
       title="Suno AI"
-      description="AIを使ってカスタムソングを作成します"
+      description="この機能は完全に停止しています。"
       isOpen={sunoModal.isOpen}
       onChange={sunoModal.onClose}
       disabled={isLoading}
