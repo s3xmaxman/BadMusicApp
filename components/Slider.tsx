@@ -14,16 +14,17 @@ const Slider: React.FC<SliderProps> = ({ value = 1, onChange }) => {
 
   return (
     <RadixSlider.Root
-      className="relative flex items-center select-none touch-none w-full h-10"
+      className="relative flex items-center select-none touch-none h-[100px] w-10"
       defaultValue={[1]}
       value={[value]}
       onValueChange={handleChange}
       max={1}
       step={0.1}
+      orientation="vertical"
       aria-label="Volume"
     >
-      <RadixSlider.Track className=" relative grow rounded-full h-[6px] bg-gray-300">
-        <RadixSlider.Range className=" absolute rounded-full h-full bg-[#4c1d95]" />
+      <RadixSlider.Track className="relative bg-gray-300 rounded-full w-[6px] h-full">
+        <RadixSlider.Range className="absolute bg-[#4c1d95] rounded-full w-full" />
       </RadixSlider.Track>
     </RadixSlider.Root>
   );

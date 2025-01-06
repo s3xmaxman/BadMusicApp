@@ -3,14 +3,12 @@
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import { BsRepeat1 } from "react-icons/bs";
 import { FaRandom } from "react-icons/fa";
-
 import { Playlist, Song, SunoSong } from "@/types";
 import LikeButton from "./LikeButton";
 import MediaItem from "./MediaItem";
 import Slider from "./Slider";
 import SeekBar from "./Seekbar";
 import useLoadImage from "@/hooks/useLoadImage";
-
 import AddPlaylist from "./AddPlaylist";
 import useAudioPlayer from "@/hooks/useAudioPlayer";
 import { useEffect } from "react";
@@ -136,23 +134,26 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
         </div>
 
         <div className="hidden md:flex w-full justify-end pr-2">
-          <div className="flex items-center gap-x-2 w-full md:w-[170px] lg:w-[200px]">
+          <div className="flex items-center gap-x-8 w-full md:w-[170px] lg:w-[200px]">
             <AddPlaylist
               playlists={playlists}
               songId={song.id}
               songType="regular"
             />
             <LikeButton songId={song.id} songType="regular" />
-            <div className="mx-1" />
-            <VolumeIcon
-              onClick={toggleMute}
-              className="cursor-pointer"
-              size={34}
-            />
-
-            <Slider value={volume} onChange={(value) => setVolume(value)} />
+            <div className="relative group">
+              <VolumeIcon
+                onClick={toggleMute}
+                className="cursor-pointer"
+                size={22}
+              />
+              <div className="absolute bottom-full mb-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
+                <Slider value={volume} onChange={(value) => setVolume(value)} />
+              </div>
+            </div>
           </div>
         </div>
+
         {/* モバイル版レイアウト */}
         {isMobilePlayer && (
           <MobilePlayerContent
