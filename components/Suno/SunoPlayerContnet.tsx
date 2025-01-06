@@ -131,20 +131,23 @@ const SunoPlayerContent: React.FC<SunoPlayerContentProps> = ({
         </div>
 
         <div className="hidden md:flex w-full justify-end pr-2">
-          <div className="flex items-center gap-x-2 w-full md:w-[170px] lg:w-[200px]">
+          <div className="flex items-center gap-x-8 w-full md:w-[170px] lg:w-[200px]">
             <AddPlaylist
               playlists={playlists}
               songId={song.id}
               songType="suno"
             />
             <LikeButton songId={song.id} songType="suno" />
-            <div className="mx-1" />
-            <VolumeIcon
-              onClick={toggleMute}
-              className="cursor-pointer"
-              size={34}
-            />
-            <Slider value={volume} onChange={(value) => setVolume(value)} />
+            <div className="relative group">
+              <VolumeIcon
+                onClick={toggleMute}
+                className="cursor-pointer"
+                size={22}
+              />
+              <div className="absolute bottom-full mb-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
+                <Slider value={volume} onChange={(value) => setVolume(value)} />
+              </div>
+            </div>
           </div>
         </div>
 
