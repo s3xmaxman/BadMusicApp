@@ -85,14 +85,16 @@ const SunoPlayerContent: React.FC<SunoPlayerContentProps> = ({
             <FaRandom
               onClick={toggleShuffle}
               size={20}
-              className={`cursor-pointer transition ${
-                isShuffling ? "text-[#4c1d95]" : "text-neutral-400"
+              className={`cursor-pointer transition-all duration-300 hover:filter hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] ${
+                isShuffling
+                  ? "text-[#4c1d95] drop-shadow-[0_0_8px_rgba(76,29,149,0.6)] hover:drop-shadow-[0_0_12px_rgba(76,29,149,0.8)]"
+                  : "text-neutral-400 hover:text-white"
               }`}
             />
             <AiFillStepBackward
               onClick={onPlayPrevious}
               size={30}
-              className=" text-neutral-400 cursor-pointer hover:text-white transition"
+              className=" text-neutral-400 cursor-pointer hover:text-white hover:filter hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] transition-all duration-300"
             />
             <div
               onClick={handlePlay}
@@ -103,13 +105,15 @@ const SunoPlayerContent: React.FC<SunoPlayerContentProps> = ({
             <AiFillStepForward
               onClick={onPlayNext}
               size={30}
-              className=" text-neutral-400 cursor-pointer hover:text-white transition"
+              className=" text-neutral-400 cursor-pointer hover:text-white hover:filter hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] transition-all duration-300"
             />
             <BsRepeat1
               onClick={toggleRepeat}
               size={25}
-              className={`cursor-pointer transition ${
-                isRepeating ? "text-[#4c1d95]" : "text-neutral-400"
+              className={`cursor-pointer transition-all duration-300 hover:filter hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] ${
+                isRepeating
+                  ? "text-[#4c1d95] drop-shadow-[0_0_8px_rgba(76,29,149,0.6)] hover:drop-shadow-[0_0_12px_rgba(76,29,149,0.8)]"
+                  : "text-neutral-400 hover:text-white"
               }`}
             />
           </div>
@@ -141,7 +145,7 @@ const SunoPlayerContent: React.FC<SunoPlayerContentProps> = ({
             <div className="relative group">
               <VolumeIcon
                 onClick={toggleMute}
-                className="cursor-pointer"
+                className="cursor-pointer text-neutral-400 hover:text-white hover:filter hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] transition-all duration-300"
                 size={22}
               />
               <div className="absolute bottom-full mb-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">

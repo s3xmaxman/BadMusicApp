@@ -88,10 +88,10 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
             <FaRandom
               onClick={toggleShuffle}
               size={20}
-              className={`cursor-pointer transition-all duration-300 hover:filter ${
+              className={`cursor-pointer transition-all duration-300 hover:filter hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] ${
                 isShuffling
                   ? "text-[#4c1d95] drop-shadow-[0_0_8px_rgba(76,29,149,0.6)] hover:drop-shadow-[0_0_12px_rgba(76,29,149,0.8)]"
-                  : "text-neutral-400 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
+                  : "text-neutral-400 hover:text-white"
               }`}
             />
             <AiFillStepBackward
@@ -116,10 +116,10 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
             <BsRepeat1
               onClick={toggleRepeat}
               size={25}
-              className={`cursor-pointer transition-all duration-300 hover:filter ${
+              className={`cursor-pointer transition-all duration-300 hover:filter hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] ${
                 isRepeating
                   ? "text-[#4c1d95] drop-shadow-[0_0_8px_rgba(76,29,149,0.6)] hover:drop-shadow-[0_0_12px_rgba(76,29,149,0.8)]"
-                  : "text-neutral-400 hover:text-white hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
+                  : "text-neutral-400 hover:text-white"
               }`}
             />
           </div>
