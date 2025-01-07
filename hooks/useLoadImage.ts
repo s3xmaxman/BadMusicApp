@@ -4,6 +4,12 @@ import { Song, Playlist, SunoSong } from "@/types";
 
 type ImageData = Song | SunoSong | Playlist | null;
 
+/**
+ * 画像データを読み込むカスタムフック
+ *
+ * @param {ImageData} data - 画像データを含むオブジェクト
+ * @returns {string|null} 読み込まれた画像のURL
+ */
 const useLoadImage = (data: ImageData) => {
   const supabaseClient = useSupabaseClient();
   const [imageUrl, setImageUrl] = useState<string | null>(null);

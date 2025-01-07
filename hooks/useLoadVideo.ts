@@ -4,6 +4,12 @@ import { Song, Playlist, SunoSong } from "@/types";
 
 type VideoData = Song | SunoSong | Playlist | null;
 
+/**
+ * 動画のURLを読み込むカスタムフック
+ *
+ * @param {VideoData} data - 動画データを含むオブジェクト
+ * @returns {string|null} 読み込まれた動画のURL
+ */
 const useLoadVideo = (data: VideoData) => {
   const supabaseClient = useSupabaseClient();
   const [videoUrl, setVideoUrl] = useState<string | null>(null);

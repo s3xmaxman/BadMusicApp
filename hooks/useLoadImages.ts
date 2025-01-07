@@ -2,6 +2,12 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useState, useEffect, useMemo } from "react";
 import { Song, Playlist, SunoSong } from "@/types";
 
+/**
+ * 複数の画像データを読み込むカスタムフック
+ *
+ * @param {Playlist[] | SunoSong[] | Song[]} data - 画像データを含むオブジェクトの配列
+ * @returns {(string|null)[]} 読み込まれた画像のURLの配列
+ */
 const useLoadImages = (data: Playlist[] | SunoSong[] | Song[]) => {
   const supabaseClient = useSupabaseClient();
   const [imageUrls, setImageUrls] = useState<(string | null)[]>([]);

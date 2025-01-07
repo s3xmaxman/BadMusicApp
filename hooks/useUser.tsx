@@ -23,6 +23,9 @@ type UserContextType = {
   fetchCredits: () => void;
 };
 
+/**
+ * ユーザーコンテキストを作成
+ */
 export const UserContext = createContext<UserContextType | undefined>(
   undefined
 );
@@ -31,6 +34,12 @@ export interface Props {
   [propName: string]: any;
 }
 
+/**
+ * ユーザーコンテキストプロバイダーコンポーネント
+ *
+ * @param {Props} props - プロパティ
+ * @returns {JSX.Element} ユーザーコンテキストプロバイダー
+ */
 export const MyUserContextProvider = (props: Props) => {
   const {
     session,
@@ -126,6 +135,11 @@ export const MyUserContextProvider = (props: Props) => {
   return <UserContext.Provider value={value} {...props} />;
 };
 
+/**
+ * ユーザーコンテキストを使用するカスタムフック
+ *
+ * @returns {UserContextType} ユーザーコンテキスト
+ */
 export const useUser = () => {
   const context = useContext(UserContext);
   if (context === undefined) {

@@ -49,6 +49,51 @@ interface SoundCloudPlayerStore {
   seekTo: (time: number) => void;
 }
 
+/**
+ * SoundCloudプレイヤーの状態を管理するカスタムフック
+ *
+ * @returns {Object} SoundCloudプレイヤーの状態と操作関数
+ * @property {string} currentUrl - 現在の曲URL
+ * @property {string} currentTitle - 現在の曲タイトル
+ * @property {boolean} isPlaying - 再生中かどうか
+ * @property {boolean} isLooping - ループ再生中かどうか
+ * @property {number} playedSeconds - 再生済み時間（秒）
+ * @property {number} duration - 曲の長さ（秒）
+ * @property {number} played - 再生済み割合（0〜1）
+ * @property {boolean} seeking - シーク中かどうか
+ * @property {string} trackImage - トラック画像URL
+ * @property {number} volume - 音量（0〜1）
+ * @property {React.RefObject} playerRef - ReactPlayerの参照
+ * @property {number} currentSoundCloudIndex - 現在の曲インデックス
+ * @property {number[]} playOrder - 再生順序
+ * @property {boolean} isShuffled - シャッフル中かどうか
+ * @property {function} setCurrentUrl - 現在の曲URLを設定する関数
+ * @property {function} setCurrentTitle - 現在の曲タイトルを設定する関数
+ * @property {function} setIsPlaying - 再生状態を設定する関数
+ * @property {function} setIsLooping - ループ状態を設定する関数
+ * @property {function} setPlayedSeconds - 再生済み時間を設定する関数
+ * @property {function} setDuration - 曲の長さを設定する関数
+ * @property {function} setPlayed - 再生済み割合を設定する関数
+ * @property {function} setSeeking - シーク状態を設定する関数
+ * @property {function} setTrackImage - トラック画像を設定する関数
+ * @property {function} setVolume - 音量を設定する関数
+ * @property {function} setPlayerRef - ReactPlayerの参照を設定する関数
+ * @property {function} setCurrentSoundCloudIndex - 現在の曲インデックスを設定する関数
+ * @property {function} setPlayOrder - 再生順序を設定する関数
+ * @property {function} setIsShuffled - シャッフル状態を設定する関数
+ * @property {function} handleSeekMouseDown - シーク開始時の処理
+ * @property {function} handleSeekMouseUp - シーク終了時の処理
+ * @property {function} handleProgress - 再生進捗更新時の処理
+ * @property {function} handleDuration - 曲の長さ更新時の処理
+ * @property {function} handleVolumeChange - 音量変更時の処理
+ * @property {function} toggleMute - ミュート切り替え関数
+ * @property {function} fetchTrackInfo - トラック情報を取得する関数
+ * @property {function} playNextTrack - 次の曲を再生する関数
+ * @property {function} playPreviousTrack - 前の曲を再生する関数
+ * @property {function} togglePlay - 再生/一時停止切り替え関数
+ * @property {function} toggleShuffle - シャッフル切り替え関数
+ * @property {function} seekTo - 指定時間にシークする関数
+ */
 export const useSoundCloudPlayerStore = create<SoundCloudPlayerStore>(
   (set, get) => ({
     currentUrl: "",

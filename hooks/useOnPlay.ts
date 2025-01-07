@@ -11,6 +11,12 @@ const debounce = (func: (...args: any[]) => void, wait: number) => {
   };
 };
 
+/**
+ * 曲の再生を管理するカスタムフック
+ *
+ * @param {Song[]} songs - 再生対象の曲リスト
+ * @returns {function} 曲を再生する関数
+ */
 const useOnPlay = (songs: Song[]) => {
   const player = usePlayer();
   const supabase = createClientComponentClient();

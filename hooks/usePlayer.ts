@@ -19,6 +19,27 @@ interface PlayerStore {
   play: () => void;
 }
 
+/**
+ * プレイヤーの状態を管理するカスタムフック
+ *
+ * @returns {Object} プレイヤーの状態と操作関数
+ * @property {string[]} ids - 再生リストの曲ID
+ * @property {string|undefined} activeId - 現在再生中の曲ID
+ * @property {boolean} isRepeating - リピート再生中かどうか
+ * @property {boolean} isShuffling - シャッフル再生中かどうか
+ * @property {string[]} shuffledIds - シャッフルされた曲IDリスト
+ * @property {boolean} isLoading - ローディング中かどうか
+ * @property {boolean|undefined} isSuno - Suno曲かどうか
+ * @property {function} setId - 現在の曲IDを設定する関数
+ * @property {function} setIds - 再生リストを設定する関数
+ * @property {function} toggleRepeat - リピート切り替え関数
+ * @property {function} toggleShuffle - シャッフル切り替え関数
+ * @property {function} reset - プレイヤーをリセットする関数
+ * @property {function} getNextSongId - 次の曲IDを取得する関数
+ * @property {function} getPreviousSongId - 前の曲IDを取得する関数
+ * @property {function} setIsLoading - ローディング状態を設定する関数
+ * @property {function} play - 再生を開始する関数
+ */
 const usePlayer = create<PlayerStore>((set, get) => ({
   ids: [],
   activeId: undefined,

@@ -5,10 +5,13 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useState, useEffect } from "react";
 
 /**
- * 指定された期間に基づいてトレンド曲を取得する
+ * 指定された期間に基づいてトレンド曲を取得するカスタムフック
  *
- * @param period "all", "month", "week", "day" のいずれか
- * @returns {trends: Song[], isLoading: boolean, error: string|null}
+ * @param {"all" | "month" | "week" | "day"} period - 取得する期間
+ * @returns {Object} トレンド曲の取得状態と結果
+ * @property {Song[]} trends - 取得したトレンド曲のリスト
+ * @property {boolean} isLoading - データ取得中かどうか
+ * @property {string|null} error - エラーメッセージ
  */
 const useGetTrendSongs = (period: "all" | "month" | "week" | "day" = "all") => {
   const [trends, setTrends] = useState<Song[]>([]);
@@ -52,7 +55,7 @@ const useGetTrendSongs = (period: "all" | "month" | "week" | "day" = "all") => {
             break;
         }
 
-        // データを取得し、カウントの降順でソートし、最大3曲まで取得
+        // データを取得し、カウントの降順でソートし、最大10曲まで取得
         const { data, error } = await query
           .order("count", { ascending: false })
           .limit(10);

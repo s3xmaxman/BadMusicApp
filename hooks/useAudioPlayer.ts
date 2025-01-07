@@ -4,6 +4,31 @@ import { isMobile } from "react-device-detect";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 
+/**
+ * オーディオプレイヤーの状態と操作を管理するカスタムフック
+ *
+ * @param {string} songUrl - 再生する曲のURL
+ * @returns {Object} プレイヤーの状態と操作関数を含むオブジェクト
+ * @property {React.ComponentType} Icon - 再生/一時停止アイコン
+ * @property {React.ComponentType} VolumeIcon - 音量アイコン
+ * @property {string} formattedCurrentTime - フォーマットされた現在の再生時間
+ * @property {string} formattedDuration - フォーマットされた曲の長さ
+ * @property {function} toggleMute - ミュート切り替え関数
+ * @property {number} volume - 現在の音量
+ * @property {function} setVolume - 音量設定関数
+ * @property {React.RefObject} audioRef - オーディオ要素への参照
+ * @property {number} currentTime - 現在の再生時間（秒）
+ * @property {number} duration - 曲の長さ（秒）
+ * @property {boolean} isPlaying - 再生中かどうか
+ * @property {boolean} isRepeating - リピート再生中かどうか
+ * @property {boolean} isShuffling - シャッフル再生中かどうか
+ * @property {function} handlePlay - 再生/一時停止切り替え関数
+ * @property {function} handleSeek - シーク操作関数
+ * @property {function} onPlayNext - 次の曲を再生する関数
+ * @property {function} onPlayPrevious - 前の曲を再生する関数
+ * @property {function} toggleRepeat - リピート切り替え関数
+ * @property {function} toggleShuffle - シャッフル切り替え関数
+ */
 const useAudioPlayer = (songUrl: string) => {
   const player = usePlayer();
   const [currentTime, setCurrentTime] = useState(0);

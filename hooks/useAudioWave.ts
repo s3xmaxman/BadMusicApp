@@ -20,6 +20,28 @@ interface AudioWaveState {
   setIsEnded: (isEnded: boolean) => void;
 }
 
+/**
+ * オーディオ波形データを管理するカスタムフック
+ *
+ * @returns {Object} オーディオ波形の状態と操作関数
+ * @property {AudioContext|null} audioContext - Web Audio APIのコンテキスト
+ * @property {AnalyserNode|null} analyser - オーディオ分析用ノード
+ * @property {HTMLAudioElement|null} audioElement - オーディオ要素
+ * @property {MediaElementAudioSourceNode|null} source - メディアソースノード
+ * @property {number} currentTime - 現在の再生時間（秒）
+ * @property {number} duration - 曲の長さ（秒）
+ * @property {boolean} isPlaying - 再生中かどうか
+ * @property {string|null} currentSongId - 現在の曲ID
+ * @property {string|null} audioUrl - オーディオURL
+ * @property {boolean} isEnded - 再生終了したかどうか
+ * @property {function} initializeAudio - オーディオの初期化関数
+ * @property {function} play - 再生関数
+ * @property {function} pause - 一時停止関数
+ * @property {function} seek - シーク関数
+ * @property {function} cleanup - クリーンアップ関数
+ * @property {function} setIsPlaying - 再生状態設定関数
+ * @property {function} setIsEnded - 終了状態設定関数
+ */
 const useAudioWaveStore = create<AudioWaveState>((set, get) => ({
   audioContext: null,
   analyser: null,

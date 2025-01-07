@@ -2,6 +2,12 @@ import { useState, useEffect, useMemo } from "react";
 import { Song, SunoSong } from "@/types";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
+/**
+ * 曲のURLを読み込むカスタムフック
+ *
+ * @param {Song | SunoSong | undefined} song - 曲データ
+ * @returns {string} 読み込まれた曲のURL
+ */
 const useLoadSongUrl = (song: Song | SunoSong | undefined) => {
   const supabaseClient = useSupabaseClient();
   const [songUrl, setSongUrl] = useState<string>("");

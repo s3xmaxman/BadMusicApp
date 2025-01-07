@@ -1,6 +1,16 @@
 import { useState, useEffect } from "react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
+/**
+ * Supabase Storageからファイルをダウンロードするためのカスタムフック
+ *
+ * @param {string} path - ダウンロードするファイルのパス
+ * @returns {Object} ダウンロード状態と結果を含むオブジェクト
+ * @property {string|null} fileUrl - ダウンロードしたファイルのURL
+ * @property {boolean} loading - ダウンロード中の状態
+ * @property {string|null} error - エラーメッセージ
+ *
+ */
 const useDownload = (path: string) => {
   const supabase = useSupabaseClient();
   const [fileUrl, setFileUrl] = useState<string | null>(null);

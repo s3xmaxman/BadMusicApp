@@ -3,6 +3,14 @@ import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
+/**
+ * 指定されたIDに基づいてSuno曲を取得するカスタムフック
+ *
+ * @param {string|undefined} id - 取得するSuno曲のID
+ * @returns {Object} Suno曲の取得状態と結果
+ * @property {boolean} isLoading - データ取得中かどうか
+ * @property {SunoSong|undefined} sunoSong - 取得したSuno曲データ
+ */
 const useGetSunoSongById = (id?: string) => {
   const [isLoading, setIsLoading] = useState(true);
   const [sunoSong, setSunoSong] = useState<SunoSong | undefined>(undefined);

@@ -11,6 +11,12 @@ const debounce = (func: (...args: any[]) => void, wait: number) => {
   };
 };
 
+/**
+ * Suno曲の再生を管理するカスタムフック
+ *
+ * @param {SunoSong[]} sunoSongs - 再生対象のSuno曲リスト
+ * @returns {function} Suno曲を再生する関数
+ */
 const useOnPlaySuno = (sunoSongs: SunoSong[]) => {
   const player = usePlayer();
   const supabase = createClientComponentClient();
