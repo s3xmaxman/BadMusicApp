@@ -1,6 +1,11 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
+/**
+ * 指定されたプレイリストIDの画像パスを取得する
+ * @param {string} playlistId プレイリストID
+ * @returns {Promise<string | null>} 画像パス。取得できない場合はnullを返す
+ */
 const getPlaylistsImage = async (playlistId: string) => {
   const supabase = createServerComponentClient({
     cookies: cookies,

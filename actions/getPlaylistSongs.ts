@@ -4,6 +4,11 @@ import { cookies } from "next/headers";
 
 type PlaylistSong = (Song | SunoSong) & { songType: "regular" | "suno" };
 
+/**
+ * 指定されたプレイリストIDに含まれる曲を取得する
+ * @param {string} playlistId プレイリストID
+ * @returns {Promise<PlaylistSong[]>} プレイリストに含まれる曲の配列
+ */
 const getPlaylistSongs = async (
   playlistId: string
 ): Promise<PlaylistSong[]> => {

@@ -4,6 +4,11 @@ import getSongs from "./getSongs";
 import getSunoSongs from "./getSunoSongs";
 import { Song, SunoSong } from "@/types";
 
+/**
+ * タイトルで曲を検索する
+ * @param {string} title 検索するタイトル
+ * @returns {Promise<{songs: Song[], sunoSongs: SunoSong[]}>} 通常曲とAI生成曲のオブジェクト
+ */
 const getSongsByTitle = async (title: string) => {
   const supabase = createServerComponentClient({
     cookies: cookies,
@@ -19,14 +24,12 @@ const getSongsByTitle = async (title: string) => {
   }
 
   const [songsResult, sunoSongsResult] = await Promise.all([
-    // 通常の曲を検索
     supabase
       .from("songs")
       .select("*")
       .ilike("title", `%${title}%`)
       .order("created_at", { ascending: false }),
 
-    // AI生成曲を検索
     supabase
       .from("suno_songs")
       .select("*")

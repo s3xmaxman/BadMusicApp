@@ -2,6 +2,10 @@ import { SunoSong } from "@/types";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
+/**
+ * ユーザーのAI生成曲を取得する
+ * @returns {Promise<SunoSong[]>} AI生成曲の配列
+ */
 const getSunoSongs = async (): Promise<SunoSong[]> => {
   const supabase = createServerComponentClient({
     cookies: cookies,

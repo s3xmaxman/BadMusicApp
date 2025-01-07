@@ -3,6 +3,11 @@ import { cookies } from "next/headers";
 
 import { SunoSong } from "@/types";
 
+/**
+ * タグでAI生成曲を検索する
+ * @param {string | string[]} tags 検索するタグ（カンマ区切り文字列または配列）
+ * @returns {Promise<SunoSong[]>} 検索結果のAI生成曲配列
+ */
 const getSunoSongsByTags = async (
   tags: string | string[]
 ): Promise<SunoSong[]> => {

@@ -2,6 +2,11 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { Encryption } from "@/libs/encryption";
 
+/**
+ * ユーザーのSuno API用クッキーを取得する
+ * @returns {Promise<string>} 復号化されたクッキー
+ * @throws {Error} 認証エラー、クッキー取得エラー、復号化エラーが発生した場合
+ */
 export async function getSunoCookie(): Promise<string> {
   try {
     const supabase = createServerComponentClient({ cookies });

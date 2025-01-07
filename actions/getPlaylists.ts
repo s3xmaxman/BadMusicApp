@@ -3,6 +3,10 @@ import { cookies } from "next/headers";
 
 import { Playlist } from "@/types";
 
+/**
+ * ユーザーのプレイリスト一覧を取得する
+ * @returns {Promise<Playlist[]>} プレイリストの配列
+ */
 const getPlaylists = async (): Promise<Playlist[]> => {
   const supabase = createServerComponentClient({
     cookies: cookies,
