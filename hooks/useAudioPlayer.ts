@@ -34,6 +34,7 @@ const useAudioPlayer = (songUrl: string) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [showVolumeSlider, setShowVolumeSlider] = useState(false);
   const [volume, setVolume] = useState(isMobile ? 1 : 0.1);
   const audioRef = useRef<HTMLAudioElement>(null);
   const isRepeating = usePlayer((state) => state.isRepeating);
@@ -160,12 +161,8 @@ const useAudioPlayer = (songUrl: string) => {
 
   const formattedDuration = useMemo(() => formatTime(duration), [duration]);
 
-  const toggleMute = () => {
-    if (volume === 0) {
-      setVolume(0.1);
-    } else {
-      setVolume(0);
-    }
+  const handleVolumeClick = () => {
+    setShowVolumeSlider(!showVolumeSlider);
   };
 
   return {
@@ -173,9 +170,11 @@ const useAudioPlayer = (songUrl: string) => {
     VolumeIcon,
     formattedCurrentTime,
     formattedDuration,
-    toggleMute,
     volume,
     setVolume,
+    showVolumeSlider,
+    setShowVolumeSlider,
+    handleVolumeClick,
     audioRef,
     currentTime,
     duration,
