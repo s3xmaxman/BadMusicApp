@@ -36,7 +36,6 @@ const SunoPlayerContent: React.FC<SunoPlayerContentProps> = ({
     formattedCurrentTime,
     formattedDuration,
     volume,
-    toggleMute,
     setVolume,
     audioRef,
     currentTime,
@@ -50,6 +49,9 @@ const SunoPlayerContent: React.FC<SunoPlayerContentProps> = ({
     onPlayPrevious,
     toggleRepeat,
     toggleShuffle,
+    showVolumeSlider,
+    setShowVolumeSlider,
+    handleVolumeClick,
   } = useAudioPlayer(songUrl);
 
   useEffect(() => {
@@ -57,6 +59,16 @@ const SunoPlayerContent: React.FC<SunoPlayerContentProps> = ({
       audioRef.current.src = songUrl;
     }
   }, [songUrl, audioRef]);
+
+  useEffect(() => {
+    if (!showVolumeSlider) return;
+
+    const timeout = setTimeout(() => {
+      setShowVolumeSlider(false);
+    }, 3000);
+
+    return () => clearTimeout(timeout);
+  }, [showVolumeSlider]);
 
   if (!song) return null;
 
@@ -79,7 +91,6 @@ const SunoPlayerContent: React.FC<SunoPlayerContentProps> = ({
           </div>
         </div>
 
-        {/* PC版のレイアウト */}
         <div className="hidden md:flex flex-col w-full md:justify-center items-center max-w-[722px] gap-x-6">
           <div className="flex items-center gap-x-8">
             <FaRandom
@@ -142,20 +153,23 @@ const SunoPlayerContent: React.FC<SunoPlayerContentProps> = ({
               songType="suno"
             />
             <LikeButton songId={song.id} songType="suno" />
-            <div className="relative group">
+            <div className="relative">
               <VolumeIcon
-                onClick={toggleMute}
+                onClick={handleVolumeClick}
                 className="cursor-pointer text-neutral-400 hover:text-white hover:filter hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] transition-all duration-300"
                 size={22}
               />
-              <div className="absolute bottom-full mb-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
+              <div
+                className={`absolute bottom-full mb-3 ml-1 transition-opacity duration-200 z-50 ${
+                  showVolumeSlider ? "opacity-100" : "opacity-0"
+                }`}
+              >
                 <Slider value={volume} onChange={(value) => setVolume(value)} />
               </div>
             </div>
           </div>
         </div>
 
-        {/* モバイル版レイアウト */}
         {isMobilePlayer && (
           <SunoMobilePlayerContent
             song={song}
