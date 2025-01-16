@@ -15,7 +15,7 @@ interface FullScreenLayoutProps {
 const FullScreenLayout: React.FC<FullScreenLayoutProps> = React.memo(
   ({ song, videoPath, imagePath, nextSong, nextImagePath, toggleLayout }) => {
     return (
-      <div className="relative w-full h-full overflow-hidden">
+      <div className="relative w-full h-full overflow-hidden rounded-xl">
         <CurrentSongDisplay
           song={song}
           videoPath={videoPath}

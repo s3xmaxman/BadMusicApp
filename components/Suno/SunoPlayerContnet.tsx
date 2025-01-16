@@ -75,7 +75,7 @@ const SunoPlayerContent: React.FC<SunoPlayerContentProps> = ({
   return (
     <>
       <audio ref={audioRef} src={songUrl} loop={isRepeating} />
-      <div className="grid grid-cols-2 md:grid-cols-3 h-full">
+      <div className="grid grid-cols-2 md:grid-cols-3 h-full bg-[#0d0d0d]">
         <div className="flex w-full justify-start">
           <div className="flex items-center gap-x-4">
             <MediaItem data={song} onClick={toggleMobilePlayer} />
@@ -85,9 +85,12 @@ const SunoPlayerContent: React.FC<SunoPlayerContentProps> = ({
         <div className="flex md:hidden col-auto w-full justify-end items-center">
           <div
             onClick={handlePlay}
-            className="h-10 w-10 flex items-center justify-center rounded-full bg-white p-1 cursor-pointer"
+            className="h-10 w-10 flex items-center justify-center rounded-full bg-gradient-to-br from-[#08101f] to-[#0d0d0d] p-1 cursor-pointer group"
           >
-            <Icon size={30} className="text-black" />
+            <Icon
+              size={30}
+              className="text-[#f0f0f0] group-hover:filter group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
+            />
           </div>
         </div>
 
@@ -105,18 +108,21 @@ const SunoPlayerContent: React.FC<SunoPlayerContentProps> = ({
             <AiFillStepBackward
               onClick={onPlayPrevious}
               size={30}
-              className=" text-neutral-400 cursor-pointer hover:text-white hover:filter hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] transition-all duration-300"
+              className="text-neutral-400 cursor-pointer hover:text-white hover:filter hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] transition-all duration-300"
             />
             <div
               onClick={handlePlay}
-              className="flex items-center justify-center h-7 w-7 rounded-full bg-white p-1 cursor-pointer"
+              className="flex items-center justify-center h-7 w-7 rounded-full bg-gradient-to-br from-[#08101f] to-[#0d0d0d] p-1 cursor-pointer group"
             >
-              <Icon size={30} className="text-black" />
+              <Icon
+                size={30}
+                className="text-[#f0f0f0] group-hover:filter group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]"
+              />
             </div>
             <AiFillStepForward
               onClick={onPlayNext}
               size={30}
-              className=" text-neutral-400 cursor-pointer hover:text-white hover:filter hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] transition-all duration-300"
+              className="text-neutral-400 cursor-pointer hover:text-white hover:filter hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] transition-all duration-300"
             />
             <BsRepeat1
               onClick={toggleRepeat}
@@ -130,7 +136,7 @@ const SunoPlayerContent: React.FC<SunoPlayerContentProps> = ({
           </div>
 
           <div className="flex items-center gap-x-2 mt-4 w-full lg:max-w-[800px] md:max-w-[300px]">
-            <span className="w-[50px] text-center inline-block">
+            <span className="w-[50px] text-center inline-block text-[#f0f0f0]">
               {formattedCurrentTime}
             </span>
             <SeekBar
@@ -139,7 +145,7 @@ const SunoPlayerContent: React.FC<SunoPlayerContentProps> = ({
               onSeek={handleSeek}
               className="flex-1 h-2"
             />
-            <span className="w-[50px] text-center inline-block">
+            <span className="w-[50px] text-center inline-block text-[#f0f0f0]">
               {formattedDuration}
             </span>
           </div>

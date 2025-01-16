@@ -35,7 +35,6 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
           transition
           text-neutral-400
           py-1
-          ${isCollapsed ? "justify-start" : ""}
         `,
         active && "text-white",
         isCollapsed ? "text-xl" : "text-lg"
