@@ -34,12 +34,14 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
           hover:text-white
           transition
           text-neutral-400
-          py-1`,
+          py-1
+          ${isCollapsed ? "justify-start" : ""}
+        `,
         active && "text-white",
         isCollapsed ? "text-xl" : "text-lg"
       )}
     >
-      <Icon size={24} />
+      <Icon size={26} />
       {!isCollapsed && <span className="truncate w-full">{label}</span>}
     </Link>
   );

@@ -83,7 +83,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children, songs, playlists }) => {
             alt="Logo"
             width={isCollapsed ? 32 : 48}
             height={isCollapsed ? 32 : 48}
-            className="mr-auto ml-2 cursor-pointer"
+            className="mr-auto ml-[15px] cursor-pointer"
             onClick={() => isCollapsed && setIsCollapsed(!isCollapsed)}
           />
           {!isCollapsed && <h1 className="font-bold text-xl">BadMusicApp</h1>}
