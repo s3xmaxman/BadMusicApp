@@ -41,7 +41,7 @@ const Player = ({ playlists }: PlayerProps) => {
   return (
     <>
       <div className="fixed bottom-0 left-0 w-full ">
-        <div className="bg-black w-full py-2 px-4 h-[100px] pb-[130px] md:pb-0">
+        <div className="bg-black w-full h-[100px] pb-[130px] md:pb-0 max-md:px-2">
           {player.isSuno ? (
             <SunoPlayerContent
               song={actualSunoSong as SunoSong}

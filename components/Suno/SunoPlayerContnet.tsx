@@ -75,7 +75,7 @@ const SunoPlayerContent: React.FC<SunoPlayerContentProps> = ({
   return (
     <>
       <audio ref={audioRef} src={songUrl} loop={isRepeating} />
-      <div className="grid grid-cols-2 md:grid-cols-3 h-full bg-[#0d0d0d]">
+      <div className="grid grid-cols-2 md:grid-cols-3 h-full from-[#000000] to-[#04000b]">
         <div className="flex w-full justify-start">
           <div className="flex items-center gap-x-4">
             <MediaItem data={song} onClick={toggleMobilePlayer} />
