@@ -18,19 +18,15 @@ import { Textarea } from "../ui/textarea";
 import GenreSelect from "../GenreSelect";
 import Button from "../Button";
 
-// TODO: ドラッグアンドドロップからアップロードできない問題を解決する
-
 const UploadModal: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [audioPreview, setAudioPreview] = useState<string | null>(null);
-  const [isDraggingAudio, setIsDraggingAudio] = useState(false);
-  const [isDraggingImage, setIsDraggingImage] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement>(null);
-  const audioDropRef = useRef<HTMLDivElement>(null);
-  const imageDropRef = useRef<HTMLDivElement>(null);
+  const dropRef = useRef<HTMLDivElement>(null);
 
   const uploadModal = useUploadModal();
   const supabaseClient = useSupabaseClient();
@@ -51,34 +47,42 @@ const UploadModal: React.FC = () => {
   const song = watch("song");
   const image = watch("image");
 
-  const handleFileDrop =
-    (fileType: "audio" | "image") => (e: DragEvent<HTMLDivElement>) => {
-      e.preventDefault();
-      if (fileType === "audio") {
-        setIsDraggingAudio(false);
-      } else {
-        setIsDraggingImage(false);
-      }
+  const handleFileDrop = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
 
-      const file = e.dataTransfer.files[0];
-      if (file && file.type.startsWith(`${fileType}/`)) {
-        setValue(fileType === "audio" ? "song" : "image", [file]);
-        if (fileType === "audio") {
-          setAudioPreview(URL.createObjectURL(file));
-        } else {
-          setImagePreview(URL.createObjectURL(file));
-        }
+    const files = e.dataTransfer.files;
+    handleFiles(files);
+  };
+
+  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) handleFiles(files);
+  };
+
+  const handleFiles = (files: FileList) => {
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+
+      if (file.type.startsWith("audio/")) {
+        setValue("song", [file]);
+        setAudioPreview(URL.createObjectURL(file));
+      } else if (file.type.startsWith("image/")) {
+        setValue("image", [file]);
+        setImagePreview(URL.createObjectURL(file));
       } else {
-        toast.error(
-          `${
-            fileType === "audio" ? "音声" : "画像"
-          }ファイルをアップロードしてください`
-        );
+        toast.error("サポートされていないファイル形式です");
       }
-    };
+    }
+  };
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
   };
 
   useEffect(() => {
@@ -188,7 +192,7 @@ const UploadModal: React.FC = () => {
   return (
     <Modal
       title="曲をアップロード"
-      description="mp3ファイルを選択してください"
+      description="mp3ファイルと画像ファイルを選択してください"
       isOpen={uploadModal.isOpen}
       onChange={onChange}
     >
@@ -248,63 +252,32 @@ const UploadModal: React.FC = () => {
 
         <div className="space-y-4">
           <div className="space-y-1">
-            <label className="text-sm text-zinc-400">曲を選択</label>
+            <label className="text-sm text-zinc-400">ファイルを選択</label>
             <div
-              ref={audioDropRef}
+              ref={dropRef}
               onDragOver={handleDragOver}
-              onDragEnter={() => setIsDraggingAudio(true)}
-              onDragLeave={() => setIsDraggingAudio(false)}
-              onDrop={handleFileDrop("audio")}
+              onDragLeave={handleDragLeave}
+              onDrop={handleFileDrop}
               className={`relative p-3 border-2 border-dashed rounded-lg transition-colors ${
-                isDraggingAudio
+                isDragging
                   ? "border-blue-500 bg-blue-500/10"
                   : "border-zinc-700/50 bg-zinc-800/50"
               }`}
             >
               <Input
                 type="file"
-                accept=".mp3"
-                id="song"
+                accept="audio/*,image/*"
+                id="file"
                 disabled={isLoading}
-                {...register("song", { required: true })}
+                onChange={handleFileInput}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                multiple
               />
               <div className="text-center py-2">
                 <p className="text-sm text-zinc-400">
                   クリックまたはドラッグ&ドロップ
                 </p>
-                <p className="text-xs text-zinc-500">MP3形式のみ</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-1">
-            <label className="text-sm text-zinc-400">画像を選択</label>
-            <div
-              ref={imageDropRef}
-              onDragOver={handleDragOver}
-              onDragEnter={() => setIsDraggingImage(true)}
-              onDragLeave={() => setIsDraggingImage(false)}
-              onDrop={handleFileDrop("image")}
-              className={`relative p-3 border-2 border-dashed rounded-lg transition-colors ${
-                isDraggingImage
-                  ? "border-blue-500 bg-blue-500/10"
-                  : "border-zinc-700/50 bg-zinc-800/50"
-              }`}
-            >
-              <Input
-                type="file"
-                accept="image/*"
-                id="image"
-                disabled={isLoading}
-                {...register("image", { required: true })}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-              />
-              <div className="text-center py-2">
-                <p className="text-sm text-zinc-400">
-                  クリックまたはドラッグ&ドロップ
-                </p>
-                <p className="text-xs text-zinc-500">PNG, JPG</p>
+                <p className="text-xs text-zinc-500">MP3および画像ファイル</p>
               </div>
             </div>
           </div>
