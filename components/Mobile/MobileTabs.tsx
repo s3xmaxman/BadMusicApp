@@ -23,7 +23,6 @@ const MobileTabs = () => {
           <Link href="/">
             <AiFillHome size={22} />
           </Link>
-          <span className="text-[10px] mt-3">ホーム</span>
         </button>
         <button
           onClick={() => handleTabClick("add")}
@@ -34,7 +33,6 @@ const MobileTabs = () => {
           <Link href="/search">
             <AiOutlineSearch size={24} />
           </Link>
-          <span className="text-[10px] mt-3">検索</span>
         </button>
         <button
           onClick={() => handleTabClick("playlist")}
@@ -45,7 +43,6 @@ const MobileTabs = () => {
           <Link href="/playlists">
             <AiOutlineBars size={22} />
           </Link>
-          <span className="text-[10px] mt-3">プレイリスト</span>
         </button>
         <button
           onClick={() => handleTabClick("liked")}
@@ -56,7 +53,6 @@ const MobileTabs = () => {
           <Link href="/liked">
             <FaHeart size={22} />
           </Link>
-          <span className="text-[10px] mt-3">お気に入り</span>
         </button>
       </div>
     </div>
