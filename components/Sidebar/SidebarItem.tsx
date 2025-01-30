@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { IconType } from "react-icons";
 import { twMerge } from "tailwind-merge";
+import Hover from "../Hover";
 
 interface SidebarItemProps {
   icon: IconType;
@@ -17,7 +18,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   href,
   isCollapsed,
 }) => {
-  return (
+  const linkContent = (
     <Link
       href={href}
       className={twMerge(
@@ -43,6 +44,14 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
       <Icon size={26} />
       {!isCollapsed && <span className="truncate w-full">{label}</span>}
     </Link>
+  );
+
+  return isCollapsed ? (
+    <Hover description={label} side="right" isCollapsed={isCollapsed}>
+      {linkContent}
+    </Hover>
+  ) : (
+    linkContent
   );
 };
 

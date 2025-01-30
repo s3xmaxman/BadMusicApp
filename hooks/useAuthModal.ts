@@ -2,16 +2,16 @@ import { create } from "zustand";
 
 // AuthModalの状態を管理するインターフェース
 interface AuthModalStore {
-  isOpen: boolean; // モーダルが開いているかどうかを示すフラグ
-  onOpen: () => void; // モーダルを開くための関数
-  onClose: () => void; // モーダルを閉じるための関数
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
 }
 
 // Zustandフックを使用してAuthModalの状態を管理するカスタムフック
 export const useAuthModal = create<AuthModalStore>((set) => ({
-  isOpen: false, // モーダルの初期状態は閉じている
-  onOpen: () => set({ isOpen: true }), // モーダルを開く関数
-  onClose: () => set({ isOpen: false }), // モーダルを閉じる関数
+  isOpen: false,
+  onOpen: () => set({ isOpen: true }),
+  onClose: () => set({ isOpen: false }),
 }));
 
-export default useAuthModal; // useAuthModalフックをデフォルトエクスポート
+export default useAuthModal;
