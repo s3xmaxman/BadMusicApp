@@ -13,7 +13,6 @@ import { useState } from "react";
 import { MdMusicNote } from "react-icons/md";
 import { MdOutlineQueueMusic } from "react-icons/md";
 import Hover from "../Hover";
-
 import Image from "next/image";
 import useSunoModal from "@/hooks/useSunoModal";
 
@@ -54,15 +53,24 @@ const Library: React.FC<LibraryProps> = ({ songs, playlists, isCollapsed }) => {
         <div className="inline-flex items-center gap-x-4">
           {!isCollapsed && (
             <Tabs value={selectedTab} onValueChange={setSelectedTab}>
-              <TabsList className="rounded-full">
-                <TabsTrigger value="music" className="rounded-full">
+              <TabsList className="rounded-full bg-neutral-800/50 p-1 h-9">
+                <TabsTrigger
+                  value="music"
+                  className="rounded-full px-3 py-1 h-7 data-[state=active]:bg-neutral-700/80 data-[state=active]:shadow-sm data-[state=active]:text-white transition-all duration-200 hover:bg-neutral-700/30"
+                >
                   <Hover contentSize="w-24" description="楽曲">
-                    <MdMusicNote size={25} />
+                    <MdMusicNote size={20} className="text-neutral-300" />
                   </Hover>
                 </TabsTrigger>
-                <TabsTrigger value="playlist" className="rounded-full">
+                <TabsTrigger
+                  value="playlist"
+                  className="rounded-full px-3 py-1 h-7 data-[state=active]:bg-neutral-700/80 data-[state=active]:shadow-sm data-[state=active]:text-white transition-all duration-200 hover:bg-neutral-700/30"
+                >
                   <Hover contentSize="w-24" description="プレイリスト">
-                    <MdOutlineQueueMusic size={25} />
+                    <MdOutlineQueueMusic
+                      size={20}
+                      className="text-neutral-300"
+                    />
                   </Hover>
                 </TabsTrigger>
               </TabsList>
@@ -72,17 +80,6 @@ const Library: React.FC<LibraryProps> = ({ songs, playlists, isCollapsed }) => {
 
         {!isCollapsed && (
           <div className="flex gap-x-4">
-            <Hover contentSize="w-24" description="SUNO">
-              <Image
-                src="/suno.png"
-                alt="suno"
-                width={20}
-                height={20}
-                onClick={sunoModal.onOpen}
-                className="text-neutral-400 cursor-pointer hover:text-white transition"
-              />
-            </Hover>
-
             <Hover contentSize="w-40" description="プレイリストを作成">
               <AiOutlineBars
                 className="text-neutral-400 cursor-pointer hover:text-white transition"
