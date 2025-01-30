@@ -9,6 +9,7 @@ import { useUser } from "@/hooks/useUser";
 import { FaUserAlt } from "react-icons/fa";
 import toast from "react-hot-toast";
 import usePlayer from "@/hooks/usePlayer";
+import Image from "next/image";
 
 interface HeaderProps {
   children: React.ReactNode;
@@ -36,23 +37,19 @@ const Header: React.FC<HeaderProps> = ({ children, className, logout }) => {
 
   return (
     <div className={twMerge(`h-fit p-6`, className)}>
-      <div className="w-full mb-4 flex items-center md:justify-between justify-end">
-        <div className="hidden md:flex gap-x-2 items-center">
-          {/* <button
-            onClick={() => router.back()}
-            className="rounded-full bg-black flex items-center justify-center hover:opacity-75 transition"
-          >
-            <RxCaretLeft className="text-white" size={35} />
-          </button>
-          <button
-            onClick={() => router.forward()}
-            className="rounded-full bg-black flex items-center justify-center hover:opacity-75 transition"
-          >
-            <RxCaretRight className="text-white" size={35} />
-          </button> */}
+      <div className="w-full mb-4 flex items-center justify-between">
+        <div className="md:hidden flex items-center">
+          <Image
+            src="/logo.svg"
+            alt="Logo"
+            width={50}
+            height={50}
+            className="object-contain"
+          />
+          <h1 className="font-bold text-xl ml-2">BadMusicApp</h1>
         </div>
 
-        <div className="flex justify-between items-center gap-x-4">
+        <div className="ml-auto flex justify-end items-center gap-x-4">
           {user ? (
             <div className="flex gap-x-4 items-center">
               {logout && (
@@ -69,7 +66,7 @@ const Header: React.FC<HeaderProps> = ({ children, className, logout }) => {
             </div>
           ) : (
             <>
-              <div className="">
+              <div>
                 <Button
                   onClick={authModal.onOpen}
                   className="bg-transparent text-neutral-300 font-medium"
