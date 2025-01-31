@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import useSpotlightModal from "@/hooks/useSpotlightModal";
 
 export const SpotlightData = [
   {
@@ -22,11 +23,13 @@ export const SpotlightData = [
 const SpotlightBoard = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isMuted, setIsMuted] = useState(true);
+  const spotlightModal = useSpotlightModal();
 
   const handleVideoHover = (index: number) => {
     setHoveredIndex(index);
     // ホバー時に対象の動画を再生
     const videos = document.querySelectorAll("video");
+
     videos.forEach((video, videoIndex) => {
       if (videoIndex === index) {
         video.play().catch((error) => console.log("Video play failed:", error));
@@ -59,9 +62,7 @@ const SpotlightBoard = () => {
             className="relative aspect-[9/16] rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
             onMouseEnter={() => handleVideoHover(index)}
             onMouseLeave={handleVideoLeave}
-            onClick={() => {
-              /* モーダル用のプレースホルダ */
-            }}
+            onClick={() => spotlightModal.onOpen(item)}
           >
             <video
               src={item.video_path}
@@ -79,7 +80,7 @@ const SpotlightBoard = () => {
               className="absolute bottom-2 right-2 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors"
             >
               <svg
-                className="w-6 h-6 text-white/80"
+                className="w-4 h-4 text-white/80"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

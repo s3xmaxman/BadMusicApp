@@ -30,7 +30,7 @@ const ModalProvider: React.FC<ModalProviderProps> = ({ products }) => {
       <UploadModal />
       <PlaylistModal />
       <SunoModal />
-
+      <SpotlightModal />
       <SubscribeModal products={products} />
     </>
   );
