@@ -9,6 +9,7 @@ import GenreCard from "@/components/GenreCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import dynamic from "next/dynamic";
 import { videoIds } from "@/constants";
+import SpotlightBoard from "@/components/SpotlightBoard";
 
 const YouTubePlayer = dynamic(() => import("@/components/YouTubePlayer"), {
   ssr: false,
@@ -176,6 +177,10 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs, sunoSongs }) => {
                 )}
               </div>
             )}
+          </section>
+
+          <section>
+            <SpotlightBoard />
           </section>
 
           {/* Genres Section */}
