@@ -1,47 +1,111 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { Dialog } from "@/components/ui/dialog";
+import { X } from "lucide-react";
 import useSpotlightModal from "@/hooks/useSpotlightModal";
-import Modal from "./Modal";
-import { SpotlightData } from "../SpotlightBoard";
 
-const SpotlightModal = () => {
+const SpotlightReelModal = () => {
   const { isOpen, onClose } = useSpotlightModal();
   const selectedItem = useSpotlightModal((state) => state.selectedItem);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  useEffect(() => {
+    const playVideo = async () => {
+      if (videoRef.current && isOpen) {
+        try {
+          await videoRef.current.play();
+          setIsPlaying(true);
+        } catch (error) {
+          console.error("Video playback failed:", error);
+          setIsPlaying(false);
+        }
+      }
+    };
+
+    if (isOpen) {
+      playVideo();
+    } else {
+      if (videoRef.current) {
+        videoRef.current.pause();
+        setIsPlaying(false);
+      }
+    }
+
+    return () => {
+      if (videoRef.current) {
+        videoRef.current.pause();
+        setIsPlaying(false);
+      }
+    };
+  }, [isOpen, selectedItem]);
 
   if (!selectedItem) return null;
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onChange={onClose}
-      title="Spotlight"
-      description={selectedItem.title}
-    >
-      <div className="flex flex-col md:flex-row gap-6 h-[80vh]">
-        {/* 動画表示エリア */}
-        <div className="flex-1 bg-black rounded-lg overflow-hidden">
-          <video
-            src={selectedItem.video_path}
-            controls
-            autoPlay
-            muted
-            className="w-full h-full object-contain"
-          />
-        </div>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <div className="fixed inset-0 bg-black/90 z-50">
+        <div className="fixed inset-0 overflow-y-auto">
+          <div className="flex min-h-full items-center justify-center p-4">
+            <div className="relative w-full max-w-4xl mx-auto flex bg-black h-[70vh]">
+              {/* Close Button */}
+              <button
+                onClick={onClose}
+                className="absolute right-2 top-2 z-10 p-2 hover:bg-neutral-800/50 rounded-full"
+              >
+                <X className="h-5 w-5 text-white" />
+              </button>
 
-        {/* 詳細情報エリア */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          <h2 className="text-2xl font-bold">{selectedItem.title}</h2>
-          <div className="space-y-2">
-            <p className="text-neutral-400">Artist: {selectedItem.author}</p>
-            <p className="text-neutral-400">Genre: {selectedItem.genre}</p>
+              {/* Video Section - Left Half */}
+              <div className="w-1/2 h-full bg-black flex items-center justify-center">
+                {selectedItem.video_path && (
+                  <video
+                    ref={videoRef}
+                    key={selectedItem.video_path}
+                    src={selectedItem.video_path}
+                    loop
+                    playsInline
+                    className="h-full w-full object-contain"
+                    onLoadedData={() => {
+                      if (videoRef.current && !isPlaying) {
+                        videoRef.current.play().catch(console.error);
+                      }
+                    }}
+                  />
+                )}
+              </div>
+
+              {/* Content Section - Right Half */}
+              <div className="w-1/2 h-full flex flex-col p-4 overflow-y-auto">
+                <div className="flex flex-col space-y-3">
+                  {/* Header */}
+                  <h2 className="text-xl font-bold text-white">
+                    {selectedItem.title}
+                  </h2>
+
+                  {/* Metadata */}
+                  <div className="space-y-1">
+                    <p className="text-neutral-400 text-sm">
+                      Artist: {selectedItem.author}
+                    </p>
+                    <p className="text-neutral-400 text-sm">
+                      Genre: {selectedItem.genre}
+                    </p>
+                  </div>
+
+                  {/* Description */}
+                  <div className="mt-2">
+                    <p className="text-neutral-300 text-sm whitespace-pre-wrap">
+                      {selectedItem.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <p className="text-neutral-300 whitespace-pre-wrap">
-            {selectedItem.description}
-          </p>
         </div>
       </div>
-    </Modal>
+    </Dialog>
   );
 };
 
-export default SpotlightModal;
+export default SpotlightReelModal;
