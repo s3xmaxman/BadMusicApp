@@ -56,7 +56,7 @@ const SpotlightModal = () => {
               </button>
 
               {/* Video Section - Left Half */}
-              <div className="w-1/2 h-full bg-black flex items-center justify-center">
+              <div className="w-1/2 h-full bg-black relative overflow-hidden">
                 {selectedItem.video_path && (
                   <video
                     ref={videoRef}
@@ -64,7 +64,7 @@ const SpotlightModal = () => {
                     src={selectedItem.video_path}
                     loop
                     playsInline
-                    className="h-full w-full object-contain"
+                    className="absolute h-full w-full object-cover top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
                     onLoadedData={() => {
                       if (videoRef.current && !isPlaying) {
                         videoRef.current.play();
