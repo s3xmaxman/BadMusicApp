@@ -43,10 +43,10 @@ const SpotlightModal = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <div className="fixed inset-0 bg-black/90 z-50">
+      <div className="fixed inset-0 bg-black/60 z-50">
         <div className="fixed inset-0 overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4">
-            <div className="relative w-full max-w-4xl mx-auto flex bg-black h-[70vh]">
+            <div className="relative w-full max-w-4xl mx-auto flex bg-black h-[65vh]">
               {/* Close Button */}
               <button
                 onClick={onClose}
@@ -64,11 +64,10 @@ const SpotlightModal = () => {
                     src={selectedItem.video_path}
                     loop
                     playsInline
-                    muted
                     className="h-full w-full object-contain"
                     onLoadedData={() => {
                       if (videoRef.current && !isPlaying) {
-                        videoRef.current.play().catch(console.error);
+                        videoRef.current.play();
                       }
                     }}
                   />
@@ -76,28 +75,30 @@ const SpotlightModal = () => {
               </div>
 
               {/* Content Section - Right Half */}
-              <div className="w-1/2 h-full flex flex-col p-4 overflow-y-auto">
-                <div className="flex flex-col space-y-3">
-                  {/* Header */}
-                  <h2 className="text-xl font-bold text-white">
-                    {selectedItem.title}
-                  </h2>
+              <div className="w-1/2 h-full flex items-center">
+                <div className="p-4 space-y-6">
+                  <div className="flex flex-col space-y-3">
+                    {/* Header */}
+                    <h2 className="text-xl font-bold text-white">
+                      {selectedItem.title}
+                    </h2>
 
-                  {/* Metadata */}
-                  <div className="space-y-1">
-                    <p className="text-neutral-400 text-sm">
-                      Artist: {selectedItem.author}
-                    </p>
-                    <p className="text-neutral-400 text-sm">
-                      Genre: {selectedItem.genre}
-                    </p>
-                  </div>
+                    {/* Metadata */}
+                    <div className="space-y-1">
+                      <p className="text-neutral-400 text-sm">
+                        Artist: {selectedItem.author}
+                      </p>
+                      <p className="text-neutral-400 text-sm">
+                        Genre: {selectedItem.genre}
+                      </p>
+                    </div>
 
-                  {/* Description */}
-                  <div className="mt-2">
-                    <p className="text-neutral-300 text-sm whitespace-pre-wrap">
-                      {selectedItem.description}
-                    </p>
+                    {/* Description */}
+                    <div className="mt-2">
+                      <p className="text-neutral-300 text-sm whitespace-pre-wrap">
+                        {selectedItem.description}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
