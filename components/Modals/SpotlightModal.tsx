@@ -3,7 +3,7 @@ import { Dialog } from "@/components/ui/dialog";
 import { X } from "lucide-react";
 import useSpotlightModal from "@/hooks/useSpotlightModal";
 
-const SpotlightReelModal = () => {
+const SpotlightModal = () => {
   const { isOpen, onClose } = useSpotlightModal();
   const selectedItem = useSpotlightModal((state) => state.selectedItem);
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -64,6 +64,7 @@ const SpotlightReelModal = () => {
                     src={selectedItem.video_path}
                     loop
                     playsInline
+                    muted
                     className="h-full w-full object-contain"
                     onLoadedData={() => {
                       if (videoRef.current && !isPlaying) {
@@ -108,4 +109,4 @@ const SpotlightReelModal = () => {
   );
 };
 
-export default SpotlightReelModal;
+export default SpotlightModal;

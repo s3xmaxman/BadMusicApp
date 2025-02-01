@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import useSpotlightModal from "@/hooks/useSpotlightModal";
 
 export const SpotlightData = [
@@ -23,28 +23,23 @@ export const SpotlightData = [
 const SpotlightBoard = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isMuted, setIsMuted] = useState(true);
+  const videoRefs = useRef<HTMLVideoElement[]>([]);
   const spotlightModal = useSpotlightModal();
 
   const handleVideoHover = (index: number) => {
     setHoveredIndex(index);
-    // ホバー時に対象の動画を再生
-    const videos = document.querySelectorAll("video");
-
-    videos.forEach((video, videoIndex) => {
-      if (videoIndex === index) {
-        video.play().catch((error) => console.log("Video play failed:", error));
-      } else {
-        video.pause();
-      }
-    });
+    if (videoRefs.current[index]) {
+      videoRefs.current[index]
+        .play()
+        .catch((error) => console.log("Video play failed:", error));
+    }
   };
 
   const handleVideoLeave = () => {
     setHoveredIndex(null);
-    // ホバーが外れた時に全ての動画を停止
-    const videos = document.querySelectorAll("video");
-    videos.forEach((video) => {
-      video.pause();
+    // 自コンポーネント内のビデオのみ停止
+    videoRefs.current.forEach((video) => {
+      if (video) video.pause();
     });
   };
 
@@ -65,6 +60,9 @@ const SpotlightBoard = () => {
             onClick={() => spotlightModal.onOpen(item)}
           >
             <video
+              ref={(el) => {
+                if (el) videoRefs.current[index] = el;
+              }}
               src={item.video_path}
               muted={isMuted}
               playsInline
