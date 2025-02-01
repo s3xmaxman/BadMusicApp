@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Dialog } from "@/components/ui/dialog";
 import { X } from "lucide-react";
 import useSpotlightModal from "@/hooks/useSpotlightModal";
@@ -7,17 +7,14 @@ const SpotlightModal = () => {
   const { isOpen, onClose } = useSpotlightModal();
   const selectedItem = useSpotlightModal((state) => state.selectedItem);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     const playVideo = async () => {
       if (videoRef.current && isOpen) {
         try {
           await videoRef.current.play();
-          setIsPlaying(true);
         } catch (error) {
           console.error("Video playback failed:", error);
-          setIsPlaying(false);
         }
       }
     };
@@ -25,17 +22,11 @@ const SpotlightModal = () => {
     if (isOpen) {
       playVideo();
     } else {
-      if (videoRef.current) {
-        videoRef.current.pause();
-        setIsPlaying(false);
-      }
+      videoRef.current?.pause();
     }
 
     return () => {
-      if (videoRef.current) {
-        videoRef.current.pause();
-        setIsPlaying(false);
-      }
+      videoRef.current?.pause();
     };
   }, [isOpen, selectedItem]);
 
@@ -43,16 +34,16 @@ const SpotlightModal = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <div className="fixed inset-0 bg-black/60 z-50">
+      <div className="fixed inset-0 bg-black/60 z-50 backdrop-blur-sm">
         <div className="fixed inset-0 overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4">
-            <div className="relative w-full max-w-4xl mx-auto flex bg-black h-[65vh]">
+            <div className="relative w-full max-w-4xl mx-auto flex bg-black h-[65vh] rounded-xl overflow-hidden border border-white/10 shadow-2xl">
               {/* Close Button */}
               <button
                 onClick={onClose}
-                className="absolute right-2 top-2 z-10 p-2 hover:bg-neutral-800/50 rounded-full"
+                className="absolute right-2 top-2 z-10 p-2 hover:bg-neutral-800/50 rounded-full transition-colors"
               >
-                <X className="h-5 w-5 text-white" />
+                <X className="h-5 w-5 text-white/80 hover:text-white" />
               </button>
 
               {/* Video Section - Left Half */}
@@ -64,42 +55,37 @@ const SpotlightModal = () => {
                     src={selectedItem.video_path}
                     loop
                     playsInline
-                    className="absolute h-full w-full object-cover top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-                    onLoadedData={() => {
-                      if (videoRef.current && !isPlaying) {
-                        videoRef.current.play();
-                      }
-                    }}
+                    className="absolute h-full w-full object-cover"
                   />
                 )}
               </div>
 
               {/* Content Section - Right Half */}
-              <div className="w-1/2 h-full flex items-center">
-                <div className="p-4 space-y-6">
-                  <div className="flex flex-col space-y-3">
-                    {/* Header */}
-                    <h2 className="text-xl font-bold text-white">
+              <div className="w-1/2 h-full flex items-center p-8 bg-gradient-to-b from-black/70 to-black/90">
+                <div className="space-y-6">
+                  {/* Header Section */}
+                  <div className="space-y-4">
+                    <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-200">
                       {selectedItem.title}
                     </h2>
 
                     {/* Metadata */}
-                    <div className="space-y-1">
-                      <p className="text-neutral-400 text-sm">
-                        Artist: {selectedItem.author}
-                      </p>
-                      <p className="text-neutral-400 text-sm">
-                        Genre: {selectedItem.genre}
-                      </p>
-                    </div>
-
-                    {/* Description */}
-                    <div className="mt-2">
-                      <p className="text-neutral-300 text-sm whitespace-pre-wrap">
-                        {selectedItem.description}
-                      </p>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-x-4 text-sm">
+                        <span className="text-purple-300/90 font-medium">
+                          {selectedItem.author}
+                        </span>
+                        <span className="text-pink-200/80 font-medium">
+                          {selectedItem.genre}
+                        </span>
+                      </div>
                     </div>
                   </div>
+
+                  {/* Description */}
+                  <p className="text-neutral-300 text-sm leading-relaxed whitespace-pre-wrap pr-4">
+                    {selectedItem.description}
+                  </p>
                 </div>
               </div>
             </div>
