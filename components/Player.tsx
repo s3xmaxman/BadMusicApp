@@ -30,7 +30,7 @@ const Player = ({ playlists }: PlayerProps) => {
     return (
       <>
         {!isMobilePlayer && (
-          <div className="md:hidden">
+          <div className="md:hidden ">
             <MobileTabs />
           </div>
         )}

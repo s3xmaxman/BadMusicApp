@@ -38,7 +38,7 @@ export default async function RootLayout({
           <UserProvider>
             <ModalProvider products={products} />
             <Sidebar songs={songs} playlists={playlists}>
-              {children}
+              <div className="pb-[40px] md:pb-0">{children}</div>
             </Sidebar>
             <Player playlists={playlists} />
           </UserProvider>

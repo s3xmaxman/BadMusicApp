@@ -47,10 +47,12 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   const [primaryColor, setPrimaryColor] = useState(getRandomColor());
   const [secondaryColor, setSecondaryColor] = useState(getRandomColor());
   const [audioWaveformKey, setAudioWaveformKey] = useState(0);
+
   const genres = useMemo(
     () => song?.genre?.split(",").map((g) => g.trim()) || [],
     [song?.genre]
   );
+
   const { songGenres } = useGetSongsByGenres(genres, songId);
   const imageUrls = useLoadImages(songGenres);
   const { fileUrl, loading } = useDownload(song?.song_path!);
@@ -116,9 +118,9 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   if (!song) return <SongSkeleton />;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b bg-black  text-white">
+    <div className="min-h-screen bg-gradient-to-b bg-black text-white">
       {/* Hero Section */}
-      <div className=" relative h-[50vh] md:h-[60vh] w-full">
+      <div className="relative h-[50vh] md:h-[60vh] w-full">
         <Image
           src={imageUrl || "/images/wait.jpg"}
           alt="Song Cover"
@@ -389,4 +391,4 @@ const SongSkeleton = () => (
   </div>
 );
 
-export default React.memo(SongContent);
+export default SongContent;
