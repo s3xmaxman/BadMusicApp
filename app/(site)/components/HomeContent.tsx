@@ -104,7 +104,7 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs, sunoSongs }) => {
             </div>
           </div>
         </Header>
-        <main className="px-6 py-8 space-y-8">
+        <main className="px-6 py-8 pb-[70px] md:pb-8 space-y-8">
           {/* Trending Section */}
           <section
             onMouseEnter={() => setShowTrendBoardArrows(true)}
