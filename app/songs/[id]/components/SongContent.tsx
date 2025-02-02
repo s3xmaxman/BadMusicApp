@@ -10,6 +10,7 @@ import {
   Clock,
   Music2,
   Pause,
+  ClipboardCopy,
 } from "lucide-react";
 import { MdLyrics } from "react-icons/md";
 import Image from "next/image";
@@ -26,9 +27,11 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Song } from "@/types";
+import toast from "react-hot-toast";
 import AudioWaveform from "@/components/AudioWaveform";
 import { getRandomColor } from "@/libs/utils";
 import useAudioWaveStore from "@/hooks/useAudioWave";
+
 interface SongContentProps {
   songId: string;
 }
@@ -80,7 +83,6 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
     setAudioWaveformKey((prevKey) => prevKey + 1);
   };
 
-  // 曲の長さを取得
   useEffect(() => {
     if (fileUrl) {
       const audio = new Audio(fileUrl);
@@ -100,6 +102,15 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
     }
 
     setIsLoading(false);
+  };
+
+  const copyLyricsToClipboard = () => {
+    try {
+      navigator.clipboard.writeText(song?.lyrics || "");
+      toast.success("Lyrics copied to clipboard!");
+    } catch (error) {
+      toast.error("Failed to copy lyrics.");
+    }
   };
 
   if (!song) return <SongSkeleton />;
@@ -293,8 +304,16 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="bg-white/5 rounded-xl p-8"
+              className="bg-white/5 rounded-xl p-8 relative"
             >
+              <Button
+                onClick={copyLyricsToClipboard}
+                variant="ghost"
+                className="absolute top-4 right-4 text-gray-400 hover:text-green-400 transition-colors p-2 h-auto"
+                title="Copy lyrics"
+              >
+                <ClipboardCopy size={20} />
+              </Button>
               <div className="prose prose-invert max-w-none">
                 <div className="whitespace-pre-line">{song.lyrics}</div>
               </div>
