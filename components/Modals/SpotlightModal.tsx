@@ -37,7 +37,7 @@ const SpotlightModal = () => {
       <div className="fixed inset-0 bg-black/60 z-50 backdrop-blur-sm">
         <div className="fixed inset-0 overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4">
-            <div className="relative w-full max-w-4xl mx-auto flex bg-black h-[65vh] rounded-xl overflow-hidden border border-white/10 shadow-2xl">
+            <div className="relative w-full max-w-4xl mx-auto flex flex-col md:flex-row bg-black h-[65vh] rounded-xl overflow-hidden border border-white/10 shadow-2xl">
               {/* Close Button */}
               <button
                 onClick={onClose}
@@ -46,8 +46,8 @@ const SpotlightModal = () => {
                 <X className="h-5 w-5 text-white/80 hover:text-white" />
               </button>
 
-              {/* Video Section - Left Half */}
-              <div className="w-1/2 h-full bg-black relative overflow-hidden">
+              {/* Video Section */}
+              <div className="w-full md:w-1/2 bg-black relative overflow-hidden h-2/3 md:h-full">
                 {selectedItem.video_path && (
                   <video
                     ref={videoRef}
@@ -60,8 +60,8 @@ const SpotlightModal = () => {
                 )}
               </div>
 
-              {/* Content Section - Right Half */}
-              <div className="w-1/2 h-full flex items-center p-8 bg-gradient-to-b from-black/70 to-black/90">
+              {/* Content Section */}
+              <div className="w-full md:w-1/2 h-1/3 md:h-full flex items-center p-8 bg-gradient-to-b from-black/70 to-black/90">
                 <div className="space-y-6">
                   {/* Header Section */}
                   <div className="space-y-4">
