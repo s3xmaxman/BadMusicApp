@@ -23,10 +23,7 @@ const arePropsEqual = (
 
 const YouTubePlayerContent: React.FC<YouTubePlayerContentProps> = memo(
   ({ videoId, name }) => {
-    const { isPlaying, volume, togglePlay, handleVolumeChange } =
-      useYouTubePlayer(videoId);
-
-    const Icon = isPlaying ? BsPauseFill : BsPlayFill;
+    const { isPlaying, volume, handleVolumeChange } = useYouTubePlayer(videoId);
     const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
 
     const Slider = ({
@@ -49,17 +46,18 @@ const YouTubePlayerContent: React.FC<YouTubePlayerContentProps> = memo(
           <RadixSlider.Track className="relative grow rounded-full h-[3px] bg-neutral-700 group-hover:bg-neutral-600 transition-colors">
             <RadixSlider.Range className="absolute rounded-full h-full bg-white group-hover:bg-white/90 transition-all" />
           </RadixSlider.Track>
-          <RadixSlider.Thumb className="hidden group-hover:block h-3 w-3 rounded-full bg-white shadow-sm transition-transform focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#0d0d0d] disabled:pointer-events-none" />
+          <RadixSlider.Thumb className="block md:group-hover:block h-3 w-3 rounded-full bg-white shadow-sm transition-transform focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#0d0d0d] disabled:pointer-events-none" />
         </RadixSlider.Root>
       );
     };
 
     return (
-      <Card className="w-full max-w-4xl mx-auto bg-[#0d0d0d]  border-neutral-800/50 rounded-xl shadow-lg">
-        <CardContent className="p-6">
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-white tracking-tight">
+      <Card className="w-full max-w-4xl mx-auto bg-[#0d0d0d] border-neutral-800/50 rounded-xl md:rounded-2xl shadow-lg">
+        <CardContent className="p-4 md:p-6">
+          <div className="space-y-4 md:space-y-6">
+            {/* Header Section */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
+              <h2 className="text-lg md:text-2xl font-bold text-white truncate">
                 {name}
               </h2>
               <div className="text-xs text-neutral-400 uppercase tracking-wider font-medium">
@@ -67,6 +65,7 @@ const YouTubePlayerContent: React.FC<YouTubePlayerContentProps> = memo(
               </div>
             </div>
 
+            {/* Video Player */}
             <div className="relative aspect-video rounded-lg overflow-hidden bg-neutral-900 ring-1 ring-white/5">
               <ReactPlayer
                 url={`https://www.youtube.com/watch?v=${videoId}`}
@@ -79,18 +78,19 @@ const YouTubePlayerContent: React.FC<YouTubePlayerContentProps> = memo(
               />
             </div>
 
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-6">
-                <Button
-                  onClick={togglePlay}
-                  size="icon"
-                  variant="ghost"
-                  className="h-12 w-12 rounded-full hover:bg-white/5 bg-transparent border border-neutral-800 transition-colors"
-                >
-                  <Icon className="h-6 w-6 text-white" />
-                </Button>
+            {/* Controls Section */}
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center justify-between gap-4">
+                {/* Live Status Indicator */}
+                <div className="flex items-center gap-2 md:hidden">
+                  <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                  <span className="text-sm text-neutral-400">Live</span>
+                </div>
+              </div>
 
-                <div className="flex items-center space-x-4">
+              {/* Volume Controls */}
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 flex-1">
                   <Button
                     onClick={() => handleVolumeChange(volume === 0 ? 50 : 0)}
                     size="icon"
@@ -99,16 +99,16 @@ const YouTubePlayerContent: React.FC<YouTubePlayerContentProps> = memo(
                   >
                     <VolumeIcon className="h-5 w-5 text-white" />
                   </Button>
-
-                  <div className="w-32">
+                  <div className="flex-1 min-w-[100px]">
                     <Slider value={volume} onChange={handleVolumeChange} />
                   </div>
                 </div>
-              </div>
 
-              <div className="flex items-center space-x-2">
-                <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                <span className="text-sm text-neutral-400">Live</span>
+                {/* Desktop Live Indicator */}
+                <div className="hidden md:flex items-center gap-2 shrink-0">
+                  <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></div>
+                  <span className="text-sm text-neutral-400">Live</span>
+                </div>
               </div>
             </div>
           </div>
@@ -120,5 +120,4 @@ const YouTubePlayerContent: React.FC<YouTubePlayerContentProps> = memo(
 );
 
 YouTubePlayerContent.displayName = "YouTubePlayerContent";
-
 export default YouTubePlayerContent;
