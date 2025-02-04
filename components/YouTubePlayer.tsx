@@ -1,11 +1,35 @@
+"use client";
 import React, { memo } from "react";
 import ReactPlayer from "react-player/youtube";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import * as RadixSlider from "@radix-ui/react-slider";
-import { BsPauseFill, BsPlayFill } from "react-icons/bs";
+import * as SliderPrimitive from "@radix-ui/react-slider";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import useYouTubePlayer from "@/hooks/useYoutubePlayer";
+
+interface VolumeSliderProps {
+  value: number;
+  onChange: (value: number) => void;
+}
+
+const VolumeSlider: React.FC<VolumeSliderProps> = ({ value, onChange }) => {
+  return (
+    <SliderPrimitive.Root
+      className="relative flex items-center select-none w-full h-6"
+      value={[value]}
+      onValueChange={(values) => onChange(values[0])}
+      min={0}
+      max={100}
+      step={1}
+      aria-label="Volume"
+    >
+      <SliderPrimitive.Track className="relative grow rounded-full h-2 bg-gray-600">
+        <SliderPrimitive.Range className="absolute h-full rounded-full bg-gradient-to-r from-purple-500 to-blue-500" />
+      </SliderPrimitive.Track>
+      <SliderPrimitive.Thumb className="block w-4 h-4 rounded-full bg-white shadow-md hover:scale-110 transition-transform" />
+    </SliderPrimitive.Root>
+  );
+};
 
 interface YouTubePlayerContentProps {
   videoId: string;
@@ -25,31 +49,6 @@ const YouTubePlayerContent: React.FC<YouTubePlayerContentProps> = memo(
   ({ videoId, name }) => {
     const { isPlaying, volume, handleVolumeChange } = useYouTubePlayer(videoId);
     const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
-
-    const Slider = ({
-      value,
-      onChange,
-    }: {
-      value: number;
-      onChange: (value: number) => void;
-    }) => {
-      return (
-        <RadixSlider.Root
-          className="relative flex items-center select-none touch-none w-full h-10 group"
-          defaultValue={[1]}
-          value={[value]}
-          onValueChange={(values) => onChange(values[0])}
-          max={100}
-          step={1}
-          aria-label="Volume"
-        >
-          <RadixSlider.Track className="relative grow rounded-full h-[3px] bg-neutral-700 group-hover:bg-neutral-600 transition-colors">
-            <RadixSlider.Range className="absolute rounded-full h-full bg-white group-hover:bg-white/90 transition-all" />
-          </RadixSlider.Track>
-          <RadixSlider.Thumb className="block md:group-hover:block h-3 w-3 rounded-full bg-white shadow-sm transition-transform focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#0d0d0d] disabled:pointer-events-none" />
-        </RadixSlider.Root>
-      );
-    };
 
     return (
       <Card className="w-full max-w-4xl mx-auto bg-[#0d0d0d] border-neutral-800/50 rounded-xl md:rounded-2xl shadow-lg">
@@ -100,7 +99,10 @@ const YouTubePlayerContent: React.FC<YouTubePlayerContentProps> = memo(
                     <VolumeIcon className="h-5 w-5 text-white" />
                   </Button>
                   <div className="flex-1 min-w-[100px]">
-                    <Slider value={volume} onChange={handleVolumeChange} />
+                    <VolumeSlider
+                      value={volume}
+                      onChange={handleVolumeChange}
+                    />
                   </div>
                 </div>
 
