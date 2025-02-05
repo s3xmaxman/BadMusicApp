@@ -3,6 +3,8 @@ import { Song } from "@/types";
 import usePlayer from "./usePlayer";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
+const DEFAULT_COOLDOWN = 1000;
+
 const debounce = (func: (...args: any[]) => void, wait: number) => {
   let timeout: NodeJS.Timeout;
   return (...args: any[]) => {
@@ -65,7 +67,7 @@ const useOnPlay = (songs: Song[]) => {
         return;
       }
 
-      if (currentTime - lastPlayTime < 1000) {
+      if (currentTime - lastPlayTime < DEFAULT_COOLDOWN) {
         pendingPlayRef.current = id;
         return;
       }
@@ -83,12 +85,12 @@ const useOnPlay = (songs: Song[]) => {
           pendingPlayRef.current = null;
           await onPlay(pendingId);
         }
-      }, 1000);
+      }, DEFAULT_COOLDOWN);
     },
     [lastPlayTime, player, songs, supabase]
   );
 
-  return debounce(onPlay, 500);
+  return debounce(onPlay, DEFAULT_COOLDOWN);
 };
 
 export default useOnPlay;

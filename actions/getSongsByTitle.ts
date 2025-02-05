@@ -16,10 +16,10 @@ const getSongsByTitle = async (title: string) => {
 
   if (!title) {
     const regularSongs = await getSongs();
-    const aiSongs = await getSunoSongs();
+    const sunoSongs = await getSunoSongs();
     return {
       songs: regularSongs,
-      sunoSongs: aiSongs,
+      sunoSongs: sunoSongs,
     };
   }
 
