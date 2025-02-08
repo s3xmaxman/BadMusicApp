@@ -10,7 +10,7 @@ interface PlayerContentProps {
     title: string;
     artist: string;
     imageUrl: string;
-    songUrl: number; // Changed to number for require() asset
+    songUrl: number; 
   };
 }
 
@@ -19,6 +19,8 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [position, setPosition] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [isSeeking, setIsSeeking] = useState(false);
+  const [seekPosition, setSeekPosition] = useState(0);
 
   useEffect(() => {
     const initAudio = async () => {
@@ -72,7 +74,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song }) => {
   };
 
   const onPlaybackStatusUpdate = (status: any) => {
-    if (status.isLoaded) {
+    if (status.isLoaded && !isSeeking) {
       setPosition(status.positionMillis);
       setIsPlaying(status.isPlaying);
     }
@@ -122,12 +124,20 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song }) => {
       
       <View style={styles.controls}>
         <Slider
-          value={position}
+          value={isSeeking ? seekPosition : position}
           maximumValue={duration}
           minimumValue={0}
+          onSlidingStart={() => {
+            setIsSeeking(true);
+            setSeekPosition(position);
+          }}
           onValueChange={(value) => {
+            setSeekPosition(value);
+          }}
+          onSlidingComplete={async (value) => {
+            setIsSeeking(false);
             if (sound) {
-              sound.setPositionAsync(value);
+              await sound.setPositionAsync(value);
             }
           }}
           minimumTrackTintColor="#1DB954"
@@ -136,7 +146,9 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song }) => {
           style={styles.slider}
         />
         <View style={styles.timeInfo}>
-          <Text style={styles.timeText}>{formatTime(position)}</Text>
+          <Text style={styles.timeText}>
+            {formatTime(isSeeking ? seekPosition : position)}
+          </Text>
           <Text style={styles.timeText}>{formatTime(duration)}</Text>
         </View>
       </View>
