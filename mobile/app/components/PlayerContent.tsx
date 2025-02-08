@@ -1,99 +1,26 @@
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import { Audio } from 'expo-av';
 import { useEffect, useState } from 'react';
 import Slider from '@react-native-community/slider';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useAudioPlayer } from '../hooks/useAudioPlayer';
+import { Song } from '../types/song';
 
 interface PlayerContentProps {
-  song: {
-    id: string;
-    title: string;
-    artist: string;
-    imageUrl: string;
-    songUrl: number; 
-  };
+  song: Song;
 }
 
 const PlayerContent: React.FC<PlayerContentProps> = ({ song }) => {
-  const [sound, setSound] = useState<Audio.Sound | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [position, setPosition] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [isSeeking, setIsSeeking] = useState(false);
-  const [seekPosition, setSeekPosition] = useState(0);
-
-  useEffect(() => {
-    const initAudio = async () => {
-      try {
-        await Audio.setAudioModeAsync({
-          allowsRecordingIOS: false,
-          staysActiveInBackground: true,
-          playsInSilentModeIOS: true,
-          shouldDuckAndroid: true,
-          playThroughEarpieceAndroid: false,
-        });
-      } catch (error) {
-        console.log('Error setting audio mode:', error);
-      }
-    };
-
-    initAudio();
-  }, []);
-
-  useEffect(() => {
-    loadAudio();
-    return () => {
-      if (sound) {
-        sound.unloadAsync();
-      }
-    };
-  }, [song]);
-
-  const loadAudio = async () => {
-    try {
-      if (sound) {
-        await sound.unloadAsync();
-      }
-      
-      const { sound: newSound } = await Audio.Sound.createAsync(
-        song.songUrl,
-        { shouldPlay: false },
-        onPlaybackStatusUpdate
-      );
-      
-      setSound(newSound);
-      const status = await newSound.getStatusAsync();
-      if (status.isLoaded) {
-        setDuration(status.durationMillis || 0);
-      } else {
-        setDuration(0);
-      }
-    } catch (error) {
-      console.log('Error loading audio:', error);
-    }
-  };
-
-  const onPlaybackStatusUpdate = (status: any) => {
-    if (status.isLoaded && !isSeeking) {
-      setPosition(status.positionMillis);
-      setIsPlaying(status.isPlaying);
-    }
-  };
-
-  const handlePlayPause = async () => {
-    if (!sound) return;
-    
-    try {
-      if (isPlaying) {
-        await sound.pauseAsync();
-      } else {
-        await sound.playAsync();
-      }
-      setIsPlaying(!isPlaying);
-    } catch (error) {
-      console.log('Error playing/pausing:', error);
-    }
-  };
+  const {
+    isPlaying,
+    position,
+    duration,
+    isSeeking,
+    seekPosition,
+    setIsSeeking,
+    setSeekPosition,
+    handlePlayPause,
+    handleSeek
+  } = useAudioPlayer(song);
 
   const formatTime = (milliseconds: number) => {
     const seconds = Math.floor(milliseconds / 1000);
@@ -136,9 +63,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song }) => {
           }}
           onSlidingComplete={async (value) => {
             setIsSeeking(false);
-            if (sound) {
-              await sound.setPositionAsync(value);
-            }
+            handleSeek(value);
           }}
           minimumTrackTintColor="#1DB954"
           maximumTrackTintColor="#ffffff"
