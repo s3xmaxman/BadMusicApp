@@ -17,7 +17,7 @@ const getSongsByGenre = async (genre: string | string[]): Promise<Song[]> => {
   const { data, error } = await supabase
     .from("songs")
     .select("*")
-    .or(genreArray.map((genre, index) => `genre.ilike.%${genre}%`).join(","))
+    .or(genreArray.map((genre) => `genre.ilike.%${genre}%`).join(","))
     .order("created_at", { ascending: false });
 
   // エラー発生時はコンソールに出力
