@@ -25,7 +25,7 @@ const getSunoSongs = async (): Promise<SunoSong[]> => {
     console.log(error.message);
   }
 
-  return (data as any) || [];
+  return (data as SunoSong[]) || [];
 };
 
 export default getSunoSongs;

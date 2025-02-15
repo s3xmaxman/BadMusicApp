@@ -26,7 +26,7 @@ const getSongsByGenre = async (genre: string | string[]): Promise<Song[]> => {
   }
 
   // 曲データまたは空の配列を返す
-  return (data as any) || [];
+  return (data as Song[]) || [];
 };
 
 export default getSongsByGenre;

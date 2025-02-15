@@ -26,7 +26,7 @@ const getPlaylists = async (): Promise<Playlist[]> => {
     console.log(error.message);
   }
 
-  return (data as any) || [];
+  return (data as Playlist[]) || [];
 };
 
 export default getPlaylists;
