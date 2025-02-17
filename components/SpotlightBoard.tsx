@@ -1,42 +1,12 @@
 import React, { useState, useRef } from "react";
 import useSpotlightModal from "@/hooks/useSpotlightModal";
+import { Spotlight } from "@/types";
 
-export const SpotlightData = [
-  {
-    id: 1,
-    video_path: "/Dystopia.mp4",
-    title: "Dystopia",
-    author: "Sample Artist",
-    genre: "SynthWave",
-    description: "This is Test Data",
-  },
-  {
-    id: 2,
-    video_path: "/Kobe Night Dream.mp4",
-    title: "Kobe Night Dream",
-    author: "Sample Artist",
-    genre: "RetroWave",
-    description: "Sample Description",
-  },
-  {
-    id: 3,
-    video_path: "/Ascend into Shadows.mp4",
-    title: "Ascend into Shadows",
-    author: "Sample Artist",
-    genre: "SynthWave, Progressive",
-    description: "Sample Description",
-  },
-  {
-    id: 4,
-    video_path: "/Dreamscape.mp4",
-    title: "Dreamscape",
-    author: "Sample Artist",
-    genre: "SynthWave",
-    description: "Sample Description",
-  },
-];
+interface SpotlightBoardProps {
+  spotlightData: Spotlight[];
+}
 
-const SpotlightBoard = () => {
+const SpotlightBoard: React.FC<SpotlightBoardProps> = ({ spotlightData }) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isMuted, setIsMuted] = useState(true);
   const videoRefs = useRef<HTMLVideoElement[]>([]);
@@ -67,7 +37,7 @@ const SpotlightBoard = () => {
       <h1 className="text-3xl font-bold mb-6 px-4">Spotlight</h1>
       <div className="p-4 w-full overflow-x-auto scrollbar-hide">
         <div className="flex gap-4 md:grid md:grid-cols-4 lg:grid-cols-6 snap-x snap-mandatory">
-          {SpotlightData.map((item, index) => (
+          {spotlightData.map((item, index) => (
             <div
               key={item.id}
               className="flex-none w-40 relative aspect-[9/16] rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group snap-center"

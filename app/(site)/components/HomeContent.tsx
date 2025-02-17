@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 import PageContent from "./PageContent";
 import RightSidebar from "@/components/RightSidebar/RightSidebar";
 import TrendBoard from "@/components/TrendBoard";
-import { Song, SunoSong } from "@/types";
+import { Song, Spotlight, SunoSong } from "@/types";
 import GenreCard from "@/components/GenreCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import dynamic from "next/dynamic";
@@ -29,9 +29,14 @@ export const genreCards = [
 interface HomeClientProps {
   songs: Song[];
   sunoSongs: SunoSong[];
+  spotlightData: Spotlight[];
 }
 
-const HomeContent: React.FC<HomeClientProps> = ({ songs, sunoSongs }) => {
+const HomeContent: React.FC<HomeClientProps> = ({
+  songs,
+  sunoSongs,
+  spotlightData,
+}) => {
   const [showArrows, setShowArrows] = useState(false);
   const [showVideoArrows, setShowVideoArrows] = useState(false);
   const [showTrendBoardArrows, setShowTrendBoardArrows] = useState(false);
@@ -180,7 +185,7 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs, sunoSongs }) => {
           </section>
 
           <section>
-            <SpotlightBoard />
+            <SpotlightBoard spotlightData={spotlightData} />
           </section>
 
           {/* Genres Section */}
