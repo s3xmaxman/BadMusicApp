@@ -46,7 +46,7 @@ const uploadFileToR2 = async ({
 
     await s3Client.send(command);
 
-    const url = `${process.env.NEXT_PUBLIC_R2_ENDPOINT}/${bucketName}/${fileName}`;
+    const url = `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${fileName}`;
     return url;
   } catch (error) {
     console.error("R2 upload error:", error);
