@@ -6,6 +6,7 @@ const nextConfig = {
       "i1.sndcdn.com",
       "soundcloud.com",
       "cdn2.suno.ai",
+      "cloudflarestorage.com",
     ],
   },
 };

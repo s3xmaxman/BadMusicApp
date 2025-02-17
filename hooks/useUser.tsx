@@ -64,15 +64,12 @@ export const MyUserContextProvider = (props: Props) => {
   // クレジット情報を取得する関数
   const fetchCredits = async () => {
     try {
-      const response = await fetch("/api/suno/get_limit");
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch credits");
-      }
-
-      const data: SunoCredits = await response.json();
-
-      setCreditsLeft(data.credits_left);
+      // const response = await fetch("/api/suno/get_limit");
+      // if (!response.ok) {
+      //   throw new Error("Failed to fetch credits");
+      // }
+      // const data: SunoCredits = await response.json();
+      // setCreditsLeft(data.credits_left);
     } catch (error) {
       console.error("Failed to fetch credits:", error);
       // エラーの場合でも既存の値を保持

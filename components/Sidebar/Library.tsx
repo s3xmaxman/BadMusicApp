@@ -2,6 +2,7 @@
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AiOutlineBars, AiOutlinePlus } from "react-icons/ai";
+import { SiSpotlight } from "react-icons/si";
 import useAuthModal from "@/hooks/useAuthModal";
 import { useUser } from "@/hooks/useUser";
 import useUploadModal from "@/hooks/useUploadModal";
@@ -13,8 +14,8 @@ import { useState } from "react";
 import { MdMusicNote } from "react-icons/md";
 import { MdOutlineQueueMusic } from "react-icons/md";
 import Hover from "../Hover";
-import Image from "next/image";
 import useSunoModal from "@/hooks/useSunoModal";
+import useSpotLightUploadModal from "@/hooks/useSpotLightUpload";
 
 interface LibraryProps {
   songs: Song[];
@@ -27,6 +28,7 @@ const Library: React.FC<LibraryProps> = ({ songs, playlists, isCollapsed }) => {
   const { user } = useUser();
   const uploadModal = useUploadModal();
   const playlistModal = usePlaylistModal();
+  const spotlightUploadModal = useSpotLightUploadModal();
   const sunoModal = useSunoModal();
   const onPlay = useOnPlay(songs);
   const [selectedTab, setSelectedTab] = useState("music");
@@ -45,6 +47,14 @@ const Library: React.FC<LibraryProps> = ({ songs, playlists, isCollapsed }) => {
     }
 
     return playlistModal.onOpen();
+  };
+
+  const openSpotlight = () => {
+    if (!user) {
+      return authModal.onOpen();
+    }
+
+    return spotlightUploadModal.onOpen();
   };
 
   return (
@@ -91,6 +101,14 @@ const Library: React.FC<LibraryProps> = ({ songs, playlists, isCollapsed }) => {
             <Hover contentSize="w-24" description="曲を追加">
               <AiOutlinePlus
                 onClick={openCreate}
+                size={20}
+                className="text-neutral-400 cursor-pointer hover:text-white transition"
+              />
+            </Hover>
+
+            <Hover contentSize="w-24" description="スポットライトを作成">
+              <SiSpotlight
+                onClick={openSpotlight}
                 size={20}
                 className="text-neutral-400 cursor-pointer hover:text-white transition"
               />

@@ -8,6 +8,7 @@ import SpotlightModal from "@/components/Modals/SpotlightModal";
 import UploadModal from "@/components/Modals/UploadModal";
 import { ProductWithPrice } from "@/types";
 import { useEffect, useState } from "react";
+import SpotlightUploadModal from "@/components/Modals/SpotlightUploadModal";
 
 interface ModalProviderProps {
   products: ProductWithPrice[];
@@ -31,6 +32,7 @@ const ModalProvider: React.FC<ModalProviderProps> = ({ products }) => {
       <PlaylistModal />
       <SunoModal />
       <SpotlightModal />
+      <SpotlightUploadModal />
       <SubscribeModal products={products} />
     </>
   );
