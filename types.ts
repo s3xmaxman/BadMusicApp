@@ -116,3 +116,12 @@ export interface PlaylistSong {
   suno_song_id?: string;
   song_type: SongType;
 }
+
+export interface Spotlight {
+  id: string;
+  video_path: string;
+  title: string;
+  author: string;
+  genre?: string;
+  description?: string;
+}

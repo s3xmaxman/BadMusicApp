@@ -51,23 +51,23 @@ export const toDateTime = (secs: number) => {
   return t;
 };
 
-// 引数で渡された文字列をランダムな文字列に変換する関数
-function generateRandomString(length: number) {
-  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-  let result = "";
-  const charactersLength = characters.length;
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-}
-
-// 引数で渡された文字列を正規化する関数
 export const sanitizeTitle = (title: string) => {
   const regex = /^[a-zA-Z0-9-_]+$/;
   if (!regex.test(title)) {
     return generateRandomString(10);
   }
+  return title;
+};
+
+// ランダムな文字列を生成するヘルパー関数 (必要に応じて実装)
+export const generateRandomString = (length: number): string => {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
 };
 
 export const formatTime = (seconds: number) => {
