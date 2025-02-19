@@ -14,7 +14,6 @@ function useDebounce<T>(value: T, delay?: number): T {
     };
   }, [value, delay]);
 
-  // デバウンスされた値を返す
   return debouncedValue;
 }
 

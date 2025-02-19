@@ -23,8 +23,6 @@ export const postData = async ({
   url: string;
   data?: { price: Price };
 }) => {
-  console.log("POST REQUEST", url, data);
-
   // fetchを使用して、指定されたURLに対してPOSTリクエストを送信します。
   const res: Response = await fetch(url, {
     method: "POST",
@@ -33,29 +31,31 @@ export const postData = async ({
     body: JSON.stringify(data), // リクエストボディにデータをJSON形式で設定
   });
 
-  // レスポンスが正常でない場合は、エラーをコンソールに出力し、例外をスローします。
   if (!res.ok) {
     console.log("Error in postData", { url, data, res });
     throw new Error(res.statusText);
   }
 
-  // レスポンスボディをJSONとして返します。
   return res.json();
 };
 
 // 引数で渡された秒数を日時に変換する関数
 export const toDateTime = (secs: number) => {
   // 1970年1月1日 00:30:00を基準にして、引数で渡された秒数を加算する
-  var t = new Date("1970-01-01T00:30:00Z");
+  const t = new Date("1970-01-01T00:30:00Z");
+
   t.setSeconds(secs);
+
   return t;
 };
 
 export const sanitizeTitle = (title: string) => {
   const regex = /^[a-zA-Z0-9-_]+$/;
+
   if (!regex.test(title)) {
     return generateRandomString(10);
   }
+
   return title;
 };
 
@@ -63,10 +63,12 @@ export const sanitizeTitle = (title: string) => {
 export const generateRandomString = (length: number): string => {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+
   let result = "";
   for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * characters.length));
   }
+
   return result;
 };
 
@@ -94,6 +96,7 @@ export const downloadFile = async (url: string, filename: string) => {
     const blob = await response.blob();
     const blobURL = window.URL.createObjectURL(blob);
     const link = document.createElement("a");
+
     link.href = blobURL;
     link.download = filename;
     document.body.appendChild(link);
