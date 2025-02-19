@@ -1,22 +1,21 @@
 "use client";
 
+import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AiOutlineBars, AiOutlinePlus } from "react-icons/ai";
-import { SiSpotlight } from "react-icons/si";
+import { MdMusicNote, MdOutlineQueueMusic } from "react-icons/md";
+import { GiMicrophone } from "react-icons/gi";
+
+import { Playlist, Song } from "@/types";
 import useAuthModal from "@/hooks/useAuthModal";
 import { useUser } from "@/hooks/useUser";
 import useUploadModal from "@/hooks/useUploadModal";
 import usePlaylistModal from "@/hooks/usePlaylistModal";
-import { Playlist, Song } from "@/types";
-import MediaItem from "../MediaItem";
 import useOnPlay from "@/hooks/useOnPlay";
-import { useState } from "react";
-import { MdMusicNote } from "react-icons/md";
-import { MdOutlineQueueMusic } from "react-icons/md";
-import { GiMicrophone } from "react-icons/gi";
-import Hover from "../Hover";
-import useSunoModal from "@/hooks/useSunoModal";
 import useSpotLightUploadModal from "@/hooks/useSpotLightUpload";
+
+import MediaItem from "../MediaItem";
+import Hover from "../Hover";
 
 interface LibraryProps {
   songs: Song[];
@@ -30,7 +29,6 @@ const Library: React.FC<LibraryProps> = ({ songs, playlists, isCollapsed }) => {
   const uploadModal = useUploadModal();
   const playlistModal = usePlaylistModal();
   const spotlightUploadModal = useSpotLightUploadModal();
-  const sunoModal = useSunoModal();
   const onPlay = useOnPlay(songs);
   const [selectedTab, setSelectedTab] = useState("music");
 
