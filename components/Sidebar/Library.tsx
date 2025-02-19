@@ -13,6 +13,7 @@ import useOnPlay from "@/hooks/useOnPlay";
 import { useState } from "react";
 import { MdMusicNote } from "react-icons/md";
 import { MdOutlineQueueMusic } from "react-icons/md";
+import { GiMicrophone } from "react-icons/gi";
 import Hover from "../Hover";
 import useSunoModal from "@/hooks/useSunoModal";
 import useSpotLightUploadModal from "@/hooks/useSpotLightUpload";
@@ -33,28 +34,19 @@ const Library: React.FC<LibraryProps> = ({ songs, playlists, isCollapsed }) => {
   const onPlay = useOnPlay(songs);
   const [selectedTab, setSelectedTab] = useState("music");
 
-  const openCreate = () => {
+  const openModal = (value: "music" | "playlist" | "spotlight") => {
     if (!user) {
       return authModal.onOpen();
     }
 
-    return uploadModal.onOpen();
-  };
-
-  const openPlaylist = () => {
-    if (!user) {
-      return authModal.onOpen();
+    switch (value) {
+      case "music":
+        return uploadModal.onOpen();
+      case "playlist":
+        return playlistModal.onOpen();
+      case "spotlight":
+        return spotlightUploadModal.onOpen();
     }
-
-    return playlistModal.onOpen();
-  };
-
-  const openSpotlight = () => {
-    if (!user) {
-      return authModal.onOpen();
-    }
-
-    return spotlightUploadModal.onOpen();
   };
 
   return (
@@ -94,21 +86,21 @@ const Library: React.FC<LibraryProps> = ({ songs, playlists, isCollapsed }) => {
               <AiOutlineBars
                 className="text-neutral-400 cursor-pointer hover:text-white transition"
                 size={20}
-                onClick={openPlaylist}
+                onClick={() => openModal("playlist")}
               />
             </Hover>
 
             <Hover contentSize="w-24" description="曲を追加">
               <AiOutlinePlus
-                onClick={openCreate}
+                onClick={() => openModal("music")}
                 size={20}
                 className="text-neutral-400 cursor-pointer hover:text-white transition"
               />
             </Hover>
 
             <Hover contentSize="w-24" description="スポットライトを作成">
-              <SiSpotlight
-                onClick={openSpotlight}
+              <GiMicrophone
+                onClick={() => openModal("spotlight")}
                 size={20}
                 className="text-neutral-400 cursor-pointer hover:text-white transition"
               />
