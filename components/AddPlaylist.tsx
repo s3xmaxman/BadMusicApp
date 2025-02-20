@@ -57,13 +57,12 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({
     }
 
     try {
-      const column = songType === "regular" ? "song_id" : "suno_song_id";
       const { data, error } = await supabaseClient
         .from("playlist_songs")
         .select("playlist_id")
-        .eq(column, songId)
+        .eq("song_id", songId)
         .eq("user_id", user.id)
-        .eq("song_type", songType);
+        .eq("song_type", "regular");
 
       if (error) {
         console.error("プレイリストに追加済みの曲の取得エラー:", error);

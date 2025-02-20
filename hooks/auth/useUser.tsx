@@ -6,13 +6,6 @@ import {
   User,
 } from "@supabase/auth-helpers-react";
 
-interface SunoCredits {
-  credits_left: number;
-  period: string;
-  monthly_limit: number;
-  monthly_usage: number;
-}
-
 type UserContextType = {
   accessToken: string | null;
   user: User | null;

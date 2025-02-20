@@ -1,25 +1,22 @@
 import React, { useState } from "react";
-import { Song, SunoSong } from "@/types";
+import { Song } from "@/types";
 import NextSongPreview from "./NextSongPreview";
 import CurrentSongDisplay from "./CurrentSongDisplay";
 import { IoMdSwap } from "react-icons/io";
 import { MdLyrics } from "react-icons/md";
 
 interface FullScreenLayoutProps {
-  song: Song | SunoSong;
+  song: Song;
   videoPath?: string;
   imagePath?: string;
-  nextSong: Song | SunoSong;
+  nextSong: Song;
   nextImagePath?: string;
 }
 
 const FullScreenLayout: React.FC<FullScreenLayoutProps> = React.memo(
   ({ song, videoPath, imagePath, nextSong, nextImagePath }) => {
     const [showLyrics, setShowLyrics] = useState(false);
-    const isSunoSong = "audio_url" in song;
-    const lyrics = isSunoSong
-      ? song.lyric ?? "歌詞はありません"
-      : song.lyrics ?? "歌詞はありません";
+    const lyrics = song.lyrics ?? "歌詞はありません";
 
     if (showLyrics) {
       return (
