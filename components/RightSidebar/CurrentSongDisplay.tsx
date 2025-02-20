@@ -13,14 +13,13 @@ interface CurrentSongDisplayProps {
   song: Song | SunoSong;
   videoPath?: string;
   imagePath?: string;
-  toggleLayout: () => void;
 }
 
 const ON_ANIMATION = 500;
 const MAX_VISIBLE_TAGS = 3;
 
 const CurrentSongDisplay: React.FC<CurrentSongDisplayProps> = React.memo(
-  ({ song, videoPath, imagePath, toggleLayout }) => {
+  ({ song, videoPath, imagePath }) => {
     const [showAllTags, setShowAllTags] = useState(false);
 
     const isSunoSong = "audio_url" in song;
@@ -111,16 +110,6 @@ const CurrentSongDisplay: React.FC<CurrentSongDisplayProps> = React.memo(
             </div>
           </div>
         </motion.div>
-
-        {/* Layout Toggle Button */}
-        <div className="absolute top-4 right-4">
-          <button
-            onClick={toggleLayout}
-            className="bg-white/10 hover:bg-white/20 rounded-full p-2 transition-colors duration-200"
-          >
-            <IoMdSwap className="text-white" size={24} />
-          </button>
-        </div>
       </div>
     );
   }

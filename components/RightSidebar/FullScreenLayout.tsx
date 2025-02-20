@@ -11,11 +11,10 @@ interface FullScreenLayoutProps {
   imagePath?: string;
   nextSong: Song | SunoSong;
   nextImagePath?: string;
-  toggleLayout: () => void;
 }
 
 const FullScreenLayout: React.FC<FullScreenLayoutProps> = React.memo(
-  ({ song, videoPath, imagePath, nextSong, nextImagePath, toggleLayout }) => {
+  ({ song, videoPath, imagePath, nextSong, nextImagePath }) => {
     const [showLyrics, setShowLyrics] = useState(false);
     const isSunoSong = "audio_url" in song;
     const lyrics = isSunoSong
@@ -53,27 +52,17 @@ const FullScreenLayout: React.FC<FullScreenLayoutProps> = React.memo(
           song={song}
           videoPath={videoPath}
           imagePath={imagePath}
-          toggleLayout={toggleLayout}
         />
         <div className="absolute bottom-0 left-0 right-0 flex flex-col">
           <NextSongPreview nextSong={nextSong} nextImagePath={nextImagePath} />
         </div>
         {/* 歌詞表示への切替ボタン */}
-        <div className="absolute top-4 right-16">
+        <div className="absolute top-4 right-4">
           <button
             onClick={() => setShowLyrics(true)}
             className="bg-white/10 hover:bg-white/20 rounded-full p-2 transition-colors duration-200 flex items-center"
           >
             <MdLyrics className="text-white" size={24} />
-          </button>
-        </div>
-        {/* 既存のレイアウト切替ボタン */}
-        <div className="absolute top-4 right-4">
-          <button
-            onClick={toggleLayout}
-            className="bg-white/10 hover:bg-white/20 rounded-full p-2 transition-colors duration-200"
-          >
-            <IoMdSwap className="text-white" size={24} />
           </button>
         </div>
       </div>

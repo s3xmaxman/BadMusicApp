@@ -46,8 +46,16 @@ const uploadFileToR2 = async ({
 
     await s3Client.send(command);
 
-    const url = `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${fileName}`;
-    return url;
+    switch (bucketName) {
+      case "spotlight":
+        return `${process.env.NEXT_PUBLIC_R2_SPOTLIGHT_URL}/${fileName}`;
+      case "song":
+        return `${process.env.NEXT_PUBLIC_R2_SONG_URL}/${fileName}`;
+      case "image":
+        return `${process.env.NEXT_PUBLIC_R2_IMAGE_URL}/${fileName}`;
+      case "video":
+        return `${process.env.NEXT_PUBLIC_R2_VIDEO_URL}/${fileName}`;
+    }
   } catch (error) {
     console.error("R2 upload error:", error);
     toast.error(
