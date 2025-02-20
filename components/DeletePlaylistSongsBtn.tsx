@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 interface DeletePlaylistSongsBtnProps {
   songId: string;
   playlistId: string;
-  songType: "regular" | "suno";
+  songType: "regular";
 }
 
 const DeletePlaylistSongsBtn: React.FC<DeletePlaylistSongsBtnProps> = ({

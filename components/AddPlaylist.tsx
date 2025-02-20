@@ -12,19 +12,18 @@ import { useUser } from "@/hooks/auth/useUser";
 import useAuthModal from "@/hooks/auth/useAuthModal";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import useGetSongById from "@/hooks/data/useGetSongById";
-import useGetSunoSongById from "@/hooks/data/useGetSunoSongById";
 
 interface PlaylistMenuProps {
   playlists: Playlist[];
   songId: string;
-  songType: "regular" | "suno";
+  songType: "regular";
   children?: React.ReactNode;
 }
 
 type PlaylistSongData = {
   playlist_id: string;
   user_id: string;
-  song_type: "regular" | "suno";
+  song_type: "regular";
   song_id?: string;
   suno_song_id?: string;
 };
@@ -47,8 +46,6 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({
   const { user } = useUser();
   const authModal = useAuthModal();
   const { song } = useGetSongById(songId);
-  const { sunoSong } = useGetSunoSongById(songId);
-
   const [isAdded, setIsAdded] = useState<Record<string, boolean>>({});
 
   /**
@@ -117,7 +114,7 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({
       playlist_id: playlistId,
       user_id: user.id,
       song_type: songType,
-      ...(songType === "suno" ? { suno_song_id: songId } : { song_id: songId }),
+      song_id: songId,
     };
 
     try {
@@ -135,12 +132,10 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({
       toast.success("プレイリストに曲を追加しました。");
 
       // プレイリストの画像を更新する必要があるか確認
-      const needsImageUpdate =
-        (songType === "regular" && song?.image_path) ||
-        (songType === "suno" && sunoSong?.image_url);
+      const needsImageUpdate = songType === "regular" && song?.image_path;
 
       if (needsImageUpdate) {
-        const imagePath = song?.image_path || sunoSong?.image_url;
+        const imagePath = song?.image_path;
         const { error: updateError } = await supabaseClient
           .from("playlists")
           .update({ image_path: imagePath })

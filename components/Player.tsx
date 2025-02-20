@@ -2,12 +2,10 @@
 import useGetSongById from "@/hooks/data/useGetSongById";
 import useLoadSongUrl from "@/hooks/data/useLoadSongUrl";
 import usePlayer from "@/hooks/player/usePlayer";
-import React, { useState } from "react";
+import React from "react";
 import PlayerContent from "./PlayerContent";
 import MobileTabs from "./Mobile/MobileTabs";
-import { Playlist, Song, SunoSong } from "@/types";
-import SunoPlayerContent from "./Suno/SunoPlayerContnet";
-import useGetSunoSongById from "@/hooks/data/useGetSunoSongById";
+import { Playlist, Song } from "@/types";
 import useMobilePlayer from "@/hooks/player/useMobilePlayer";
 
 interface PlayerProps {
@@ -17,14 +15,8 @@ interface PlayerProps {
 const Player = ({ playlists }: PlayerProps) => {
   const player = usePlayer();
   const { isMobilePlayer, toggleMobilePlayer } = useMobilePlayer();
-
   const { song } = useGetSongById(player.activeId);
-  const { sunoSong } = useGetSunoSongById(player.activeId);
-
-  const actualSong = player.isSuno ? undefined : song;
-  const actualSunoSong = player.isSuno ? sunoSong : undefined;
-
-  const songUrl = useLoadSongUrl(player.isSuno ? actualSunoSong : actualSong);
+  const songUrl = useLoadSongUrl(song);
 
   if (!songUrl) {
     return (
@@ -42,23 +34,13 @@ const Player = ({ playlists }: PlayerProps) => {
     <>
       <div className="fixed bottom-0 left-0 w-full ">
         <div className="bg-black w-full h-[100px] pb-[130px] md:pb-0 max-md:px-2">
-          {player.isSuno ? (
-            <SunoPlayerContent
-              song={actualSunoSong as SunoSong}
-              songUrl={songUrl}
-              isMobilePlayer={isMobilePlayer}
-              toggleMobilePlayer={toggleMobilePlayer}
-              playlists={playlists}
-            />
-          ) : (
-            <PlayerContent
-              song={actualSong as Song}
-              songUrl={songUrl}
-              isMobilePlayer={isMobilePlayer}
-              toggleMobilePlayer={toggleMobilePlayer}
-              playlists={playlists}
-            />
-          )}
+          <PlayerContent
+            song={song!}
+            songUrl={songUrl}
+            isMobilePlayer={isMobilePlayer}
+            toggleMobilePlayer={toggleMobilePlayer}
+            playlists={playlists}
+          />
         </div>
       </div>
       {!isMobilePlayer && (

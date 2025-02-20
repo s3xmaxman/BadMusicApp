@@ -3,13 +3,12 @@
 import { useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 
-import { Song, SunoSong } from "@/types";
+import { Song } from "@/types";
 import { useUser } from "@/hooks/auth/useUser";
 import MediaItem from "@/components/MediaItem";
 import LikeButton from "@/components/LikeButton";
 import useOnPlay from "@/hooks/player/useOnPlay";
 import DeletePlaylistSongsBtn from "@/components/DeletePlaylistSongsBtn";
-import useOnPlaySuno from "@/hooks/player/useOnPlaySuno";
 
 interface LikedContentProps {
   songs: Song[];
@@ -19,17 +18,7 @@ interface LikedContentProps {
 const LikedContent: React.FC<LikedContentProps> = ({ songs, playlistId }) => {
   const router = useRouter();
   const { isLoading, user } = useUser();
-  const onPlayRegular = useOnPlay(songs.filter((song) => !("song_id" in song)));
-  const onPlaySuno = useOnPlaySuno(
-    songs.filter(
-      (song) =>
-        "song_id" in song &&
-        "image_url" in song &&
-        "audio_url" in song &&
-        "model_name" in song &&
-        "prompt" in song
-    ) as SunoSong[]
-  );
+  const onPlay = useOnPlay(songs);
 
   const displayedSongs = playlistId ? [...songs].reverse() : songs;
 
@@ -52,22 +41,14 @@ const LikedContent: React.FC<LikedContentProps> = ({ songs, playlistId }) => {
       {displayedSongs.map((song: Song) => (
         <div key={song.id} className="flex items-center gap-x-4 w-full">
           <div className="flex-1">
-            <MediaItem
-              onClick={(id: string) =>
-                "song_id" in song ? onPlaySuno(id) : onPlayRegular(id)
-              }
-              data={song}
-            />
+            <MediaItem onClick={(id: string) => onPlay(id)} data={song} />
           </div>
-          <LikeButton
-            songId={song.id}
-            songType={"song_id" in song ? "suno" : "regular"}
-          />
+          <LikeButton songId={song.id} songType={"regular"} />
           {playlistId && (
             <DeletePlaylistSongsBtn
               songId={song.id}
               playlistId={playlistId}
-              songType={"song_id" in song ? "suno" : "regular"}
+              songType={"regular"}
             />
           )}
         </div>

@@ -8,7 +8,7 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
 interface LikeButtonProps {
   songId: string;
-  songType: "regular" | "suno";
+  songType: "regular";
   size?: number;
 }
 
@@ -20,10 +20,10 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId, songType, size }) => {
   const [isLiked, setIsLiked] = useState(false);
   const Icon = isLiked ? AiFillHeart : AiOutlineHeart;
 
-  const getTableName = (type: "regular" | "suno") =>
+  const getTableName = (type: "regular") =>
     type === "regular" ? "liked_songs_regular" : "liked_songs_suno";
 
-  const getSongsTableName = (type: "regular" | "suno") =>
+  const getSongsTableName = (type: "regular") =>
     type === "regular" ? "songs" : "suno_songs";
 
   useEffect(() => {
@@ -92,7 +92,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId, songType, size }) => {
 
   const updateLikeCount = async (
     songId: string,
-    songType: "regular" | "suno",
+    songType: "regular",
     increment: number
   ) => {
     try {

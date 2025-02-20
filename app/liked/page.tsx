@@ -1,4 +1,4 @@
-import getLikedSongs, { getAllLikedSongs } from "@/actions/getLikedSongs";
+import getLikedSongs from "@/actions/getLikedSongs";
 import Header from "@/components/Header";
 import Image from "next/image";
 import LikedContent from "./components/LikedContent";
@@ -6,7 +6,7 @@ import LikedContent from "./components/LikedContent";
 // export const revalidate = 0;
 
 const Liked = async () => {
-  const songs = await getAllLikedSongs();
+  const songs = await getLikedSongs();
 
   return (
     <div className="bg-[#0d0d0d] rounded-lg h-full w-full overflow-hidden overflow-y-auto">

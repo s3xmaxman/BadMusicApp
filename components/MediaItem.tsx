@@ -2,13 +2,13 @@
 
 import Image from "next/image";
 import useLoadImage from "@/hooks/data/useLoadImage";
-import { Playlist, Song, SunoSong } from "@/types";
+import { Playlist, Song } from "@/types";
 import usePlayer from "@/hooks/player/usePlayer";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface MediaItemProps {
-  data: Song | SunoSong | Playlist;
+  data: Song | Playlist;
   onClick?: (id: string) => void;
   isCollapsed?: boolean;
 }
