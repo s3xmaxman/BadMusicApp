@@ -20,7 +20,7 @@ const FullScreenLayout: React.FC<FullScreenLayoutProps> = React.memo(
 
     if (showLyrics) {
       return (
-        <div className="relative w-full h-full bg-black">
+        <div className="relative w-full h-full bg-black custom-scrollbar">
           <div className="absolute top-4 right-4 z-10">
             <button
               onClick={() => setShowLyrics(false)}

@@ -106,7 +106,7 @@ const Library: React.FC<LibraryProps> = ({ songs, playlists, isCollapsed }) => {
           </div>
         )}
       </div>
-      <div
+      {/* <div
         className={`flex flex-col gap-y-2 mt-4 px-3 ${
           isCollapsed ? "items-center" : ""
         }`}
@@ -124,7 +124,7 @@ const Library: React.FC<LibraryProps> = ({ songs, playlists, isCollapsed }) => {
           playlists.map((item) => (
             <MediaItem key={item.id} data={item} isCollapsed={isCollapsed} />
           ))}
-      </div>
+      </div> */}
     </div>
   );
 };
