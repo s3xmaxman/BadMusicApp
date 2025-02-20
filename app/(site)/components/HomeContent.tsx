@@ -28,15 +28,10 @@ export const genreCards = [
 
 interface HomeClientProps {
   songs: Song[];
-  sunoSongs: SunoSong[];
   spotlightData: Spotlight[];
 }
 
-const HomeContent: React.FC<HomeClientProps> = ({
-  songs,
-  sunoSongs,
-  spotlightData,
-}) => {
+const HomeContent: React.FC<HomeClientProps> = ({ songs, spotlightData }) => {
   const [showArrows, setShowArrows] = useState(false);
   const [showVideoArrows, setShowVideoArrows] = useState(false);
   const [showTrendBoardArrows, setShowTrendBoardArrows] = useState(false);
@@ -231,7 +226,7 @@ const HomeContent: React.FC<HomeClientProps> = ({
 
           {/* Latest Songs Section */}
           <section>
-            <PageContent songs={songs} sunoSongs={sunoSongs} />
+            <PageContent songs={songs} />
           </section>
         </main>
       </div>

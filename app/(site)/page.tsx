@@ -7,14 +7,7 @@ export const revalidate = 0;
 
 export default async function Home() {
   const songs = await getSongs();
-  const sunoSongs = await getSunoSongs();
   const spotlightData = await getSpotlight();
 
-  return (
-    <HomeContent
-      songs={songs}
-      sunoSongs={sunoSongs}
-      spotlightData={spotlightData}
-    />
-  );
+  return <HomeContent songs={songs} spotlightData={spotlightData} />;
 }
