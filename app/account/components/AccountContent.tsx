@@ -12,7 +12,7 @@ import SunoCookieInput from "@/components/Suno/SunoCookieInput";
 const AccountContent = () => {
   const router = useRouter();
   const subscribeModal = useSubscribeModal();
-  const { isLoading, subscription, user, creditsLeft } = useUser();
+  const { isLoading, subscription, user } = useUser();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -75,40 +75,6 @@ const AccountContent = () => {
                 </Button>
               </div>
             )}
-          </CardContent>
-        </Card>
-
-        {/* クレジット情報 */}
-        <Card className="bg-neutral-900/50 backdrop-blur border border-neutral-800 shadow-lg hover:border-neutral-700 transition duration-300">
-          <CardHeader className="flex flex-row items-center space-x-4">
-            <div className="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center">
-              <div className="text-2xl">🎵</div>
-            </div>
-            <CardTitle className="text-xl font-bold text-white">
-              クレジット残高
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/20">
-                <p className="text-sm text-neutral-400">利用可能なクレジット</p>
-                <p className="text-3xl font-bold text-green-500">
-                  {creditsLeft !== null ? (
-                    <>
-                      {creditsLeft}
-                      <span className="text-sm text-neutral-500 ml-2">
-                        credits
-                      </span>
-                    </>
-                  ) : (
-                    <span className="text-neutral-400">読み込み中...</span>
-                  )}
-                </p>
-              </div>
-              <p className="text-sm text-neutral-500">
-                クレジットは音楽生成に使用され、毎日更新されます
-              </p>
-            </div>
           </CardContent>
         </Card>
 

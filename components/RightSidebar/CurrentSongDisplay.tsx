@@ -4,13 +4,12 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { CiPlay1 } from "react-icons/ci";
 import { AiOutlineHeart } from "react-icons/ai";
-import { IoMdSwap } from "react-icons/io";
 import { BiChevronRight } from "react-icons/bi";
-import { Song, SunoSong } from "@/types";
+import { Song } from "@/types";
 import { splitTags } from "@/libs/utils";
 
 interface CurrentSongDisplayProps {
-  song: Song | SunoSong;
+  song: Song;
   videoPath?: string;
   imagePath?: string;
 }
@@ -21,9 +20,7 @@ const MAX_VISIBLE_TAGS = 3;
 const CurrentSongDisplay: React.FC<CurrentSongDisplayProps> = React.memo(
   ({ song, videoPath, imagePath }) => {
     const [showAllTags, setShowAllTags] = useState(false);
-
-    const isSunoSong = "audio_url" in song;
-    const tags = isSunoSong ? splitTags(song.tags) : splitTags(song.genre);
+    const tags = splitTags(song.genre);
 
     const uniqueTags = Array.from(new Set(tags));
     const visibleTags = showAllTags
@@ -33,7 +30,7 @@ const CurrentSongDisplay: React.FC<CurrentSongDisplayProps> = React.memo(
 
     return (
       <div className="relative w-full h-full">
-        {(isSunoSong ? song.video_url : song.video_path) ? (
+        {song.video_path ? (
           <video
             src={videoPath!}
             autoPlay
@@ -71,7 +68,7 @@ const CurrentSongDisplay: React.FC<CurrentSongDisplayProps> = React.memo(
           >
             <Link
               className="cursor-pointer hover:underline"
-              href={isSunoSong ? `/suno-songs/${song.id}` : `/songs/${song.id}`}
+              href={`/songs/${song.id}`}
             >
               {song.title}
             </Link>
@@ -82,7 +79,7 @@ const CurrentSongDisplay: React.FC<CurrentSongDisplayProps> = React.memo(
               {visibleTags.map((tag, index) => (
                 <Link
                   key={tag}
-                  href={isSunoSong ? `/tag/${tag}` : `/genre/${tag}`}
+                  href={`/tag/${tag}`}
                   className="bg-white/10 px-3 py-1 rounded-full hover:bg-white/20 transition-colors"
                 >
                   {tag}

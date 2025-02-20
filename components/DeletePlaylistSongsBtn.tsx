@@ -43,7 +43,7 @@ const DeletePlaylistSongsBtn: React.FC<DeletePlaylistSongsBtnProps> = ({
         .delete()
         .eq("playlist_id", playlistId)
         .eq("user_id", session.user.id)
-        .eq(songType === "regular" ? "song_id" : "suno_song_id", songId);
+        .eq("song_id", songId);
 
       toast.success("プレイリストから曲が削除されました！");
       router.refresh();

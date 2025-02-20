@@ -9,7 +9,7 @@ interface MobileStyleIconsProps {
   toggleLyrics: () => void;
   playlists: Playlist[];
   songId: string;
-  songType: "regular" | "suno";
+  songType: "regular";
 }
 
 const MobileStyleIcons: React.FC<MobileStyleIconsProps> = memo(

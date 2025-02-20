@@ -20,22 +20,14 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId, songType, size }) => {
   const [isLiked, setIsLiked] = useState(false);
   const Icon = isLiked ? AiFillHeart : AiOutlineHeart;
 
-  const getTableName = (type: "regular") =>
-    type === "regular" ? "liked_songs_regular" : "liked_songs_suno";
-
-  const getSongsTableName = (type: "regular") =>
-    type === "regular" ? "songs" : "suno_songs";
-
   useEffect(() => {
     const fetchData = async () => {
       if (!user?.id) return;
 
       setIsLiked(false);
 
-      const tableName = getTableName(songType);
-
       const { data, error } = await supabaseClient
-        .from(tableName)
+        .from("liked_songs_regular")
         .select("*")
         .eq("user_id", user.id)
         .eq("song_id", songId)
@@ -59,12 +51,10 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId, songType, size }) => {
       return authModal.onOpen();
     }
 
-    const tableName = getTableName(songType);
-
     try {
       if (isLiked) {
         const { error } = await supabaseClient
-          .from(tableName)
+          .from("liked_songs_regular")
           .delete()
           .eq("user_id", user.id)
           .eq("song_id", songId);
@@ -74,10 +64,12 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId, songType, size }) => {
         setIsLiked(false);
         await updateLikeCount(songId, songType, -1);
       } else {
-        const { error } = await supabaseClient.from(tableName).insert({
-          song_id: songId,
-          user_id: user.id,
-        });
+        const { error } = await supabaseClient
+          .from("liked_songs_regular")
+          .insert({
+            song_id: songId,
+            user_id: user.id,
+          });
 
         if (error) throw error;
 
@@ -96,11 +88,9 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId, songType, size }) => {
     increment: number
   ) => {
     try {
-      const tableName = getSongsTableName(songType);
-
       // 現在のlike_countを取得
       const { data, error: fetchError } = await supabaseClient
-        .from(tableName)
+        .from("liked_songs_regular")
         .select("like_count")
         .eq("id", songId)
         .single();
@@ -110,7 +100,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId, songType, size }) => {
       // 新しいlike_countを計算して更新
       const newLikeCount = (data?.like_count || 0) + increment;
       const { error: updateError } = await supabaseClient
-        .from(tableName)
+        .from("liked_songs_regular")
         .update({ like_count: newLikeCount })
         .eq("id", songId);
 

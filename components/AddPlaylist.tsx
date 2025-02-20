@@ -25,7 +25,6 @@ type PlaylistSongData = {
   user_id: string;
   song_type: "regular";
   song_id?: string;
-  suno_song_id?: string;
 };
 
 /**

@@ -1,13 +1,12 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import getSongs from "./getSongs";
-import getSunoSongs from "./getSunoSongs";
-import { Song, SunoSong } from "@/types";
+import { Song } from "@/types";
 
 /**
  * タイトルで曲を検索する
  * @param {string} title 検索するタイトル
- * @returns {Promise<{songs: Song[], sunoSongs: SunoSong[]}>} 通常曲とAI生成曲のオブジェクト
+ * @returns {Promise<{songs: Song[]}>} 通常曲オブジェクト
  */
 const getSongsByTitle = async (title: string) => {
   const supabase = createServerComponentClient({
@@ -15,31 +14,20 @@ const getSongsByTitle = async (title: string) => {
   });
 
   if (!title) {
-    const regularSongs = await getSongs();
-    const sunoSongs = await getSunoSongs();
+    const songs = await getSongs();
     return {
-      songs: regularSongs,
-      sunoSongs: sunoSongs,
+      songs: songs,
     };
   }
 
-  const [songsResult, sunoSongsResult] = await Promise.all([
-    supabase
-      .from("songs")
-      .select("*")
-      .ilike("title", `%${title}%`)
-      .order("created_at", { ascending: false }),
-
-    supabase
-      .from("suno_songs")
-      .select("*")
-      .ilike("title", `%${title}%`)
-      .order("created_at", { ascending: false }),
-  ]);
+  const songsResult = await supabase
+    .from("songs")
+    .select("*")
+    .ilike("title", `%${title}%`)
+    .order("created_at", { ascending: false });
 
   return {
     songs: (songsResult.data as Song[]) || [],
-    sunoSongs: (sunoSongsResult.data as SunoSong[]) || [],
   };
 };
 
