@@ -11,6 +11,7 @@ import getActiveProductsWithPrices from "@/actions/getActiveProductsWithPrices";
 import getPlaylists from "@/actions/getPlaylists";
 import getSongs from "@/actions/getSongs";
 import Sidebar from "@/components/Sidebar/Sidebar";
+import RightSidebar from "@/components/RightSidebar/RightSidebar";
 
 const font = Figtree({ subsets: ["latin"] });
 
@@ -38,7 +39,9 @@ export default async function RootLayout({
           <UserProvider>
             <ModalProvider products={products} />
             <Sidebar songs={songs} playlists={playlists}>
-              {children}
+              <RightSidebar>
+                {children}
+              </RightSidebar>
             </Sidebar>
             <Player playlists={playlists} />
           </UserProvider>
