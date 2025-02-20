@@ -3,7 +3,6 @@
 import DeleteButton from "@/components/DeleteButton";
 import LikeButton from "@/components/LikeButton";
 import MediaItem from "@/components/MediaItem";
-import MusicTabs from "@/components/MusicTabs";
 import useOnPlay from "@/hooks/player/useOnPlay";
 import useOnPlaySuno from "@/hooks/player/useOnPlaySuno";
 import { useUser } from "@/hooks/auth/useUser";
@@ -13,38 +12,23 @@ import { useState } from "react";
 
 interface SearchContentProps {
   songs: Song[];
-  sunoSongs: SunoSong[];
 }
 
-const SearchContent: React.FC<SearchContentProps> = ({ songs, sunoSongs }) => {
+const SearchContent: React.FC<SearchContentProps> = ({ songs }) => {
   const onPlay = useOnPlay(songs);
-  const onPlaySuno = useOnPlaySuno(sunoSongs);
   const { user } = useUser();
   const player = usePlayer();
-  const [activeTab, setActiveTab] = useState<"songs" | "suno">("songs");
 
   const handlePlay = (id: string) => {
-    if (activeTab === "suno") {
-      onPlaySuno(id);
-      player.setId(id, true);
-    } else {
-      onPlay(id);
-      player.setId(id, false);
-    }
+    onPlay(id);
+    player.setId(id, false);
   };
 
-  const renderSongs = (
-    songsData: Song[] | SunoSong[],
-    isSuno: boolean = false
-  ) => {
+  const renderSongs = (songsData: Song[]) => {
     if (songsData.length === 0) {
       return (
         <div className="flex flex-col gap-y-2 w-full text-neutral-400">
-          <h1>
-            {isSuno
-              ? "AI生成された曲は見つかりませんでした"
-              : "該当の曲が見つかりませんでした"}
-          </h1>
+          <h1>該当の曲が見つかりませんでした</h1>
         </div>
       );
     }
@@ -58,10 +42,7 @@ const SearchContent: React.FC<SearchContentProps> = ({ songs, sunoSongs }) => {
             </div>
             {user?.id && (
               <div className="flex items-center gap-x-2">
-                <LikeButton
-                  songId={song.id}
-                  songType={isSuno ? "suno" : "regular"}
-                />
+                <LikeButton songId={song.id} songType={"regular"} />
               </div>
             )}
           </div>
@@ -70,15 +51,7 @@ const SearchContent: React.FC<SearchContentProps> = ({ songs, sunoSongs }) => {
     );
   };
 
-  return (
-    <div className="w-full px-6">
-      <MusicTabs
-        onTabChange={setActiveTab}
-        songsContent={renderSongs(songs)}
-        sunoContent={renderSongs(sunoSongs, true)}
-      />
-    </div>
-  );
+  return <div className="w-full px-6">{renderSongs(songs)}</div>;
 };
 
 export default SearchContent;

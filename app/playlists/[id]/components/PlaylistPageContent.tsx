@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Header from "@/components/Header";
 import LikedContent from "@/app/liked/components/LikedContent";
-import { Playlist, Song, SunoSong } from "@/types";
+import { Playlist } from "@/types";
 import DeletePlaylistButton from "@/components/DeletePlaylistButton";
 import useLoadImage from "@/hooks/data/useLoadImage";
 import { useEffect, useState } from "react";
