@@ -1,14 +1,14 @@
 import { useState, useEffect, useMemo } from "react";
-import { Song, SunoSong } from "@/types";
+import { Song } from "@/types";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 /**
  * 曲のURLを読み込むカスタムフック
  *
- * @param {Song | SunoSong | undefined} song - 曲データ
+ * @param {Song | undefined} song - 曲データ
  * @returns {string} 読み込まれた曲のURL
  */
-const useLoadSongUrl = (song: Song | SunoSong | undefined) => {
+const useLoadSongUrl = (song: Song | undefined) => {
   const supabaseClient = useSupabaseClient();
   const [songUrl, setSongUrl] = useState<string>("");
 
@@ -19,11 +19,6 @@ const useLoadSongUrl = (song: Song | SunoSong | undefined) => {
     }
 
     const loadSong = async () => {
-      if ("audio_url" in song) {
-        setSongUrl(song.audio_url);
-        return;
-      }
-
       try {
         const { data: songData } = await supabaseClient.storage
           .from("songs")

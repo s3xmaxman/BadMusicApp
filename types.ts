@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 
-export type SongType = "regular" | "suno";
+export type SongType = "regular";
 
 export interface Song {
   id: string;

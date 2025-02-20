@@ -1,8 +1,8 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useState, useEffect, useMemo } from "react";
-import { Song, Playlist, SunoSong } from "@/types";
+import { Song, Playlist } from "@/types";
 
-type ImageData = Song | SunoSong | Playlist | null;
+type ImageData = Song | Playlist | null;
 
 /**
  * 画像データを読み込むカスタムフック
@@ -21,11 +21,6 @@ const useLoadImage = (data: ImageData) => {
     }
 
     const loadImage = async () => {
-      if ("image_url" in data) {
-        setImageUrl(data.image_url || null);
-        return;
-      }
-
       if (
         data.image_path?.startsWith("http://") ||
         data.image_path?.startsWith("https://")

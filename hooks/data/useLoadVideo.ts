@@ -1,8 +1,8 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useState, useEffect, useMemo } from "react";
-import { Song, Playlist, SunoSong } from "@/types";
+import { Song, Playlist } from "@/types";
 
-type VideoData = Song | SunoSong | Playlist | null;
+type VideoData = Song | Playlist | null;
 
 /**
  * 動画のURLを読み込むカスタムフック
@@ -21,11 +21,6 @@ const useLoadVideo = (data: VideoData) => {
     }
 
     const loadVideo = async () => {
-      if ("video_url" in data) {
-        setVideoUrl(data.video_url || null);
-        return;
-      }
-
       const videoPath = "video_path" in data ? data.video_path : null;
 
       if (!videoPath) {
