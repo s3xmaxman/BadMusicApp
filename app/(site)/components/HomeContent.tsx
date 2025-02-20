@@ -2,7 +2,6 @@
 import { useState, useRef, useEffect } from "react";
 import Header from "@/components/Header";
 import PageContent from "./PageContent";
-import RightSidebar from "@/components/RightSidebar/RightSidebar";
 import TrendBoard from "@/components/TrendBoard";
 import { Song, Spotlight } from "@/types";
 import GenreCard from "@/components/GenreCard";
@@ -96,7 +95,7 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs, spotlightData }) => {
 
   return (
     <div className="flex bg-[#0d0d0d] h-full overflow-hidden">
-      <div className="w-full xl:w-[calc(100%-24rem)] h-full overflow-y-auto custom-scrollbar">
+      <div className="w-full  h-full overflow-y-auto custom-scrollbar">
         <Header>
           <div className="mb-2">
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 mt-4">
@@ -231,10 +230,10 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs, spotlightData }) => {
         </main>
       </div>
 
-      {/* Right Sidebar */}
+      {/* Right Sidebar
       <aside className="hidden xl:block w-96 h-full overflow-y-auto bg-black custom-scrollbar">
         <RightSidebar />
-      </aside>
+      </aside> */}
     </div>
   );
 };
