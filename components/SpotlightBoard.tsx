@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
-import useSpotlightModal from "@/hooks/useSpotlightModal";
 import { Spotlight } from "@/types";
+import useSpotlightModal from "@/hooks/modal/useSpotlightModal";
 
 interface SpotlightBoardProps {
   spotlightData: Spotlight[];

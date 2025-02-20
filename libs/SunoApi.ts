@@ -5,7 +5,6 @@ import pino from "pino";
 import { wrapper } from "axios-cookiejar-support";
 import { CookieJar } from "tough-cookie";
 import { sleep } from "./utils";
-import { get } from "http";
 import { getSunoCookie } from "@/actions/getSunoCookie";
 
 const logger = pino();

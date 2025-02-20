@@ -8,11 +8,11 @@ import {
 import { Playlist } from "@/types";
 import { RiPlayListAddFill, RiPlayListFill } from "react-icons/ri";
 import toast from "react-hot-toast";
-import { useUser } from "@/hooks/useUser";
-import useAuthModal from "@/hooks/useAuthModal";
+import { useUser } from "@/hooks/auth/useUser";
+import useAuthModal from "@/hooks/auth/useAuthModal";
 import { useSessionContext } from "@supabase/auth-helpers-react";
-import useGetSongById from "@/hooks/useGetSongById";
-import useGetSunoSongById from "@/hooks/useGetSunoSongById";
+import useGetSongById from "@/hooks/data/useGetSongById";
+import useGetSunoSongById from "@/hooks/data/useGetSunoSongById";
 
 interface PlaylistMenuProps {
   playlists: Playlist[];

@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import LikedContent from "@/app/liked/components/LikedContent";
 import { Playlist, Song, SunoSong } from "@/types";
 import DeletePlaylistButton from "@/components/DeletePlaylistButton";
-import useLoadImage from "@/hooks/useLoadImage";
+import useLoadImage from "@/hooks/data/useLoadImage";
 import { useEffect, useState } from "react";
 interface PlaylistPageContentProps {
   playlistId: string;

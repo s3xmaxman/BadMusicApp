@@ -7,12 +7,12 @@ import { MdMusicNote, MdOutlineQueueMusic } from "react-icons/md";
 import { GiMicrophone } from "react-icons/gi";
 
 import { Playlist, Song } from "@/types";
-import useAuthModal from "@/hooks/useAuthModal";
-import { useUser } from "@/hooks/useUser";
-import useUploadModal from "@/hooks/useUploadModal";
-import usePlaylistModal from "@/hooks/usePlaylistModal";
-import useOnPlay from "@/hooks/useOnPlay";
-import useSpotLightUploadModal from "@/hooks/useSpotLightUpload";
+import useAuthModal from "@/hooks/auth/useAuthModal";
+import { useUser } from "@/hooks/auth/useUser";
+import useUploadModal from "@/hooks/modal/useUploadModal";
+import usePlaylistModal from "@/hooks/modal/usePlaylistModal";
+import useOnPlay from "@/hooks/player/useOnPlay";
+import useSpotLightUploadModal from "@/hooks/modal/useSpotLightUpload";
 
 import MediaItem from "../MediaItem";
 import Hover from "../Hover";
@@ -24,8 +24,8 @@ interface LibraryProps {
 }
 
 const Library: React.FC<LibraryProps> = ({ songs, playlists, isCollapsed }) => {
-  const authModal = useAuthModal();
   const { user } = useUser();
+  const authModal = useAuthModal();
   const uploadModal = useUploadModal();
   const playlistModal = usePlaylistModal();
   const spotlightUploadModal = useSpotLightUploadModal();

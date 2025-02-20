@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import useLoadImage from "@/hooks/useLoadImage";
+import useLoadImage from "@/hooks/data/useLoadImage";
 import { Playlist, Song, SunoSong } from "@/types";
-import usePlayer from "@/hooks/usePlayer";
+import usePlayer from "@/hooks/player/usePlayer";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 

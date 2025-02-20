@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import useAudioWaveStore from "@/hooks/useAudioWave";
+import useAudioWaveStore from "@/hooks/audio/useAudioWave";
 
 interface AudioWaveformProps {
   audioUrl: string;

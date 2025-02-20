@@ -4,7 +4,7 @@ import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
-import { useUser } from "@/hooks/useUser";
+import { useUser } from "@/hooks/auth/useUser";
 
 interface DeleteButtonProps {
   songId: string;

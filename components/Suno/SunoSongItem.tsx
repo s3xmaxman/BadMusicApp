@@ -32,7 +32,7 @@ import { downloadFile } from "@/libs/helpers";
 import PreviewDownloadModal from "../Modals/DownloadPreviewModal";
 import { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
-import useMobilePlayer from "@/hooks/useMobilePlayer";
+import useMobilePlayer from "@/hooks/player/useMobilePlayer";
 
 interface SunoSongItemProps {
   onClick: (id: string) => void;

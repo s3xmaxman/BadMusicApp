@@ -1,14 +1,14 @@
 "use client";
-import useGetSongById from "@/hooks/useGetSongById";
-import useLoadSongUrl from "@/hooks/useLoadSongUrl";
-import usePlayer from "@/hooks/usePlayer";
+import useGetSongById from "@/hooks/data/useGetSongById";
+import useLoadSongUrl from "@/hooks/data/useLoadSongUrl";
+import usePlayer from "@/hooks/player/usePlayer";
 import React, { useState } from "react";
 import PlayerContent from "./PlayerContent";
 import MobileTabs from "./Mobile/MobileTabs";
 import { Playlist, Song, SunoSong } from "@/types";
 import SunoPlayerContent from "./Suno/SunoPlayerContnet";
-import useGetSunoSongById from "@/hooks/useGetSunoSongById";
-import useMobilePlayer from "@/hooks/useMobilePlayer";
+import useGetSunoSongById from "@/hooks/data/useGetSunoSongById";
+import useMobilePlayer from "@/hooks/player/useMobilePlayer";
 
 interface PlayerProps {
   playlists: Playlist[];

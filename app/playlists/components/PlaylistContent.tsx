@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import { Playlist } from "@/types";
-import useLoadImages from "@/hooks/useLoadImages";
+import useLoadImages from "@/hooks/data/useLoadImages";
 
 interface PlaylistContentProps {
   playlists: Playlist[];

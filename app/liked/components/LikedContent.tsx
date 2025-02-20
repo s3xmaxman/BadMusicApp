@@ -4,12 +4,12 @@ import { useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 
 import { Song, SunoSong } from "@/types";
-import { useUser } from "@/hooks/useUser";
+import { useUser } from "@/hooks/auth/useUser";
 import MediaItem from "@/components/MediaItem";
 import LikeButton from "@/components/LikeButton";
-import useOnPlay from "@/hooks/useOnPlay";
+import useOnPlay from "@/hooks/player/useOnPlay";
 import DeletePlaylistSongsBtn from "@/components/DeletePlaylistSongsBtn";
-import useOnPlaySuno from "@/hooks/useOnPlaySuno";
+import useOnPlaySuno from "@/hooks/player/useOnPlaySuno";
 
 interface LikedContentProps {
   songs: Song[];

@@ -8,8 +8,8 @@ import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-import useUploadModal from "@/hooks/useUploadModal";
-import { useUser } from "@/hooks/useUser";
+import useUploadModal from "@/hooks/modal/useUploadModal";
+import { useUser } from "@/hooks/auth/useUser";
 
 import { sanitizeTitle } from "@/libs/helpers";
 import Modal from "./Modal";

@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useEffect, useState, useCallback } from "react";
-import useLoadImage from "@/hooks/useLoadImage";
-import usePlayer from "@/hooks/usePlayer";
-import useGetSongById from "@/hooks/useGetSongById";
-import useLoadVideo from "@/hooks/useLoadVideo";
+import useLoadImage from "@/hooks/data/useLoadImage";
+import usePlayer from "@/hooks/player/usePlayer";
+import useGetSongById from "@/hooks/data/useGetSongById";
+import useLoadVideo from "@/hooks/data/useLoadVideo";
 import FullScreenLayout from "./FullScreenLayout";
 import StandardLayout from "./StandardLayout";
-import useGetSunoSongById from "@/hooks/useGetSunoSongById";
+import useGetSunoSongById from "@/hooks/data/useGetSunoSongById";
 
 const RightSidebar = () => {
   const [isFullScreenLayout, setIsFullScreenLayout] = useState(false);

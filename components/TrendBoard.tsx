@@ -1,12 +1,13 @@
 "use client";
 import { useState } from "react";
-import useLoadImages from "@/hooks/useLoadImages";
+import useLoadImages from "@/hooks/data/useLoadImages";
 import Image from "next/image";
 import Link from "next/link";
-import useOnPlay from "@/hooks/useOnPlay";
-import useGetTrendSongs from "@/hooks/useGetTrendSongs";
+
+import useGetTrendSongs from "@/hooks/data/useGetTrendSongs";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
+import useOnPlay from "@/hooks/player/useOnPlay";
 
 interface TrendBoardProps {
   scrollRef: React.RefObject<HTMLDivElement>;

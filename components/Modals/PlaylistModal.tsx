@@ -1,6 +1,6 @@
 "use client";
-import usePlaylistModal from "@/hooks/usePlaylistModal";
-import { useUser } from "@/hooks/useUser";
+import usePlaylistModal from "@/hooks/modal/usePlaylistModal";
+import { useUser } from "@/hooks/auth/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import React, { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";

@@ -8,7 +8,7 @@ import { Playlist, SunoSong } from "@/types";
 import MediaItem from "../MediaItem";
 import Slider from "../Slider";
 import SeekBar from "../Seekbar";
-import useAudioPlayer from "@/hooks/useAudioPlayer";
+import useAudioPlayer from "@/hooks/audio/useAudioPlayer";
 import { useEffect } from "react";
 
 import LikeButton from "../LikeButton";

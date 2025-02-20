@@ -1,9 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useUser } from "@/hooks/useUser";
+import { useUser } from "@/hooks/auth/useUser";
 import Button from "@/components/Button";
-import useSubscribeModal from "@/hooks/useSubscribeModal";
+import useSubscribeModal from "@/hooks/modal/useSubscribeModal";
 import { postData } from "@/libs/helpers";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { CircleSlash, CreditCard, User, Cookie } from "lucide-react";

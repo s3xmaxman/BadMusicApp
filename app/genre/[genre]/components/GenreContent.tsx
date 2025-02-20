@@ -2,8 +2,8 @@
 import DeleteButton from "@/components/DeleteButton";
 import LikeButton from "@/components/LikeButton";
 import MediaItem from "@/components/MediaItem";
-import useOnPlay from "@/hooks/useOnPlay";
-import { useUser } from "@/hooks/useUser";
+import useOnPlay from "@/hooks/player/useOnPlay";
+import { useUser } from "@/hooks/auth/useUser";
 import { Song } from "@/types";
 import React from "react";
 

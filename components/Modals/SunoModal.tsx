@@ -5,10 +5,10 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import Modal from "./Modal";
-import useSunoModal from "@/hooks/useSunoModal";
+import useSunoModal from "@/hooks/modal/useSunoModal";
 import toast from "react-hot-toast";
 import Input from "../Input";
-import { useUser } from "@/hooks/useUser";
+import { useUser } from "@/hooks/auth/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 

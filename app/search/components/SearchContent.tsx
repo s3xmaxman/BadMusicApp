@@ -4,11 +4,11 @@ import DeleteButton from "@/components/DeleteButton";
 import LikeButton from "@/components/LikeButton";
 import MediaItem from "@/components/MediaItem";
 import MusicTabs from "@/components/MusicTabs";
-import useOnPlay from "@/hooks/useOnPlay";
-import useOnPlaySuno from "@/hooks/useOnPlaySuno";
-import { useUser } from "@/hooks/useUser";
+import useOnPlay from "@/hooks/player/useOnPlay";
+import useOnPlaySuno from "@/hooks/player/useOnPlaySuno";
+import { useUser } from "@/hooks/auth/useUser";
 import { Song, SunoSong } from "@/types";
-import usePlayer from "@/hooks/usePlayer";
+import usePlayer from "@/hooks/player/usePlayer";
 import { useState } from "react";
 
 interface SearchContentProps {

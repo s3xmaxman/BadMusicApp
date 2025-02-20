@@ -1,14 +1,13 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { twMerge } from "tailwind-merge";
-import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
 import Button from "./Button";
-import useAuthModal from "@/hooks/useAuthModal";
+import useAuthModal from "@/hooks/auth/useAuthModal";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { useUser } from "@/hooks/useUser";
+import { useUser } from "@/hooks/auth/useUser";
 import { FaUserAlt } from "react-icons/fa";
 import toast from "react-hot-toast";
-import usePlayer from "@/hooks/usePlayer";
+import usePlayer from "@/hooks/player/usePlayer";
 import Image from "next/image";
 
 interface HeaderProps {

@@ -1,5 +1,5 @@
-import useAuthModal from "@/hooks/useAuthModal";
-import { useUser } from "@/hooks/useUser";
+import useAuthModal from "@/hooks/auth/useAuthModal";
+import { useUser } from "@/hooks/auth/useUser";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";

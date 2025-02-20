@@ -3,7 +3,7 @@ import { toast } from "react-hot-toast";
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { useRouter } from "next/navigation";
 
-import { useUser } from "@/hooks/useUser";
+import { useUser } from "@/hooks/auth/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 import Modal from "./Modal";
@@ -11,7 +11,7 @@ import Input from "@/components/Input";
 import Button from "@/components/Button";
 
 import uploadFileToR2 from "@/actions/uploadFileToR2";
-import useSpotLightUploadModal from "@/hooks/useSpotLightUpload";
+import useSpotLightUploadModal from "@/hooks/modal/useSpotLightUpload";
 import { Textarea } from "../ui/textarea";
 
 const SpotlightUploadModal = () => {

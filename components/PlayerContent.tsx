@@ -7,12 +7,14 @@ import LikeButton from "./LikeButton";
 import MediaItem from "./MediaItem";
 import Slider from "./Slider";
 import SeekBar from "./Seekbar";
-import useLoadImage from "@/hooks/useLoadImage";
+
 import AddPlaylist from "./AddPlaylist";
-import useAudioPlayer from "@/hooks/useAudioPlayer";
-import useLoadVideo from "@/hooks/useLoadVideo";
+
 import MobilePlayerContent from "./Mobile/MobilePlayerContent";
 import AudioWaveform from "./AudioWaveform";
+import useLoadImage from "@/hooks/data/useLoadImage";
+import useLoadVideo from "@/hooks/data/useLoadVideo";
+import useAudioPlayer from "@/hooks/audio/useAudioPlayer";
 
 interface PlayerContentProps {
   song: Song;

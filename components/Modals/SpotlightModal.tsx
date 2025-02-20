@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Dialog } from "@/components/ui/dialog";
 import { X } from "lucide-react";
-import useSpotlightModal from "@/hooks/useSpotlightModal";
+import useSpotlightModal from "@/hooks/modal/useSpotlightModal";
 
 const SpotlightModal = () => {
   const { isOpen, onClose } = useSpotlightModal();

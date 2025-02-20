@@ -1,9 +1,9 @@
 "use client";
 import LikeButton from "@/components/LikeButton";
 import MediaItem from "@/components/MediaItem";
-import useOnPlaySuno from "@/hooks/useOnPlaySuno";
+import useOnPlaySuno from "@/hooks/player/useOnPlaySuno";
 import { SunoSong } from "@/types";
-import { useUser } from "@/hooks/useUser";
+import { useUser } from "@/hooks/auth/useUser";
 import React from "react";
 
 interface Props {

@@ -2,7 +2,7 @@
 
 import qs from "query-string";
 
-import useDebounce from "@/hooks/useDebounce";
+import useDebounce from "@/hooks/utils/useDebounce";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Input from "./Input";

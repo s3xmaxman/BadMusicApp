@@ -15,12 +15,12 @@ import {
 import { MdLyrics } from "react-icons/md";
 import Image from "next/image";
 import Link from "next/link";
-import useGetSongById from "@/hooks/useGetSongById";
-import useLoadImage from "@/hooks/useLoadImage";
-import useLoadImages from "@/hooks/useLoadImages";
-import useDownload from "@/hooks/useDownload";
-import { useUser } from "@/hooks/useUser";
-import useGetSongsByGenres from "@/hooks/useGetSongGenres";
+import useGetSongById from "@/hooks/data/useGetSongById";
+import useLoadImage from "@/hooks/data/useLoadImage";
+import useLoadImages from "@/hooks/data/useLoadImages";
+import useDownload from "@/hooks/data/useDownload";
+import { useUser } from "@/hooks/auth/useUser";
+import useGetSongsByGenres from "@/hooks/data/useGetSongGenres";
 import EditModal from "@/components/Modals/EditModal";
 import { downloadFile } from "@/libs/helpers";
 import { Card } from "@/components/ui/card";
@@ -30,7 +30,7 @@ import { Song } from "@/types";
 import toast from "react-hot-toast";
 import AudioWaveform from "@/components/AudioWaveform";
 import { getRandomColor } from "@/libs/utils";
-import useAudioWaveStore from "@/hooks/useAudioWave";
+import useAudioWaveStore from "@/hooks/audio/useAudioWave";
 
 interface SongContentProps {
   songId: string;

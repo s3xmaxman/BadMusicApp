@@ -3,8 +3,8 @@
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 
-import useSubscribeModal from "@/hooks/useSubscribeModal";
-import { useUser } from "@/hooks/useUser";
+import useSubscribeModal from "@/hooks/modal/useSubscribeModal";
+import { useUser } from "@/hooks/auth/useUser";
 import { postData } from "@/libs/helpers";
 import { getStripe } from "@/libs/stripeClient";
 import { Price, ProductWithPrice } from "@/types";

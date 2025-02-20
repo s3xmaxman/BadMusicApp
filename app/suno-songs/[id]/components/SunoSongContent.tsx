@@ -13,8 +13,8 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import useGetSunoSongById from "@/hooks/useGetSunoSongById";
-import { useUser } from "@/hooks/useUser";
+import useGetSunoSongById from "@/hooks/data/useGetSunoSongById";
+import { useUser } from "@/hooks/auth/useUser";
 import { downloadFile } from "@/libs/helpers";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,7 @@ import AudioWaveform from "@/components/AudioWaveform";
 import PreviewDownloadModal from "@/components/Modals/DownloadPreviewModal";
 import { MdLyrics } from "react-icons/md";
 import { getRandomColor } from "@/libs/utils";
-import useAudioWaveStore from "@/hooks/useAudioWave";
+import useAudioWaveStore from "@/hooks/audio/useAudioWave";
 import SunoEditModal from "@/components/Modals/SunoEditModal";
 
 interface SunoSongContentProps {

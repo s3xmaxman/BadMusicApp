@@ -2,11 +2,11 @@
 
 import SongItem from "@/components/SongItem";
 import SunoSongItem from "@/components/Suno/SunoSongItem";
-import useOnPlay from "@/hooks/useOnPlay";
+import useOnPlay from "@/hooks/player/useOnPlay";
 import { Song, SunoSong } from "@/types";
-import useOnPlaySuno from "@/hooks/useOnPlaySuno";
+import useOnPlaySuno from "@/hooks/player/useOnPlaySuno";
 import { useState } from "react";
-import usePlayer from "@/hooks/usePlayer";
+import usePlayer from "@/hooks/player/usePlayer";
 import MusicTabs from "@/components/MusicTabs";
 
 interface PageContentProps {

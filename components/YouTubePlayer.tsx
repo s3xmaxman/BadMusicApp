@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import * as SliderPrimitive from "@radix-ui/react-slider";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
-import useYouTubePlayer from "@/hooks/useYoutubePlayer";
+import useYouTubePlayer from "@/hooks/player/useYoutubePlayer";
 
 interface VolumeSliderProps {
   value: number;

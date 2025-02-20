@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useMemo } from "react";
-import usePlayer from "@/hooks/usePlayer";
+import usePlayer from "@/hooks/player/usePlayer";
 import { isMobile } from "react-device-detect";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";

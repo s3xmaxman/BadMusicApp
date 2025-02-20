@@ -1,6 +1,6 @@
 "use client";
 
-import useLoadImage from "@/hooks/useLoadImage";
+import useLoadImage from "@/hooks/data/useLoadImage";
 import { Song } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
