@@ -19,7 +19,7 @@ const SearchContent: React.FC<SearchContentProps> = ({ songs }) => {
 
   const handlePlay = (id: string) => {
     onPlay(id);
-    player.setId(id, false);
+    player.setId(id);
   };
 
   const renderSongs = (songsData: Song[]) => {

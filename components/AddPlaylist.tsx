@@ -32,7 +32,7 @@ type PlaylistSongData = {
  *
  * @param playlists プレイリストの配列
  * @param songId 曲のID
- * @param songType 曲のタイプ ("regular" か "suno")
+ * @param songType 曲のタイプ ("regular")
  * @param children ドロップダウンのトリガーとなる要素
  */
 const AddPlaylist: React.FC<PlaylistMenuProps> = ({

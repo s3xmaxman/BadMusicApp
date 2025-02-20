@@ -7,9 +7,8 @@ interface PlayerStore {
   isShuffling: boolean;
   shuffledIds: string[];
   isLoading: boolean;
-  isSuno?: boolean;
-  setId: (id: string, isSuno: boolean) => void;
-  setIds: (ids: string[], isSuno: boolean) => void;
+  setId: (id: string) => void;
+  setIds: (ids: string[]) => void;
   toggleRepeat: () => void;
   toggleShuffle: () => void;
   reset: () => void;
@@ -29,7 +28,6 @@ interface PlayerStore {
  * @property {boolean} isShuffling - シャッフル再生中かどうか
  * @property {string[]} shuffledIds - シャッフルされた曲IDリスト
  * @property {boolean} isLoading - ローディング中かどうか
- * @property {boolean|undefined} isSuno - Suno曲かどうか
  * @property {function} setId - 現在の曲IDを設定する関数
  * @property {function} setIds - 再生リストを設定する関数
  * @property {function} toggleRepeat - リピート切り替え関数
@@ -47,9 +45,8 @@ const usePlayer = create<PlayerStore>((set, get) => ({
   isShuffling: false,
   shuffledIds: [],
   isLoading: false,
-  isSuno: false,
-  setId: (id: string, isSuno: boolean) => set({ activeId: id, isSuno }),
-  setIds: (ids: string[], isSuno: boolean) => set({ ids, isSuno }),
+  setId: (id: string) => set({ activeId: id }),
+  setIds: (ids: string[]) => set({ ids }),
   toggleRepeat: () => set((state) => ({ isRepeating: !state.isRepeating })),
   toggleShuffle: () =>
     set((state) => {
@@ -75,7 +72,6 @@ const usePlayer = create<PlayerStore>((set, get) => ({
       isRepeating: false,
       isShuffling: false,
       isLoading: false,
-      isSuno: false,
     }),
   getNextSongId: () => {
     const { ids, activeId, isShuffling, isRepeating, shuffledIds } = get();

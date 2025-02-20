@@ -39,7 +39,6 @@ const useAudioPlayer = (songUrl: string) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const isRepeating = usePlayer((state) => state.isRepeating);
   const isShuffling = usePlayer((state) => state.isShuffling);
-  const isSuno = songUrl.includes("suno") ? true : false;
 
   const Icon = isPlaying ? BsPauseFill : BsPlayFill;
   const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
@@ -61,7 +60,7 @@ const useAudioPlayer = (songUrl: string) => {
     }
     const nextSongId = player.getNextSongId();
     if (nextSongId) {
-      player.setId(nextSongId, isSuno);
+      player.setId(nextSongId);
     }
   };
 
@@ -73,7 +72,7 @@ const useAudioPlayer = (songUrl: string) => {
     } else {
       const prevSongId = player.getPreviousSongId();
       if (prevSongId) {
-        player.setId(prevSongId, isSuno);
+        player.setId(prevSongId);
       }
     }
   };

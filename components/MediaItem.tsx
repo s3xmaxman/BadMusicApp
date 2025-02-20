@@ -29,7 +29,7 @@ const MediaItem: React.FC<MediaItemProps> = ({
     }
 
     if ("author" in data && data.id) {
-      return player.setId(data.id, false);
+      return player.setId(data.id);
     }
 
     if (data.id) {

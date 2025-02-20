@@ -25,7 +25,7 @@ const PageContent: React.FC<PageContentProps> = ({ songs }) => {
 
   const handlePlay = (id: string) => {
     onPlay(id);
-    player.setId(id, false);
+    player.setId(id);
   };
 
   const handleViewAllSongs = () => {

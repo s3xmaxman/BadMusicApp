@@ -7,7 +7,6 @@ import useSubscribeModal from "@/hooks/modal/useSubscribeModal";
 import { postData } from "@/libs/helpers";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { CircleSlash, CreditCard, User, Cookie } from "lucide-react";
-import SunoCookieInput from "@/components/Suno/SunoCookieInput";
 
 const AccountContent = () => {
   const router = useRouter();
@@ -75,21 +74,6 @@ const AccountContent = () => {
                 </Button>
               </div>
             )}
-          </CardContent>
-        </Card>
-
-        {/* SUNO Cookie設定 */}
-        <Card className="bg-neutral-900/50 backdrop-blur border border-neutral-800 shadow-lg hover:border-neutral-700 transition duration-300">
-          <CardHeader className="flex flex-row items-center space-x-4">
-            <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center">
-              <Cookie className="w-6 h-6 text-blue-500" />
-            </div>
-            <CardTitle className="text-xl font-bold text-white">
-              SUNO設定
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <SunoCookieInput />
           </CardContent>
         </Card>
 
