@@ -59,7 +59,7 @@ const DeletePlaylistSongsBtn: React.FC<DeletePlaylistSongsBtnProps> = ({
 
   return (
     <button
-      className="flex items-center"
+      className="flex items-center text-neutral-400 cursor-pointer hover:text-white hover:filter hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] transition-all duration-300"
       disabled={isDeleting}
       onClick={handleDeletePlaylistSongs}
     >
