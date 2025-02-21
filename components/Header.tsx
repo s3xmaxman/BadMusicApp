@@ -1,4 +1,5 @@
 "use client";
+
 import { useRouter } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 import Button from "./Button";
@@ -9,6 +10,7 @@ import { FaUserAlt } from "react-icons/fa";
 import toast from "react-hot-toast";
 import usePlayer from "@/hooks/player/usePlayer";
 import Image from "next/image";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 interface HeaderProps {
   children: React.ReactNode;
@@ -21,7 +23,7 @@ const Header: React.FC<HeaderProps> = ({ children, className, logout }) => {
   const router = useRouter();
   const supabaseClient = useSupabaseClient();
   const player = usePlayer();
-  const { user } = useUser();
+  const { user, userDetails } = useUser();
 
   const handleLogout = async () => {
     const { error } = await supabaseClient.auth.signOut();
@@ -50,7 +52,7 @@ const Header: React.FC<HeaderProps> = ({ children, className, logout }) => {
 
         <div className="ml-auto flex justify-end items-center gap-x-4">
           {user ? (
-            <div className="flex gap-x-4 items-center">
+            <div className="flex gap-x-4 items-center z-50">
               {logout && (
                 <Button onClick={handleLogout} className="bg-white px-6 py-2">
                   Logout
@@ -58,9 +60,17 @@ const Header: React.FC<HeaderProps> = ({ children, className, logout }) => {
               )}
               <Button
                 onClick={() => router.push("/account")}
-                className="bg-white"
+                className="bg-transparent"
               >
-                <FaUserAlt />
+                <Avatar>
+                  {userDetails?.avatar_url ? (
+                    <AvatarImage src={userDetails.avatar_url} alt="Avatar" />
+                  ) : (
+                    <AvatarFallback>
+                      <FaUserAlt />
+                    </AvatarFallback>
+                  )}
+                </Avatar>
               </Button>
             </div>
           ) : (

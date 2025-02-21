@@ -11,7 +11,7 @@ import uploadFileToR2 from "@/actions/uploadFileToR2";
 import { toast } from "react-hot-toast";
 
 const AccountContent = () => {
-  const { getUserData, userDetails } = useUser();
+  const { userDetails: data } = useUser();
   const router = useRouter();
   const supabaseClient = useSupabaseClient();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -20,16 +20,17 @@ const AccountContent = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const data = await getUserData();
       setUserData(data);
+
       if (data?.avatar_url) {
         setImageUrl(data.avatar_url);
       }
     };
+
     if (!userData) {
       fetchUserData();
     }
-  }, [getUserData, userData]);
+  }, [data, userData]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
