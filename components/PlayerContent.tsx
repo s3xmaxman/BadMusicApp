@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import { BsRepeat1 } from "react-icons/bs";
 import { FaRandom } from "react-icons/fa";
@@ -7,14 +7,10 @@ import LikeButton from "./LikeButton";
 import MediaItem from "./MediaItem";
 import Slider from "./Slider";
 import SeekBar from "./Seekbar";
-
 import AddPlaylist from "./AddPlaylist";
-
 import MobilePlayerContent from "./Mobile/MobilePlayerContent";
-import AudioWaveform from "./AudioWaveform";
-import useLoadImage from "@/hooks/data/useLoadImage";
-import useLoadVideo from "@/hooks/data/useLoadVideo";
 import useAudioPlayer from "@/hooks/audio/useAudioPlayer";
+import useLoadMedia from "@/hooks/data/useLoadMedia";
 
 interface PlayerContentProps {
   song: Song;
@@ -31,8 +27,8 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
   toggleMobilePlayer,
   playlists,
 }) => {
-  const imageUrl = useLoadImage(song);
-  const videoUrl = useLoadVideo(song);
+  const imageUrl = useLoadMedia(song, { type: "image", bucket: "images" });
+  const videoUrl = useLoadMedia(song, { type: "video", bucket: "videos" });
 
   const {
     Icon,
@@ -186,8 +182,8 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
             song={song}
             playlists={playlists}
             songUrl={songUrl}
-            imageUrl={imageUrl || "/images/wait.jpg"}
-            videoUrl={videoUrl!}
+            imageUrl={imageUrl?.[0] || "/images/wait.jpg"}
+            videoUrl={videoUrl?.[0]!}
             currentTime={currentTime}
             duration={duration}
             formattedCurrentTime={formattedCurrentTime}

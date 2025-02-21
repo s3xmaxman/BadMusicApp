@@ -3,10 +3,10 @@
 import Image from "next/image";
 import Header from "@/components/Header";
 import LikedContent from "@/app/liked/components/LikedContent";
-import { Playlist } from "@/types";
 import DeletePlaylistButton from "@/components/DeletePlaylistButton";
-import useLoadImage from "@/hooks/data/useLoadImage";
 import { useEffect, useState } from "react";
+import useLoadMedia from "@/hooks/data/useLoadMedia";
+
 interface PlaylistPageContentProps {
   playlistId: string;
   playlistTitle: string;
@@ -21,14 +21,17 @@ const PlaylistPageContent: React.FC<PlaylistPageContentProps> = ({
   imageUrl,
 }) => {
   const defaultImage = "/images/playlist.png";
-  const loadedImage = useLoadImage(
-    imageUrl ? ({ image_path: imageUrl } as Playlist) : null
-  );
+
+  const loadedImage = useLoadMedia(imageUrl ? { image_path: imageUrl } : null, {
+    type: "image",
+    bucket: "images",
+  });
+
   const [image, setImage] = useState<string>(defaultImage);
 
   useEffect(() => {
-    if (loadedImage) {
-      setImage(loadedImage);
+    if (loadedImage?.[0]) {
+      setImage(loadedImage[0]);
     }
   }, [loadedImage]);
 

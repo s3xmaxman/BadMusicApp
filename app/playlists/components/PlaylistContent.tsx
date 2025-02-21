@@ -4,15 +4,16 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import { Playlist } from "@/types";
-import useLoadImages from "@/hooks/data/useLoadImages";
+import useLoadMedia from "@/hooks/data/useLoadMedia";
 
 interface PlaylistContentProps {
   playlists: Playlist[];
 }
 
 const PlaylistContent = ({ playlists }: PlaylistContentProps) => {
-  const imageUrl = useLoadImages(playlists);
+  const imageUrl = useLoadMedia(playlists, { type: "image", bucket: "images" });
   const router = useRouter();
+
   if (playlists.length === 0) {
     return (
       <div className="flex flex-col gap-y-2 w-full px-6 text-neutral-400">

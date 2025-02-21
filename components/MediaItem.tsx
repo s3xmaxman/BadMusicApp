@@ -1,11 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import useLoadImage from "@/hooks/data/useLoadImage";
 import { Playlist, Song } from "@/types";
 import usePlayer from "@/hooks/player/usePlayer";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import useLoadMedia from "@/hooks/data/useLoadMedia";
 
 interface MediaItemProps {
   data: Song | Playlist;
@@ -19,8 +19,8 @@ const MediaItem: React.FC<MediaItemProps> = ({
   isCollapsed,
 }) => {
   const player = usePlayer();
-  const imageUrl = useLoadImage(data);
   const router = useRouter();
+  const imageUrl = useLoadMedia(data, { type: "image", bucket: "images" });
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   const handleClick = () => {
@@ -58,7 +58,7 @@ const MediaItem: React.FC<MediaItemProps> = ({
         )}
         <Image
           fill
-          src={imageUrl || "/images/playlist.png"}
+          src={imageUrl?.[0] || "/images/playlist.png"}
           alt="MediaItem"
           className={`object-cover transition-opacity duration-300 ${
             isImageLoaded ? "opacity-100" : "opacity-0"

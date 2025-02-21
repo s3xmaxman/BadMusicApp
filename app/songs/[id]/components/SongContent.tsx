@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -16,8 +17,6 @@ import { MdLyrics } from "react-icons/md";
 import Image from "next/image";
 import Link from "next/link";
 import useGetSongById from "@/hooks/data/useGetSongById";
-import useLoadImage from "@/hooks/data/useLoadImage";
-import useLoadImages from "@/hooks/data/useLoadImages";
 import useDownload from "@/hooks/data/useDownload";
 import { useUser } from "@/hooks/auth/useUser";
 import useGetSongsByGenres from "@/hooks/data/useGetSongGenres";
@@ -31,6 +30,7 @@ import toast from "react-hot-toast";
 import AudioWaveform from "@/components/AudioWaveform";
 import { getRandomColor } from "@/libs/utils";
 import useAudioWaveStore from "@/hooks/audio/useAudioWave";
+import useLoadMedia from "@/hooks/data/useLoadMedia";
 
 interface SongContentProps {
   songId: string;
@@ -39,7 +39,6 @@ interface SongContentProps {
 const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   const { song } = useGetSongById(songId);
   const { user } = useUser();
-  const imageUrl = useLoadImage(song as Song);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<"lyrics" | "similar">("lyrics");
@@ -54,7 +53,15 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
   );
 
   const { songGenres } = useGetSongsByGenres(genres, songId);
-  const imageUrls = useLoadImages(songGenres);
+  const imageUrl = useLoadMedia(song as Song, {
+    type: "image",
+    bucket: "images",
+  });
+  const imageUrls = useLoadMedia(songGenres, {
+    type: "image",
+    bucket: "images",
+  });
+
   const { fileUrl, loading } = useDownload(song?.song_path!);
 
   const { isPlaying, play, pause, currentSongId, initializeAudio } =
@@ -122,7 +129,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
       {/* Hero Section */}
       <div className="relative h-[50vh] md:h-[60vh] w-full">
         <Image
-          src={imageUrl || "/images/wait.jpg"}
+          src={imageUrl?.[0] || "/images/wait.jpg"}
           alt="Song Cover"
           fill
           className="object-cover opacity-40"
@@ -136,7 +143,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
           onEnded={handlePlaybackEnded}
           primaryColor={primaryColor}
           secondaryColor={secondaryColor}
-          imageUrl={imageUrl!}
+          imageUrl={imageUrl?.[0]!}
           songId={songId}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/60 to-black" />
@@ -155,7 +162,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
                 className="hidden md:block w-48 h-48 md:w-64 md:h-64 relative rounded-lg overflow-hidden shadow-2xl flex-shrink-0"
               >
                 <Image
-                  src={imageUrl || "/images/wait.jpg"}
+                  src={imageUrl?.[0] || "/images/wait.jpg"}
                   alt="Song Cover"
                   fill
                   className="object-cover"

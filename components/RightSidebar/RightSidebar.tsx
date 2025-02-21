@@ -1,12 +1,11 @@
 "use client";
 
 import React from "react";
-import useLoadImage from "@/hooks/data/useLoadImage";
 import usePlayer from "@/hooks/player/usePlayer";
 import useGetSongById from "@/hooks/data/useGetSongById";
-import useLoadVideo from "@/hooks/data/useLoadVideo";
 import FullScreenLayout from "./FullScreenLayout";
 import { twMerge } from "tailwind-merge";
+import useLoadMedia from "@/hooks/data/useLoadMedia";
 
 interface RightSidebarProps {
   children: React.ReactNode;
@@ -20,9 +19,18 @@ const RightSidebar: React.FC<RightSidebarProps> = ({ children }) => {
   const currentSong = song;
   const nextTrack = nextSong;
 
-  const videoPath = useLoadVideo(currentSong!);
-  const imagePath = useLoadImage(currentSong!);
-  const nextImagePath = useLoadImage(nextTrack!);
+  const videoPath = useLoadMedia(currentSong!, {
+    type: "video",
+    bucket: "videos",
+  });
+  const imagePath = useLoadMedia(currentSong!, {
+    type: "image",
+    bucket: "images",
+  });
+  const nextImagePath = useLoadMedia(nextTrack!, {
+    type: "image",
+    bucket: "images",
+  });
 
   const showRightSidebar = currentSong && nextTrack;
 
@@ -33,10 +41,10 @@ const RightSidebar: React.FC<RightSidebarProps> = ({ children }) => {
         <div className="hidden xl:flex w-96 h-full bg-black p-2">
           <FullScreenLayout
             song={currentSong!}
-            videoPath={videoPath!}
-            imagePath={imagePath!}
+            videoPath={videoPath?.[0]!}
+            imagePath={imagePath?.[0]!}
             nextSong={nextTrack}
-            nextImagePath={nextImagePath!}
+            nextImagePath={nextImagePath?.[0]!}
           />
         </div>
       )}

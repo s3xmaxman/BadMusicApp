@@ -1,6 +1,6 @@
 "use client";
 
-import useLoadImage from "@/hooks/data/useLoadImage";
+import useLoadMedia from "@/hooks/data/useLoadMedia";
 import { Song } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,7 +13,7 @@ interface SongItemProps {
 }
 
 const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
-  const imagePath = useLoadImage(data);
+  const imageUrl = useLoadMedia(data, { type: "image", bucket: "images" });
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   return (
@@ -46,7 +46,7 @@ const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
           className={`object-cover w-full h-full transition-opacity duration-700 transition-transform duration-300 ${
             isImageLoaded ? "opacity-100" : "opacity-0"
           } group-hover:scale-110`}
-          src={imagePath || "/images/wait.jpg"}
+          src={imageUrl?.[0] || "/images/wait.jpg"}
           fill
           alt="Image"
           onLoad={() => setIsImageLoaded(true)}

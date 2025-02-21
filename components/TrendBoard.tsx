@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import useLoadImages from "@/hooks/data/useLoadImages";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -8,6 +7,7 @@ import useGetTrendSongs from "@/hooks/data/useGetTrendSongs";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 import useOnPlay from "@/hooks/player/useOnPlay";
+import useLoadMedia from "@/hooks/data/useLoadMedia";
 
 interface TrendBoardProps {
   scrollRef: React.RefObject<HTMLDivElement>;
@@ -24,7 +24,7 @@ const TrendBoard: React.FC<TrendBoardProps> = ({
     "all" | "month" | "week" | "day"
   >("all");
   const { trends, isLoading, error } = useGetTrendSongs(selectedPeriod);
-  const imageUrls = useLoadImages(trends);
+  const imageUrls = useLoadMedia(trends, { type: "image", bucket: "images" });
   const onPlay = useOnPlay(trends);
 
   const containerVariants = {
