@@ -19,7 +19,6 @@ const LikeButton: React.FC<LikeButtonProps> = ({
   size,
   showText = false,
 }) => {
-  const router = useRouter();
   const { supabaseClient } = useSessionContext();
   const { user } = useUser();
   const authModal = useAuthModal();
