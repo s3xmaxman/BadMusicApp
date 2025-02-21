@@ -1,5 +1,5 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies, headers } from "next/headers";
+import { cookies } from "next/headers";
 
 import { Song } from "@/types";
 
@@ -8,7 +8,6 @@ const getSongsByGenre = async (genre: string | string[]): Promise<Song[]> => {
   const genreArray =
     typeof genre === "string" ? genre.split(",").map((g) => g.trim()) : genre;
 
-  // supabaseクライアントを初期化
   const supabase = createServerComponentClient({
     cookies: cookies,
   });
@@ -20,12 +19,10 @@ const getSongsByGenre = async (genre: string | string[]): Promise<Song[]> => {
     .or(genreArray.map((genre) => `genre.ilike.%${genre}%`).join(","))
     .order("created_at", { ascending: false });
 
-  // エラー発生時はコンソールに出力
   if (error) {
     console.log(error.message);
   }
 
-  // 曲データまたは空の配列を返す
   return (data as Song[]) || [];
 };
 

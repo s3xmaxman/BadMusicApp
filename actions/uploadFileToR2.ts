@@ -9,6 +9,15 @@ interface UploadFileToR2Props {
   fileNamePrefix?: string;
 }
 
+/**
+ * R2にファイルをアップロードし、アップロードされたファイルのURLを返します。
+ * @param {File} file - アップロードするファイル
+ * @param {'spotlight' | 'song' | 'image' | 'video'} bucketName - アップロード先のバケット名
+ * @param {'image' | 'audio' | 'video'} fileType - ファイルのタイプ
+ * @param {string} [fileNamePrefix] - ファイル名のプレフィックス（オプション）
+ * @returns {Promise<string | null>} - アップロードされたファイルのURL、またはエラー時はnull
+ * @throws {Error} - アップロード中にエラーが発生した場合
+ */
 const uploadFileToR2 = async ({
   file,
   bucketName,
