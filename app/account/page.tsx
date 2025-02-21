@@ -2,7 +2,7 @@ import Header from "@/components/Header";
 import React from "react";
 import AccountContent from "./components/AccountContent";
 
-const Account = () => {
+const Account = async () => {
   return (
     <div className="bg-[#0d0d0d] rounded-lg h-full overflow-hidden overflow-y-auto">
       <Header logout={true}>

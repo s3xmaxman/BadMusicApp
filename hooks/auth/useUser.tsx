@@ -12,6 +12,7 @@ type UserContextType = {
   userDetails: UserDetails | null;
   isLoading: boolean;
   subscription: Subscription | null;
+  getUserData: () => Promise<UserDetails | null>;
 };
 
 /**
@@ -51,6 +52,25 @@ export const MyUserContextProvider = (props: Props) => {
       .in("status", ["trialing", "active"])
       .single();
 
+  const getUserData = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    const { data: userData, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("id", user?.id)
+      .single();
+
+    if (error) {
+      console.error("Error fetching user data:", error);
+      return null;
+    }
+
+    return (userData as any) || [];
+  };
+
   // ユーザー情報とサブスクリプション情報の取得
   useEffect(() => {
     if (user && !isLoadingData && !userDetails && !subscription) {
@@ -85,6 +105,8 @@ export const MyUserContextProvider = (props: Props) => {
     userDetails,
     isLoading: isLoadingUser || isLoadingData,
     subscription,
+    getUserDetails,
+    getUserData,
   };
 
   return <UserContext.Provider value={value} {...props} />;

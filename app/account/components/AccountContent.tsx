@@ -1,87 +1,102 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useUser } from "@/hooks/auth/useUser";
-import Button from "@/components/Button";
-import useSubscribeModal from "@/hooks/modal/useSubscribeModal";
-import { postData } from "@/libs/helpers";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { CircleSlash, CreditCard, User, Cookie } from "lucide-react";
+import { User } from "lucide-react";
+import Image from "next/image";
+import { useUser } from "@/hooks/auth/useUser";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import uploadFileToR2 from "@/actions/uploadFileToR2";
+import { toast } from "react-hot-toast";
 
 const AccountContent = () => {
+  const { getUserData, userDetails } = useUser();
   const router = useRouter();
-  const subscribeModal = useSubscribeModal();
-  const { isLoading, subscription, user } = useUser();
-  const [loading, setLoading] = useState(false);
+  const supabaseClient = useSupabaseClient();
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [userData, setUserData] = useState<any>(null);
 
   useEffect(() => {
-    if (!isLoading && !user) {
-      router.replace("/");
+    const fetchUserData = async () => {
+      const data = await getUserData();
+      setUserData(data);
+      if (data?.avatar_url) {
+        setImageUrl(data.avatar_url);
+      }
+    };
+    if (!userData) {
+      fetchUserData();
     }
-  }, [isLoading, user, router]);
+  }, [getUserData, userData]);
 
-  const redirectToCustomerPortal = async () => {
-    setLoading(true);
-    try {
-      const { url, error } = await postData({
-        url: "/api/create-portal-link",
-      });
-      window.location.assign(url);
-    } catch (error) {
-      if (error) return alert((error as Error).message);
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      setSelectedImage(file);
+      setImageUrl(URL.createObjectURL(file));
     }
-    setLoading(false);
+  };
+
+  const handleUpload = async () => {
+    if (!selectedImage) {
+      toast.error("画像を選択してください");
+      return;
+    }
+
+    try {
+      const uploadedImageUrl = await uploadFileToR2({
+        file: selectedImage,
+        bucketName: "image",
+        fileType: "image",
+        fileNamePrefix: `avatar-${userData?.id}`,
+      });
+
+      if (!uploadedImageUrl) {
+        toast.error("画像のアップロードに失敗しました");
+        return;
+      }
+
+      // Supabaseのusersテーブルのavatar_urlを更新
+      const { error } = await supabaseClient
+        .from("users")
+        .update({ avatar_url: uploadedImageUrl })
+        .eq("id", userData?.id);
+
+      if (error) {
+        toast.error("アバターURLの更新に失敗しました");
+        console.error("Supabase update error:", error);
+        return;
+      }
+
+      toast.success("アバター画像を更新しました");
+      router.refresh();
+    } catch (error) {
+      toast.error("エラーが発生しました");
+      console.error(error);
+    }
   };
 
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* サブスクリプション情報 */}
-        <Card className="bg-neutral-900/50 backdrop-blur border border-neutral-800 shadow-lg hover:border-neutral-700 transition duration-300">
-          <CardHeader className="flex flex-row items-center space-x-4">
-            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-              <CreditCard className="w-6 h-6 text-primary" />
-            </div>
-            <CardTitle className="text-xl font-bold text-white">
-              サブスクリプション
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {!subscription ? (
-              <div className="space-y-4">
-                <div className="flex items-center space-x-2 text-neutral-400">
-                  <CircleSlash className="w-4 h-4" />
-                  <span>未加入</span>
-                </div>
-                <Button onClick={subscribeModal.onOpen} className="w-full">
-                  サブスクリプションに加入する
-                </Button>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <div className="p-4 rounded-lg bg-primary/10 border border-primary/20">
-                  <p className="text-sm text-neutral-400">現在のプラン</p>
-                  <p className="text-xl font-bold text-primary">
-                    {subscription?.prices?.products?.name}
-                  </p>
-                </div>
-                <Button
-                  disabled={loading || isLoading}
-                  onClick={redirectToCustomerPortal}
-                  className="w-full"
-                >
-                  プラン設定を変更
-                </Button>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
         {/* アカウント情報 */}
         <Card className="bg-neutral-900/50 backdrop-blur border border-neutral-800 shadow-lg hover:border-neutral-700 transition duration-300">
           <CardHeader className="flex flex-row items-center space-x-4">
             <div className="w-12 h-12 rounded-full bg-purple-500/10 flex items-center justify-center">
-              <User className="w-6 h-6 text-purple-500" />
+              {imageUrl ? (
+                <Image
+                  src={imageUrl}
+                  alt="アバター"
+                  width={48}
+                  height={48}
+                  className="rounded-full"
+                />
+              ) : (
+                <User className="w-6 h-6 text-purple-500" />
+              )}
             </div>
             <CardTitle className="text-xl font-bold text-white">
               アカウント情報
@@ -90,18 +105,26 @@ const AccountContent = () => {
           <CardContent>
             <div className="space-y-4">
               <div className="flex flex-col space-y-2">
-                <p className="text-sm text-neutral-400">メールアドレス</p>
+                <p className="text-sm text-neutral-400">ユーザー名</p>
                 <p className="text-white font-medium px-3 py-2 bg-neutral-800/50 rounded-md">
-                  {user?.email}
+                  {userData?.full_name}
                 </p>
               </div>
+              {/* 画像アップロード関連のUI */}
               <div className="flex flex-col space-y-2">
-                <p className="text-sm text-neutral-400">最終ログイン</p>
-                <p className="text-white font-medium px-3 py-2 bg-neutral-800/50 rounded-md">
-                  {user?.last_sign_in_at
-                    ? new Date(user.last_sign_in_at).toLocaleString("ja-JP")
-                    : "情報なし"}
-                </p>
+                <p className="text-sm text-neutral-400">アバター画像</p>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="text-sm text-neutral-400"
+                />
+                <button
+                  onClick={handleUpload}
+                  className="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition duration-300"
+                >
+                  アップロード
+                </button>
               </div>
             </div>
           </CardContent>
