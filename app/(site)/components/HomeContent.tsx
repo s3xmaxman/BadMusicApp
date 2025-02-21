@@ -229,11 +229,6 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs, spotlightData }) => {
           </section>
         </main>
       </div>
-
-      {/* Right Sidebar
-      <aside className="hidden xl:block w-96 h-full overflow-y-auto bg-black custom-scrollbar">
-        <RightSidebar />
-      </aside> */}
     </div>
   );
 };
