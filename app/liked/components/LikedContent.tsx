@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import { Song } from "@/types";
@@ -9,6 +9,12 @@ import MediaItem from "@/components/MediaItem";
 import LikeButton from "@/components/LikeButton";
 import useOnPlay from "@/hooks/player/useOnPlay";
 import DeletePlaylistSongsBtn from "@/components/DeletePlaylistSongsBtn";
+import { BsThreeDots } from "react-icons/bs";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface LikedContentProps {
   songs: Song[];
@@ -43,14 +49,39 @@ const LikedContent: React.FC<LikedContentProps> = ({ songs, playlistId }) => {
           <div className="flex-1">
             <MediaItem onClick={(id: string) => onPlay(id)} data={song} />
           </div>
-          <LikeButton songId={song.id} songType={"regular"} />
-          {playlistId && (
-            <DeletePlaylistSongsBtn
-              songId={song.id}
-              playlistId={playlistId}
-              songType={"regular"}
-            />
-          )}
+          <Popover>
+            <PopoverTrigger asChild>
+              <button
+                className="
+              text-neutral-400 
+              cursor-pointer 
+              hover:text-white 
+              transition
+              "
+                aria-label="More Options"
+              >
+                <BsThreeDots size={20} />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent side="left" className="w-auto p-0">
+              <div className="flex flex-col">
+                <LikeButton
+                  songId={song.id}
+                  songType={"regular"}
+                  showText={true}
+                />
+
+                {playlistId && (
+                  <DeletePlaylistSongsBtn
+                    songId={song.id}
+                    playlistId={playlistId}
+                    songType={"regular"}
+                    showText={true}
+                  />
+                )}
+              </div>
+            </PopoverContent>
+          </Popover>
         </div>
       ))}
     </div>

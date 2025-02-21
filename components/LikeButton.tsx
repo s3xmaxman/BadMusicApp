@@ -10,9 +10,15 @@ interface LikeButtonProps {
   songId: string;
   songType: "regular";
   size?: number;
+  showText?: boolean;
 }
 
-const LikeButton: React.FC<LikeButtonProps> = ({ songId, songType, size }) => {
+const LikeButton: React.FC<LikeButtonProps> = ({
+  songId,
+  songType,
+  size,
+  showText = false,
+}) => {
   const router = useRouter();
   const { supabaseClient } = useSessionContext();
   const { user } = useUser();
@@ -62,7 +68,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId, songType, size }) => {
         if (error) throw error;
 
         setIsLiked(false);
-        await updateLikeCount(songId, songType, -1);
+        await updateLikeCount(songId, -1);
       } else {
         const { error } = await supabaseClient
           .from("liked_songs_regular")
@@ -74,7 +80,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId, songType, size }) => {
         if (error) throw error;
 
         setIsLiked(true);
-        await updateLikeCount(songId, songType, 1);
+        await updateLikeCount(songId, 1);
         toast.success("いいねしました！");
       }
     } catch (error) {
@@ -82,15 +88,11 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId, songType, size }) => {
     }
   };
 
-  const updateLikeCount = async (
-    songId: string,
-    songType: "regular",
-    increment: number
-  ) => {
+  const updateLikeCount = async (songId: string, increment: number) => {
     try {
       // 現在のlike_countを取得
       const { data, error: fetchError } = await supabaseClient
-        .from("liked_songs_regular")
+        .from("songs")
         .select("like_count")
         .eq("id", songId)
         .single();
@@ -100,7 +102,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId, songType, size }) => {
       // 新しいlike_countを計算して更新
       const newLikeCount = (data?.like_count || 0) + increment;
       const { error: updateError } = await supabaseClient
-        .from("liked_songs_regular")
+        .from("songs")
         .update({ like_count: newLikeCount })
         .eq("id", songId);
 
@@ -116,7 +118,12 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId, songType, size }) => {
       className="text-neutral-400 cursor-pointer hover:text-white hover:filter hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] transition-all duration-300"
       aria-label={isLiked ? "Remove like" : "Add like"}
     >
-      <Icon color={isLiked ? "#FF69B4" : "white"} size={size || 25} />
+      <div className="flex items-center">
+        <Icon color={isLiked ? "#FF69B4" : "white"} size={size || 25} />
+        {showText && (
+          <span className="ml-2">{isLiked ? "いいね済み" : "いいね"}</span>
+        )}
+      </div>
     </button>
   );
 };

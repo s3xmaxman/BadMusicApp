@@ -10,12 +10,14 @@ interface DeletePlaylistSongsBtnProps {
   songId: string;
   playlistId: string;
   songType: "regular";
+  showText?: boolean;
 }
 
 const DeletePlaylistSongsBtn: React.FC<DeletePlaylistSongsBtnProps> = ({
   songId,
   playlistId,
   songType,
+  showText = false,
 }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
@@ -56,13 +58,17 @@ const DeletePlaylistSongsBtn: React.FC<DeletePlaylistSongsBtnProps> = ({
   };
 
   return (
-    <div>
+    <button
+      className="flex items-center"
+      disabled={isDeleting}
+      onClick={handleDeletePlaylistSongs}
+    >
       <RiDeleteBin5Line
-        onClick={handleDeletePlaylistSongs}
         className="text-neutral-400 hover:text-red-500 cursor-pointer"
         size={28}
       />
-    </div>
+      {showText && <span className="ml-2 text-sm font-semibold">削除</span>}
+    </button>
   );
 };
 
