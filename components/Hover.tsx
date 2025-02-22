@@ -20,13 +20,13 @@ const Hover = ({
   isCollapsed = false,
 }: HoverCardProps) => {
   return (
-    <HoverCard>
+    <HoverCard >
       <HoverCardTrigger asChild>
         <div className="cursor-pointer">{children}</div>
       </HoverCardTrigger>
       <HoverCardContent
         side={side}
-        className={`${contentSize} rounded-xl transition-all duration-300 ${
+        className={`${contentSize} rounded-xl  transition-all duration-300 ${
           isCollapsed ? "translate-x-2" : "translate-x-0"
         }`}
         sideOffset={isCollapsed ? 10 : 5}
