@@ -6,34 +6,32 @@ import { twMerge } from "tailwind-merge";
 
 interface GenreSelectProps {
   disabled?: boolean;
-  onChange: (value: string) => void;
+  onGenreChange: (genres: string) => void;
   value?: string;
 }
 
 const genres = [
-  "j-pop",
-  "j-rock",
-  "anime",
-  "pop",
-  "rock",
-  "electronic",
-  "jazz",
-  "classical",
-  "hip-hop",
-  "r&b",
-  "folk",
-  "other",
+  { id: "j-pop", name: "j-pop" },
+  { id: "synth wave", name: "synth wave" },
+  { id: "nu disco", name: "nu disco" },
+  { id: "electronic", name: "electronic" },
+  { id: "electro house", name: "electro house" },
+  { id: "classical", name: "classical" },
+  { id: "hip-hop", name: "hip-hop" },
+  { id: "r&b", name: "r&b" },
+  { id: "folk", name: "folk" },
+  { id: "other", name: "other" },
 ];
 
 const GenreSelect: React.FC<GenreSelectProps> = ({
   disabled,
-  onChange,
+  onGenreChange,
   value,
 }) => {
   return (
     <RadixSelect.Root
       defaultValue={value}
-      onValueChange={onChange}
+      onValueChange={onGenreChange}
       disabled={disabled}
     >
       <RadixSelect.Trigger
@@ -61,23 +59,25 @@ const GenreSelect: React.FC<GenreSelectProps> = ({
       <RadixSelect.Portal>
         <RadixSelect.Content className="overflow-hidden bg-neutral-900/95 backdrop-blur-xl rounded-xl border border-white/[0.02] shadow-xl animate-scale-in z-[9999]">
           <RadixSelect.Viewport className="p-2">
-            {genres.map((genre) => (
-              <RadixSelect.Item
-                key={genre}
-                value={genre}
-                className={twMerge(
-                  "relative flex items-center px-8 py-2 rounded-lg text-sm",
-                  "text-neutral-300 hover:text-white",
-                  "focus:bg-purple-500/10 focus:text-purple-400 focus:outline-none",
-                  "cursor-pointer transition-all duration-300",
-                  "data-[state=checked]:text-purple-400 data-[state=checked]:bg-purple-500/10"
-                )}
-              >
-                <RadixSelect.ItemText className="capitalize">
-                  {genre}
-                </RadixSelect.ItemText>
-              </RadixSelect.Item>
-            ))}
+            <div className="w-full max-h-[300px] overflow-x-auto custom-scrollbar">
+              {genres.map((genre) => (
+                <RadixSelect.Item
+                  key={genre.id}
+                  value={genre.id}
+                  className={twMerge(
+                    "relative flex items-center px-8 py-2 rounded-lg text-sm",
+                    "text-neutral-300 hover:text-white",
+                    "focus:bg-purple-500/10 focus:text-purple-400 focus:outline-none",
+                    "cursor-pointer transition-all duration-300",
+                    "data-[state=checked]:text-purple-400 data-[state=checked]:bg-purple-500/10"
+                  )}
+                >
+                  <RadixSelect.ItemText className="capitalize">
+                    {genre.name}
+                  </RadixSelect.ItemText>
+                </RadixSelect.Item>
+              ))}
+            </div>
           </RadixSelect.Viewport>
         </RadixSelect.Content>
       </RadixSelect.Portal>

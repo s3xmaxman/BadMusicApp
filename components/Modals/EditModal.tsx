@@ -28,9 +28,7 @@ interface EditModalProps {
 
 const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedGenres, setSelectedGenres] = useState<string[]>(
-    song.genre ? song.genre.split(", ") : []
-  );
+  const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const supabaseClient = useSupabaseClient();
 
   const { register, handleSubmit, reset, setValue, watch } =
@@ -67,10 +65,6 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
       setSelectedGenres(song.genre ? song.genre.split(", ") : []);
     }
   }, [isOpen, song, reset]);
-
-  const handleGenreChange = (genre: string[]) => {
-    setSelectedGenres(genre);
-  };
 
   const handleVideoUpload = async (videoFile: File): Promise<string | null> => {
     const maxVideoSize = 5 * 1024 * 1024; // 5MB
@@ -172,9 +166,7 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
           className="bg-neutral-700"
         />
         <GenreSelect
-          className="w-full bg-neutral-700"
-          onGenreChange={handleGenreChange}
-          defaultValue={selectedGenres}
+          onGenreChange={(genres: string) => setSelectedGenres([genres])}
         />
         <div>
           <div className="pb-1">ビデオを選択（5MB以下）</div>
@@ -201,11 +193,7 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
             </div>
           )}
         </div>
-        <Button
-          disabled={isLoading}
-          type="submit"
-          className="col-span-full py-6 text-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 transition-all duration-300 shadow-lg hover:shadow-blue-500/25"
-        >
+        <Button disabled={isLoading} type="submit">
           {isLoading ? "編集中..." : "編集"}
         </Button>
       </form>

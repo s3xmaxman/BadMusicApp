@@ -123,7 +123,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children, songs, playlists }) => {
           <Library isCollapsed={isCollapsed} />
         </Box>
 
-        <div className="mt-2">
+        <div className=" mb-6">
           <UserCard userDetails={userDetails} isCollapsed={isCollapsed} />
         </div>
       </div>

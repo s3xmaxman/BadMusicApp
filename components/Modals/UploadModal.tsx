@@ -108,10 +108,6 @@ const UploadModal: React.FC = () => {
     }
   };
 
-  const handleGenreChange = (genres: string[]) => {
-    setSelectedGenres(genres);
-  };
-
   const onSubmit: SubmitHandler<FieldValues> = async (values) => {
     try {
       setIsLoading(true);
@@ -244,8 +240,7 @@ const UploadModal: React.FC = () => {
           <div className="space-y-1">
             <label className="text-sm text-zinc-400">ジャンル</label>
             <GenreSelect
-              className="w-full bg-zinc-800/50 border-zinc-700/50"
-              onGenreChange={handleGenreChange}
+              onGenreChange={(genres: string) => setSelectedGenres([genres])}
             />
           </div>
         </div>
