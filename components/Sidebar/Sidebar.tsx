@@ -16,6 +16,7 @@ import { useUser } from "@/hooks/auth/useUser";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import { GoSidebarCollapse } from "react-icons/go";
+import UserCard from "./UserCard"; 
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -26,7 +27,7 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ children, songs, playlists }) => {
   const pathname = usePathname();
   const player = usePlayer();
-  const { user } = useUser();
+  const { user, userDetails } = useUser();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const routes = useMemo(
@@ -72,30 +73,42 @@ const Sidebar: React.FC<SidebarProps> = ({ children, songs, playlists }) => {
     >
       <div
         className={twMerge(
-          "flex flex-col gap-y-2 bg-black h-full p-2 transition-width duration-300",
+          "flex flex-col gap-y-2.5 bg-gradient-to-br from-black/95 via-neutral-900/90 to-neutral-900/85 h-full p-2.5 transition-all duration-500 backdrop-blur-2xl border-r border-white/[0.02] shadow-xl shadow-black/10",
           isCollapsed ? "w-20" : "w-72",
           "hidden md:flex"
         )}
       >
-        <div className="flex items-center justify-between">
-          <Image
-            src="/logo.svg"
-            alt="Logo"
-            width={isCollapsed ? 32 : 48}
-            height={isCollapsed ? 32 : 48}
-            className="mr-auto ml-[15px] cursor-pointer"
-            onClick={() => isCollapsed && setIsCollapsed(!isCollapsed)}
-          />
-          {!isCollapsed && <h1 className="font-bold text-xl">BadMusicApp</h1>}
+        <div className="flex items-center justify-between px-2.5 py-2">
+          <div className="flex items-center gap-3">
+            <div className="relative group">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-purple-900/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500" />
+              <Image
+                src="/logo.svg"
+                alt="Logo"
+                width={isCollapsed ? 32 : 40}
+                height={isCollapsed ? 32 : 40}
+                className="relative cursor-pointer transition-all duration-300 hover:scale-105 z-10"
+                onClick={() => isCollapsed && setIsCollapsed(!isCollapsed)}
+              />
+            </div>
+            {!isCollapsed && (
+              <h1 className="font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-neutral-400">
+                BadMusicApp
+              </h1>
+            )}
+          </div>
           <Button
-            className="text-white text-2xl mt-1 ml-auto"
+            variant="ghost"
+            size="icon"
+            className="text-neutral-400 hover:text-white hover:bg-white/5 transition-all duration-300"
             onClick={() => setIsCollapsed(!isCollapsed)}
           >
             {isCollapsed ? "" : <GoSidebarCollapse size={20} />}
           </Button>
         </div>
-        <Box>
-          <div className="flex flex-col gap-y-4 px-5 py-4">
+
+        <Box className="bg-neutral-900/40 backdrop-blur-xl border border-white/[0.02] shadow-inner">
+          <div className="flex flex-col gap-y-3 px-4 py-3">
             {routes.map((item) => (
               <SidebarItem
                 key={item.label}
@@ -105,15 +118,18 @@ const Sidebar: React.FC<SidebarProps> = ({ children, songs, playlists }) => {
             ))}
           </div>
         </Box>
-        <Box className="overflow-y-auto flex-1 custom-scrollbar">
-          <Library
-            songs={songs}
-            playlists={playlists}
-            isCollapsed={isCollapsed}
-          />
+
+        <Box className="overflow-y-auto flex-1 custom-scrollbar bg-neutral-900/40 backdrop-blur-xl border border-white/[0.02] shadow-inner">
+          <Library isCollapsed={isCollapsed} />
         </Box>
+
+        <div className="mt-2">
+          <UserCard userDetails={userDetails} isCollapsed={isCollapsed} />
+        </div>
       </div>
-      <main className="h-full flex-1 overflow-y-auto py-2">{children}</main>
+      <main className="h-full flex-1 overflow-y-auto py-2 bg-gradient-to-b from-neutral-900 to-black">
+        {children}
+      </main>
     </div>
   );
 };

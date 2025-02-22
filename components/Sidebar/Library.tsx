@@ -1,36 +1,24 @@
 "use client";
 
-import { useState } from "react";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AiOutlineBars, AiOutlinePlus } from "react-icons/ai";
-import { MdMusicNote, MdOutlineQueueMusic } from "react-icons/md";
 import { GiMicrophone } from "react-icons/gi";
-
-import { Playlist, Song } from "@/types";
 import useAuthModal from "@/hooks/auth/useAuthModal";
 import { useUser } from "@/hooks/auth/useUser";
 import useUploadModal from "@/hooks/modal/useUploadModal";
 import usePlaylistModal from "@/hooks/modal/usePlaylistModal";
-import useOnPlay from "@/hooks/player/useOnPlay";
 import useSpotLightUploadModal from "@/hooks/modal/useSpotLightUpload";
-
-import MediaItem from "../MediaItem";
 import Hover from "../Hover";
 
 interface LibraryProps {
-  songs: Song[];
-  playlists: Playlist[];
   isCollapsed: boolean;
 }
 
-const Library: React.FC<LibraryProps> = ({ songs, playlists, isCollapsed }) => {
+const Library: React.FC<LibraryProps> = ({ isCollapsed }) => {
   const { user } = useUser();
   const authModal = useAuthModal();
   const uploadModal = useUploadModal();
   const playlistModal = usePlaylistModal();
   const spotlightUploadModal = useSpotLightUploadModal();
-  const onPlay = useOnPlay(songs);
-  const [selectedTab, setSelectedTab] = useState("music");
 
   const openModal = (value: "music" | "playlist" | "spotlight") => {
     if (!user) {
@@ -47,84 +35,115 @@ const Library: React.FC<LibraryProps> = ({ songs, playlists, isCollapsed }) => {
     }
   };
 
-  return (
-    <div className="flex flex-col">
-      <div className="flex items-center justify-between px-5 pt-4">
-        <div className="inline-flex items-center gap-x-4">
-          {!isCollapsed && (
-            <Tabs value={selectedTab} onValueChange={setSelectedTab}>
-              <TabsList className="rounded-full bg-neutral-800/50 p-1 h-9">
-                <TabsTrigger
-                  value="music"
-                  className="rounded-full px-3 py-1 h-7 data-[state=active]:bg-neutral-700/80 data-[state=active]:shadow-sm data-[state=active]:text-white transition-all duration-200 hover:bg-neutral-700/30"
-                >
-                  <Hover contentSize="w-24" description="楽曲">
-                    <MdMusicNote size={20} className="text-neutral-300" />
-                  </Hover>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="playlist"
-                  className="rounded-full px-3 py-1 h-7 data-[state=active]:bg-neutral-700/80 data-[state=active]:shadow-sm data-[state=active]:text-white transition-all duration-200 hover:bg-neutral-700/30"
-                >
-                  <Hover contentSize="w-24" description="プレイリスト">
-                    <MdOutlineQueueMusic
-                      size={20}
-                      className="text-neutral-300"
-                    />
-                  </Hover>
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
-          )}
-        </div>
-
-        {!isCollapsed && (
-          <div className="flex gap-x-4">
-            <Hover contentSize="w-40" description="プレイリストを作成">
-              <AiOutlineBars
-                className="text-neutral-400 cursor-pointer hover:text-white transition"
-                size={20}
-                onClick={() => openModal("playlist")}
-              />
-            </Hover>
-
-            <Hover contentSize="w-24" description="曲を追加">
-              <AiOutlinePlus
-                onClick={() => openModal("music")}
-                size={20}
-                className="text-neutral-400 cursor-pointer hover:text-white transition"
-              />
-            </Hover>
-
-            <Hover contentSize="w-24" description="スポットライトを作成">
-              <GiMicrophone
-                onClick={() => openModal("spotlight")}
-                size={20}
-                className="text-neutral-400 cursor-pointer hover:text-white transition"
-              />
-            </Hover>
-          </div>
-        )}
-      </div>
-      {/* <div
-        className={`flex flex-col gap-y-2 mt-4 px-3 ${
-          isCollapsed ? "items-center" : ""
-        }`}
-      >
-        {selectedTab === "music" &&
-          songs.map((item) => (
-            <MediaItem
-              onClick={(id: string) => onPlay(id)}
-              key={item.id}
-              data={item}
-              isCollapsed={isCollapsed}
+  if (isCollapsed) {
+    return (
+      <div className="flex flex-col gap-3 px-1 pt-4">
+        <Hover contentSize="w-40" description="プレイリストを作成">
+          <button className="w-full aspect-square rounded-xl bg-gradient-to-br from-neutral-800/80 to-neutral-900/80 backdrop-blur-lg border border-white/5 hover:border-purple-500/30 transition-all duration-500 flex items-center justify-center group relative overflow-hidden shadow-lg hover:shadow-purple-500/10">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
+            <AiOutlineBars
+              className="text-neutral-400 group-hover:text-white transition-all duration-300 transform group-hover:scale-110"
+              size={20}
+              onClick={() => openModal("playlist")}
             />
-          ))}
-        {selectedTab === "playlist" &&
-          playlists.map((item) => (
-            <MediaItem key={item.id} data={item} isCollapsed={isCollapsed} />
-          ))}
-      </div> */}
+          </button>
+        </Hover>
+
+        <Hover contentSize="w-24" description="曲を追加">
+          <button className="w-full aspect-square rounded-xl bg-gradient-to-br from-neutral-800/80 to-neutral-900/80 backdrop-blur-lg border border-white/5 hover:border-purple-500/30 transition-all duration-500 flex items-center justify-center group relative overflow-hidden shadow-lg hover:shadow-purple-500/10">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
+            <AiOutlinePlus
+              className="text-neutral-400 group-hover:text-white transition-all duration-300 transform group-hover:scale-110"
+              size={20}
+              onClick={() => openModal("music")}
+            />
+          </button>
+        </Hover>
+
+        <Hover contentSize="w-24" description="スポットライトを作成">
+          <button className="w-full aspect-square rounded-xl bg-gradient-to-br from-neutral-800/80 to-neutral-900/80 backdrop-blur-lg border border-white/5 hover:border-purple-500/30 transition-all duration-500 flex items-center justify-center group relative overflow-hidden shadow-lg hover:shadow-purple-500/10">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
+            <GiMicrophone
+              className="text-neutral-400 group-hover:text-white transition-all duration-300 transform group-hover:scale-110"
+              size={20}
+              onClick={() => openModal("spotlight")}
+            />
+          </button>
+        </Hover>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-3 px-3 pt-4">
+      <div className="grid grid-cols-1 gap-3">
+        <button
+          onClick={() => openModal("playlist")}
+          className="group w-full p-4 rounded-xl bg-gradient-to-br from-neutral-800/80 to-neutral-900/80 backdrop-blur-lg border border-white/5 hover:border-purple-500/30 transition-all duration-500 relative overflow-hidden shadow-lg hover:shadow-purple-500/10"
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
+          <div className="relative flex items-center gap-4">
+            <div className="p-3 rounded-xl bg-purple-500/10 group-hover:bg-purple-500/20 transition-all duration-500 shadow-inner">
+              <AiOutlineBars
+                className="text-purple-400 group-hover:text-purple-300 transition-all duration-300 transform group-hover:scale-110"
+                size={24}
+              />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm font-medium bg-clip-text text-transparent bg-gradient-to-r from-white to-neutral-300">
+                プレイリストを作成
+              </span>
+              <span className="text-xs text-neutral-400">
+                お気に入りの曲をまとめよう
+              </span>
+            </div>
+          </div>
+        </button>
+
+        <button
+          onClick={() => openModal("music")}
+          className="group w-full p-4 rounded-xl bg-gradient-to-br from-neutral-800/80 to-neutral-900/80 backdrop-blur-lg border border-white/5 hover:border-purple-500/30 transition-all duration-500 relative overflow-hidden shadow-lg hover:shadow-purple-500/10"
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
+          <div className="relative flex items-center gap-4">
+            <div className="p-3 rounded-xl bg-purple-500/10 group-hover:bg-purple-500/20 transition-all duration-500 shadow-inner">
+              <AiOutlinePlus
+                className="text-purple-400 group-hover:text-purple-300 transition-all duration-300 transform group-hover:scale-110"
+                size={24}
+              />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm font-medium bg-clip-text text-transparent bg-gradient-to-r from-white to-neutral-300">
+                曲を追加
+              </span>
+              <span className="text-xs text-neutral-400">
+                新しい曲をアップロード
+              </span>
+            </div>
+          </div>
+        </button>
+
+        <button
+          onClick={() => openModal("spotlight")}
+          className="group w-full p-4 rounded-xl bg-gradient-to-br from-neutral-800/80 to-neutral-900/80 backdrop-blur-lg border border-white/5 hover:border-purple-500/30 transition-all duration-500 relative overflow-hidden shadow-lg hover:shadow-purple-500/10"
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
+          <div className="relative flex items-center gap-4">
+            <div className="p-3 rounded-xl bg-purple-500/10 group-hover:bg-purple-500/20 transition-all duration-500 shadow-inner">
+              <GiMicrophone
+                className="text-purple-400 group-hover:text-purple-300 transition-all duration-300 transform group-hover:scale-110"
+                size={24}
+              />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm font-medium bg-clip-text text-transparent bg-gradient-to-r from-white to-neutral-300">
+                スポットライト
+              </span>
+              <span className="text-xs text-neutral-400">Spotlightを共有</span>
+            </div>
+          </div>
+        </button>
+      </div>
     </div>
   );
 };

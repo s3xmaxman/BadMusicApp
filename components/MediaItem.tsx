@@ -6,17 +6,20 @@ import usePlayer from "@/hooks/player/usePlayer";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import useLoadMedia from "@/hooks/data/useLoadMedia";
+import { twMerge } from "tailwind-merge";
 
 interface MediaItemProps {
   data: Song | Playlist;
   onClick?: (id: string) => void;
   isCollapsed?: boolean;
+  className?: string;
 }
 
 const MediaItem: React.FC<MediaItemProps> = ({
   data,
   onClick,
   isCollapsed,
+  className,
 }) => {
   const player = usePlayer();
   const router = useRouter();
@@ -42,16 +45,44 @@ const MediaItem: React.FC<MediaItemProps> = ({
   return (
     <div
       onClick={handleClick}
-      className={`cursor-pointer hover:bg-neutral-800/50 p-2 rounded-md ${
-        isCollapsed
-          ? "flex items-center justify-center"
-          : "flex items-center gap-x-3"
-      }`}
+      className={twMerge(
+        `
+        flex
+        items-center
+        gap-x-3
+        cursor-pointer
+        rounded-xl
+        p-2
+        hover:bg-neutral-800/50
+        transition-all
+        duration-300
+        group
+        relative
+        animate-fade-in
+        hover:shadow-lg
+        hover:shadow-purple-500/[0.03]
+        hover:border
+        hover:border
+        hover:border-purple-500/20
+        `,
+        className
+      )}
     >
       <div
-        className={`relative rounded-md overflow-hidden min-h-[48px] min-w-[48px] ${
+        className={twMerge(
+          `
+          relative
+          rounded-lg
+          overflow-hidden
+          min-h-[48px]
+          min-w-[48px]
+          transition-transform
+          duration-300
+          group-hover:scale-105
+          shadow-md
+          `,
           isCollapsed ? "" : ""
-        }`}
+        )}
       >
         {!isImageLoaded && (
           <div className="absolute inset-0 bg-gray-300 animate-pulse"></div>
@@ -68,11 +99,13 @@ const MediaItem: React.FC<MediaItemProps> = ({
       </div>
       {!isCollapsed && (
         <div className="flex flex-col gap-y-1 overflow-hidden w-[70%]">
-          <p className="text-white truncate w-full">
+          <p className="text-white truncate w-full text-gradient font-medium">
             {data.title || "Untitled"}
           </p>
           {"author" in data && (
-            <p className="text-neutral-400 text-sm truncate">{data.author}</p>
+            <p className="text-neutral-400 text-sm truncate group-hover:text-neutral-300 transition-colors">
+              {data.author}
+            </p>
           )}
         </div>
       )}

@@ -1,26 +1,40 @@
-import React from "react";
+"use client";
+
 import { FaPlay } from "react-icons/fa";
 
-const PlayButton = () => {
+interface PlayButtonProps {
+  size?: number;
+}
+
+const PlayButton: React.FC<PlayButtonProps> = ({
+  size = 35
+}) => {
   return (
     <button
       className="
-            transition
-            opacity-0
-            rounded-full
-            flex
-            items-center
-            bg-[#4c1d95]
-            p-4
-            drop-shadow-md
-            translate
-            translate-y-1/4
-            group-hover:opacity-100
-            group-hover:translate-y-0
-            hover:scale-110
-        "
+        transition-all
+        duration-300
+        rounded-full
+        flex
+        items-center
+        justify-center
+        bg-gradient-to-br
+        from-purple-500
+        to-purple-600
+        p-4
+        drop-shadow-md
+        hover:scale-110
+        hover:shadow-lg
+        hover:shadow-purple-500/20
+        group
+        relative
+      "
     >
-      <FaPlay className="text-black" />
+      <div className="absolute inset-0 rounded-full bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-md" />
+      <FaPlay
+        className="text-black relative ml-1"
+        size={size / 2}
+      />
     </button>
   );
 };
