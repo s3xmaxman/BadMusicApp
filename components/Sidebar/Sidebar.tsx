@@ -17,6 +17,7 @@ import { Button } from "../ui/button";
 import Image from "next/image";
 import { GoSidebarCollapse } from "react-icons/go";
 import UserCard from "./UserCard";
+import Hover from "../Hover";
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -82,14 +83,16 @@ const Sidebar: React.FC<SidebarProps> = ({ children, songs, playlists }) => {
           <div className="flex items-center gap-3">
             <div className="relative group">
               <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-purple-900/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500" />
-              <Image
-                src="/logo.svg"
-                alt="Logo"
-                width={isCollapsed ? 32 : 40}
-                height={isCollapsed ? 32 : 40}
-                className="relative cursor-pointer transition-all duration-300 hover:scale-105 z-10"
-                onClick={() => isCollapsed && setIsCollapsed(!isCollapsed)}
-              />
+              <Hover contentSize="w-24" description="メニューを展開" side="right">
+                <Image
+                  src="/logo.svg"
+                  alt="Logo"
+                  width={48}
+                  height={48}
+                  className="relative cursor-pointer transition-all duration-300 hover:scale-105 z-10"
+                  onClick={() => isCollapsed && setIsCollapsed(!isCollapsed)}
+                />
+              </Hover>
             </div>
             {!isCollapsed && (
               <h1 className="font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-neutral-400">
