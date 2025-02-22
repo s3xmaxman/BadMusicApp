@@ -83,17 +83,17 @@ const Sidebar: React.FC<SidebarProps> = ({ children, songs, playlists }) => {
           <div className="flex items-center gap-3">
             <div className="relative group">
               <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-purple-900/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500" />
-                <Image
-                  src="/logo.svg"
-                  alt="Logo"
-                  width={isCollapsed ? 160 : 48}
-                  height={isCollapsed ? 160 : 48}
-                  className="relative cursor-pointer transition-all duration-300 hover:scale-105 z-10"
-                  onClick={() => isCollapsed && setIsCollapsed(!isCollapsed)}
-                />
+              <Image
+                src="/logo.svg"
+                alt="Logo"
+                width={isCollapsed ? 160 : 48}
+                height={isCollapsed ? 160 : 48}
+                className="relative cursor-pointer transition-all duration-300 hover:scale-105 z-10"
+                onClick={() => isCollapsed && setIsCollapsed(!isCollapsed)}
+              />
             </div>
             {!isCollapsed && (
-              <h1 className="font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-neutral-400">
+              <h1 className="ml-2 font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-neutral-400">
                 BadMusicApp
               </h1>
             )}

@@ -10,11 +10,7 @@ interface ListItemProps {
   href: string;
 }
 
-const ListItem: React.FC<ListItemProps> = ({
-  image,
-  name,
-  href,
-}) => {
+const ListItem: React.FC<ListItemProps> = ({ image, name, href }) => {
   const router = useRouter();
 
   const onClick = () => {
@@ -26,7 +22,6 @@ const ListItem: React.FC<ListItemProps> = ({
       onClick={onClick}
       className="
         relative 
-        group 
         flex 
         items-center 
         rounded-xl 
@@ -46,22 +41,13 @@ const ListItem: React.FC<ListItemProps> = ({
         pr-4
       "
     >
-      <div className="relative min-h-[64px] min-w-[64px] transition-transform duration-300 group-hover:scale-105">
-        <Image
-          className="object-cover"
-          src={image}
-          fill
-          alt="Image"
-        />
+      <div className="relative min-h-[64px] min-w-[64px] transition-transform duration-300">
+        <Image className="object-cover" src={image} fill alt="Image" />
       </div>
-      <p className="font-medium truncate py-5 text-gradient">
-        {name}
-      </p>
-      <div 
+      <p className="font-medium truncate py-5 text-gradient">{name}</p>
+      <div
         className="
           absolute 
-          transition-all
-          duration-300
           opacity-0
           rounded-full
           flex
@@ -71,9 +57,6 @@ const ListItem: React.FC<ListItemProps> = ({
           p-3
           drop-shadow-md
           right-5
-          group-hover:opacity-100
-          group-hover:scale-105
-          hover:scale-110
         "
       >
         <FaPlay className="text-black" size={12} />

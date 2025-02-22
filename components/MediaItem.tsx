@@ -53,17 +53,9 @@ const MediaItem: React.FC<MediaItemProps> = ({
         cursor-pointer
         rounded-xl
         p-2
-        hover:bg-neutral-800/50
-        transition-all
-        duration-300
         group
         relative
         animate-fade-in
-        hover:shadow-lg
-        hover:shadow-purple-500/[0.03]
-        hover:border
-        hover:border
-        hover:border-purple-500/20
         `,
         className
       )}
@@ -78,10 +70,8 @@ const MediaItem: React.FC<MediaItemProps> = ({
           min-w-[48px]
           transition-transform
           duration-300
-          group-hover:scale-105
           shadow-md
-          `,
-          isCollapsed ? "" : ""
+          `
         )}
       >
         {!isImageLoaded && (
