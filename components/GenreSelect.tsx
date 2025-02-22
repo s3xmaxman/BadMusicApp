@@ -22,13 +22,13 @@ const genres = [
   "hip-hop",
   "r&b",
   "folk",
-  "other"
+  "other",
 ];
 
 const GenreSelect: React.FC<GenreSelectProps> = ({
   disabled,
   onChange,
-  value
+  value,
 }) => {
   return (
     <RadixSelect.Root
@@ -46,22 +46,20 @@ const GenreSelect: React.FC<GenreSelectProps> = ({
         )}
       >
         <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-purple-500/10 to-purple-900/10 opacity-0 group-hover:opacity-100 transition-all duration-300" />
-        <RadixSelect.Value 
-          placeholder="ジャンルを選択" 
+        <RadixSelect.Value
+          placeholder="ジャンルを選択"
           className="text-neutral-400 group-hover:text-neutral-300"
         />
         <RadixSelect.Icon>
-          <BsChevronDown 
-            size={16} 
-            className="text-neutral-400 group-hover:text-neutral-300 transition-transform duration-300 group-data-[state=open]:rotate-180" 
+          <BsChevronDown
+            size={16}
+            className="text-neutral-400 group-hover:text-neutral-300 transition-transform duration-300 group-data-[state=open]:rotate-180"
           />
         </RadixSelect.Icon>
       </RadixSelect.Trigger>
 
       <RadixSelect.Portal>
-        <RadixSelect.Content
-          className="overflow-hidden bg-neutral-900/95 backdrop-blur-xl rounded-xl border border-white/[0.02] shadow-xl animate-scale-in z-[9999]"
-        >
+        <RadixSelect.Content className="overflow-hidden bg-neutral-900/95 backdrop-blur-xl rounded-xl border border-white/[0.02] shadow-xl animate-scale-in z-[9999]">
           <RadixSelect.Viewport className="p-2">
             {genres.map((genre) => (
               <RadixSelect.Item

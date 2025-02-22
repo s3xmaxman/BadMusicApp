@@ -16,7 +16,7 @@ import { useUser } from "@/hooks/auth/useUser";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import { GoSidebarCollapse } from "react-icons/go";
-import UserCard from "./UserCard"; 
+import UserCard from "./UserCard";
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -127,7 +127,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children, songs, playlists }) => {
           <UserCard userDetails={userDetails} isCollapsed={isCollapsed} />
         </div>
       </div>
-      <main className="h-full flex-1 overflow-y-auto py-2 bg-gradient-to-b from-neutral-900 to-black">
+      <main className="h-full flex-1 overflow-y-auto  bg-gradient-to-b from-neutral-900 to-black">
         {children}
       </main>
     </div>

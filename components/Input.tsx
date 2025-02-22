@@ -3,22 +3,17 @@
 import { forwardRef } from "react";
 import { twMerge } from "tailwind-merge";
 
-interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 
-const Input = forwardRef<HTMLInputElement, InputProps>(({
-  className,
-  type,
-  disabled,
-  ...props
-}, ref) => {
-  return (
-    <div className="relative w-full group">
-      <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-purple-500/10 to-purple-900/10 opacity-0 group-focus-within:opacity-100 transition-all duration-300 -z-10" />
-      <input
-        type={type}
-        className={twMerge(
-          `
+const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ className, type, disabled, ...props }, ref) => {
+    return (
+      <div className="relative w-full group">
+        <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-purple-500/10 to-purple-900/10 opacity-0 group-focus-within:opacity-100 transition-all duration-300 -z-10" />
+        <input
+          type={type}
+          className={twMerge(
+            `
           w-full
           rounded-xl
           bg-neutral-900/60
@@ -38,15 +33,16 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({
           transition-all
           duration-300
           `,
-          className
-        )}
-        disabled={disabled}
-        ref={ref}
-        {...props}
-      />
-    </div>
-  );
-});
+            className
+          )}
+          disabled={disabled}
+          ref={ref}
+          {...props}
+        />
+      </div>
+    );
+  }
+);
 
 Input.displayName = "Input";
 

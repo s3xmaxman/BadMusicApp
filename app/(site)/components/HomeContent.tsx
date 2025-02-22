@@ -97,11 +97,7 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs, spotlightData }) => {
     <div className="flex bg-[#0d0d0d] h-full overflow-hidden">
       <div className="w-full  h-full overflow-y-auto custom-scrollbar">
         <Header>
-          <div className="mb-2">
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 mt-4">
-              {/* Header content goes here */}
-            </div>
-          </div>
+          <></>
         </Header>
         <main className="px-6 py-8 pb-[70px] md:pb-8 space-y-8">
           {/* Trending Section */}

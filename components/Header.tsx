@@ -48,6 +48,7 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
         to-neutral-900/90
         backdrop-blur-xl
         z-10
+      
         `,
         className
       )}
@@ -56,28 +57,6 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
         <div className="flex items-center justify-between w-full mb-4">
           <div className="flex items-center gap-x-2 md:gap-x-4"></div>
           <div className="flex items-center gap-x-2 md:gap-x-4">
-            <div className="flex items-center gap-x-2 md:gap-x-4">
-              <button
-                onClick={() => router.push("/")}
-                className="group relative rounded-full p-2 hover:bg-neutral-800/50 transition-all duration-300"
-              >
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-500/10 to-purple-900/10 opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                <HiHome
-                  size={20}
-                  className="text-neutral-400 group-hover:text-white transition-colors"
-                />
-              </button>
-              <button
-                onClick={() => router.push("/search")}
-                className="group relative rounded-full p-2 hover:bg-neutral-800/50 transition-all duration-300"
-              >
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-500/10 to-purple-900/10 opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                <BiSearch
-                  size={20}
-                  className="text-neutral-400 group-hover:text-white transition-colors"
-                />
-              </button>
-            </div>
             <div className="flex justify-between items-center gap-x-4">
               {user ? (
                 <div className="flex gap-x-4 items-center">

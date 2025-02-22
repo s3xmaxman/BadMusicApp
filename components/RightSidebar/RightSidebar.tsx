@@ -36,7 +36,7 @@ const RightSidebar: React.FC<RightSidebarProps> = ({ children }) => {
 
   return (
     <div className={twMerge(`flex h-full`, player.activeId && "h-full")}>
-      <main className="h-full flex-1 overflow-y-auto py-2">{children}</main>
+      <main className="h-full flex-1 overflow-y-auto ">{children}</main>
       {showRightSidebar && (
         <div className="hidden xl:flex w-96 h-full bg-black p-2">
           <FullScreenLayout
