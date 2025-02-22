@@ -11,16 +11,17 @@ interface GenreSelectProps {
 }
 
 const genres = [
-  { id: "j-pop", name: "j-pop" },
-  { id: "synth wave", name: "synth wave" },
-  { id: "nu disco", name: "nu disco" },
-  { id: "electronic", name: "electronic" },
-  { id: "electro house", name: "electro house" },
-  { id: "classical", name: "classical" },
-  { id: "hip-hop", name: "hip-hop" },
-  { id: "r&b", name: "r&b" },
-  { id: "folk", name: "folk" },
-  { id: "other", name: "other" },
+  { id: "j-pop", name: "J-Pop" },
+  { id: "synth wave", name: "Synth Wave" },
+  { id: "nu disco", name: "Nu Disco" },
+  { id: "electronic", name: "Electronic" },
+  { id: "electro house", name: "Electro House" },
+  { id: "classical", name: "Classical" },
+  { id: "hip-hop", name: "Hip-Hop" },
+  { id: "DnB", name: "DnB" },
+  { id: "r&b", name: "R&B" },
+  { id: "folk", name: "Folk" },
+  { id: "other", name: "Other" },
 ];
 
 const GenreSelect: React.FC<GenreSelectProps> = ({

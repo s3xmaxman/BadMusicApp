@@ -18,7 +18,14 @@ const useLoadSongUrl = (song: Song | undefined) => {
       return;
     }
 
+    const isExternalUrl = (path?: string) =>
+      path?.startsWith("http://") || path?.startsWith("https://");
+
     const loadSong = async () => {
+      if (isExternalUrl(song.song_path)) {
+        return setSongUrl(song.song_path);
+      }
+
       try {
         const { data: songData } = await supabaseClient.storage
           .from("songs")

@@ -12,6 +12,7 @@ import { useUser } from "@/hooks/auth/useUser";
 import useAuthModal from "@/hooks/auth/useAuthModal";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import useGetSongById from "@/hooks/data/useGetSongById";
+import usePlaylistModal from "@/hooks/modal/usePlaylistModal";
 
 interface PlaylistMenuProps {
   playlists: Playlist[];
@@ -46,6 +47,7 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({
   const authModal = useAuthModal();
   const { song } = useGetSongById(songId);
   const [isAdded, setIsAdded] = useState<Record<string, boolean>>({});
+  const playlistModal = usePlaylistModal();
 
   /**
    * プレイリストに曲が追加済みかどうかを取得し、状態を更新する
@@ -155,19 +157,25 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({
         {children || <RiPlayListAddFill size={20} />}
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        {playlists.map((playlist) => (
-          <DropdownMenuItem
-            key={playlist.id}
-            onClick={() => handleAddToPlaylist(playlist.id)}
-            className="flex items-center justify-between"
-          >
-            <div className="flex items-center">
-              <RiPlayListFill size={15} className="mr-1" />
-              <span>{playlist.title}</span>
-            </div>
-            {isAdded[playlist.id] && <span className="ml-2">✓</span>}
+        {playlists.length === 0 ? (
+          <DropdownMenuItem onClick={playlistModal.onOpen}>
+            プレイリストを作成
           </DropdownMenuItem>
-        ))}
+        ) : (
+          playlists.map((playlist) => (
+            <DropdownMenuItem
+              key={playlist.id}
+              onClick={() => handleAddToPlaylist(playlist.id)}
+              className="flex items-center justify-between"
+            >
+              <div className="flex items-center">
+                <RiPlayListFill size={15} className="mr-1" />
+                <span>{playlist.title}</span>
+              </div>
+              {isAdded[playlist.id] && <span className="ml-2">✓</span>}
+            </DropdownMenuItem>
+          ))
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

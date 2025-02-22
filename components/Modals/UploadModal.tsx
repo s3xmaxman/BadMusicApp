@@ -17,6 +17,7 @@ import Input from "../Input";
 import { Textarea } from "../ui/textarea";
 import GenreSelect from "../GenreSelect";
 import Button from "../Button";
+import uploadFileToR2 from "@/actions/uploadFileToR2";
 
 const UploadModal: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -121,36 +122,30 @@ const UploadModal: React.FC = () => {
       }
 
       const uniqueID = uniqid();
+      const songFileNamePrefix = `song-${sanitizeTitle(
+        values.title
+      )}-${uniqueID}`;
+      const imageFileNamePrefix = `image-${sanitizeTitle(
+        values.title
+      )}-${uniqueID}`;
+      // Upload song to R2
+      const songUrl = await uploadFileToR2({
+        file: songFile,
+        bucketName: "song",
+        fileType: "audio",
+        fileNamePrefix: songFileNamePrefix,
+      });
 
-      // Upload song
-      const { data: songData, error: songError } = await supabaseClient.storage
-        .from("songs")
-        .upload(`song-${sanitizeTitle(values.title)}-${uniqueID}`, songFile, {
-          cacheControl: "3600",
-          upsert: false,
-        });
-
-      if (songError) {
-        setIsLoading(false);
-        return toast.error("曲のアップロードに失敗しました");
-      }
-
-      // Upload image
-      const { data: imageData, error: imageError } =
-        await supabaseClient.storage
-          .from("images")
-          .upload(
-            `image-${sanitizeTitle(values.title)}-${uniqueID}`,
-            imageFile,
-            {
-              cacheControl: "3600",
-              upsert: false,
-            }
-          );
-
-      if (imageError) {
-        setIsLoading(false);
-        return toast.error("画像のアップロードに失敗しました");
+      // Upload image to R2
+      const imageUrl = await uploadFileToR2({
+        file: imageFile,
+        bucketName: "image",
+        fileType: "image",
+        fileNamePrefix: imageFileNamePrefix,
+      });
+      if (!songUrl || !imageUrl) {
+        toast.error("ファイルのアップロードに失敗しました");
+        return;
       }
 
       // Create record
@@ -161,8 +156,8 @@ const UploadModal: React.FC = () => {
           title: values.title,
           author: values.author,
           lyrics: values.lyrics,
-          image_path: imageData.path,
-          song_path: songData.path,
+          image_path: imageUrl,
+          song_path: songUrl,
           genre: selectedGenres.join(", "),
           count: 0,
         });
@@ -298,11 +293,7 @@ const UploadModal: React.FC = () => {
           </div>
         </div>
 
-        <Button
-          disabled={isLoading}
-          type="submit"
-          className="col-span-full "
-        >
+        <Button disabled={isLoading} type="submit" className="col-span-full ">
           {isLoading ? "アップロード中..." : "アップロード"}
         </Button>
       </form>

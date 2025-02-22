@@ -12,7 +12,6 @@ interface DeleteButtonProps {
   songPath: string;
   imagePath: string;
   className?: string;
-  onClick: () => void;
 }
 
 const DeleteButton: React.FC<DeleteButtonProps> = ({
@@ -20,7 +19,6 @@ const DeleteButton: React.FC<DeleteButtonProps> = ({
   songPath,
   imagePath,
   className,
-  onClick
 }) => {
   const { supabaseClient } = useSessionContext();
   const router = useRouter();
@@ -103,7 +101,8 @@ const DeleteButton: React.FC<DeleteButtonProps> = ({
 
   return (
     <button
-      className={twMerge(`
+      className={twMerge(
+        `
         group
         relative
         rounded-full
@@ -119,8 +118,8 @@ const DeleteButton: React.FC<DeleteButtonProps> = ({
       disabled={isLoading}
     >
       <div className="absolute inset-0 rounded-full bg-gradient-to-br from-red-500/10 to-red-900/10 opacity-0 group-hover:opacity-100 transition-all duration-300" />
-      <HiTrash 
-        className="text-neutral-400 group-hover:text-red-500 transition-colors duration-300 transform group-hover:scale-110" 
+      <HiTrash
+        className="text-neutral-400 group-hover:text-red-500 transition-colors duration-300 transform group-hover:scale-110"
         size={20}
       />
     </button>

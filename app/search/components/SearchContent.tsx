@@ -41,6 +41,11 @@ const SearchContent: React.FC<SearchContentProps> = ({ songs }) => {
             {user?.id && (
               <div className="flex items-center gap-x-2">
                 <LikeButton songId={song.id} songType={"regular"} />
+                {/* <DeleteButton
+                  songId={song.id}
+                  songPath={song.song_path}
+                  imagePath={song.image_path}
+                /> */}
               </div>
             )}
           </div>
