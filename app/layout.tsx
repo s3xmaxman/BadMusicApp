@@ -41,6 +41,7 @@ export default async function RootLayout({
             <Sidebar songs={songs} playlists={playlists}>
               <RightSidebar>
                 {children}
+           
               </RightSidebar>
             </Sidebar>
             <Player playlists={playlists} />

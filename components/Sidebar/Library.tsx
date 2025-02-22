@@ -38,7 +38,7 @@ const Library: React.FC<LibraryProps> = ({ isCollapsed }) => {
   if (isCollapsed) {
     return (
       <div className="flex flex-col gap-3 px-1 pt-4">
-        <Hover contentSize="w-40" description="プレイリストを作成">
+        <Hover contentSize="w-auto px-3 py-2" side="right" description="プレイリストを作成">
           <button className="w-full aspect-square rounded-xl bg-gradient-to-br from-neutral-800/80 to-neutral-900/80 backdrop-blur-lg border border-white/5 hover:border-purple-500/30 transition-all duration-500 flex items-center justify-center group relative overflow-hidden shadow-lg hover:shadow-purple-500/10">
             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
             <AiOutlineBars
@@ -49,7 +49,7 @@ const Library: React.FC<LibraryProps> = ({ isCollapsed }) => {
           </button>
         </Hover>
 
-        <Hover contentSize="w-24" description="曲を追加">
+        <Hover contentSize="w-auto px-3 py-2" side="right" description="曲を追加">
           <button className="w-full aspect-square rounded-xl bg-gradient-to-br from-neutral-800/80 to-neutral-900/80 backdrop-blur-lg border border-white/5 hover:border-purple-500/30 transition-all duration-500 flex items-center justify-center group relative overflow-hidden shadow-lg hover:shadow-purple-500/10">
             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
             <AiOutlinePlus
@@ -60,7 +60,7 @@ const Library: React.FC<LibraryProps> = ({ isCollapsed }) => {
           </button>
         </Hover>
 
-        <Hover contentSize="w-24" description="スポットライトを作成">
+        <Hover contentSize="w-auto px-3 py-2" side="right" description="スポットライトを作成" >
           <button className="w-full aspect-square rounded-xl bg-gradient-to-br from-neutral-800/80 to-neutral-900/80 backdrop-blur-lg border border-white/5 hover:border-purple-500/30 transition-all duration-500 flex items-center justify-center group relative overflow-hidden shadow-lg hover:shadow-purple-500/10">
             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
             <GiMicrophone

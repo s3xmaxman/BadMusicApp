@@ -3,6 +3,7 @@
 import { IconType } from "react-icons";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
+import Hover from "../Hover";
 
 interface SidebarItemProps {
   icon: IconType;
@@ -25,19 +26,19 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
         href={href}
         className={twMerge(
           `w-full flex items-center justify-center`,
-          active
-            ? "border-purple-500/30"
-            : "border-white/5"
+          active ? "border-purple-500/30" : "border-white/5"
         )}
       >
-        <div className="p-3 rounded-xl">
-          <Icon
-            size={20}
-            className={twMerge(
-              active ? "text-purple-400" : "text-neutral-400"
-            )}
-          />
-        </div>
+        <Hover description={label} contentSize="w-auto px-3 py-2" side="right">
+          <div className="p-3 rounded-xl">
+            <Icon
+              size={20}
+              className={twMerge(
+                active ? "text-purple-400" : "text-neutral-400"
+              )}
+            />
+          </div>
+        </Hover>
       </Link>
     );
   }

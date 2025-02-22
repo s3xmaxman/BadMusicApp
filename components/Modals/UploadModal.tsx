@@ -301,7 +301,7 @@ const UploadModal: React.FC = () => {
         <Button
           disabled={isLoading}
           type="submit"
-          className="col-span-full py-3 text-base bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 transition-all duration-300 shadow-lg hover:shadow-blue-500/25"
+          className="col-span-full "
         >
           {isLoading ? "アップロード中..." : "アップロード"}
         </Button>

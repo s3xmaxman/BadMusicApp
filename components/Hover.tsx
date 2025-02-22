@@ -1,8 +1,10 @@
+import * as React from "react"
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { Portal } from "@radix-ui/react-portal";
 
 interface HoverCardProps {
   children: React.ReactNode;
@@ -20,21 +22,23 @@ const Hover = ({
   isCollapsed = false,
 }: HoverCardProps) => {
   return (
-    <HoverCard >
+    <HoverCard>
       <HoverCardTrigger asChild>
         <div className="cursor-pointer">{children}</div>
       </HoverCardTrigger>
-      <HoverCardContent
-        side={side}
-        className={`${contentSize} rounded-xl  transition-all duration-300 ${
-          isCollapsed ? "translate-x-2" : "translate-x-0"
-        }`}
-        sideOffset={isCollapsed ? 10 : 5}
-      >
-        <div className="flex items-center justify-center h-full">
-          <p className="text-sm">{description}</p>
-        </div>
-      </HoverCardContent>
+      <Portal>
+          <HoverCardContent
+            side={side}
+            className={`${contentSize} rounded-xl transition-all duration-300 pointer-events-auto ${
+              isCollapsed ? "translate-x-2" : "translate-x-0"
+            }`}
+            sideOffset={isCollapsed ? 10 : 5}
+          >
+            <div className="flex items-center justify-center h-full">
+              <p className="text-sm">{description}</p>
+            </div>
+          </HoverCardContent>
+      </Portal>
     </HoverCard>
   );
 };
