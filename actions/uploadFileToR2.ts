@@ -1,6 +1,7 @@
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { toast } from "react-hot-toast";
 import { sanitizeTitle } from "@/libs/helpers";
+import s3Client from "@/libs/s3";
 
 interface UploadFileToR2Props {
   file: File;
@@ -34,15 +35,6 @@ const uploadFileToR2 = async ({
   const fileName = `${fileNamePrefix}-${sanitizeTitle(
     file.name
   )}-${Date.now()}`;
-
-  const s3Client = new S3Client({
-    region: "auto",
-    endpoint: process.env.NEXT_PUBLIC_R2_ENDPOINT!,
-    credentials: {
-      accessKeyId: process.env.NEXT_PUBLIC_R2_ACCESS_KEY!,
-      secretAccessKey: process.env.NEXT_PUBLIC_R2_SECRET_KEY!,
-    },
-  });
 
   try {
     const command = new PutObjectCommand({

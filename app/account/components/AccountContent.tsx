@@ -10,11 +10,14 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import uploadFileToR2 from "@/actions/uploadFileToR2";
 import { toast } from "react-hot-toast";
 import Input from "@/components/Input";
+import deleteFileFromR2 from "@/actions/deleteFileFromR2";
+import Button from "@/components/Button";
 
 const AccountContent = () => {
   const { userDetails: data } = useUser();
   const router = useRouter();
   const supabaseClient = useSupabaseClient();
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [userData, setUserData] = useState<any>(null);
@@ -83,7 +86,24 @@ const AccountContent = () => {
     }
 
     try {
+      setIsLoading(true);
       toast.loading("アップロード中...");
+
+      // 既存の画像を削除（もしあれば）
+      if (userData?.avatar_url) {
+        try {
+          const filePath = userData.avatar_url.split("/").pop();
+
+          await deleteFileFromR2({
+            bucketName: "image",
+            filePath: filePath!,
+          });
+        } catch (error) {
+          toast.dismiss();
+          toast.error("画像の削除に失敗しました");
+          console.error("画像の削除に失敗しました", error);
+        }
+      }
 
       const uploadedImageUrl = await uploadFileToR2({
         file: selectedImage,
@@ -119,6 +139,8 @@ const AccountContent = () => {
       toast.error("エラーが発生しました");
       console.error(error);
     }
+
+    setIsLoading(false);
   };
 
   const handleNameChange = async () => {
@@ -217,13 +239,13 @@ const AccountContent = () => {
               )}
 
               {selectedImage && (
-                <button
+                <Button
+                  disabled={isLoading}
                   onClick={handleUpload}
-                  className="mt-4 w-full px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-md hover:from-purple-700 hover:to-indigo-700 transition duration-300 flex items-center justify-center gap-2 shadow-md"
+                  type="submit"
                 >
-                  <Upload size={16} />
-                  アップロード
-                </button>
+                  {isLoading ? "アップロード中..." : "アップロード"}
+                </Button>
               )}
 
               <p className="mt-4 text-xs text-neutral-500 text-center">
