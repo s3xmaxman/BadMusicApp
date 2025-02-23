@@ -11,7 +11,6 @@ type UserContextType = {
   user: User | null;
   userDetails: UserDetails | null;
   isLoading: boolean;
-  subscription: Subscription | null;
 };
 
 /**
@@ -41,40 +40,25 @@ export const MyUserContextProvider = (props: Props) => {
   const accessToken = session?.access_token ?? null;
   const [isLoadingData, setIsloadingData] = useState(false);
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
-  const [subscription, setSubscription] = useState<Subscription | null>(null);
 
   const getUserDetails = () => supabase.from("users").select("*").single();
-  const getSubscription = () =>
-    supabase
-      .from("subscriptions")
-      .select("*, prices(*, products(*))")
-      .in("status", ["trialing", "active"])
-      .single();
 
   // ユーザー情報とサブスクリプション情報の取得
   useEffect(() => {
-    if (user && !isLoadingData && !userDetails && !subscription) {
+    if (user && !isLoadingData && !userDetails) {
       setIsloadingData(true);
 
-      Promise.allSettled([getUserDetails(), getSubscription()]).then(
-        (results) => {
-          const userDetailsPromise = results[0];
-          const subscriptionPromise = results[1];
+      Promise.allSettled([getUserDetails()]).then((results) => {
+        const userDetailsPromise = results[0];
 
-          if (userDetailsPromise.status === "fulfilled") {
-            setUserDetails(userDetailsPromise.value.data as UserDetails);
-          }
-
-          if (subscriptionPromise.status === "fulfilled") {
-            setSubscription(subscriptionPromise.value.data as Subscription);
-          }
-
-          setIsloadingData(false);
+        if (userDetailsPromise.status === "fulfilled") {
+          setUserDetails(userDetailsPromise.value.data as UserDetails);
         }
-      );
+
+        setIsloadingData(false);
+      });
     } else if (!user && !isLoadingUser && !isLoadingData) {
       setUserDetails(null);
-      setSubscription(null);
       setIsloadingData(false);
     }
   }, [user, isLoadingUser]);
@@ -84,7 +68,6 @@ export const MyUserContextProvider = (props: Props) => {
     user,
     userDetails,
     isLoading: isLoadingUser || isLoadingData,
-    subscription,
     getUserDetails,
   };
 

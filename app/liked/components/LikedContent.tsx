@@ -6,15 +6,8 @@ import { useRouter } from "next/navigation";
 import { Song } from "@/types";
 import { useUser } from "@/hooks/auth/useUser";
 import MediaItem from "@/components/MediaItem";
-import LikeButton from "@/components/LikeButton";
 import useOnPlay from "@/hooks/player/useOnPlay";
-import DeletePlaylistSongsBtn from "@/components/DeletePlaylistSongsBtn";
-import { BsThreeDots } from "react-icons/bs";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import SongOptionsPopover from "@/components/SongOptionsPopover";
 
 interface LikedContentProps {
   songs: Song[];
@@ -49,41 +42,7 @@ const LikedContent: React.FC<LikedContentProps> = ({ songs, playlistId }) => {
           <div className="flex-1 min-w-0">
             <MediaItem onClick={(id: string) => onPlay(id)} data={song} />
           </div>
-          <Popover>
-            <PopoverTrigger asChild>
-              <button
-                className="text-neutral-400 cursor-pointer hover:text-white transition"
-                aria-label="More Options"
-              >
-                <BsThreeDots size={20} />
-              </button>
-            </PopoverTrigger>
-            <PopoverContent
-              side="left"
-              className="w-48 p-0 bg-neutral-800 border-neutral-700"
-            >
-              <div className="flex flex-col text-sm">
-                <div className="px-4 py-3">
-                  <LikeButton
-                    songId={song.id}
-                    songType={"regular"}
-                    showText={true}
-                  />
-                </div>
-
-                {playlistId && (
-                  <div className="px-4 py-3">
-                    <DeletePlaylistSongsBtn
-                      songId={song.id}
-                      playlistId={playlistId}
-                      songType={"regular"}
-                      showText={true}
-                    />
-                  </div>
-                )}
-              </div>
-            </PopoverContent>
-          </Popover>
+          <SongOptionsPopover song={song} playlistId={playlistId} />
         </div>
       ))}
     </div>

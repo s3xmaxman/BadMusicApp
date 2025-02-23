@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-
 import { Playlist } from "@/types";
 import useLoadMedia from "@/hooks/data/useLoadMedia";
 
@@ -14,6 +13,22 @@ const PlaylistContent = ({ playlists }: PlaylistContentProps) => {
   const imageUrl = useLoadMedia(playlists, { type: "image", bucket: "images" });
   const router = useRouter();
 
+  // Array of vibrant colors for random selection
+  const colors = [
+    "from-purple-500/20 to-purple-700/20",
+    "from-blue-500/20 to-blue-700/20",
+    "from-green-500/20 to-green-700/20",
+    "from-red-500/20 to-red-700/20",
+    "from-pink-500/20 to-pink-700/20",
+    "from-indigo-500/20 to-indigo-700/20",
+    "from-cyan-500/20 to-cyan-700/20",
+  ];
+
+  // Get random color from array
+  const getRandomColor = () => {
+    return colors[Math.floor(Math.random() * colors.length)];
+  };
+
   if (playlists.length === 0) {
     return (
       <div className="flex flex-col gap-y-2 w-full px-6 text-neutral-400">
@@ -23,12 +38,13 @@ const PlaylistContent = ({ playlists }: PlaylistContentProps) => {
   }
 
   return (
-    <div className="flex flex-col gap-y-2 w-full px-6">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-6 ">
       {playlists.map((playlist, index) => {
+        const randomColor = getRandomColor();
         return (
           <div
             key={playlist.id}
-            className="flex items-center gap-x-3 cursor-pointer hover:bg-neutral-800/50 p-2 rounded-md"
+            className="group relative cursor-pointer w-full max-w-[200px]"
             onClick={() =>
               router.push(
                 `/playlists/${playlist.id}?title=${encodeURIComponent(
@@ -37,16 +53,35 @@ const PlaylistContent = ({ playlists }: PlaylistContentProps) => {
               )
             }
           >
-            <div className="relative rounded-md overflow-hidden min-h-[48px] min-w-[48px]">
-              <Image
-                fill
-                src={imageUrl[index] || "/images/playlist.png"}
-                alt="PlaylistItem"
-                className="object-cover"
+            {/* Background stacked cards effect */}
+            <div className="absolute top-2 left-2 w-full h-full bg-neutral-800  transform rotate-3 rounded-xl" />
+            <div className="absolute top-1 left-1 w-full h-full bg-neutral-700 transform rotate-2 rounded-xl" />
+
+            {/* Main card */}
+            <div className="rounded-xl relative bg-neutral-900 p-3 transform transition-transform duration-300 group-hover:-translate-y-2 group-hover:shadow-xl">
+              <div className="relative aspect-square w-full overflow-hidden rounded-md mb-3">
+                <Image
+                  fill
+                  src={imageUrl[index] || "/images/playlist.png"}
+                  alt="PlaylistItem"
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
+
+              {/* Gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-neutral-900/90 rounded-xl" />
+
+              {/* Content */}
+              <div className="relative z-10">
+                <h3 className="text-sm font-bold text-white truncate">
+                  {playlist.title}
+                </h3>
+              </div>
+
+              {/* Hover effect glow with random color */}
+              <div
+                className={`absolute inset-0 bg-gradient-to-br ${randomColor} opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300`}
               />
-            </div>
-            <div className="flex flex-col gap-y-1 overflow-hidden w-[70%]">
-              <p className="text-white truncate w-full">{playlist.title}</p>
             </div>
           </div>
         );
