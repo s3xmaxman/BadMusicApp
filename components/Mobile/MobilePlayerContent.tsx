@@ -11,6 +11,7 @@ import { useDrag } from "@use-gesture/react";
 import SeekBar from "../Seekbar";
 import MobileStyleIcons from "./MobileStyleIcons";
 import LyricsDrawer from "./LyricsDrawer";
+import ScrollingText from "../ScrollingText";
 
 interface MobilePlayerContentProps {
   song: Song;
@@ -113,7 +114,7 @@ const MobilePlayerContent = ({
               <div className="max-w-[70%]">
                 <Link href={`/songs/${song.id}`}>
                   <h1 className="text-4xl font-bold text-white drop-shadow-lg hover:underline truncate">
-                    {song.title}
+                    <ScrollingText text={song.title} />
                   </h1>
                 </Link>
                 <p className="text-lg text-gray-200 drop-shadow-lg mt-1 truncate">
