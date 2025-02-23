@@ -47,7 +47,6 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({
   const authModal = useAuthModal();
   const { song } = useGetSongById(songId);
   const [isAdded, setIsAdded] = useState<Record<string, boolean>>({});
-  const playlistModal = usePlaylistModal();
 
   /**
    * プレイリストに曲が追加済みかどうかを取得し、状態を更新する
@@ -158,9 +157,7 @@ const AddPlaylist: React.FC<PlaylistMenuProps> = ({
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         {playlists.length === 0 ? (
-          <DropdownMenuItem onClick={playlistModal.onOpen}>
-            プレイリストを作成
-          </DropdownMenuItem>
+          <DropdownMenuItem>プレイリストを作成しましょう！</DropdownMenuItem>
         ) : (
           playlists.map((playlist) => (
             <DropdownMenuItem

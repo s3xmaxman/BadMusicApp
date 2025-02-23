@@ -129,7 +129,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
       {/* Hero Section */}
       <div className="relative h-[50vh] md:h-[60vh] w-full">
         <Image
-          src={imageUrl?.[0] || "/images/wait.jpg"}
+          src={imageUrl?.[0] || "/images/loading.gif"}
           alt="Song Cover"
           fill
           className="object-cover opacity-40"

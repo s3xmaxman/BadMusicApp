@@ -4,12 +4,13 @@ import Image from "next/image";
 import Header from "@/components/Header";
 import LikedContent from "@/app/liked/components/LikedContent";
 import DeletePlaylistButton from "@/components/DeletePlaylistButton";
+import { Song } from "@/types";
 
 interface PlaylistPageContentProps {
   playlistId: string;
   playlistTitle: string;
   imageUrl: string;
-  songs: any;
+  songs: Song[];
 }
 
 const PlaylistPageContent: React.FC<PlaylistPageContentProps> = ({
