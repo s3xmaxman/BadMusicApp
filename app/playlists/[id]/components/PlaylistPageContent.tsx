@@ -20,36 +20,6 @@ const PlaylistPageContent: React.FC<PlaylistPageContentProps> = ({
   songs,
   imageUrl,
 }) => {
-  const supabaseClient = useSupabaseClient();
-  const defaultImage = "/images/playlist.png";
-  const [image, setImage] = useState<string>(defaultImage);
-
-  useEffect(() => {
-    const loadImage = async () => {
-      if (!imageUrl) {
-        setImage(defaultImage);
-        return;
-      }
-
-      try {
-        const { data: mediaData } = await supabaseClient.storage
-          .from("images")
-          .getPublicUrl(imageUrl);
-
-        if (mediaData?.publicUrl) {
-          setImage(mediaData.publicUrl);
-        } else {
-          setImage(defaultImage);
-        }
-      } catch (error) {
-        console.error("Error loading image:", error);
-        setImage(defaultImage);
-      }
-    };
-
-    loadImage();
-  }, [imageUrl, supabaseClient]);
-
   return (
     <div className="bg-[#0d0d0d] rounded-lg h-full w-full overflow-hidden overflow-y-auto">
       <Header>
@@ -58,7 +28,7 @@ const PlaylistPageContent: React.FC<PlaylistPageContentProps> = ({
             <div className="relative h-32 w-32 lg:h-44 lg:w-44">
               <Image
                 fill
-                src={image || defaultImage}
+                src={imageUrl || "/images/playlist.png"}
                 alt="Playlist"
                 className="object-cover"
               />

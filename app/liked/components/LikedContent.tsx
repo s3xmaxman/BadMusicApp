@@ -46,7 +46,7 @@ const LikedContent: React.FC<LikedContentProps> = ({ songs, playlistId }) => {
     <div className="flex flex-col gap-y-2 w-full p-6">
       {displayedSongs.map((song: Song) => (
         <div key={song.id} className="flex items-center gap-x-4 w-full">
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <MediaItem onClick={(id: string) => onPlay(id)} data={song} />
           </div>
           <Popover>

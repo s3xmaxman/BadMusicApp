@@ -46,9 +46,7 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
         from-purple-900/10
         via-neutral-900/95
         to-neutral-900/90
-        backdrop-blur-xl
-        z-10
-      
+        backdrop-blur-xl      
         `,
         className
       )}
