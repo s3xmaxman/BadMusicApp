@@ -24,11 +24,6 @@ const PlaylistContent = ({ playlists }: PlaylistContentProps) => {
     "from-cyan-500/20 to-cyan-700/20",
   ];
 
-  // Get random color from array
-  const getRandomColor = () => {
-    return colors[Math.floor(Math.random() * colors.length)];
-  };
-
   if (playlists.length === 0) {
     return (
       <div className="flex flex-col gap-y-2 w-full px-6 text-neutral-400">
@@ -40,7 +35,6 @@ const PlaylistContent = ({ playlists }: PlaylistContentProps) => {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-6 ">
       {playlists.map((playlist, index) => {
-        const randomColor = getRandomColor();
         return (
           <div
             key={playlist.id}
@@ -54,8 +48,8 @@ const PlaylistContent = ({ playlists }: PlaylistContentProps) => {
             }
           >
             {/* Background stacked cards effect */}
-            <div className="absolute top-2 left-2 w-full h-full bg-neutral-800  transform rotate-3 rounded-xl" />
-            <div className="absolute top-1 left-1 w-full h-full bg-neutral-700 transform rotate-2 rounded-xl" />
+            <div className="absolute top-2 left-2 w-full h-full bg-[#4c1d95]  transform rotate-3 rounded-xl" />
+            <div className="absolute top-1 left-1 w-full h-full bg-[#4c1d95] transform rotate-2 rounded-xl" />
 
             {/* Main card */}
             <div className="rounded-xl relative bg-neutral-900 p-3 transform transition-transform duration-300 group-hover:-translate-y-2 group-hover:shadow-xl">
@@ -77,11 +71,6 @@ const PlaylistContent = ({ playlists }: PlaylistContentProps) => {
                   {playlist.title}
                 </h3>
               </div>
-
-              {/* Hover effect glow with random color */}
-              <div
-                className={`absolute inset-0 bg-gradient-to-br ${randomColor} opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-300`}
-              />
             </div>
           </div>
         );

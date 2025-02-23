@@ -5,8 +5,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Music, Video } from "lucide-react";
+import Button from "@/components/Button";
 
 interface PreviewDownloadModalProps {
   isOpen: boolean;
@@ -14,7 +13,7 @@ interface PreviewDownloadModalProps {
   title: string;
   audioUrl?: string;
   videoUrl?: string;
-  onDownload: (type: "audio" | "video") => void;
+  handleDownloadClick: (type: "audio" | "video") => void;
 }
 
 const PreviewDownloadModal: React.FC<PreviewDownloadModalProps> = ({
@@ -23,7 +22,7 @@ const PreviewDownloadModal: React.FC<PreviewDownloadModalProps> = ({
   title,
   audioUrl,
   videoUrl,
-  onDownload,
+  handleDownloadClick,
 }) => {
   const handleContentClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -59,10 +58,10 @@ const PreviewDownloadModal: React.FC<PreviewDownloadModalProps> = ({
                 />
               </div>
               <Button
-                className="w-full bg-white/10 hover:bg-white/20 text-white border-0 h-12 rounded-xl transition-all duration-200 hover:scale-[1.02]"
-                onClick={() => onDownload("video")}
+                type="submit"
+                className="w-full"
+                onClick={() => handleDownloadClick("video")}
               >
-                <Video className="w-5 h-5 mr-2 opacity-80" />
                 動画をダウンロード
               </Button>
             </div>
@@ -80,10 +79,10 @@ const PreviewDownloadModal: React.FC<PreviewDownloadModalProps> = ({
                 />
               </div>
               <Button
-                className="w-full bg-white/10 hover:bg-white/20 text-white border-0 h-12 rounded-xl transition-all duration-200 hover:scale-[1.02]"
-                onClick={() => onDownload("audio")}
+                type="submit"
+                className="w-full"
+                onClick={() => handleDownloadClick("audio")}
               >
-                <Music className="w-5 h-5 mr-2 opacity-80" />
                 音声をダウンロード
               </Button>
             </div>

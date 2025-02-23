@@ -92,7 +92,7 @@ const TrendBoard: React.FC<TrendBoardProps> = ({
               >
                 <div className="relative w-full h-60 overflow-hidden rounded-xl bg-black shadow-lg">
                   <Image
-                    src={imageUrls[index] || "/images/wait.jpg"}
+                    src={imageUrls[index] || "/images/loader.gif"}
                     alt={song.title}
                     fill
                     objectFit="cover"
