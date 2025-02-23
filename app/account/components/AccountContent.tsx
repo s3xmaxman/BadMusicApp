@@ -242,6 +242,7 @@ const AccountContent = () => {
                 <Button
                   disabled={isLoading}
                   onClick={handleUpload}
+                  className="mt-4 w-full"
                   type="submit"
                 >
                   {isLoading ? "アップロード中..." : "アップロード"}

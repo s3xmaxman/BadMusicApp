@@ -44,6 +44,7 @@
     "clsx": "^2.1.1",
     "crypto": "^1.0.1",
     "dayjs": "^1.11.11",
+    "dotenv": "^16.4.7",
     "framer-motion": "^11.2.10",
     "lodash.throttle": "^4.1.1",
     "lucide-react": "^0.383.0",
@@ -70,6 +71,10 @@
     "zustand": "^4.4.7"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-typescript": "^7.26.0",
+    "@faker-js/faker": "^9.5.0",
+    "@types/isomorphic-fetch": "^0.0.39",
     "@types/jest": "^29.5.14",
     "@types/node": "^20.17.0",
     "@types/react": "^18",
@@ -78,12 +83,14 @@
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.0.3",
+    "isomorphic-fetch": "^3.0.0",
     "jest": "^29.7.0",
     "postcss": "^8",
     "supabase": "^1.115.4",
     "tailwindcss": "^3.3.0",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.6.3"
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.3"
   }
 }

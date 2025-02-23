@@ -4,20 +4,22 @@ import { useState, useEffect } from "react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
+import Image from "next/image";
 
 import { Song } from "@/types";
-
 import { sanitizeTitle } from "@/libs/helpers";
 import Modal from "./Modal";
 import Input from "../Input";
 import { Textarea } from "../ui/textarea";
 import GenreSelect from "../GenreSelect";
 import Button from "../Button";
-
-// TODO: 後でリファクタリングするかもしれない
+import uploadFileToR2 from "@/actions/uploadFileToR2";
+import deleteFileFromR2 from "@/actions/deleteFileFromR2";
 
 interface EditFormValues extends Partial<Song> {
   video?: FileList;
+  song?: FileList;
+  image?: FileList;
 }
 
 interface EditModalProps {
@@ -47,6 +49,8 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
     });
 
   const watchVideo = watch("video");
+  const watchSong = watch("song");
+  const watchImage = watch("image");
 
   useEffect(() => {
     if (isOpen) {
@@ -61,37 +65,59 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
         genre: song.genre || "All",
         video_path: song.video_path || "",
         video: undefined,
+        song: undefined,
+        image: undefined,
       });
       setSelectedGenres(song.genre ? song.genre.split(", ") : []);
     }
   }, [isOpen, song, reset]);
 
-  const handleVideoUpload = async (videoFile: File): Promise<string | null> => {
-    const maxVideoSize = 5 * 1024 * 1024; // 5MB
-
-    if (videoFile.size > maxVideoSize) {
-      toast.error("動画のサイズが5MBを超えています");
-      return null;
-    }
-
+  const handleFileUpload = async ({
+    file,
+    bucketName,
+    fileType,
+    fileNamePrefix,
+  }: {
+    file: File;
+    bucketName: "video" | "song" | "image";
+    fileType: "video" | "audio" | "image";
+    fileNamePrefix: string;
+  }) => {
     try {
-      const { data, error } = await supabaseClient.storage
-        .from("videos")
-        .upload(`video-${sanitizeTitle(videoFile.name)}`, videoFile, {
-          cacheControl: "3600",
-          upsert: false,
-        });
+      const uploadedUrl = await uploadFileToR2({
+        file,
+        bucketName,
+        fileType,
+        fileNamePrefix,
+      });
 
-      if (error) {
-        console.error("Video upload error:", error);
-        toast.error("ビデオのアップロードに失敗しました");
+      if (!uploadedUrl) {
+        toast.error(
+          `${
+            fileType === "video" ? "動画" : fileType === "audio" ? "曲" : "画像"
+          }のアップロードに失敗しました`
+        );
         return null;
       }
 
-      return data.path;
+      // 古いファイルを削除
+      if (bucketName === "song" && song.song_path) {
+        await deleteFileFromR2({
+          bucketName: "song",
+          filePath: song.song_path.split("/").pop()!,
+          showToast: false,
+        });
+      } else if (bucketName === "image" && song.image_path) {
+        await deleteFileFromR2({
+          bucketName: "image",
+          filePath: song.image_path.split("/").pop()!,
+          showToast: false,
+        });
+      }
+
+      return uploadedUrl;
     } catch (error) {
-      console.error("Unexpected error during video upload:", error);
-      toast.error("ビデオのアップロード中に不具合が発生しました");
+      console.error(`${fileType} upload error:`, error);
       return null;
     }
   };
@@ -101,17 +127,37 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
       setIsLoading(true);
 
       let updatedVideoPath = song.video_path;
+      let updatedSongPath = song.song_path;
+      let updatedImagePath = song.image_path;
 
-      if (values.video && values.video.length > 0) {
-        const videoFile = values.video[0];
-        const videoPath = await handleVideoUpload(videoFile);
+      if (values.video?.[0]) {
+        const videoPath = await handleFileUpload({
+          file: values.video[0],
+          bucketName: "video",
+          fileType: "video",
+          fileNamePrefix: `video-${sanitizeTitle(values.title!)}`,
+        });
+        if (videoPath) updatedVideoPath = videoPath;
+      }
 
-        if (!videoPath) {
-          setIsLoading(false);
-          return;
-        }
+      if (values.song?.[0]) {
+        const songPath = await handleFileUpload({
+          file: values.song[0],
+          bucketName: "song",
+          fileType: "audio",
+          fileNamePrefix: `song-${sanitizeTitle(values.title!)}`,
+        });
+        if (songPath) updatedSongPath = songPath;
+      }
 
-        updatedVideoPath = videoPath;
+      if (values.image?.[0]) {
+        const imagePath = await handleFileUpload({
+          file: values.image[0],
+          bucketName: "image",
+          fileType: "image",
+          fileNamePrefix: `image-${sanitizeTitle(values.title!)}`,
+        });
+        if (imagePath) updatedImagePath = imagePath;
       }
 
       const { error } = await supabaseClient
@@ -122,20 +168,18 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
           lyrics: values.lyrics,
           genre: selectedGenres.join(", "),
           video_path: updatedVideoPath,
+          song_path: updatedSongPath,
+          image_path: updatedImagePath,
         })
         .eq("id", song.id);
 
-      if (error) {
-        toast.error("曲の更新に失敗しました");
-        console.error("Supabase update error:", error);
-        return;
-      }
+      if (error) throw error;
 
       toast.success("曲を編集しました");
       onClose();
     } catch (error) {
-      toast.error("曲の編集に失敗しました");
-      console.error("Unexpected error during update:", error);
+      toast.error("編集に失敗しました");
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -168,6 +212,44 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
         <GenreSelect
           onGenreChange={(genres: string) => setSelectedGenres([genres])}
         />
+
+        <div>
+          <div className="pb-1">曲を選択（50MB以下）</div>
+          <Input
+            disabled={isLoading}
+            type="file"
+            accept="audio/*"
+            {...register("song")}
+          />
+          {song.song_path && (
+            <div className="mt-2">
+              <audio controls className="w-full mt-2">
+                <source src={song.song_path} type="audio/mpeg" />
+              </audio>
+            </div>
+          )}
+        </div>
+
+        <div>
+          <div className="pb-1">画像を選択（5MB以下）</div>
+          <Input
+            disabled={isLoading}
+            type="file"
+            accept="image/*"
+            {...register("image")}
+          />
+          {song.image_path && (
+            <div className="mt-2 relative w-32 h-32">
+              <Image
+                src={song.image_path}
+                alt="現在の画像"
+                fill
+                className="object-cover rounded-md"
+              />
+            </div>
+          )}
+        </div>
+
         <div>
           <div className="pb-1">ビデオを選択（5MB以下）</div>
           <Input
@@ -179,11 +261,7 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
           {song.video_path && (
             <div className="mt-2">
               <a
-                href={`${
-                  supabaseClient.storage
-                    .from("videos")
-                    .getPublicUrl(song.video_path).data.publicUrl
-                }`}
+                href={song.video_path}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-500 underline"
@@ -193,6 +271,7 @@ const EditModal = ({ song, isOpen, onClose }: EditModalProps) => {
             </div>
           )}
         </div>
+
         <Button disabled={isLoading} type="submit">
           {isLoading ? "編集中..." : "編集"}
         </Button>

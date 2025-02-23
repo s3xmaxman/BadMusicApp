@@ -21,6 +21,12 @@ const useDownload = (path: string) => {
     const downloadFile = async () => {
       setLoading(true);
       try {
+        if (path.startsWith("http://") || path.startsWith("https://")) {
+          setFileUrl(path);
+          setLoading(false);
+          return;
+        }
+
         const { data, error } = await supabase.storage
           .from("songs")
           .download(path);
