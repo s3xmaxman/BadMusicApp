@@ -2,12 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { twMerge } from "tailwind-merge";
-import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
-import { HiHome } from "react-icons/hi";
-import { BiSearch } from "react-icons/bi";
 import { FaUserAlt } from "react-icons/fa";
 import { useUser } from "@/hooks/auth/useUser";
-import useSubscribeModal from "@/hooks/modal/useSubscribeModal";
 import useAuthModal from "@/hooks/auth/useAuthModal";
 import Button from "./Button";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -22,8 +18,7 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
   const router = useRouter();
   const authModal = useAuthModal();
   const supabaseClient = useSupabaseClient();
-  const { user, subscription } = useUser();
-  const subscribeModal = useSubscribeModal();
+  const { user } = useUser();
 
   const handleLogout = async () => {
     const { error } = await supabaseClient.auth.signOut();

@@ -1,4 +1,4 @@
-import { Subscription, UserDetails } from "@/types";
+import { UserDetails } from "@/types";
 import { useEffect, useState, createContext, useContext } from "react";
 import {
   useUser as useSupaUser,

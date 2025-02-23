@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import useLoadMedia from "@/hooks/data/useLoadMedia";
 import { twMerge } from "tailwind-merge";
+import ScrollingText from "./ScrollingText";
 
 interface MediaItemProps {
   data: Song | Playlist;
@@ -89,9 +90,7 @@ const MediaItem: React.FC<MediaItemProps> = ({
       </div>
       {!isCollapsed && (
         <div className="flex flex-col gap-y-1 overflow-hidden w-[70%]">
-          <p className="text-white truncate w-full text-gradient font-medium">
-            {data.title || "Untitled"}
-          </p>
+          <ScrollingText text={data.title} />
           {"author" in data && (
             <p className="text-neutral-400 text-sm truncate group-hover:text-neutral-300 transition-colors">
               {data.author}

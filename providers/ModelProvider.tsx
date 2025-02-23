@@ -2,7 +2,6 @@
 
 import AuthModal from "@/components/Modals/AuthModal";
 import PlaylistModal from "@/components/Modals/PlaylistModal";
-import SubscribeModal from "@/components/Modals/SubscribeModal";
 import SpotlightModal from "@/components/Modals/SpotlightModal";
 import UploadModal from "@/components/Modals/UploadModal";
 import { ProductWithPrice } from "@/types";
@@ -31,7 +30,6 @@ const ModalProvider: React.FC<ModalProviderProps> = ({ products }) => {
       <PlaylistModal />
       <SpotlightModal />
       <SpotlightUploadModal />
-      <SubscribeModal products={products} />
     </>
   );
 };
