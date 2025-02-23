@@ -110,18 +110,36 @@ body,
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes slideIn {
-  from { opacity: 0; transform: translateX(-10px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .animate-fade-in {
@@ -144,10 +162,28 @@ body,
   transform: scale(1.02);
 }
 
-.glass-effect {
-  @apply bg-gradient-to-br from-white/5 to-transparent backdrop-blur-lg border border-white/[0.02];
-}
-
 .text-gradient {
   @apply bg-clip-text text-transparent bg-gradient-to-r from-white to-neutral-300;
+}
+
+.scrolling-text-container {
+  overflow: hidden; /* テキストがはみ出さないようにする */
+  white-space: nowrap; /* テキストを折り返さない */
+  width: 100%; /* コンテナの幅を親要素に合わせる */
+}
+
+.scrolling-text {
+  display: inline-block; /* インライン要素として扱う */
+  animation-name: scroll-text; /* 適用するアニメーションの名前 */
+  animation-timing-function: linear; /* 等速アニメーション */
+  animation-iteration-count: infinite; /* 無限に繰り返す */
+}
+
+@keyframes scroll-text {
+  from {
+    transform: translateX(100%); /* 開始位置: 右端 */
+  }
+  to {
+    transform: translateX(-100%); /* 終了位置: 左端 */
+  }
 }

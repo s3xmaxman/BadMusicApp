@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { CiPlay1 } from "react-icons/ci";
 import { AiOutlineHeart } from "react-icons/ai";
 import { BiChevronRight } from "react-icons/bi";
 import { Song } from "@/types";
 import { splitTags } from "@/libs/utils";
+import ScrollingText from "../ScrollingText";
 
 interface CurrentSongDisplayProps {
   song: Song;
@@ -14,7 +14,6 @@ interface CurrentSongDisplayProps {
   imagePath?: string;
 }
 
-const ON_ANIMATION = 500;
 const MAX_VISIBLE_TAGS = 3;
 
 const CurrentSongDisplay: React.FC<CurrentSongDisplayProps> = React.memo(
@@ -50,29 +49,15 @@ const CurrentSongDisplay: React.FC<CurrentSongDisplayProps> = React.memo(
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-black " />
 
         {/* Current Song Info */}
-        <motion.div
-          className="absolute bottom-20 left-0 right-0 p-6 "
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          <motion.h1
-            className="text-4xl font-bold tracking-wide line-clamp-2 text-white mb-2"
-            initial={{ x: song.title.length > ON_ANIMATION ? "100%" : 0 }}
-            animate={{ x: 0 }}
-            transition={{
-              duration: song.title.length > ON_ANIMATION ? 22 : 0,
-              repeat: song.title.length > ON_ANIMATION ? Infinity : 0,
-              ease: "linear",
-            }}
-          >
+        <div className="absolute bottom-20 left-0 right-0 p-6 ">
+          <h1 className="text-4xl font-bold tracking-wide line-clamp-2 text-white mb-2">
             <Link
               className="cursor-pointer hover:underline"
               href={`/songs/${song.id}`}
             >
-              {song.title}
+              <ScrollingText text={song.title} />
             </Link>
-          </motion.h1>
+          </h1>
           <p className="text-gray-300 text-xl mb-4">{song.author}</p>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex flex-wrap items-center gap-2 text-gray-400 text-lg max-w-[70%]">
@@ -106,7 +91,7 @@ const CurrentSongDisplay: React.FC<CurrentSongDisplayProps> = React.memo(
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     );
   }
