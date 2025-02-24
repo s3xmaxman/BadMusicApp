@@ -8,6 +8,7 @@ import { useUser } from "@/hooks/auth/useUser";
 import MediaItem from "@/components/MediaItem";
 import useOnPlay from "@/hooks/player/useOnPlay";
 import SongOptionsPopover from "@/components/SongOptionsPopover";
+import SongList from "@/components/SongList";
 
 interface LikedContentProps {
   songs: Song[];
@@ -40,7 +41,7 @@ const LikedContent: React.FC<LikedContentProps> = ({ songs, playlistId }) => {
       {displayedSongs.map((song: Song) => (
         <div key={song.id} className="flex items-center gap-x-4 w-full">
           <div className="flex-1 min-w-0">
-            <MediaItem onClick={(id: string) => onPlay(id)} data={song} />
+            <SongList data={song} onClick={(id: string) => onPlay(id)} />
           </div>
           <SongOptionsPopover song={song} playlistId={playlistId} />
         </div>

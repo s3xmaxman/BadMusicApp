@@ -133,7 +133,7 @@ const SongContent: React.FC<SongContentProps> = ({ songId }) => {
           alt="Song Cover"
           fill
           className="object-cover opacity-40"
-          priority
+          unoptimized
         />
         <AudioWaveform
           key={audioWaveformKey}

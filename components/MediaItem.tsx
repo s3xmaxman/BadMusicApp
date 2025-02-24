@@ -10,7 +10,7 @@ import { twMerge } from "tailwind-merge";
 import ScrollingText from "./ScrollingText";
 
 interface MediaItemProps {
-  data: Song | Playlist;
+  data: Song;
   onClick?: (id: string) => void;
   isCollapsed?: boolean;
   className?: string;
@@ -23,7 +23,6 @@ const MediaItem: React.FC<MediaItemProps> = ({
   className,
 }) => {
   const player = usePlayer();
-  const router = useRouter();
   const imageUrl = useLoadMedia(data, { type: "image", bucket: "images" });
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
@@ -34,12 +33,6 @@ const MediaItem: React.FC<MediaItemProps> = ({
 
     if ("author" in data && data.id) {
       return player.setId(data.id);
-    }
-
-    if (data.id) {
-      return router.push(
-        `/playlists/${data.id}?title=${encodeURIComponent(data.title)}`
-      );
     }
   };
 
@@ -80,7 +73,7 @@ const MediaItem: React.FC<MediaItemProps> = ({
         )}
         <Image
           fill
-          src={imageUrl?.[0] || "/images/playlist.png"}
+          src={imageUrl?.[0]!}
           alt="MediaItem"
           className={`object-cover transition-opacity duration-300 ${
             isImageLoaded ? "opacity-100" : "opacity-0"
@@ -91,11 +84,9 @@ const MediaItem: React.FC<MediaItemProps> = ({
       {!isCollapsed && (
         <div className="flex flex-col gap-y-1 overflow-hidden w-[70%]">
           <ScrollingText text={data.title} />
-          {"author" in data && (
-            <p className="text-neutral-400 text-sm truncate group-hover:text-neutral-300 transition-colors">
-              {data.author}
-            </p>
-          )}
+          <p className="text-neutral-400 text-sm truncate group-hover:text-neutral-300 transition-colors">
+            {data.author}
+          </p>
         </div>
       )}
     </div>

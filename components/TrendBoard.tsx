@@ -95,6 +95,7 @@ const TrendBoard: React.FC<TrendBoardProps> = ({
                     src={imageUrls[index] || "/images/Loading.gif"}
                     alt={song.title}
                     fill
+                    unoptimized
                     objectFit="cover"
                     className="rounded-t-xl group-hover:scale-110 transition duration-300 ease-in-out"
                   />

@@ -43,11 +43,12 @@ const CurrentSongDisplay: React.FC<CurrentSongDisplayProps> = React.memo(
             alt="Song Image"
             fill
             className="z-0 object-cover"
-            priority
+            unoptimized
           />
         )}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-black " />
 
+        {/* Current Song Info */}
         {/* Current Song Info */}
         <div className="absolute bottom-20 left-0 right-0 p-6 ">
           <h1 className="text-4xl font-bold tracking-wide line-clamp-2 text-white mb-2">
