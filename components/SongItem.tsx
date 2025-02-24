@@ -43,17 +43,18 @@ const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
         {!isImageLoaded && (
           <div className="absolute inset-0 bg-gray-800 animate-pulse"></div>
         )}
-        <Image
-          className={`object-cover w-full h-full transition-opacity duration-700 transition-transform duration-300 ${
-            isImageLoaded ? "opacity-100" : "opacity-0"
-          } group-hover:scale-110`}
-          src={imageUrl?.[0]!}
-          fill
-          alt="Image"
-          onLoad={() => setIsImageLoaded(true)}
-          onClick={() => onClick(data.id)}
-        />
-
+        {imageUrl?.[0] && (
+          <Image
+            className={`object-cover w-full h-full transition-opacity duration-700 transition-transform duration-300 ${
+              isImageLoaded ? "opacity-100" : "opacity-0"
+            } group-hover:scale-110`}
+            src={imageUrl?.[0]}
+            fill
+            alt="Image"
+            onLoad={() => setIsImageLoaded(true)}
+            onClick={() => onClick(data.id)}
+          />
+        )}
         <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
           <Link href={`/songs/${data.id}`} className="w-full block">
             <p className="font-medium text-gray-100 truncate text-sm hover:text-gray-300 transition-colors group-hover:text-white group-hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">

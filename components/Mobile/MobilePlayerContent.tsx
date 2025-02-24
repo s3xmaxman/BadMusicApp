@@ -98,7 +98,7 @@ const MobilePlayerContent = ({
           />
         ) : (
           <Image
-            src={imageUrl || "/images/wait.jpg"}
+            src={imageUrl}
             alt={song.title}
             layout="fill"
             objectFit="cover"

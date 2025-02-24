@@ -71,15 +71,17 @@ const MediaItem: React.FC<MediaItemProps> = ({
         {!isImageLoaded && (
           <div className="absolute inset-0 bg-gray-300 animate-pulse"></div>
         )}
-        <Image
-          fill
-          src={imageUrl?.[0]!}
-          alt="MediaItem"
-          className={`object-cover transition-opacity duration-300 ${
-            isImageLoaded ? "opacity-100" : "opacity-0"
-          }`}
-          onLoad={() => setIsImageLoaded(true)}
-        />
+        {imageUrl?.[0] && (
+          <Image
+            fill
+            src={imageUrl?.[0]}
+            alt="MediaItem"
+            className={`object-cover transition-opacity duration-300 ${
+              isImageLoaded ? "opacity-100" : "opacity-0"
+            }`}
+            onLoad={() => setIsImageLoaded(true)}
+          />
+        )}
       </div>
       {!isCollapsed && (
         <div className="flex flex-col gap-y-1 overflow-hidden w-[70%]">

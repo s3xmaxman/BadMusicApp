@@ -17,7 +17,7 @@ interface AudioWaveformProps {
 const AudioWaveform = ({
   primaryColor = "#00ff87",
   secondaryColor = "#60efff",
-  imageUrl = "/images/wait.jpg",
+  imageUrl,
   audioUrl,
   songId,
 }: AudioWaveformProps) => {
