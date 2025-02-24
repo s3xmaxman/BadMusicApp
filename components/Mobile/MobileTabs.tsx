@@ -13,7 +13,7 @@ const MobileTabs = () => {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 h-[70px] bg-black flex items-center justify-center z-50">
-      <div className="flex space-x-12">
+      <div className="flex space-x-20">
         <button
           onClick={() => handleTabClick("home")}
           className={`flex flex-col items-center text-white ${
@@ -21,7 +21,7 @@ const MobileTabs = () => {
           }`}
         >
           <Link href="/">
-            <AiFillHome size={22} />
+            <AiFillHome size={25} />
           </Link>
         </button>
         <button
@@ -31,7 +31,7 @@ const MobileTabs = () => {
           }`}
         >
           <Link href="/search">
-            <AiOutlineSearch size={24} />
+            <AiOutlineSearch size={25} />
           </Link>
         </button>
         <button
@@ -41,7 +41,7 @@ const MobileTabs = () => {
           }`}
         >
           <Link href="/playlists">
-            <AiOutlineBars size={22} />
+            <AiOutlineBars size={25} />
           </Link>
         </button>
         <button
@@ -51,7 +51,7 @@ const MobileTabs = () => {
           }`}
         >
           <Link href="/liked">
-            <FaHeart size={22} />
+            <FaHeart size={25} />
           </Link>
         </button>
       </div>

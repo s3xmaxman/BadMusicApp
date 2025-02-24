@@ -12,6 +12,7 @@ import SeekBar from "../Seekbar";
 import MobileStyleIcons from "./MobileStyleIcons";
 import LyricsDrawer from "./LyricsDrawer";
 import ScrollingText from "../ScrollingText";
+import { Portal } from "@radix-ui/react-portal";
 
 interface MobilePlayerContentProps {
   song: Song;
@@ -84,7 +85,7 @@ const MobilePlayerContent = ({
         y,
         touchAction: showLyrics ? "auto" : "none",
       }}
-      className="md:hidden fixed inset-0 bg-black text-white"
+      className="md:hidden fixed inset-0 bg-black text-white z-100"
     >
       <div className="relative w-full h-full ">
         {videoUrl ? (

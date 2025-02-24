@@ -10,6 +10,7 @@ import dynamic from "next/dynamic";
 import { videoIds } from "@/constants";
 import SpotlightBoard from "@/components/SpotlightBoard";
 import HomeHeader from "@/components/HomeHeader";
+import useMobilePlayer from "@/hooks/player/useMobilePlayer";
 
 const YouTubePlayer = dynamic(() => import("@/components/YouTubePlayer"), {
   ssr: false,
@@ -32,6 +33,7 @@ interface HomeClientProps {
 }
 
 const HomeContent: React.FC<HomeClientProps> = ({ songs, spotlightData }) => {
+  const { isMobilePlayer, toggleMobilePlayer } = useMobilePlayer();
   const [showArrows, setShowArrows] = useState(false);
   const [showVideoArrows, setShowVideoArrows] = useState(false);
   const [showTrendBoardArrows, setShowTrendBoardArrows] = useState(false);
@@ -97,7 +99,7 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs, spotlightData }) => {
   return (
     <div className="flex bg-[#0d0d0d] h-full overflow-hidden">
       <div className="w-full  h-full overflow-y-auto custom-scrollbar">
-        {isMobile && <HomeHeader />}
+        {isMobile && !isMobilePlayer && <HomeHeader />}
         <main className="px-6 py-8 pb-[70px] md:pb-8 space-y-8">
           {/* Trending Section */}
           <section
