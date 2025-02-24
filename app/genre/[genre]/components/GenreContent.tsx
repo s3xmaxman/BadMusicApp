@@ -6,6 +6,8 @@ import useOnPlay from "@/hooks/player/useOnPlay";
 import { useUser } from "@/hooks/auth/useUser";
 import { Song } from "@/types";
 import React from "react";
+import SongList from "@/components/SongList";
+import SongOptionsPopover from "@/components/SongOptionsPopover";
 
 interface Props {
   songs: Song[];
@@ -24,20 +26,15 @@ const GenreContent = ({ songs }: Props) => {
   }
 
   return (
-    <div className="flex flex-col gap-y-2 w-full px-6">
+    <div className="flex flex-col gap-y-2 w-full p-6">
       {songs.map((song) => (
         <div key={song.id} className="flex items-center gap-x-4 w-full">
           <div className="flex-1 min-w-0">
-            <MediaItem data={song} onClick={(id: string) => onPlay(id)} />
+            <SongList data={song} onClick={(id: string) => onPlay(id)} />
           </div>
           {user?.id && (
             <div className="flex items-center gap-x-2">
-              <LikeButton songId={song.id} songType="regular" />
-              {/* <DeleteButton
-                songId={song.id}
-                songPath={song.song_path}
-                imagePath={song.image_path}
-              /> */}
+              <SongOptionsPopover song={song} />
             </div>
           )}
         </div>

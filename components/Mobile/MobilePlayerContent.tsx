@@ -12,7 +12,6 @@ import SeekBar from "../Seekbar";
 import MobileStyleIcons from "./MobileStyleIcons";
 import LyricsDrawer from "./LyricsDrawer";
 import ScrollingText from "../ScrollingText";
-import { Portal } from "@radix-ui/react-portal";
 
 interface MobilePlayerContentProps {
   song: Song;
