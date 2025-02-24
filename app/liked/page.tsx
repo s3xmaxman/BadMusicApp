@@ -12,7 +12,7 @@ const Liked = async () => {
           <div className="flex flex-col md:flex-row items-center gap-x-5">
             <div className="flex flex-col gap-y-2 mt-4 md:mt-0">
               <h1 className="text-white text-4xl sm:text-5xl lg:text-7xl font-bold">
-                お気に入りの曲
+                お気に入り
               </h1>
             </div>
           </div>

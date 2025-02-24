@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { CiHeart, CiPlay1 } from "react-icons/ci";
+import ScrollingText from "./ScrollingText";
 
 interface SongItemProps {
   onClick: (id: string) => void;
@@ -46,7 +47,7 @@ const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
           className={`object-cover w-full h-full transition-opacity duration-700 transition-transform duration-300 ${
             isImageLoaded ? "opacity-100" : "opacity-0"
           } group-hover:scale-110`}
-          src={imageUrl?.[0] || "/images/wait.jpg"}
+          src={imageUrl?.[0]!}
           fill
           alt="Image"
           onLoad={() => setIsImageLoaded(true)}
@@ -56,7 +57,7 @@ const SongItem: React.FC<SongItemProps> = ({ onClick, data }) => {
         <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
           <Link href={`/songs/${data.id}`} className="w-full block">
             <p className="font-medium text-gray-100 truncate text-sm hover:text-gray-300 transition-colors group-hover:text-white group-hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
-              {data.title}
+              <ScrollingText text={data.title} />
             </p>
           </Link>
 

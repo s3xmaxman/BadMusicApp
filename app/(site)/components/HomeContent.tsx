@@ -9,6 +9,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import dynamic from "next/dynamic";
 import { videoIds } from "@/constants";
 import SpotlightBoard from "@/components/SpotlightBoard";
+import HomeHeader from "@/components/HomeHeader";
 
 const YouTubePlayer = dynamic(() => import("@/components/YouTubePlayer"), {
   ssr: false,
@@ -96,9 +97,7 @@ const HomeContent: React.FC<HomeClientProps> = ({ songs, spotlightData }) => {
   return (
     <div className="flex bg-[#0d0d0d] h-full overflow-hidden">
       <div className="w-full  h-full overflow-y-auto custom-scrollbar">
-        <Header>
-          <></>
-        </Header>
+        {isMobile && <HomeHeader />}
         <main className="px-6 py-8 pb-[70px] md:pb-8 space-y-8">
           {/* Trending Section */}
           <section
