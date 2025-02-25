@@ -24,8 +24,11 @@ const TrendBoard: React.FC<TrendBoardProps> = ({
     "all" | "month" | "week" | "day"
   >("all");
   const { trends, isLoading, error } = useGetTrendSongs(selectedPeriod);
-  const imageUrls = useLoadMedia(trends, { type: "image", bucket: "images" });
-  const onPlay = useOnPlay(trends);
+  const imageUrls = useLoadMedia(trends || [], {
+    type: "image",
+    bucket: "images",
+  });
+  const onPlay = useOnPlay(trends || []);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -80,11 +83,13 @@ const TrendBoard: React.FC<TrendBoardProps> = ({
             </p>
           )}
           {error && (
-            <p className="text-red-500 text-center col-span-full">{error}</p>
+            <p className="text-red-500 text-center col-span-full">
+              {error.message}
+            </p>
           )}
           {!isLoading &&
             !error &&
-            trends.map((song, index) => (
+            trends?.map((song, index) => (
               <motion.div
                 key={song.id}
                 variants={itemVariants}

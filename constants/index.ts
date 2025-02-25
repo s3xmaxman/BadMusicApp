@@ -12,6 +12,8 @@ export const CACHED_QUERIES = {
   media: "media",
   songUrl: "songUrl",
   songById: "songById",
+  songsByGenres: "songsByGenres",
+  trendSongs: "trendSongs",
 } as const;
 
 export const CACHE_CONFIG = {
