@@ -12,6 +12,8 @@ import getPlaylists from "@/actions/getPlaylists";
 import getSongs from "@/actions/getSongs";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import RightSidebar from "@/components/RightSidebar/RightSidebar";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import TanStackProvider from "@/providers/TanstackProvider";
 
 const font = Figtree({ subsets: ["latin"] });
 
@@ -35,18 +37,17 @@ export default async function RootLayout({
     <html lang="en">
       <body className={font.className}>
         <ToasterProvider />
-        <SupabaseProvider>
-          <UserProvider>
-            <ModalProvider products={products} />
-            <Sidebar songs={songs} playlists={playlists}>
-              <RightSidebar>
-                {children}
-           
-              </RightSidebar>
-            </Sidebar>
-            <Player playlists={playlists} />
-          </UserProvider>
-        </SupabaseProvider>
+        <TanStackProvider>
+          <SupabaseProvider>
+            <UserProvider>
+              <ModalProvider products={products} />
+              <Sidebar songs={songs} playlists={playlists}>
+                <RightSidebar>{children}</RightSidebar>
+              </Sidebar>
+              <Player playlists={playlists} />
+            </UserProvider>
+          </SupabaseProvider>
+        </TanStackProvider>
       </body>
     </html>
   );

@@ -5,3 +5,14 @@ export const videoIds = [
   { id: 4, name: "Blade Runner Radio", videoId: "RrkrdYm3HPQ" },
   { id: 5, name: "tokyo night drive", videoId: "Lcdi9O2XB4E" },
 ];
+
+export const CACHE_PREFIX = "@query-cache";
+
+export const CACHED_QUERIES = {
+  TREND_SONGS: "trend-songs",
+} as const;
+
+export const CACHE_CONFIG = {
+  staleTime: 1000 * 60 * 30, // 30分間
+  gcTime: 1000 * 60 * 60, // 60分間
+} as const;
