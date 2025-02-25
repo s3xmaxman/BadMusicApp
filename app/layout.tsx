@@ -12,7 +12,7 @@ import getPlaylists from "@/actions/getPlaylists";
 import getSongs from "@/actions/getSongs";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import RightSidebar from "@/components/RightSidebar/RightSidebar";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import TanStackProvider from "@/providers/TanstackProvider";
 
 const font = Figtree({ subsets: ["latin"] });
@@ -47,6 +47,7 @@ export default async function RootLayout({
               <Player playlists={playlists} />
             </UserProvider>
           </SupabaseProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
         </TanStackProvider>
       </body>
     </html>

@@ -36,6 +36,7 @@
     "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/supabase-js": "^2.39.0",
     "@tanstack/react-query": "^5.66.9",
+    "@tanstack/react-query-devtools": "^5.66.9",
     "@types/uniqid": "^5.3.4",
     "@use-gesture/react": "^10.3.1",
     "braces": "^3.0.3",

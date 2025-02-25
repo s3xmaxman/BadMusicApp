@@ -1,5 +1,7 @@
+import { useQuery, useQueries, UseQueryOptions } from "@tanstack/react-query";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { useState, useEffect, useMemo } from "react";
+import { useMemo } from "react";
+import { CACHE_CONFIG, CACHED_QUERIES } from "@/constants";
 
 type MediaType = "image" | "video";
 type MediaData = {
@@ -10,14 +12,23 @@ type MediaData = {
 interface UseLoadMediaOptions {
   type: MediaType;
   bucket: string;
+  staleTime?: number;
+  cacheTime?: number;
 }
 
+/**
+ * A hook to load media from Supabase Storage with TanStack Query caching
+ */
 const useLoadMedia = (
   data: MediaData | MediaData[],
-  { type, bucket }: UseLoadMediaOptions
+  {
+    type,
+    bucket,
+    staleTime = CACHE_CONFIG.staleTime,
+    cacheTime = CACHE_CONFIG.gcTime,
+  }: UseLoadMediaOptions
 ): (string | null)[] => {
   const supabaseClient = useSupabaseClient();
-  const [urls, setUrls] = useState<(string | null)[]>([]);
 
   const isExternalUrl = (path?: string) =>
     path?.startsWith("http://") || path?.startsWith("https://");
@@ -27,7 +38,7 @@ const useLoadMedia = (
     return type === "image" ? item?.image_path : item?.video_path;
   };
 
-  const loadSingleMedia = async (item: MediaData) => {
+  const fetchMediaUrl = async (item: MediaData): Promise<string | null> => {
     const path = getMediaPath(item);
     if (!path) return null;
 
@@ -45,30 +56,32 @@ const useLoadMedia = (
     }
   };
 
-  useEffect(() => {
-    const loadMedia = async () => {
-      if (!data) {
-        setUrls([]);
-        return;
-      }
+  // 前処理: dataをいつも配列形式に変換する
+  const dataArray = useMemo(() => {
+    if (!data) return [];
+    return Array.isArray(data) ? data : [data];
+  }, [data]);
 
-      const items = Array.isArray(data) ? data : [data];
+  // 各アイテムのパスを取得
+  const paths = useMemo(() => {
+    return dataArray.map((item) => getMediaPath(item));
+  }, [dataArray]);
 
-      try {
-        const loadedUrls = await Promise.all(
-          items.map((item) => loadSingleMedia(item))
-        );
-        setUrls(loadedUrls);
-      } catch (error) {
-        console.error(`Error loading ${type}s:`, error);
-        setUrls(items.map(() => null));
-      }
-    };
+  // クエリを実行
+  const results = useQueries({
+    queries: dataArray.map((item, index) => {
+      const path = paths[index];
+      return {
+        queryKey: [CACHED_QUERIES.media, bucket, type, path],
+        queryFn: () => fetchMediaUrl(item),
+        staleTime,
+        gcTime: cacheTime,
+        enabled: !!path,
+      } as UseQueryOptions<string | null>;
+    }),
+  });
 
-    loadMedia();
-  }, [data, supabaseClient, type, bucket]);
-
-  return useMemo(() => urls, [urls]);
+  return results.map((result) => result.data || null);
 };
 
 export default useLoadMedia;

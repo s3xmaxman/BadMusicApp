@@ -9,7 +9,8 @@ export const videoIds = [
 export const CACHE_PREFIX = "@query-cache";
 
 export const CACHED_QUERIES = {
-  TREND_SONGS: "trend-songs",
+  media: "media",
+  songUrl: "songUrl",
 } as const;
 
 export const CACHE_CONFIG = {
