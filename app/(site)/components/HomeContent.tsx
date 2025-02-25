@@ -33,7 +33,7 @@ interface HomeClientProps {
 }
 
 const HomeContent: React.FC<HomeClientProps> = ({ songs, spotlightData }) => {
-  const { isMobilePlayer, toggleMobilePlayer } = useMobilePlayer();
+  const { isMobilePlayer } = useMobilePlayer();
   const [showArrows, setShowArrows] = useState(false);
   const [showVideoArrows, setShowVideoArrows] = useState(false);
   const [showTrendBoardArrows, setShowTrendBoardArrows] = useState(false);

@@ -1,7 +1,8 @@
 import { Song } from "@/types";
 import { useSessionContext } from "@supabase/auth-helpers-react";
-import { useEffect, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { CACHE_CONFIG, CACHED_QUERIES } from "@/constants";
 
 /**
  * 指定されたIDに基づいて曲を取得するカスタムフック
@@ -12,20 +13,19 @@ import toast from "react-hot-toast";
  * @property {Song|undefined} song - 取得した曲データ
  */
 const useGetSongById = (id?: string) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [song, setSong] = useState<Song | undefined>(undefined);
   const { supabaseClient } = useSessionContext();
 
-  useEffect(() => {
-    if (!id) {
-      setSong(undefined);
-      setIsLoading(false);
-      return;
-    }
+  const {
+    isLoading,
+    data: song,
+    error,
+  } = useQuery({
+    queryKey: [CACHED_QUERIES.songById, id],
+    queryFn: async () => {
+      if (!id) {
+        return undefined;
+      }
 
-    setIsLoading(true);
-
-    const fetchSong = async () => {
       const { data, error } = await supabaseClient
         .from("songs")
         .select("*")
@@ -33,19 +33,22 @@ const useGetSongById = (id?: string) => {
         .maybeSingle();
 
       if (error) {
-        setIsLoading(false);
-        setSong(undefined);
-        return toast.error(`Failed to load song: ${error.message}`);
+        throw new Error(`Failed to load song: ${error.message}`);
       }
 
-      setSong(data);
-      setIsLoading(false);
-    };
+      return data as Song | undefined;
+    },
+    staleTime: CACHE_CONFIG.staleTime,
+    gcTime: CACHE_CONFIG.gcTime,
+    enabled: !!id, // id が undefined の場合はクエリを実行しない
+  });
 
-    fetchSong();
-  }, [id, supabaseClient]);
+  // useQuery の外でエラーハンドリングを行う
+  if (error) {
+    toast.error(error.message);
+  }
 
-  return useMemo(() => ({ isLoading, song }), [isLoading, song]);
+  return { isLoading, song };
 };
 
 export default useGetSongById;

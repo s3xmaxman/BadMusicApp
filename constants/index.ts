@@ -11,6 +11,7 @@ export const CACHE_PREFIX = "@query-cache";
 export const CACHED_QUERIES = {
   media: "media",
   songUrl: "songUrl",
+  songById: "songById",
 } as const;
 
 export const CACHE_CONFIG = {
